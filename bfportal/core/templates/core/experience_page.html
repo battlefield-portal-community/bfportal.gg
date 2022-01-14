@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% block content %}
+{{page.cover_img_url}}
+{{page.name}}
+{{page.description}}
+{{page.exp_url}}
+{{page.code}}
+{{page.no_players}}
+{{page.no_bots}}
+{{page.vid_url}}
+{% endblock content %}
