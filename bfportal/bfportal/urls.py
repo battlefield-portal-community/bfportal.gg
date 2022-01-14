@@ -6,15 +6,14 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
-from search import views as search_views
+from core.views import sumbit_experience
 
 urlpatterns = [
     path('django-admin/', admin.site.urls),
 
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
-
-    path('search/', search_views.search, name='search'),
+    path('submit/', sumbit_experience)
 
 ]
 
