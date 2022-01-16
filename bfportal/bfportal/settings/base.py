@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'wagtail.search',
     'wagtail.admin',
     'wagtail.core',
+    'wagtail.contrib.routable_page',
 
     'modelcluster',
     'taggit',
@@ -46,8 +47,25 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.discord',
 ]
 
+SITE_ID = 1
+SOCIALACCOUNT_PROVIDERS = {
+    'discord' : {
+        'APP': {
+            'client_id':os.getenv("DISCORD_CLIENT_ID"),
+            'secret': os.getenv("DISCORD_SECRET"),
+            'key':'',
+        }
+    }
+}
+ 
 MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -75,10 +93,20 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
 
 WSGI_APPLICATION = 'bfportal.wsgi.application'
 
@@ -166,3 +194,5 @@ WAGTAILSEARCH_BACKENDS = {
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = 'http://example.com'
+LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = "/discord/login/"

@@ -1,20 +1,38 @@
+from operator import imod
 from django.conf import settings
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.contrib import admin
+from django.views.generic import TemplateView, RedirectView
 
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
-from core.views import sumbit_experience
 
 urlpatterns = [
     path('django-admin/', admin.site.urls),
-
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
-    path('submit/', sumbit_experience)
 
+    # allow only social login :)
+    path('password/change/', RedirectView.as_view(url='/')),
+    path('password/set/', RedirectView.as_view(url='/')),
+    path('password/reset/', RedirectView.as_view(url='/')),
+    path('password/reset/done/', RedirectView.as_view(url='/')),
+    re_path('^password/reset/key/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)/$',
+            RedirectView.as_view(url='/')),
+    path('password/reset/key/done/', RedirectView.as_view(url='/')),
+    path('email/', RedirectView.as_view(url='/')),
+    path('confirm-email/', RedirectView.as_view(url='/')),
+
+    re_path('^confirm-email/(?P<key>[-:\\w]+)/$',
+            RedirectView.as_view(url='/')),
+    path("signup/", RedirectView.as_view(url="/")),
+
+    # go straight to discord login
+    path('login/', RedirectView.as_view(url="/discord/login/?process=login")),
+    
+    path('', include('allauth.urls')),
 ]
 
 
