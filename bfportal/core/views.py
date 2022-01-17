@@ -20,6 +20,7 @@ def sumbit_experience(request, index_page: Page):
             new_exp_page.slug = slugify(new_exp_page.title)
             new_exp_page.title = new_exp_page.title
             new_exp_page.tags.add(*form.cleaned_data['tags'])
+            new_exp_page.owner = request.user
             new_exp: ExperiencePage = index_page.get_first_child().add_child(instance=new_exp_page)
             if new_exp:
                 new_exp.unpublish()

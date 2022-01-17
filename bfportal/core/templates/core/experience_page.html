@@ -1,13 +1,19 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 {% block content %}
-{{page.user}}
-{{page.cover_img_url}}
-{{page.name}}
-{{page.description}}
-{{page.exp_url}}
-{{page.code}}
-{{page.no_players}}
-{{page.no_bots}}
-{{page.vid_url}}
+{% if page.owner == request.user %}
+<h1>Your page</h1>
+{% else %}
+<h1>Nope</h1>
+{% endif %}
+<br><br>
+au {{page.owner}} <br>
+cover {{page.cover_img_url}} <br>
+title {{page.title}} <br>
+desc {{page.description}} <br>
+exp_url {{page.exp_url}} <br>
+code {{page.code}} <br>
+no_player {{page.no_players}} <br>
+no_bots {{page.no_bots}} <br>
+vid_url {{page.vid_url}} <br>
 {% endblock content %}
