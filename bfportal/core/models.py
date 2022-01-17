@@ -13,6 +13,9 @@ from modelcluster.contrib.taggit import ClusterTaggableManager
 
 from allauth.socialaccount.models import SocialAccount
 
+from loguru import logger
+
+
 class HomePage(RoutablePageMixin, Page):
     max_count = 1
     parent_page_types = ['wagtailcore.Page']
@@ -33,12 +36,13 @@ class HomePage(RoutablePageMixin, Page):
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
+        context['posts'] = ExperiencePage.objects.live().public().order_by('-first_published_at')
         if request.user.is_authenticated:
             context['social_user'] = SocialAccount.objects.get(user=request.user)
         return context
 
 
-class ExperienceTag(TaggedItemBase):
+class ExperiencePageTag(TaggedItemBase):
     content_object  = ParentalKey(
         'ExperiencePage',
         related_name='tagged_items',
@@ -51,6 +55,20 @@ class ExperiencesPage(RoutablePageMixin, Page):
     parent_page_types = ['core.HomePage']
     subpage_types = ['core.ExperiencePage']
 
+    def get_context(self, request, *args, **kwargs):
+        """Adding custom stuff to our context."""
+        context = super().get_context(request, *args, **kwargs)
+        # Get all posts
+        all_posts = ExperiencePage.objects.live().public().order_by('-first_published_at')
+
+        if request.GET.get('tag', None):
+            tags = request.GET.get('tag')
+            all_posts = all_posts.filter(tags__slug__in=[tags])
+            logger.debug(f"Filted {len(all_posts)} experiences by tags {tags}")
+
+        context["posts"] = all_posts
+        return context
+
 
 class ExperiencePage(Page):
     description = models.TextField(default='', help_text="Description of Your experience")
@@ -58,7 +76,7 @@ class ExperiencePage(Page):
     code = models.CharField(blank=True, max_length=6, default='', help_text="Six letter alpha-numeric code of you experience")
     exp_url = models.URLField(blank=True, default='', help_text="Url of your experience")
     
-    tags = ClusterTaggableManager(blank=True, help_text="Some tags")
+    tags = ClusterTaggableManager(blank=True, help_text="Some tags", through=ExperiencePageTag)
     vid_url = models.URLField(blank=True, default='', help_text="Link to vid showcasing your experience")
     cover_img_url = models.URLField(blank=True, default='', help_text="Link for your cover Image")
     
@@ -82,13 +100,13 @@ class ExperiencePage(Page):
 
     parent_page_types =  ['core.ExperiencesPage']
 
-    class Meta:
-        constraints = [
-            models.CheckConstraint(
-                name="%(app_label)s_%(class)s_code_or_exp_url",
-                check=(
-                    models.Q(code__isnull=True, exp_url__isnull=False)
-                    | models.Q(code__isnull=False, exp_url__isnull=True)
-                ),
-            )
-        ]
+    # class Meta:
+    #     constraints = [
+    #         models.CheckConstraint(
+    #             name="%(app_label)s_%(class)s_code_or_exp_url",
+    #             check=(
+    #                 models.Q(code__isnull=True, exp_url__isnull=False)
+    #                 | models.Q(code__isnull=False, exp_url__isnull=True)
+    #             ),
+    #         )
+    #     ]

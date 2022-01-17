@@ -9,6 +9,7 @@ class ExperiencePageForm(forms.ModelForm):
             'description',
             'exp_url',
             'code',
+            'tags',
             'no_players',
             'no_bots',
             'cover_img_url',

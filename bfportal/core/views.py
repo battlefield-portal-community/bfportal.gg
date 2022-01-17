@@ -19,7 +19,8 @@ def sumbit_experience(request, index_page: Page):
             new_exp_page : ExperiencePage = form.save(commit=False)
             new_exp_page.slug = slugify(new_exp_page.title)
             new_exp_page.title = new_exp_page.title
-            new_exp: ExperiencePage = index_page.add_child(instance=new_exp_page)
+            new_exp_page.tags.add(*form.cleaned_data['tags'])
+            new_exp: ExperiencePage = index_page.get_first_child().add_child(instance=new_exp_page)
             if new_exp:
                 new_exp.unpublish()
                 new_exp.save_revision(submitted_for_moderation=True, user=request.user)
