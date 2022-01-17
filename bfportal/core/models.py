@@ -6,6 +6,9 @@ from wagtail.core.models import Page
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 
+from taggit.models import TaggedItemBase
+
+from modelcluster.models import ParentalKey
 from allauth.socialaccount.models import SocialAccount
 
 class IndexPage(RoutablePageMixin, Page):
@@ -34,25 +37,40 @@ class IndexPage(RoutablePageMixin, Page):
 
 
 class ExperiencePage(Page):
-    name = models.CharField(max_length=255, default='')
-    code = models.CharField(max_length=6, default='')
-    exp_url = models.URLField(default='')
-    vid_url = models.URLField(default='')
-    cover_img_url = models.URLField(default='')
-    description = models.TextField(default='')
-    no_players = models.IntegerField(default=-1)
-    no_bots = models.IntegerField(default=-1)
+    description = models.TextField(default='', help_text="Description of Your experience")
+
+    code = models.CharField(blank=True, max_length=6, default='', help_text="Six letter alpha-numeric code of you experience")
+    exp_url = models.URLField(blank=True, default='', help_text="Url of your experience")
+    
+    vid_url = models.URLField(blank=True, default='', help_text="Link to vid showcasing your experience")
+    cover_img_url = models.URLField(blank=True, default='', help_text="Link for your cover Image")
+    
+    no_players = models.IntegerField(blank=True, default=-1, help_text="Max Number of Human Players in your experience")
+    no_bots = models.IntegerField(blank=True, default=-1, help_text="Max Number of Bots in your experience")
 
     
     content_panels = Page.content_panels + [
-        FieldPanel('name', classname='full'),
+        FieldPanel('description', classname='full'),
+
         FieldPanel('code', classname='full'),
         FieldPanel('exp_url', classname='full'),
-        FieldPanel('description', classname='full'),
+
         FieldPanel('cover_img_url', classname='full'),
         FieldPanel('vid_url', classname='full'),
+
         FieldPanel('no_players', classname='full'),
         FieldPanel('no_bots', classname='full'),
     ]
 
     parent_page_types =  ['IndexPage']
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                name="%(app_label)s_%(class)s_code_or_exp_url",
+                check=(
+                    models.Q(code__isnull=True, exp_url__isnull=False)
+                    | models.Q(code__isnull=False, exp_url__isnull=True)
+                ),
+            )
+        ]
