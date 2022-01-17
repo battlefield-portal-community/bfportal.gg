@@ -9,12 +9,14 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from taggit.models import TaggedItemBase
 
 from modelcluster.models import ParentalKey
+from modelcluster.contrib.taggit import ClusterTaggableManager
+
 from allauth.socialaccount.models import SocialAccount
 
-class IndexPage(RoutablePageMixin, Page):
+class HomePage(RoutablePageMixin, Page):
     max_count = 1
     parent_page_types = ['wagtailcore.Page']
-    subpage_types = ['core.ExperiencePage']
+    subpage_types = ['core.ExperiencesPage']
 
     @route(r'^$')
     def base(self, request):
@@ -36,12 +38,27 @@ class IndexPage(RoutablePageMixin, Page):
         return context
 
 
+class ExperienceTag(TaggedItemBase):
+    content_object  = ParentalKey(
+        'ExperiencePage',
+        related_name='tagged_items',
+        on_delete=models.CASCADE,
+    )
+
+
+class ExperiencesPage(RoutablePageMixin, Page):
+    max_count = 1
+    parent_page_types = ['core.HomePage']
+    subpage_types = ['core.ExperiencePage']
+
+
 class ExperiencePage(Page):
     description = models.TextField(default='', help_text="Description of Your experience")
 
     code = models.CharField(blank=True, max_length=6, default='', help_text="Six letter alpha-numeric code of you experience")
     exp_url = models.URLField(blank=True, default='', help_text="Url of your experience")
     
+    tags = ClusterTaggableManager(blank=True, help_text="Some tags")
     vid_url = models.URLField(blank=True, default='', help_text="Link to vid showcasing your experience")
     cover_img_url = models.URLField(blank=True, default='', help_text="Link for your cover Image")
     
@@ -55,6 +72,7 @@ class ExperiencePage(Page):
         FieldPanel('code', classname='full'),
         FieldPanel('exp_url', classname='full'),
 
+        FieldPanel('tags'),
         FieldPanel('cover_img_url', classname='full'),
         FieldPanel('vid_url', classname='full'),
 
@@ -62,7 +80,7 @@ class ExperiencePage(Page):
         FieldPanel('no_bots', classname='full'),
     ]
 
-    parent_page_types =  ['IndexPage']
+    parent_page_types =  ['core.ExperiencesPage']
 
     class Meta:
         constraints = [
