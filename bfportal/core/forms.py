@@ -5,7 +5,7 @@ class ExperiencePageForm(forms.ModelForm):
     class Meta:
         model = ExperiencePage
         fields = [
-            'name',
+            'title',
             'description',
             'exp_url',
             'code',
