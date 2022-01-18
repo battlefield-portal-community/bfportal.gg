@@ -1,6 +1,7 @@
 from django.db import models
 from django.template.response import TemplateResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
 from wagtail.core.models import Page
 from wagtail.admin.edit_handlers import FieldPanel
@@ -15,11 +16,13 @@ from allauth.socialaccount.models import SocialAccount
 
 from loguru import logger
 
+from bfportal.settings.base import LOGIN_URL
+
 
 class HomePage(RoutablePageMixin, Page):
     max_count = 1
     parent_page_types = ['wagtailcore.Page']
-    subpage_types = ['core.ExperiencesPage']
+    subpage_types = ['core.ExperiencesPage', 'core.ProfilePage']
 
     @route(r'^$')
     def base(self, request):
@@ -37,8 +40,6 @@ class HomePage(RoutablePageMixin, Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         context['posts'] = ExperiencePage.objects.live().public().order_by('-first_published_at')
-        if request.user.is_authenticated:
-            context['social_user'] = SocialAccount.objects.get(user=request.user)
         return context
 
 
@@ -70,7 +71,7 @@ class ExperiencesPage(RoutablePageMixin, Page):
         return context
 
 
-class ExperiencePage(Page):
+class ExperiencePage(RoutablePageMixin ,Page):
     description = models.TextField(default='', help_text="Description of Your experience")
 
     code = models.CharField(blank=True, max_length=6, default='', help_text="Six letter alpha-numeric code of you experience")
@@ -99,14 +100,44 @@ class ExperiencePage(Page):
     ]
 
     parent_page_types =  ['core.ExperiencesPage']
+    subpage_types = []
 
-    # class Meta:
-    #     constraints = [
-    #         models.CheckConstraint(
-    #             name="%(app_label)s_%(class)s_code_or_exp_url",
-    #             check=(
-    #                 models.Q(code__isnull=True, exp_url__isnull=False)
-    #                 | models.Q(code__isnull=False, exp_url__isnull=True)
-    #             ),
-    #         )
-    #     ]
+    @route(r'^edit/$')
+    def edit_page(self, request):
+        if request.user.is_authenticated and self.owner == request.user:
+            from .views import edit_experience
+            return edit_experience(request, self)
+        else:
+            return redirect(LOGIN_URL)
+
+class ProfilePage(RoutablePageMixin, Page):
+
+    max_count = 1
+    parent_page_types = ['core.HomePage']
+    subpage_types = []
+
+
+    def serve(self, request, view=None, args=None, kwargs=None):
+        if request.user.is_authenticated:
+            return super().serve(request, view, args, kwargs)
+        else:
+            return redirect(LOGIN_URL)
+
+    def get_context(self, request, *args, **kwargs):
+        l = kwargs.pop('list_experiences', None)
+        context = super().get_context(request, *args, **kwargs)
+        if l:
+            posts = ExperiencePage.objects.live().public().filter(owner=request.user)
+            logger.debug(f"filtred {len(posts)} for {request.user}")
+            context['posts'] = posts
+
+        return context
+
+
+    @route(r'experiences/$')
+    def user_experiences(self, request):
+        return TemplateResponse(
+            request,
+            "core/experiences_page.html",
+            self.get_context(request, list_experiences=True),
+        )
