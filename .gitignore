@@ -168,4 +168,4 @@ tests/.coverage
 build/
 tests/report/
 .vscode/
-*temp*
+*_temp_*
