@@ -1,0 +1,8 @@
+{% load socialaccount %}
+{% block content %}
+{% get_social_accounts user as accounts %}
+{% with account=accounts.discord.0 %}
+{{account.extra_data}}
+{{account}}
+{% endwith %}
+{% endblock content %}

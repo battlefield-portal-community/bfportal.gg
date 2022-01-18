@@ -8,12 +8,18 @@
 {% endif %}
 <br><br>
 au {{page.owner}} <br>
-cover {{page.cover_img_url}} <br>
 title {{page.title}} <br>
 desc {{page.description}} <br>
+<br>
 exp_url {{page.exp_url}} <br>
 code {{page.code}} <br>
+<br>
+tags {{page.tags.all | join:","}} <br>
+cover {{page.cover_img_url}} <br>
+vid_url {{page.vid_url}} <br>
+<br>
 no_player {{page.no_players}} <br>
 no_bots {{page.no_bots}} <br>
-vid_url {{page.vid_url}} <br>
+
+
 {% endblock content %}
