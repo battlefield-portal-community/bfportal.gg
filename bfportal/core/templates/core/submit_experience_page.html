@@ -1,14 +1,12 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 
-{% block body_class %}template-suggest{% endblock %}
-
 {% block content %}
     <form action="." method="POST">
         {% csrf_token %}
 
         {{ form.as_p }}
         
-        <p><input type="submit" value="Suggest my flavour"></p>
+        <p><input type="submit" value="Submit Experience"></p>
     </form>
 {% endblock %}
