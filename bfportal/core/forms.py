@@ -1,5 +1,6 @@
 from django import forms
-from core.models import ExperiencePage
+from core.models import ExperiencePage, ExperiencesCategory
+
 
 class ExperiencePageForm(forms.ModelForm):
     class Meta:
@@ -7,6 +8,7 @@ class ExperiencePageForm(forms.ModelForm):
         fields = [
             'title',
             'description',
+            'categories',
             'exp_url',
             'code',
             'tags',

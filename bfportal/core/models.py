@@ -1,18 +1,20 @@
+from cmath import log
 from django.db import models
+from django import forms
+from django.http import HttpRequest, HttpResponse
 from django.template.response import TemplateResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
 
 from wagtail.core.models import Page
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, InlinePanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.snippets.models import register_snippet
 
 from taggit.models import TaggedItemBase
 
-from modelcluster.models import ParentalKey
+from modelcluster.models import ParentalKey, ParentalManyToManyField
 from modelcluster.contrib.taggit import ClusterTaggableManager
-
-from allauth.socialaccount.models import SocialAccount
 
 from loguru import logger
 
@@ -31,11 +33,11 @@ class HomePage(RoutablePageMixin, Page):
             self.get_template(request),
             self.get_context(request)
         )
-    
+
     @route(r'^submit/$')
     def submit_exp(self, request):
-        from core.views import sumbit_experience
-        return sumbit_experience(request, self)
+        from core.views import submit_experience
+        return submit_experience(request, self)
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
@@ -43,8 +45,30 @@ class HomePage(RoutablePageMixin, Page):
         return context
 
 
+class ExperiencesCategory(models.Model):
+    name = models.CharField(max_length=255)
+    icon = models.ForeignKey(
+        'wagtailimages.Image', null=True, blank=True,
+        on_delete=models.SET_NULL, related_name='+'
+    )
+
+    panels = [
+        FieldPanel('name'),
+        ImageChooserPanel('icon'),
+    ]
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'experiences categories'
+
+
+register_snippet(ExperiencesCategory)
+
+
 class ExperiencePageTag(TaggedItemBase):
-    content_object  = ParentalKey(
+    content_object = ParentalKey(
         'ExperiencePage',
         related_name='tagged_items',
         on_delete=models.CASCADE,
@@ -71,51 +95,64 @@ class ExperiencesPage(RoutablePageMixin, Page):
         return context
 
 
-class ExperiencePage(RoutablePageMixin ,Page):
+class ExperiencePage(RoutablePageMixin, Page):
     description = models.TextField(default='', help_text="Description of Your experience")
 
-    code = models.CharField(blank=True, max_length=6, default='', help_text="Six letter alpha-numeric code of you experience")
+    code = models.CharField(blank=True, max_length=6, default='',
+                            help_text="Six letter alpha-numeric code of you experience")
     exp_url = models.URLField(blank=True, default='', help_text="Url of your experience")
-    
+
     tags = ClusterTaggableManager(blank=True, help_text="Some tags", through=ExperiencePageTag)
     vid_url = models.URLField(blank=True, default='', help_text="Link to vid showcasing your experience")
     cover_img_url = models.URLField(blank=True, default='', help_text="Link for your cover Image")
-    
+
     no_players = models.IntegerField(blank=True, default=-1, help_text="Max Number of Human Players in your experience")
     no_bots = models.IntegerField(blank=True, default=-1, help_text="Max Number of Bots in your experience")
+    categories = ParentalManyToManyField('core.ExperiencesCategory', blank=True)
 
-    
     content_panels = Page.content_panels + [
-        FieldPanel('description', classname='full'),
+        MultiFieldPanel([
+            FieldPanel('description', classname='full'),
+            FieldPanel('categories', widget=forms.CheckboxSelectMultiple)
+        ], heading="Basic Info", classname="collapsible"),
 
-        FieldPanel('code', classname='full'),
-        FieldPanel('exp_url', classname='full'),
+        MultiFieldPanel([
+            FieldPanel('code', classname='full'),
+            FieldPanel('exp_url', classname='full')
+        ], heading="Sharing Info", classname="collapsible"),
 
-        FieldPanel('tags'),
-        FieldPanel('cover_img_url', classname='full'),
-        FieldPanel('vid_url', classname='full'),
+        MultiFieldPanel([
+            FieldPanel('tags'),
+            FieldPanel('cover_img_url', classname='full'),
+            FieldPanel('vid_url', classname='full'),
+        ], heading="Extra Info", classname="collapsible"),
 
-        FieldPanel('no_players', classname='full'),
-        FieldPanel('no_bots', classname='full'),
+        MultiFieldPanel([
+            FieldPanel('no_players', classname='full'),
+            FieldPanel('no_bots', classname='full'),
+        ], heading="Settings info", classname="collapsible"),
     ]
 
-    parent_page_types =  ['core.ExperiencesPage']
+    parent_page_types = ['core.ExperiencesPage']
     subpage_types = []
 
     @route(r'^edit/$')
-    def edit_page(self, request):
-        if request.user.is_authenticated and self.owner == request.user:
-            from .views import edit_experience
-            return edit_experience(request, self)
+    def edit_page(self, request: HttpRequest):
+        if request.user.is_authenticated:
+            if self.owner == request.user:
+                from .views import edit_experience
+                return edit_experience(request, self)
+            else:
+                logger.debug(f"{request.user} tried to edit a experience they dont own exp: {request.path}")
+                return HttpResponse("Unauthorized", status=401)
         else:
             return redirect(LOGIN_URL)
 
-class ProfilePage(RoutablePageMixin, Page):
 
+class ProfilePage(RoutablePageMixin, Page):
     max_count = 1
     parent_page_types = ['core.HomePage']
     subpage_types = []
-
 
     def serve(self, request, view=None, args=None, kwargs=None):
         if request.user.is_authenticated:
@@ -132,7 +169,6 @@ class ProfilePage(RoutablePageMixin, Page):
             context['posts'] = posts
 
         return context
-
 
     @route(r'experiences/$')
     def user_experiences(self, request):
