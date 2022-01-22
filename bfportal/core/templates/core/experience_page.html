@@ -1,25 +1,35 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 {% block content %}
-{% if page.owner == request.user %}
-<h1>Your page</h1>
-{% else %}
-<h1>Nope</h1>
-{% endif %}
-<br><br>
-au {{page.owner}} <br>
-title {{page.title}} <br>
-desc {{page.description}} <br>
-<br>
-exp_url {{page.exp_url}} <br>
-code {{page.code}} <br>
-<br>
-tags {{page.tags.all | join:","}} <br>
-cover {{page.cover_img_url}} <br>
-vid_url {{page.vid_url}} <br>
-<br>
-no_player {{page.no_players}} <br>
-no_bots {{page.no_bots}} <br>
+    {% if page.owner == request.user %}
+        <h1>Your page</h1>
+    {% else %}
+        <h1>Nope</h1>
+    {% endif %}
+    <br><br>
+    au {{ page.owner }} <br>
+    title {{ page.title }} <br>
+    desc {{ page.description }} <br>
+    <br>
+    exp_url {{ page.exp_url }} <br>
+    code {{ page.code }} <br>
+    <br>
+    tags {{ page.tags.all | join:","}} <br>
+    cover {{ page.cover_img_url }} <br>
+    vid_url {{ page.vid_url }} <br>
+    cate
+    {% with categories=page.categories.all %}
+        {% if categories %}
+                {% for category in categories %}
+                        {{category.name}}
+                {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+
+    <br>
+    no_player {{ page.no_players }} <br>
+    no_bots {{ page.no_bots }} <br>
 
 
 {% endblock content %}

@@ -1,6 +1,9 @@
-from cmath import log
+from typing import Union
+
 from django.db import models
 from django import forms
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth import get_user_model
 from django.http import HttpRequest, HttpResponse
 from django.template.response import TemplateResponse
 from django.shortcuts import render, redirect
@@ -11,6 +14,8 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.models import register_snippet
 
+from allauth.socialaccount.templatetags.socialaccount import get_social_accounts
+from allauth.socialaccount.models import SocialAccount
 from taggit.models import TaggedItemBase
 
 from modelcluster.models import ParentalKey, ParentalManyToManyField
@@ -86,10 +91,11 @@ class ExperiencesPage(RoutablePageMixin, Page):
         # Get all posts
         all_posts = ExperiencePage.objects.live().public().order_by('-first_published_at')
 
-        if request.GET.get('tag', None):
-            tags = request.GET.get('tag')
+        if tags := request.GET.get('tag', None):
             all_posts = all_posts.filter(tags__slug__in=[tags])
             logger.debug(f"Filted {len(all_posts)} experiences by tags {tags}")
+        elif category := request.GET.get('category', None):
+            all_posts = all_posts.filter(categories__slug__in=[category])
 
         context["posts"] = all_posts
         return context
@@ -149,6 +155,14 @@ class ExperiencePage(RoutablePageMixin, Page):
             return redirect(LOGIN_URL)
 
 
+def social_user(discord_id: int):
+    """Returns a User object for a discord id"""
+    try:
+        return get_user_model().objects.get(id=SocialAccount.objects.get(uid=discord_id).user_id)
+    except ObjectDoesNotExist:
+        return False
+
+
 class ProfilePage(RoutablePageMixin, Page):
     max_count = 1
     parent_page_types = ['core.HomePage']
@@ -162,18 +176,40 @@ class ProfilePage(RoutablePageMixin, Page):
 
     def get_context(self, request, *args, **kwargs):
         l = kwargs.pop('list_experiences', None)
+        user_acc = kwargs.pop('user', None)
         context = super().get_context(request, *args, **kwargs)
+        if not user_acc:
+            user_acc = request.user
         if l:
-            posts = ExperiencePage.objects.live().public().filter(owner=request.user)
-            logger.debug(f"filtred {len(posts)} for {request.user}")
+            posts = ExperiencePage.objects.live().public().filter(owner=user_acc)
+            logger.debug(f"filtred {len(posts)} for {user_acc}")
             context['posts'] = posts
-
         return context
 
-    @route(r'experiences/$')
-    def user_experiences(self, request):
-        return TemplateResponse(
-            request,
-            "core/experiences_page.html",
-            self.get_context(request, list_experiences=True),
-        )
+    @route(r"^$")
+    def root_profile_page(self, request):
+        return redirect("/")
+
+    @route(r"^(\d{18})/$", name='discord_id')
+    def profile_page_view(self, request: HttpRequest, discord_id):
+        user = social_user(discord_id)
+        if user:
+            return TemplateResponse(
+                request,
+                self.get_template(request),
+                {"user": user}
+            )
+        else:
+            return HttpResponse("Nope", status=404)
+
+    @route(r'(\d{18})/experiences/$', name='discord_id')
+    def user_experiences(self, request, discord_id):
+        user = social_user(discord_id=discord_id)
+        if user:
+            return TemplateResponse(
+                request,
+                "core/experiences_page.html",
+                self.get_context(request=request, list_experiences=True, user=user)
+            )
+        else:
+            return HttpResponse("User not Found", status=404)

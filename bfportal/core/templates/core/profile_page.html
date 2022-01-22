@@ -3,6 +3,9 @@
 {% with account=accounts.discord.0 %}
 <title>{{account|capfirst}}'s profile</title>
 {% block content %}
-{{account.extra_data}}
+    {{account.extra_data}}
+    <br><br>
+    <a href="experiences/">experiences</a>
+
 {% endblock content %}
 {% endwith %}
