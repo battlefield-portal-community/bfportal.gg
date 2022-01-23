@@ -10,7 +10,7 @@
         {% get_social_accounts user as accounts %}
         {% if accounts %}
             {% with account=accounts.discord.0 %}
-                <h2>Hi {{account}}#{{account.extra_data.discriminator}}</h2>
+                <h1>Hi <a href="users/{{ account.uid }}">{{account}}#{{account.extra_data.discriminator}}</a></h1>
                 <img src="{{account.get_avatar_url}}" alt="">
             {% endwith %}
         {% endif %}

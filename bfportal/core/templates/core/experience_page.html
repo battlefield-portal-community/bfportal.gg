@@ -14,17 +14,17 @@
     exp_url {{ page.exp_url }} <br>
     code {{ page.code }} <br>
     <br>
-    tags {{ page.tags.all | join:","}} <br>
+    tags {{ page.tags.all | join:", "}} <br>
     cover {{ page.cover_img_url }} <br>
     vid_url {{ page.vid_url }} <br>
-    cate
-    {% with categories=page.categories.all %}
-        {% if categories %}
-                {% for category in categories %}
-                        {{category.name}}
-                {% endfor %}
-        {% endif %}
-    {% endwith %}
+    cate {{ page.categories.all | join:", " }} <br>
+{#    {% with categories=page.categories.all %}#}
+{#        {% if categories %}#}
+{#                {% for category in categories %}#}
+{#                        {{category.name}}#}
+{#                {% endfor %}#}
+{#        {% endif %}#}
+{#    {% endwith %}#}
 
 
     <br>

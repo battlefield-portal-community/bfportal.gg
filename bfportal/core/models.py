@@ -90,12 +90,15 @@ class ExperiencesPage(RoutablePageMixin, Page):
         context = super().get_context(request, *args, **kwargs)
         # Get all posts
         all_posts = ExperiencePage.objects.live().public().order_by('-first_published_at')
-
+        logger.debug([cat.name for cat in all_posts[0].categories.all()])
         if tags := request.GET.get('tag', None):
             all_posts = all_posts.filter(tags__slug__in=[tags])
             logger.debug(f"Filted {len(all_posts)} experiences by tags {tags}")
         elif category := request.GET.get('category', None):
-            all_posts = all_posts.filter(categories__slug__in=[category])
+            all_posts = [
+                post for post in all_posts
+                if category.lower() in [cat.name.lower() for cat in post.categories.all()]
+            ]
 
         context["posts"] = all_posts
         return context
