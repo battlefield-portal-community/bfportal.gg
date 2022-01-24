@@ -1,5 +1,5 @@
 {% load static wagtailcore_tags wagtailuserbar %}
-
+{% load tailwind_tags %}
 <!DOCTYPE html>
 <html class="no-js" lang="en">
     <head>
@@ -17,7 +17,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         {# Global stylesheets #}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+        {% tailwind_css %}
 
         {% block extra_css %}
             {# Override this in templates to add extra stylesheets #}

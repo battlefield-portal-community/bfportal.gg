@@ -53,9 +53,14 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.discord',
+    'tailwind',
+    'theme',
+    'django_browser_reload',
 ]
 
 SITE_ID = 1
+TAILWIND_APP_NAME = 'theme'
+NPM_BIN_PATH = r'D:\Program Files\nodejs\npm.cmd'
 SOCIALACCOUNT_PROVIDERS = {
     'discord' : {
         'APP': {
@@ -76,6 +81,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    'django_browser_reload.middleware.BrowserReloadMiddleware',
 ]
 
 ROOT_URLCONF = 'bfportal.urls'

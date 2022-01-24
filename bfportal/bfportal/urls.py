@@ -10,6 +10,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 
 
 urlpatterns = [
+    path("__reload__/", include("django_browser_reload.urls")),
     path('django-admin/', admin.site.urls),
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
@@ -33,6 +34,7 @@ urlpatterns = [
     path('login/', RedirectView.as_view(url="/discord/login/?process=login")),
     
     path('', include('allauth.urls')),
+
 ]
 
 
