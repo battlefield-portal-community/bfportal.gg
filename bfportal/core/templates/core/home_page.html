@@ -2,16 +2,15 @@
 {% load account socialaccount %}
 {% load wagtailcore_tags %}
 
-{% block body_class %}template-blogindexpage{% endblock %}
 {% block content %}
 
-    <h1>{{ page.title }}</h1>
+    <p class="text-8xl" >{{ page.title }}</p>
     {% if request.user.is_authenticated %}
         {% get_social_accounts user as accounts %}
         {% if accounts %}
             {% with account=accounts.discord.0 %}
                 <h1>Hi <a href="users/{{ account.uid }}">{{account}}#{{account.extra_data.discriminator}}</a></h1>
-                <img src="{{account.get_avatar_url}}" alt="">
+                <img class="rounded-full" src="{{account.get_avatar_url}}" alt="">
             {% endwith %}
         {% endif %}
     {% else %}
