@@ -1,0 +1,54 @@
+{% load static wagtailcore_tags socialaccount %}
+<nav class="flex items-center justify-between flex-wrap bg-discord-dark px-6 py-3">
+    <a href="/" >
+        <div class="flex items-center flex-shrink-0 text-white mr-6">
+            <img class="fill-current h-8 w-8 mr-2" width="54" height="54" src="{% static 'images/bf_portal_logo_bc.png' %}"
+                 alt=""/>
+            <span class="font-semibold text-2xl tracking-tight">BF Portal</span>
+        </div>
+    </a>
+    <div class="block lg:hidden">
+        <button class="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
+            <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title>
+                <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/>
+            </svg>
+        </button>
+    </div>
+    <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+        <div class="text-base lg:flex-grow">
+            <a href="/experiences/" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4">
+                Library
+            </a>
+            <a href="#" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4">
+                Docs
+            </a>
+            <a href="/experiences?category=featured"
+               class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4">
+                Featured
+            </a>
+            <a href="/submit/"
+               class="inline-block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white bg-discord-light-dark p-1 rounded-lg hover:bg-bf2042-5 hover:text-bf2042-1">
+                Submit Experience
+            </a>
+        </div>
+        <div>
+            {% if request.user.is_authenticated %}
+                {% get_social_accounts user as accounts %}
+                {% if accounts %}
+                    {% with account=accounts.discord.0 %}
+                        <a href="/users/{{ account.uid }}"
+                           class="inline-block text-sm px-4 py-1 leading-none border rounded text-bf2042-4 border-white hover:border-transparent hover:text-bf2042-6 hover:bg-bf2042-1 mt-4 lg:mt-0">
+                            <img src="{{ account.get_avatar_url }}" class="inline rounded-full" width="30" alt="@p" />
+                            <div class="inline">{{ account }}</div>
+                            <div class="inline text-bf2042-2">#{{ account.extra_data.discriminator }}</div>
+                        </a>
+                        {#                <img class="rounded-full hover:drop-shadow-2xl" src="{{account.get_avatar_url}}" alt="">#}
+                    {% endwith %}
+                {% endif %}
+            {% else %}
+                <a href="{% provider_login_url 'discord' process='login' %}"
+                   class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">Login</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>

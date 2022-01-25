@@ -1,5 +1,4 @@
-{% load static wagtailcore_tags wagtailuserbar %}
-{% load tailwind_tags %}
+{% load static wagtailcore_tags wagtailuserbar account socialaccount tailwind_tags %}
 <!DOCTYPE html>
 <html class="no-js" lang="en">
     <head>
@@ -24,9 +23,10 @@
         {% endblock %}
     </head>
 
-    <body class="{% block body_class %}bg-discord-dark{% endblock %}">
+    <body class="{% block body_class %}bg-discord-light-dark{% endblock %}">
         {% wagtailuserbar %}
 
+        {% include 'navbar.html' %}
         {% block content %}{% endblock %}
 
         {# Global javascript #}
