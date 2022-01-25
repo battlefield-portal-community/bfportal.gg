@@ -1,22 +1,7 @@
 {% extends "base.html" %}
-{% load account socialaccount %}
 {% load wagtailcore_tags %}
 
 {% block content %}
-
-    <p class="text-8xl" >{{ page.title }}</p>
-    {% if request.user.is_authenticated %}
-        {% get_social_accounts user as accounts %}
-        {% if accounts %}
-            {% with account=accounts.discord.0 %}
-                <h1>Hi <a href="users/{{ account.uid }}">{{account}}#{{account.extra_data.discriminator}}</a></h1>
-                <img class="rounded-full" src="{{account.get_avatar_url}}" alt="">
-            {% endwith %}
-        {% endif %}
-    {% else %}
-            <h3><a href="{% provider_login_url 'discord' process='login' %}">Login Via discord</a></h3>
-    {% endif %}
-
     {% for post in posts %}
         <h2><a href="{% pageurl post %}">{{ post.title }}</a></h2>
         {{ post.specific.intro }}
