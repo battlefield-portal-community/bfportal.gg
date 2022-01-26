@@ -1,12 +1,118 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags widget_tweaks %}
 
 {% block content %}
-    <form action="." method="POST">
-        {% csrf_token %}
+    <div class="flex h-screen">
+        <form action="." method="POST" class="mx-auto">
+            {% csrf_token %}
+            <table class="border-collapse">
+            {% for field in form %}
+                {% if forloop.counter0 == 1 %}
+                    <tr>
+                        <td class="font-bold text-lg text-slate-500 text-center">-- or --</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td class="mb-8"><div class="inline-block text-bf2042-3 pr-6">{{ field.label }}</div></td>
+                    <td>
+                        {% if field.html_name == "categories" %}
 
-        {{ form.as_p }}
-        
-        <p><input type="submit" value="Submit Experience"></p>
-    </form>
+                                <ul class="inline">
+                                {% for choice in form.categories.field.choices %}
+                                    <li class="inline text-white mt-0 bg-discord-light-dark px-0.5">
+                                    <input type="checkbox" class="form-checkbox appearance-none border border-red-300 rounded-sm bg-discord-dark checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 bg-no-repeat bg-center bg-contain mr-2 cursor-pointer" name="categories" value="{{choice.0}}"
+                                      {% ifequal form.categories.data choice.0 %}
+                                         checked="checked"
+                                      {% endifequal %}/>
+                                    <label>{{choice.1}}</label>
+                                    </li>
+                                {% endfor %}
+                                </ul>
+                        {% elif field.html_name == "description"  %}
+                            {% render_field field class="inline-block resize-y h-20 w-3/4 text-white mt-0 bg-discord-light-dark px-0.5 rounded rounded-lg border-0 border-b-2 border-gray-200  focus:ring-0 focus:bg-discord-dark focus:border-bf2042-4" %}
+                        {% else %}
+                            {% render_field field class="inline-block text-white w-3/4 mt-0 bg-discord-light-dark px-0.5 rounded rounded-lg border-0 border-b-2 border-gray-200  focus:ring-0 focus:bg-discord-dark focus:border-bf2042-4" %}
+                        {% endif %}
+                        {% if field.help_text %}
+                        <label
+                                class="
+                                inline-block
+                                rounded-full
+                                px-2 bg-black w-min text-bf2042-3
+                                hover:text-blue-700 hover:cursor-help hover:bg-bf2042-5
+                                transition duration-200 ease-in-out "
+                                data-bs-toggle="tooltip" title="{{ field.help_text|safe }}">
+                            ?
+                        </label>
+                    </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </table>
+            <br>
+            {% if form.errors %}
+            <ul class="user-msg error text-center border border-red-300 rounded-lg mb-8">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <li>
+                      {% if field != '__all__' %}
+                        <strong class="text-red-700">{{ field.label }}:</strong>
+                      {% endif %}
+                      <p class="inline-block text-red-400">{{ error }}</p>
+                    </li>
+                {% endfor %}
+            {% endfor %}
+            </ul>
+            {% endif %}
+            <button type="submit" class="text-bf2042-4 font-bold hover:text-bf2042-1 bg-bf2042-1 rounded-lg px-2 py-1 hover:bg-bf2042-4 transition duration-300 ease-in-out">Submit Experience</button>
+        </form>
+    </div>
+{% endblock %}
+{% block extra_js %}
+    <script>
+    async function GetPlaygroundInfo(url){
+        const api_url = `https://api.gametools.network/bf2042/playground/?playgroundid=${url.search.split('=').at(-1)}`
+        console.log(api_url)
+        const resp = await fetch(api_url);
+        return resp.json()
+    }
+    </script>
+    <script>
+    $('input[type="checkbox"]').on('change', function() {
+       $('input[type="checkbox"]').not(this).prop('checked', false);
+    });
+    </script>
+    <script>
+    function toTitleCase(str) {
+      return str.replace(
+        /\w\S*/g,
+        function(txt) {
+          return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        }
+      );
+    }
+    $('#id_exp_url').on('change', function () {
+        if ($(this).val()){
+            const url = new URL($(this).val());
+            if (url.origin === "https://portal.battlefield.com"){
+                if (url.search.split('=').at(0) === "?playgroundId"){
+                    if (url.search.split('=').at(-1).length === 36){
+                        GetPlaygroundInfo(url).then(resp => {
+                            if (!resp.hasOwnProperty('errors')) {
+                                let tags = ""
+                                resp['tag'].forEach(elm => tags = tags.concat(elm["values"][0]["readableSettingName"], ","))
+                                resp = resp['validatedPlayground']
+                                document.getElementById("id_title").value = toTitleCase(resp['playgroundName']);
+                                document.getElementById("id_description").value = resp['playgroundDescription'];
+                                document.getElementById("id_tags").value = tags;
+                                document.getElementById("id_no_players").value = resp['mapRotation']['maps'][0]['gameSize'];
+                                {#document.getElementById("id_no_bots").value = resp['mapRotation']['maps'][0]['gameSize'];#}
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    });
+    </script>
 {% endblock %}

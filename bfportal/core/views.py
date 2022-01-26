@@ -1,14 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.shortcuts import render
-from django.template.defaultfilters import slugify
-from django.views.generic import TemplateView
-
 from loguru import logger
 
 from core.forms import ExperiencePageForm
 from core.models import ExperiencePage, HomePage, ExperiencesPage
-
+from core.utils.helper import unique_slug_generator
 
 @login_required
 def submit_experience(request: HttpRequest, home_page: HomePage):
@@ -17,7 +14,7 @@ def submit_experience(request: HttpRequest, home_page: HomePage):
         if form.is_valid():
             logger.debug(f"Saving new exp {form.cleaned_data}")
             new_exp_page : ExperiencePage = form.save(commit=False)
-            new_exp_page.slug = slugify(new_exp_page.title)
+            new_exp_page.slug = unique_slug_generator(new_exp_page)
             new_exp_page.tags.add(*form.cleaned_data['tags'])
             selected = form.cleaned_data['categories']
             if selected:

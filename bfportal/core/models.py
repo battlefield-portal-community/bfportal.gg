@@ -103,19 +103,31 @@ class ExperiencesPage(RoutablePageMixin, Page):
 
 
 class ExperiencePage(RoutablePageMixin, Page):
-    description = models.TextField(default='', help_text="Description of Your experience")
+    description = models.TextField(default='', help_text="Description of Your experience", verbose_name='Description')
 
     code = models.CharField(blank=True, max_length=6, default='',
-                            help_text="Six letter alpha-numeric code of you experience")
-    exp_url = models.URLField(blank=True, default='', help_text="Url of your experience")
+                            help_text="Six letter alpha-numeric code of you experience", verbose_name="Share Code")
+    exp_url = models.URLField(blank=True, default='', help_text="Url of your experience", verbose_name="Experience Url")
 
-    tags = ClusterTaggableManager(blank=True, help_text="Some tags", through=ExperiencePageTag)
-    vid_url = models.URLField(blank=True, default='', help_text="Link to vid showcasing your experience")
-    cover_img_url = models.URLField(blank=True, default='', help_text="Link for your cover Image")
+    tags = ClusterTaggableManager(blank=True, help_text="Some tags", through=ExperiencePageTag, verbose_name="Tags")
+    vid_url = models.URLField(
+        blank=True, default='', help_text="Link to vid showcasing your experience", verbose_name="Video Url"
+    )
+    cover_img_url = models.URLField(
+        blank=True, default='', help_text="Link for your cover Image", verbose_name="Cover Image Url"
+    )
 
-    no_players = models.IntegerField(blank=True, default=-1, help_text="Max Number of Human Players in your experience")
-    no_bots = models.IntegerField(blank=True, default=-1, help_text="Max Number of Bots in your experience")
-    categories = ParentalManyToManyField('core.ExperiencesCategory', blank=True)
+    no_players = models.PositiveIntegerField(
+        blank=True,
+        default=0,
+
+        help_text="Max Number of Human Players in your experience",
+        verbose_name="Number of Human Players"
+    )
+    no_bots = models.PositiveIntegerField(
+        blank=True, default=0, help_text="Max Number of Bots in your experience", verbose_name="Number Of Bots"
+    )
+    categories = ParentalManyToManyField('core.ExperiencesCategory', blank=True, help_text="Choose from the Category")
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
