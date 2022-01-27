@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.category_pill {
+    background-color: var(--category_pill_bg_color);
+    color: var(--category_pill_text_color);
+    transition-property: background-color, color;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+}
+.experience_container:hover .category_pill {
+    background-color: var(--category_pill_bg_hover_color);
+    color: var(--category_pill_text_hover_color);
+}
