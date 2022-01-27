@@ -9,17 +9,18 @@ from django.template.response import TemplateResponse
 from django.shortcuts import render, redirect
 
 from wagtail.core.models import Page
-from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, InlinePanel
+from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.models import register_snippet
 
-from allauth.socialaccount.templatetags.socialaccount import get_social_accounts
 from allauth.socialaccount.models import SocialAccount
 from taggit.models import TaggedItemBase
 
 from modelcluster.models import ParentalKey, ParentalManyToManyField
 from modelcluster.contrib.taggit import ClusterTaggableManager
+from wagtail_color_panel.fields import ColorField
+from wagtail_color_panel.edit_handlers import NativeColorPanel
 
 from loguru import logger
 
@@ -52,6 +53,10 @@ class HomePage(RoutablePageMixin, Page):
 
 class ExperiencesCategory(models.Model):
     name = models.CharField(max_length=255)
+    bg_color = ColorField(default="#474c50")
+    bg_hover_color = ColorField(default="#474c50")
+    text_color = ColorField(default="#000000")
+    text_hover_color = ColorField(default="#000000")
     icon = models.ForeignKey(
         'wagtailimages.Image', null=True, blank=True,
         on_delete=models.SET_NULL, related_name='+'
@@ -59,6 +64,12 @@ class ExperiencesCategory(models.Model):
 
     panels = [
         FieldPanel('name'),
+        MultiFieldPanel([
+            NativeColorPanel('bg_color'),
+            NativeColorPanel('bg_hover_color'),
+            NativeColorPanel('text_color'),
+            NativeColorPanel('text_hover_color'),
+        ], heading="Colors Info", classname="collapsible"),
         ImageChooserPanel('icon'),
     ]
 
@@ -171,7 +182,8 @@ class ExperiencePage(RoutablePageMixin, Page):
 def social_user(discord_id: int):
     """Returns a User object for a discord id"""
     try:
-        return get_user_model().objects.get(id=SocialAccount.objects.get(uid=discord_id).user_id)
+        usr = get_user_model().objects.get(id=SocialAccount.objects.get(uid=discord_id).user_id)
+        return usr
     except ObjectDoesNotExist:
         return False
 
@@ -194,9 +206,10 @@ class ProfilePage(RoutablePageMixin, Page):
         if not user_acc:
             user_acc = request.user
         if l:
-            posts = ExperiencePage.objects.live().public().filter(owner=user_acc)
+            posts = ExperiencePage.objects.live().public().filter(owner=user_acc).order_by("-first_published_at")
             logger.debug(f"filtred {len(posts)} for {user_acc}")
             context['posts'] = posts
+        context['user'] = user_acc
         return context
 
     @route(r"^$")
@@ -207,10 +220,11 @@ class ProfilePage(RoutablePageMixin, Page):
     def profile_page_view(self, request: HttpRequest, discord_id):
         user = social_user(discord_id)
         if user:
+            logger.debug(f"fetch profile for {user}")
             return TemplateResponse(
                 request,
                 self.get_template(request),
-                {"user": user}
+                self.get_context(request, list_experiences=True, user=user)
             )
         else:
             return HttpResponse("Nope", status=404)
@@ -219,6 +233,7 @@ class ProfilePage(RoutablePageMixin, Page):
     def user_experiences(self, request, discord_id):
         user = social_user(discord_id=discord_id)
         if user:
+            logger.debug(f"fetch experiences for {user}")
             return TemplateResponse(
                 request,
                 "core/experiences_page.html",
