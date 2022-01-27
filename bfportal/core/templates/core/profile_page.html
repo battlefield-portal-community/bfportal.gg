@@ -1,12 +1,45 @@
 {% extends "base.html" %}
 {% load socialaccount %}
-{% get_social_accounts user as accounts %}
-{% with account=accounts.discord.0 %}
-<title>{{account|capfirst}}'s profile</title>
-{% block content %}
-    {{account.extra_data}}
-    <br><br>
-    <a href="experiences/">experiences</a>
 
-{% endblock content %}
-{% endwith %}
+{% block content %}
+    {% get_social_accounts user as accounts %}
+    <div class="flex w-full flex-col space-y-20 p-4">
+        <div class="profile flex space-x-5">
+            {% if accounts %}
+                {% with account=accounts.discord.0 %}
+                    <div class="profile_banner flex flex-col justify-center items-center text-sm px-2  py-4 space-y-2  rounded-lg text-bf2042-4 bg-card-bg hover:drop-shadow-bf2042-4 transition duration-200 ease-in-out ">
+                        <img src="{{ account.get_avatar_url }}" class="block rounded-full " alt="@p"/>
+                        <div class="flex flex-row  text-bf2042-4">
+                            <div>
+                               {{ account }}<p class="inline text-bf2042-3">#{{ account.extra_data.discriminator }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user_info grid grid-cols-2 bg-card-bg rounded-lg place-content-around pr-4">
+                        <div class="text-center">
+                            <p class="font-semibold text-slate-500">Account Create on</p>
+                            <p class="text-center font-thin oldstyle-nums text-bf2042-3">{{ user.date_joined|date:"d M Y"}}</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="font-semibold text-slate-500">Number of Experiences</p>
+                            <a href="experiences/" class="font-thin oldstyle-nums text-bf2042-3 hover:text-bf2042-6">{{ posts|length  }}</a>
+                        </div>
+                        {% with posts|first as latest_post %}
+                            {% if latest_post %}
+                                <div class="text-center">
+                                    <p class="font-semibold text-slate-500">Latest Experience</p>
+                                        <a href="{{ latest_post.url }}" class="font-thin oldstyle-nums text-bf2042-3 hover:text-bf2042-6">{{ latest_post.title|title }} </a>
+                                </div>
+                                <div class="text-center">
+                                    <p class="font-semibold text-slate-500">Posted On</p>
+                                    <p class="text-center font-thin oldstyle-nums text-bf2042-3">{{ latest_post.first_published_at|date:"d M Y"}}</p>
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                {% endwith %}
+            {% endif %}
+        </div>
+        {% include 'core/experiences_listing.html'%}
+    </div>
+{% endblock %}
