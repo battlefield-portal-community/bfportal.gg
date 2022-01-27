@@ -2,9 +2,14 @@
 {% load wagtailcore_tags %}
 
 {% block content %}
-    {% for post in posts %}
-        <h2><a href="{% pageurl post %}">{{ post.title }}</a></h2>
-        {{ post.specific.intro }}
-        {{ post.specific.body|richtext }}        
-    {% endfor %}
+    <div class="flex flex-wrap flex-col">
+        <div class="pl-2 mx-auto">
+            {% include 'core/experiences_listing.html'%}
+        </div>
+        {% if request.user.is_authenticated %}
+        {% else %}
+            <iframe src="https://discord.com/widget?id=870246147455877181&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+        {% endif %}
+    </div>
+
 {% endblock %}
