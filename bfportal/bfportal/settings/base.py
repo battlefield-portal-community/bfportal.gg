@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'wagtail.admin',
     'wagtail.core',
     'wagtail.contrib.routable_page',
+    'wagtail_color_panel',
 
     'modelcluster',
     'taggit',
@@ -203,3 +204,7 @@ WAGTAILSEARCH_BACKENDS = {
 BASE_URL = 'http://example.com'
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/discord/login/"
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
