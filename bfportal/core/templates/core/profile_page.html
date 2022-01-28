@@ -4,7 +4,7 @@
 {% block content %}
     {% get_social_accounts user as accounts %}
     <div class="flex w-full flex-col space-y-20 p-4">
-        <div class="profile flex space-x-5">
+        <div class="profile flex space-x-5 mx-auto">
             {% if accounts %}
                 {% with account=accounts.discord.0 %}
                     <div class="profile_banner flex flex-col justify-center items-center text-sm px-2  py-4 space-y-2  rounded-lg text-bf2042-4 bg-card-bg hover:drop-shadow-bf2042-4 transition duration-200 ease-in-out ">
