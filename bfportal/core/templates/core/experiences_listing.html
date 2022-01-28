@@ -1,34 +1,65 @@
 {% load static %}
-<div class="flex flex-row flex-wrap">
-    {% for post in posts %}
-        <a href="{{ post.url }}">
-            <div class="experience_container group flex-wrap flex-col mr-2 mb-2 bg-accent-bg p-2 rounded-sm hover:bg-hover-bg-light hover:shadow-xl transition duration-500 ease-in-out">
-                <div class="-m-2 drop-shadow-xl">
-                    <img class="rounded-sm object-cover object-center w-72 h-56" src="{% static 'images/placeholder.avif' %}" alt="{{ post.slug }}">
-                    <div class="absolute top-0 left-0 flex flex-row flex-wrap p-2">
-                        {% for cat in post.categories.all %}
-                            <a href="/experiences/?category={{ cat }}">
-                            <p class="category_pill rounded-lg w-min inline mr-1 px-1 hover:border hover:border-white" style="--category_pill_bg_color: {{ cat.bg_color }}; --category_pill_bg_hover_color: {{ cat.bg_hover_color }}; --category_pill_text_color: {{ cat.text_color }}; --category_pill_text_hover_color: {{ cat.text_hover_color }}">{{ cat }}</p>
-                            </a>
-                        {% endfor %}
+<div>
+    <div class="w-11/12 mx-auto">
+        <div class="flex flex-wrap flex-row justify-center gap-x-2 gap-y-4">
+            {% for post in posts %}
+                <div class="static experience_container group flex-col w-min p-2 h-96 w-96 bg-accent-bg rounded-sm scroll-mt-6 hover:bg-hover-bg-light hover:shadow-xl hover:cursor-pointer transition duration-500 ease-in-out">
+                    <div class=" -m-2 drop-shadow-xl h-2/3">
+                        <img class="rounded-sm h-full w-full" src="{% static 'images/placeholder.avif' %}" alt="{{ post.slug }}">
+                        <div class="absolute top-0 left-0 flex flex-row flex-wrap p-2 gap-x-1">
+                            {% for cat in post.categories.all %}
+                                <a href="/experiences/?category={{ cat }}">
+                                <p class="category_pill font-semibold oldstyle-nums font-sans rounded-lg px-2 hover:border hover:border-white" style="--category_pill_bg_color: {{ cat.bg_color }}; --category_pill_bg_hover_color: {{ cat.bg_hover_color }}; --category_pill_text_color: {{ cat.text_color }}; --category_pill_text_hover_color: {{ cat.text_hover_color }}">{{ cat }}</p>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 mt-2 h-1/3">
+                        <a href="{{ post.url }}" class="main-link">
+                            <div class="font-bold font-mono text-3xl text-white group-hover:text-gray-900 transition duration-500 ease-in-out ">{{ post.title|title }}</div>
+                        </a>
+                        <div class="font-medium text-gray-500 pb-2">{{ post.description|truncatewords:10 }}</div>
+                        <div class="pb-1 text-sm">
+                            {% for tag in post.tags.all|slice:"0:5" %}
+                                <a href="/experiences/?tag={{ tag }}" class="bg-hover-bg-light rounded-lg px-2 py-0">{{ tag|title }}</a>
+                            {% endfor %}
+
+                        </div>
+                        <div class="text-xs font-semibold text-gray-500">
+                            By
+                            {% get_social_account post.owner as social_account %}
+                            {% if social_account %}
+                                <a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-thin oldstyle-nums text-bf2042-3 hover:text-bf2042-6">{{post.owner}}</a>
+                            {% else %}
+                                {{post.owner}}
+                            {% endif %}
+                            On {{post.first_published_at}}</div>
                     </div>
                 </div>
-                <div class="pt-2">
-                    <a href="{{ post.url }}">
-                        <div class="font-bold font-mono text-4xl text-gray-400 group-hover:text-gray-900 transition duration-500 ease-in-out ">{{ post.title|title }}</div>
-                    </a>
-                    <div class="font-medium text-gray-500  ">{{ post.description }}</div>
-                    <div class="text-sm">
-                        By
-                        {% get_social_account post.owner as social_account %}
-                        {% if social_account %}
-                            <a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-thin oldstyle-nums text-bf2042-3 hover:text-bf2042-6">{{post.owner}}</a>
-                        {% else %}
-                            {{post.owner}}
-                        {% endif %}
-                        On {{post.first_published_at}}</div>
-                </div>
-            </div>
-        </a>
-    {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
 </div>
+{% block extra_js %}
+    <script>
+        const cards = document.querySelectorAll(".experience_container");
+        [...cards].forEach(card => {
+                const mainLink = card.querySelector(".main-link");
+                const clickableElements = Array.from(card.querySelectorAll("a"));
+                //we are using 'a' here for simplicity but ideally you should put a class like 'clickable' on every clickable element inside card(a, button) and use that in query selector
+
+                clickableElements.forEach((ele) =>
+                    ele.addEventListener("click", (e) => e.stopPropagation())
+                );
+
+                function handleClick(event) {
+                    const noTextSelected = !window.getSelection().toString();
+
+                    if (noTextSelected) {
+                        mainLink.click();
+                    }
+                }
+                card.addEventListener("click", handleClick);
+        });
+    </script>
+{% endblock %}
