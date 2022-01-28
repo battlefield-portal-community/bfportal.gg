@@ -65,6 +65,10 @@ module.exports = {
                 'bf2042-5' : '0 0 0.35rem #F26A1B',
                 'bf2042-6' : '0 0 0.35rem #FF2C10',
             },
+            gridTemplateColumns: {
+                'auto-fit': 'repeat(auto-fit, minmax(0, 1fr))',
+                'auto-fll': 'repeat(auto-fill, minmax(0, 1fr))',
+            },
         }
     },
     plugins: [
