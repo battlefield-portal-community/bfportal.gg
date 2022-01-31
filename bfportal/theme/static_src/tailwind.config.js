@@ -45,6 +45,7 @@ module.exports = {
         extend: {
             colors: {
                 'bg-default' : '#121212',
+                'default' : '#121212',
                 'card-bg' : '#262626',
                 'hover-bg-light': '#474c50',
                 'accent-bg' : '#303030',
