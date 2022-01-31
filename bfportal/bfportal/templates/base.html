@@ -23,7 +23,7 @@
         {% endblock %}
     </head>
 
-    <body class="bg-bg-default{% block body_class %}{% endblock %}">
+    <body class="bg-bg-default min-h-screen m-0 flex flex-col gap-y-4 scrollable{% block body_class %}{% endblock %}">
         {% wagtailuserbar %}
 
         {% block header %}
@@ -31,6 +31,9 @@
         {% endblock %}
         {% block content %}{% endblock %}
 
+        {% block footer %}
+            {% include 'footer.html' %}
+        {% endblock %}
         {# Global javascript #}
         <script type="text/javascript" src="{% static 'js/bfportal.js' %}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
