@@ -64,10 +64,19 @@ module.exports = {
                 'bf2042-4' : '0 0 0.35rem #26FFDF',
                 'bf2042-5' : '0 0 0.35rem #F26A1B',
                 'bf2042-6' : '0 0 0.35rem #FF2C10',
+                'bf2042-1-sm' : '0 1px 1px #011C26',
+                'bf2042-2-sm' : '0 1px 1px #025159',
+                'bf2042-3-sm' : '0 1px 1px #08A696',
+                'bf2042-4-sm' : '0 1px 1px #26FFDF',
+                'bf2042-5-sm' : '0 1px 1px #F26A1B',
+                'bf2042-6-sm' : '0 1px 1px #FF2C10',
             },
             gridTemplateColumns: {
                 'auto-fit': 'repeat(auto-fit, minmax(0, 1fr))',
                 'auto-fll': 'repeat(auto-fill, minmax(0, 1fr))',
+            },
+            borderWidth:{
+                '1/2' : '0.5px',
             },
         }
     },
