@@ -2,70 +2,82 @@
 {% load wagtailcore_tags widget_tweaks %}
 
 {% block content %}
-    <div class="flex h-screen">
-        <form action="." method="POST" class="mx-auto">
-            {% csrf_token %}
-            <table class="border-collapse">
-            {% for field in form %}
-                {% if forloop.counter0 == 1 %}
-                    <tr>
-                        <td class="font-bold text-lg text-slate-500 text-center">-- or --</td>
-                    </tr>
-                {% endif %}
-                <tr>
-                    <td class="mb-8"><div class="inline-block text-bf2042-3 pr-6">{{ field.label }}</div></td>
-                    <td>
-                        {% if field.html_name == "categories" %}
-
-                                <ul class="inline">
-                                {% for choice in form.categories.field.choices %}
-                                    <li class="inline text-white mt-0 bg-discord-light-dark px-0.5">
-                                    <input type="checkbox" class="form-checkbox appearance-none border border-red-300 rounded-sm bg-discord-dark checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 bg-no-repeat bg-center bg-contain mr-2 cursor-pointer" name="categories" value="{{choice.0}}"
-                                      {% ifequal form.categories.data choice.0 %}
-                                         checked="checked"
-                                      {% endifequal %}/>
-                                    <label>{{choice.1}}</label>
-                                    </li>
-                                {% endfor %}
-                                </ul>
-                        {% elif field.html_name == "description"  %}
-                            {% render_field field class="inline-block resize-y h-20 w-3/4 text-white mt-0 bg-discord-light-dark px-0.5 rounded rounded-lg border-0 border-b-2 border-gray-200  focus:ring-0 focus:bg-discord-dark focus:border-bf2042-4" %}
-                        {% else %}
-                            {% render_field field class="inline-block text-white w-3/4 mt-0 bg-discord-light-dark px-0.5 rounded rounded-lg border-0 border-b-2 border-gray-200  focus:ring-0 focus:bg-discord-dark focus:border-bf2042-4" %}
+    <div class="w-9/12 mx-auto mb-8">
+        <div>
+            <form action="." method="POST">
+                {% csrf_token %}
+                <table class="expSubmitTable border-separate w-full">
+                    {% for field in form %}
+                        {% if forloop.counter0 == 1 %}
+                            <tr>
+                                <td class="font-bold text-2xl text-[#474747] text-center">-- or --</td>
+                            </tr>
                         {% endif %}
-                        {% if field.help_text %}
-                        <label
-                                class="
-                                inline-block
-                                rounded-full
-                                px-2 bg-black w-min text-bf2042-3
-                                hover:text-blue-700 hover:cursor-help hover:bg-bf2042-5
-                                transition duration-200 ease-in-out "
-                                data-bs-toggle="tooltip" title="{{ field.help_text|safe }}">
-                            ?
-                        </label>
-                    </td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
-            </table>
-            <br>
-            {% if form.errors %}
-            <ul class="user-msg error text-center border border-red-300 rounded-lg mb-8">
-            {% for field in form %}
-                {% for error in field.errors %}
-                    <li>
-                      {% if field != '__all__' %}
-                        <strong class="text-red-700">{{ field.label }}:</strong>
-                      {% endif %}
-                      <p class="inline-block text-red-400">{{ error }}</p>
-                    </li>
+                        <tr>
+                            <td>
+                                <div class="flex flex-col gap-y-4">
+                                    <div>
+                                        <div class="inline-block text-bf2042-3">
+                                            {{ field.label }}
+                                            {% if field.field.required  %}
+                                                <p class="inline-block text-red-500">*</p>
+                                            {% endif %}
+                                        </div>
+                                        <p id="{{ field.auto_id  }}Reason" class="reasonP inline-block text-bf2042-2 mr-2"></p>
+                                        <div class="inline-block">
+                                            {% if field.help_text %}
+                                                <label
+                                                    class="
+                                                    rounded-full
+                                                    px-2 bg-black w-min text-bf2042-3
+                                                    hover:text-blue-700 hover:cursor-help hover:bg-bf2042-5
+                                                    transition duration-200 ease-in-out "
+                                                    data-bs-toggle="tooltip" title="{{ field.help_text|safe }}">
+                                                ?
+                                                </label>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        {% if field.html_name == "categories" %}
+                                                <ul class="inline bg-default">
+                                                {% for choice in form.categories.field.choices %}
+                                                    <li class="inline text-white bg-default mt-0 px-0.5">
+                                                    <input type="checkbox" class="form-checkbox appearance-none border border-red-300 rounded-sm bg-default checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 bg-no-repeat bg-center bg-contain mr-2 cursor-pointer" name="categories" value="{{choice.0}}"
+                                                      {% ifequal form.categories.data choice.0 %}
+                                                         checked="checked"
+                                                      {% endifequal %}/>
+                                                    <label>{{choice.1}}</label>
+                                                    </li>
+                                                {% endfor %}
+                                                </ul>
+                                        {% else %}
+                                            {% render_field field class="inline-block w-full  bg-default resize-y h-14 text-white mt-0 px-0.5 rounded rounded-lg border-0 border-b-2 border-gray-200 hover:bg-[#1f1f1f]  focus:ring-0 focus:bg-discord-dark  focus:border-bf2042-4 disabled:bg-[#1f1f1f]" %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <br>
+                {% if form.errors %}
+                <ul class="user-msg error text-center border border-red-300 rounded-lg mb-8">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>
+                          {% if field != '__all__' %}
+                            <strong class="text-red-700">{{ field.label }}:</strong>
+                          {% endif %}
+                          <p class="inline-block text-red-400">{{ error }}</p>
+                        </li>
+                    {% endfor %}
                 {% endfor %}
-            {% endfor %}
-            </ul>
-            {% endif %}
-            <button type="submit" class="text-bf2042-4 font-bold hover:text-bf2042-1 bg-bf2042-1 rounded-lg px-2 py-1 hover:bg-bf2042-4 transition duration-300 ease-in-out">Submit Experience</button>
-        </form>
+                </ul>
+                {% endif %}
+                <button type="submit" class="text-bf2042-4 font-bold hover:text-bf2042-1 bg-bf2042-1 rounded-lg px-2 py-1 hover:bg-bf2042-4 transition duration-300 ease-in-out">Submit Experience</button>
+            </form>
+        </div>
     </div>
 {% endblock %}
 {% block extra_js %}
@@ -104,7 +116,12 @@
                                 resp = resp['validatedPlayground']
                                 document.getElementById("id_title").value = toTitleCase(resp['playgroundName']);
                                 document.getElementById("id_description").value = resp['playgroundDescription'];
-                                document.getElementById("id_tags").value = tags;
+                                const tagElm = document.getElementById("id_tags");
+                                tagElm.value = tags;
+                                if(tags.length > 1) {
+                                    tagElm.disabled = true;
+                                    document.getElementById(tagElm.id+"Reason").textContent = "[Auto Completed as Exp Url is Provided]"
+                                }
                                 document.getElementById("id_no_players").value = resp['mapRotation']['maps'][0]['gameSize'];
                                 {#document.getElementById("id_no_bots").value = resp['mapRotation']['maps'][0]['gameSize'];#}
                             }

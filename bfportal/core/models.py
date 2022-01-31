@@ -171,7 +171,7 @@ class ExperiencePage(RoutablePageMixin, Page):
     no_bots = models.PositiveIntegerField(
         blank=True, default=0, help_text="Max Number of Bots in your experience", verbose_name="Number Of Bots"
     )
-    categories = ParentalManyToManyField('core.ExperiencesCategory', blank=True, help_text="Choose from the Category")
+    categories = ParentalManyToManyField('core.ExperiencesCategory', blank=False, help_text="Choose from the Category")
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
