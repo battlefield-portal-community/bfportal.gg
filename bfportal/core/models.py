@@ -2,6 +2,7 @@ from typing import Union
 
 from django.db import models
 from django import forms
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import get_user_model
 from django.http import HttpRequest, HttpResponse
@@ -25,6 +26,39 @@ from wagtail_color_panel.edit_handlers import NativeColorPanel
 from loguru import logger
 
 from bfportal.settings.base import LOGIN_URL
+from core.utils.helper import safe_cast
+
+
+def pagination_wrapper(request: HttpRequest, posts: models.query.QuerySet) -> Paginator:
+    paginator = Paginator(filter_tags_category(request, posts), request.GET.get('n', 10))
+    curr_page = safe_cast(request.GET.get('page', None), int, 1)
+    try:
+        # If the page exists and the ?page=x is an int
+        posts = paginator.page(curr_page)
+    except PageNotAnInteger:
+        # If the ?page=x is not an int; show the first page
+        posts = paginator.page(1)
+    except EmptyPage:
+        # If the ?page=x is out of range (too high most likely)
+        # Then return the last page
+        posts = paginator.page(paginator.num_pages)
+
+    return posts
+
+
+def filter_tags_category(request: HttpRequest, posts: models.query.QuerySet):
+    all_posts = posts
+    if tags := request.GET.getlist('tag', None):
+        all_posts = all_posts.filter(tags__slug__in=tags)
+    if category := request.GET.get('category', None):
+        all_posts = [
+            post for post in all_posts
+            if category.lower() in [cat.name.lower() for cat in post.categories.all()]
+        ]
+
+    if tags or category:
+        logger.debug(f"filtered {len(all_posts)} experiences for tags {tags}, cat [{category}]")
+    return all_posts
 
 
 class HomePage(RoutablePageMixin, Page):
@@ -47,7 +81,12 @@ class HomePage(RoutablePageMixin, Page):
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-        context['posts'] = ExperiencePage.objects.live().public().order_by('-first_published_at')
+        posts = pagination_wrapper(
+            request,
+            ExperiencePage.objects.live().public().order_by('-first_published_at'),
+        )
+
+        context['posts'] = posts
         return context
 
 
@@ -100,16 +139,10 @@ class ExperiencesPage(RoutablePageMixin, Page):
         """Adding custom stuff to our context."""
         context = super().get_context(request, *args, **kwargs)
         # Get all posts
-        all_posts = ExperiencePage.objects.live().public().order_by('-first_published_at')
-        if tags := request.GET.getlist('tag', None):
-            all_posts = all_posts.filter(tags__slug__in=tags)
-        if category := request.GET.get('category', None):
-            all_posts = [
-                post for post in all_posts
-                if category.lower() in [cat.name.lower() for cat in post.categories.all()]
-            ]
-        logger.debug(f"filtered {len(all_posts)} experiences for tags {tags}, cat [{category}]")
-        context["posts"] = all_posts
+        context["posts"] = pagination_wrapper(
+            request,
+            ExperiencePage.objects.live().public().order_by('-first_published_at')
+        )
         return context
 
 
@@ -203,13 +236,19 @@ class ProfilePage(RoutablePageMixin, Page):
         l = kwargs.pop('list_experiences', None)
         user_acc = kwargs.pop('user', None)
         context = super().get_context(request, *args, **kwargs)
+        all_posts = ExperiencePage.objects.live().public().filter(owner=user_acc).order_by("-first_published_at")
         if not user_acc:
             user_acc = request.user
         if l:
-            posts = ExperiencePage.objects.live().public().filter(owner=user_acc).order_by("-first_published_at")
-            logger.debug(f"filtred {len(posts)} for {user_acc}")
-            context['posts'] = posts
+            context['posts'] = pagination_wrapper(
+                request,
+                all_posts,
+            )
+
+            logger.debug(f"filtred {len(all_posts)} for {user_acc}")
         context['user'] = user_acc
+        context['latest_post'] = all_posts.first()
+        context['total_num_posts'] = len(all_posts)
         return context
 
     @route(r"^$")
