@@ -1,5 +1,5 @@
 {% load static wagtailcore_tags socialaccount %}
-<nav class="sticky top-0 z-50 border-b-1/2 border-bf2042-3 bg-repeated-square shadow-bf2042-3 flex items-center justify-between hover:shadow hover:shadow-bf2042-4 flex-wrap px-6 py-3 transition-shadow duration-200">
+<nav class="sticky relative top-0 z-50 border-b-1/2 border-bf2042-3 bg-repeated-square shadow-bf2042-3 flex items-center justify-between hover:shadow hover:shadow-bf2042-4 flex-wrap px-6 py-3 transition-shadow duration-200">
     <a href="/" >
         <div class="flex group items-center flex-shrink-0 text-white mr-6">
             <img class="fill-current h-8 w-8 mr-2" width="54" height="54" src="{% static 'images/bf_portal_logo_bc.png' %}"
@@ -27,24 +27,56 @@
 
             {% endblock %}
         </div>
-        <div>
-            {% if request.user.is_authenticated %}
-                {% get_social_accounts user as accounts %}
-                {% if accounts %}
-                    {% with account=accounts.discord.0 %}
-                        <a href="/users/{{ account.uid }}"
-                           class="inline-block group text-sm px-4 py-1 leading-none border rounded text-bf2042-4 border-hover-bg-light hover:border-transparent hover:text-bf2042-6 hover:bg-hover-bg-light mt-4 lg:mt-0 transition duration-200 ease-in-out">
-                            <img src="{{ account.get_avatar_url }}" class="inline rounded-full" width="30" alt="@p" />
-                            <div class="inline">{{ account }}</div>
-                            <div class="inline text-bf2042-2  group-hover:text-bf2042-4 transition duration-200 ease-in-out">#{{ account.extra_data.discriminator }}</div>
-                        </a>
-                        {#                <img class="rounded-full hover:drop-shadow-2xl" src="{{account.get_avatar_url}}" alt="">#}
-                    {% endwith %}
-                {% endif %}
-            {% else %}
-                <a href="{% provider_login_url 'discord' process='login' %}"
-                   class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">Login</a>
+        {% if request.user.is_authenticated %}
+            {% get_social_accounts user as accounts %}
+            {% if accounts %}
+                {% with account=accounts.discord.0 %}
+                    <div id="profileButton" class="profileButton relative inline-block group px-4 py-1 leading-none border rounded text-bf2042-4 border-hover-bg-light hover:border-transparent hover:text-bf2042-6 hover:bg-hover-bg-light mt-4 lg:mt-0 transition duration-200 ease-in-out">
+                        <img src="{{ account.get_avatar_url }}" class="inline rounded-full" width="30" alt="@p" />
+                        <div id="myDropdown" class="dropdown-content flex flex-col text-center text-md gap-y-2 bg-card-bg p-2 -top-2.5 rounded-lg absolute -left-1 text-white invisible">
+                            <a href="/users/{{ account.uid }}">Profile</a>
+                            <a href="/logout" class="text-red-400">Logout</a>
+                        </div>
+                    </div>
+                {% endwith %}
             {% endif %}
-        </div>
+        {% else %}
+            <a href="{% provider_login_url 'discord' process='login' %}"
+               class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">Login</a>
+        {% endif %}
     </div>
 </nav>
+<script>
+/* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function toggleDropdown() {
+    const drpDown = document.getElementById("myDropdown")
+    drpDown.classList.toggle("invisible");
+    drpDown.style.opacity = '0%';
+    drpDown.style.left = '0';
+    anime({
+        targets: '#myDropdown',
+        opacity: '100%',
+        left: '-5rem',
+        easing: 'easeOutQuint',
+    });
+
+}
+document.getElementById('profileButton').addEventListener('click', toggleDropdown)
+document.getElementById("myDropdown").addEventListener('click',function(event){
+    event.stopPropagation();
+});
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.closest('.profileButton')) {
+      const dropdowns = document.getElementsByClassName("dropdown-content");
+      let i;
+      for (i = 0; i < dropdowns.length; i++) {
+          const openDropdown = dropdowns[i];
+          if (!openDropdown.classList.contains('invisible')) {
+        openDropdown.classList.add('invisible');
+      }
+    }
+  }
+}
+</script>
