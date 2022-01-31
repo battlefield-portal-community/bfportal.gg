@@ -70,6 +70,7 @@ module.exports = {
                 'bf2042-4-sm' : '0 1px 1px #26FFDF',
                 'bf2042-5-sm' : '0 1px 1px #F26A1B',
                 'bf2042-6-sm' : '0 1px 1px #FF2C10',
+                'hover-bg-light' : '0 1px 1px #474c50',
             },
             gridTemplateColumns: {
                 'auto-fit': 'repeat(auto-fit, minmax(0, 1fr))',
