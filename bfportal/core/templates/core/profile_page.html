@@ -22,20 +22,18 @@
                         </div>
                         <div class="text-center">
                             <p class="font-semibold text-slate-500">Number of Experiences</p>
-                            <a href="experiences/" class="font-thin oldstyle-nums text-bf2042-3 hover:text-bf2042-6">{{ posts|length  }}</a>
+                            <a href="experiences/" class="font-thin oldstyle-nums text-bf2042-3 hover:text-bf2042-6">{{ total_num_posts  }}</a>
                         </div>
-                        {% with posts|first as latest_post %}
-                            {% if latest_post %}
-                                <div class="text-center">
-                                    <p class="font-semibold text-slate-500">Latest Experience</p>
-                                        <a href="{{ latest_post.url }}" class="font-thin oldstyle-nums text-bf2042-3 hover:text-bf2042-6">{{ latest_post.title|title }} </a>
-                                </div>
-                                <div class="text-center">
-                                    <p class="font-semibold text-slate-500">Posted On</p>
-                                    <p class="text-center font-thin oldstyle-nums text-bf2042-3">{{ latest_post.first_published_at|date:"d M Y"}}</p>
-                                </div>
-                            {% endif %}
-                        {% endwith %}
+                    {% if latest_post %}
+                        <div class="text-center">
+                            <p class="font-semibold text-slate-500">Latest Experience</p>
+                                <a href="{{ latest_post.url }}" class="font-thin oldstyle-nums text-bf2042-3 hover:text-bf2042-6">{{ latest_post.title|title }} </a>
+                        </div>
+                        <div class="text-center">
+                            <p class="font-semibold text-slate-500">Posted On</p>
+                            <p class="text-center font-thin oldstyle-nums text-bf2042-3">{{ latest_post.first_published_at|date:"d M Y"}}</p>
+                        </div>
+                    {% endif %}
                     </div>
                 {% endwith %}
             {% endif %}
