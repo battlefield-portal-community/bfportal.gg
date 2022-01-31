@@ -3,7 +3,7 @@
 
 {% block content %}
     {% get_social_accounts user as accounts %}
-    <div class="flex w-full flex-col space-y-20 p-4">
+    <div class="flex w-full flex-col space-y-20 px-4">
         <div class="profile flex space-x-5 mx-auto">
             {% if accounts %}
                 {% with account=accounts.discord.0 %}

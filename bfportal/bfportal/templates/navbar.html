@@ -1,26 +1,26 @@
 {% load static wagtailcore_tags socialaccount %}
-<nav class="sticky top-0 z-50 flex items-center justify-between flex-wrap bg-bg-default px-6 py-3 drop-shadow-lg mb-4">
+<nav class="sticky top-0 z-50 border-b-1/2 border-bf2042-3 bg-repeated-square shadow-bf2042-3 flex items-center justify-between hover:shadow hover:shadow-bf2042-4 flex-wrap px-6 py-3 transition-shadow duration-200">
     <a href="/" >
-        <div class="flex items-center flex-shrink-0 text-white mr-6">
+        <div class="flex group items-center flex-shrink-0 text-white mr-6">
             <img class="fill-current h-8 w-8 mr-2" width="54" height="54" src="{% static 'images/bf_portal_logo_bc.png' %}"
                  alt=""/>
-            <span class="font-semibold text-2xl tracking-tight">BF Portal</span>
+            <span class="font-semibold text-2xl tracking-tight group-hover:text-bf2042-4 transition duration-200 ease-in-out">BF Portal</span>
         </div>
     </a>
     <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
         <div class="text-base lg:flex-grow">
-            <a href="/experiences/" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4">
+            <a href="/experiences/" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4 transition duration-200 ease-in-out">
                 Library
             </a>
-            <a href="#" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4">
+            <a href="#" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4 transition duration-200 ease-in-out">
                 Docs
             </a>
             <a href="/experiences?category=featured"
-               class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4">
+               class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4 transition duration-200 ease-in-out">
                 Featured
             </a>
             <a href="/submit/"
-               class="inline-block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white p-1 rounded-lg hover:bg-bf2042-2 hover:shadow-md hover:shadow-bf2042-4 hover:text-bf2042-4 mr-4 transition duration-200 ease-in">
+               class="inline-block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white p-1 rounded-lg mr-4 hover:text-bf2042-6 transition duration-200 ease-in-out">
                 Submit Experience
             </a>
             {% block extend_navbar %}
