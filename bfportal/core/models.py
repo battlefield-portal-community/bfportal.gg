@@ -280,3 +280,7 @@ class ProfilePage(RoutablePageMixin, Page):
             )
         else:
             return HttpResponse("User not Found", status=404)
+
+
+class AvailableTags(models.Model):
+    tags = models.TextField(blank=True, verbose_name="All available tags in BF 2042 Portal Rules editor")
