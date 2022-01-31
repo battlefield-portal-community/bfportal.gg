@@ -1,65 +1,186 @@
-{% load static %}
-<div>
-    <div class="w-11/12 mx-auto">
-        <div class="flex flex-wrap flex-row justify-center gap-x-2 gap-y-4">
-            {% for post in posts %}
-                <div class="static experience_container group flex-col w-min p-2 h-96 w-96 bg-accent-bg rounded-sm scroll-mt-6 hover:bg-hover-bg-light hover:shadow-xl hover:cursor-pointer transition duration-500 ease-in-out">
-                    <div class=" -m-2 drop-shadow-xl h-2/3">
-                        <img class="rounded-sm h-full w-full" src="{% static 'images/placeholder.avif' %}" alt="{{ post.slug }}">
-                        <div class="absolute top-0 left-0 flex flex-row flex-wrap p-2 gap-x-1">
-                            {% for cat in post.categories.all %}
-                                <a href="/experiences/?category={{ cat }}">
-                                <p class="category_pill font-semibold oldstyle-nums font-sans rounded-lg px-2 hover:border hover:border-white" style="--category_pill_bg_color: {{ cat.bg_color }}; --category_pill_bg_hover_color: {{ cat.bg_hover_color }}; --category_pill_text_color: {{ cat.text_color }}; --category_pill_text_hover_color: {{ cat.text_hover_color }}">{{ cat }}</p>
-                                </a>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 mt-2 h-1/3">
-                        <a href="{{ post.url }}" class="main-link">
-                            <div class="font-bold font-mono text-3xl text-white group-hover:text-gray-900 transition duration-500 ease-in-out ">{{ post.title|title }}</div>
-                        </a>
-                        <div class="font-medium text-gray-500 pb-2">{{ post.description|truncatewords:10 }}</div>
-                        <div class="pb-1 text-sm">
-                            {% for tag in post.tags.all|slice:"0:5" %}
-                                <a href="/experiences/?tag={{ tag }}" class="bg-hover-bg-light rounded-lg px-2 py-0">{{ tag|title }}</a>
-                            {% endfor %}
+{% if posts.paginator.count > 0 %}
+    {% load static %}
+    <div class="w-11/12 mx-auto grid grid-cols-1 justify-items-center">
+        {% if posts.paginator.num_pages > 1 %}
+            {% pagination_suffix request.GET.urlencode as suffix %}
+            <div class="pagination my-10 text-white flex flex-row text-lg py-1 px-2  bg-hover-bg-light rounded-lg hover:drop-shadow-bf2042-4 transition duration-300 ease-in-out">
+                {% if posts.has_previous %}
+                    <span class="text-center w-6 bg-card-bg drop-shadow rounded-l-lg">
+                        <a href="?page=1{{ suffix }}">&laquo;</a>
+                    </span>
+                    <span class="text-center w-6 bg-card-bg drop-shadow">
+                        <a href="?page={{ posts.previous_page_number }}{{ suffix }}">&lt;</a>
+                    </span>
+{#                    {% if posts.number >= 4  %}#}
+{#                        <span class="text-center w-6 bg-card-bg drop-shadow hover:text-bf2042-4">#}
+{#                            <a href="?page=1{{ suffix }}">1</a>#}
+{#                        </span>#}
+{#                        <span class=" text-center w-6 drop-shadow bg-card-bg hover:text-bf2042-4 ">..</span>#}
+{#                    {% endif %}#}
+                {% endif %}
 
+                {% for page_num in posts.paginator.page_range %}
+{#                    {% if page_num|sub:posts.number|abs <= 2 %}#}
+{##}
+{#                    {% endif %}#}
+                        <span class="
+                        text-center  px-2
+                        {% if page_num == posts.number %} bg-hover-bg-light text-bf2042-6 drop-shadow-none
+                        {% else %} bg-card-bg hover:text-bf2042-4 drop-shadow-lg
+                        {% endif %}
+                        {% if page_num|sub:posts.number == -1 %} rounded-r-lg
+                        {% elif page_num|sub:posts.number == 1 %} rounded-l-lg
+                        {% endif %}
+                        ">
+                            <a href="?page={{ page_num }}{{ suffix }}" class="page-link">
+                              {{ page_num }}
+                            </a>
+                        </span>
+                {% endfor %}
+
+{#                    {% if posts.paginator.num_pages|sub:posts.number > 2 %}#}
+{#                        <span class=" text-center w-6 drop-shadow bg-card-bg hover:text-bf2042-4 ">..</span>#}
+{#                        <span class="text-center w-6 bg-card-bg drop-shadow hover:text-bf2042-4">#}
+{#                            <a href="?page={{ posts.paginator.num_pages }}{{ suffix }}">{{ posts.paginator.num_pages }}</a>#}
+{#                        </span>#}
+{#                    {% endif %}#}
+            {% if posts.has_next %}
+                    <span class="text-center w-6 bg-card-bg drop-shadow">
+                        <a href="?page={{ posts.next_page_number }}{{ suffix }}" class="page-link">
+                          <span>&gt;</span>
+                        </a>
+                    </span>
+                    <span class="text-center w-6 bg-card-bg drop-shadow rounded-r-lg">
+                        <a href="?page={{ posts.paginator.num_pages }}{{ suffix }}" class="page-link">
+                          <span>&raquo;</span>
+                        </a>
+                    </span>
+            {% endif %} 
+            </div>
+        {% endif %}
+
+        <div class="flex flex-wrap flex-row justify-center gap-x-3 gap-y-5">
+            {% for post in posts %}
+                <div class="static experience_container group block w-min h-min w-96 bg-accent-bg rounded-sm scroll-mt-6 hover:bg-hover-bg-light hover:shadow-xl hover:cursor-pointer hover:drop-shadow-hover-bg-light transition duration-500 ease-in-out">
+                    <div class="m-2">
+                        <div class="-m-2 drop-shadow-xl h-3/5">
+                            <img class="rounded-sm h-full w-full" src="{% static 'images/placeholder.avif' %}" alt="{{ post.slug }}">
+                            <div class="absolute top-0 left-0 flex flex-row flex-wrap p-2 gap-x-1">
+                                {% for cat in post.categories.all %}
+                                    <a href="/experiences/?category={{ cat }}">
+                                    <p class="category_pill font-semibold oldstyle-nums font-sans rounded-lg px-2 hover:border hover:border-white" style="--category_pill_bg_color: {{ cat.bg_color }}; --category_pill_bg_hover_color: {{ cat.bg_hover_color }}; --category_pill_text_color: {{ cat.text_color }}; --category_pill_text_hover_color: {{ cat.text_hover_color }}">{{ cat }}</p>
+                                    </a>
+                                {% endfor %}
+                            </div>
                         </div>
-                        <div class="text-xs font-semibold text-gray-500">
-                            By
-                            {% get_social_account post.owner as social_account %}
-                            {% if social_account %}
-                                <a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-thin oldstyle-nums text-bf2042-3 hover:text-bf2042-6">{{post.owner}}</a>
-                            {% else %}
-                                {{post.owner}}
-                            {% endif %}
-                            On {{post.first_published_at}}</div>
+                        <div class="grid grid-cols-1 grid-flow-row mt-3 h-1/3 gap-y-2">
+                            <a href="{{ post.url }}" class="main-link">
+                                <div class="font-bold font-mono text-3xl text-white transition duration-500 ease-in-out ">{{ post.title|title }}</div>
+                            </a>
+                            <div class="text-gray-400 pb-4 h-12 text-ellipsis overflow-hidden"><p>{{ post.description|truncatewords:15 }}</p></div>
+                            <div class=" flex text-sm gap-x-2 pt-2 w-full overflow-hidden">
+                                {% for tag in post.tags.all|slice:"0:5" %}
+                                    <a href="/experiences/?tag={{ tag }}" class="bg-hover-bg-light border-1/2  border-hover-bg-light rounded-lg px-2 py-0 mb-1  group-hover:bg-gray-600 hover:border-bf2042-3 hover:drop-shadow-bf2042-3-sm transition duration-100 ease-in ">{{ tag|title }}</a>
+                                {% endfor %}
+
+                            </div>
+                            <div class="text-xs font-semibold text-gray-500 mt-1">
+                                By
+                                {% get_social_account post.owner as social_account %}
+                                {% if social_account %}
+                                    <a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-thin oldstyle-nums text-bf2042-3 hover:text-bf2042-6">{{post.owner}}</a>
+                                {% else %}
+                                    {{post.owner}}
+                                {% endif %}
+                                On {{post.first_published_at}}</div>
+                        </div>
                     </div>
+
                 </div>
             {% endfor %}
         </div>
+
+
+        {% if posts.paginator.num_pages > 1 %}
+            {% pagination_suffix request.GET.urlencode as suffix %}
+            <div class="pagination mb-8 mt-8 text-white flex flex-row text-lg py-1 px-2  bg-hover-bg-light rounded-lg hover:drop-shadow-bf2042-4 transition duration-300 ease-in-out">
+                {% if posts.has_previous %}
+                    <span class="text-center w-6 bg-card-bg drop-shadow rounded-l-lg">
+                        <a href="?page=1{{ suffix }}">&laquo;</a>
+                    </span>
+                    <span class="text-center w-6 bg-card-bg drop-shadow">
+                        <a href="?page={{ posts.previous_page_number }}{{ suffix }}">&lt;</a>
+                    </span>
+{#                    {% if posts.number >= 4  %}#}
+{#                        <span class="text-center w-6 bg-card-bg drop-shadow hover:text-bf2042-4">#}
+{#                            <a href="?page=1{{ suffix }}">1</a>#}
+{#                        </span>#}
+{#                        <span class=" text-center w-6 drop-shadow bg-card-bg hover:text-bf2042-4 ">..</span>#}
+{#                    {% endif %}#}
+                {% endif %}
+
+                {% for page_num in posts.paginator.page_range %}
+{#                    {% if page_num|sub:posts.number|abs <= 2 %}#}
+{##}
+{#                    {% endif %}#}
+                        <span class="
+                        text-center  px-2
+                        {% if page_num == posts.number %} bg-hover-bg-light text-bf2042-6 drop-shadow-none
+                        {% else %} bg-card-bg hover:text-bf2042-4 drop-shadow-lg
+                        {% endif %}
+                        {% if page_num|sub:posts.number == -1 %} rounded-r-lg
+                        {% elif page_num|sub:posts.number == 1 %} rounded-l-lg
+                        {% endif %}
+                        ">
+                            <a href="?page={{ page_num }}{{ suffix }}" class="page-link">
+                              {{ page_num }}
+                            </a>
+                        </span>
+                {% endfor %}
+
+{#                    {% if posts.paginator.num_pages|sub:posts.number > 2 %}#}
+{#                        <span class=" text-center w-6 drop-shadow bg-card-bg hover:text-bf2042-4 ">..</span>#}
+{#                        <span class="text-center w-6 bg-card-bg drop-shadow hover:text-bf2042-4">#}
+{#                            <a href="?page={{ posts.paginator.num_pages }}{{ suffix }}">{{ posts.paginator.num_pages }}</a>#}
+{#                        </span>#}
+{#                    {% endif %}#}
+            {% if posts.has_next %}
+                    <span class="text-center w-6 bg-card-bg drop-shadow">
+                        <a href="?page={{ posts.next_page_number }}{{ suffix }}" class="page-link">
+                          <span>&gt;</span>
+                        </a>
+                    </span>
+                    <span class="text-center w-6 bg-card-bg drop-shadow rounded-r-lg">
+                        <a href="?page={{ posts.paginator.num_pages }}{{ suffix }}" class="page-link">
+                          <span>&raquo;</span>
+                        </a>
+                    </span>
+            {% endif %}
+            </div>
+        {% endif %}
+
     </div>
-</div>
-{% block extra_js %}
-    <script>
-        const cards = document.querySelectorAll(".experience_container");
-        [...cards].forEach(card => {
-                const mainLink = card.querySelector(".main-link");
-                const clickableElements = Array.from(card.querySelectorAll("a"));
-                //we are using 'a' here for simplicity but ideally you should put a class like 'clickable' on every clickable element inside card(a, button) and use that in query selector
+    {% block extra_js %}
+        <script>
+            const cards = document.querySelectorAll(".experience_container");
+            [...cards].forEach(card => {
+                    const mainLink = card.querySelector(".main-link");
+                    const clickableElements = Array.from(card.querySelectorAll("a"));
+                    //we are using 'a' here for simplicity but ideally you should put a class like 'clickable' on every clickable element inside card(a, button) and use that in query selector
 
-                clickableElements.forEach((ele) =>
-                    ele.addEventListener("click", (e) => e.stopPropagation())
-                );
+                    clickableElements.forEach((ele) =>
+                        ele.addEventListener("click", (e) => e.stopPropagation())
+                    );
 
-                function handleClick(event) {
-                    const noTextSelected = !window.getSelection().toString();
+                    function handleClick(event) {
+                        const noTextSelected = !window.getSelection().toString();
 
-                    if (noTextSelected) {
-                        mainLink.click();
+                        if (noTextSelected) {
+                            mainLink.click();
+                        }
                     }
-                }
-                card.addEventListener("click", handleClick);
-        });
-    </script>
-{% endblock %}
+                    card.addEventListener("click", handleClick);
+            });
+        </script>
+    {% endblock %}
+{% endif %}
