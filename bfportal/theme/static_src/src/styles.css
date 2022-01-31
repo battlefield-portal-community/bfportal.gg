@@ -13,3 +13,42 @@
     background-color: var(--category_pill_bg_hover_color);
     color: var(--category_pill_text_hover_color);
 }
+
+body::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+body::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px #0a0a0a;
+  border-radius: 5px;
+}
+
+/* Handle */
+body::-webkit-scrollbar-thumb {
+  background: #26ffe0;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+body::-webkit-scrollbar-thumb:hover {
+  background: #ff0000;
+}
+
+.scrollable::-webkit-scrollbar {
+  height: 8px;
+}
+/* Handle */
+.scrollable::-webkit-scrollbar-thumb {
+    background: #011C26;
+    border-radius: 5px;
+}
+.scrollable::-webkit-scrollbar-track {
+    background: #303030;
+    border-radius: 5px;
+}
+
+.scrollable {
+  scrollbar-width: thin;    /* "auto" or "thin" */
+  scrollbar-color: #011C26 #303030;   /* scroll thumb and track */
+}
