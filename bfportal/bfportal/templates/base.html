@@ -47,6 +47,40 @@
             return new Tooltip(tooltipTriggerEl);
           });
         </script>
+        <script>
+                $('#filters_button').click(function (e){
+                    if( e.target !== this) return;
+                    console.log("DO IT!!!");
+                    const filters = document.getElementById('filters');
+                    if (filters.style.opacity !== "" && filters.style.opacity > 0) {
+                        anime({
+                            targets: '#filters',
+                            left: '80%',
+                            opacity: '0',
+                            easing: 'easeOutExpo',
+                            complete: function () {
+                                filters.classList.add('invisible')
+                                filters.style.left = "0%"
+                            }
+                        });
+                    } else {
+                        filters.classList.remove('invisible');
+                        anime({
+                            targets: '#filters',
+                            left: '50%',
+                            translateX: '-50%',
+                            opacity: '100%',
+                            easing: 'easeOutQuint'
+                        });
+                    }
+                })
+                function showTags() {
+                    console.log("Show tags");
+                }
+                function showCategories() {
+                    console.log("Show Categories");
+                }
+        </script>
         {% block extra_js %}
             {# Override this in templates to add extra javascript #}
         {% endblock %}
