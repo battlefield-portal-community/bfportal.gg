@@ -49,7 +49,6 @@
         </script>
         <script>
                 $('#filters_button').click(function (e){
-                    if( e.target !== this) return;
                     console.log("DO IT!!!");
                     const filters = document.getElementById('filters');
                     if (filters.style.opacity !== "" && filters.style.opacity > 0) {
@@ -58,6 +57,9 @@
                             left: '80%',
                             opacity: '0',
                             easing: 'easeOutExpo',
+                            begin: function (){
+                              document.getElementById("filter-plus-item").textContent = '⊕';
+                            },
                             complete: function () {
                                 filters.classList.add('invisible')
                                 filters.style.left = "0%"
@@ -70,14 +72,19 @@
                             left: '50%',
                             translateX: '-50%',
                             opacity: '100%',
-                            easing: 'easeOutQuint'
+                            easing: 'easeOutQuint',
+                            begin: function (){
+                              document.getElementById("filter-plus-item").textContent = '⊗';
+                            },
                         });
                     }
                 })
                 function showTags() {
+                    {#todo: Complete ShowTags#}
                     console.log("Show tags");
                 }
                 function showCategories() {
+                    {#todo: Complete showCategories#}
                     console.log("Show Categories");
                 }
         </script>
