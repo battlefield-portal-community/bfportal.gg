@@ -6,28 +6,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0015_auto_20220126_1230'),
+        ("core", "0015_auto_20220126_1230"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='experiencescategory',
-            name='bg_color',
-            field=models.CharField(blank=True, default='#474c50', max_length=7),
+            model_name="experiencescategory",
+            name="bg_color",
+            field=models.CharField(blank=True, default="#474c50", max_length=7),
         ),
         migrations.AddField(
-            model_name='experiencescategory',
-            name='bg_hover_color',
-            field=models.CharField(blank=True, default='#474c50', max_length=7),
+            model_name="experiencescategory",
+            name="bg_hover_color",
+            field=models.CharField(blank=True, default="#474c50", max_length=7),
         ),
         migrations.AddField(
-            model_name='experiencescategory',
-            name='text_color',
-            field=models.CharField(blank=True, default='#000000', max_length=7),
+            model_name="experiencescategory",
+            name="text_color",
+            field=models.CharField(blank=True, default="#000000", max_length=7),
         ),
         migrations.AddField(
-            model_name='experiencescategory',
-            name='text_hover_color',
-            field=models.CharField(blank=True, default='#000000', max_length=7),
+            model_name="experiencescategory",
+            name="text_hover_color",
+            field=models.CharField(blank=True, default="#000000", max_length=7),
         ),
     ]

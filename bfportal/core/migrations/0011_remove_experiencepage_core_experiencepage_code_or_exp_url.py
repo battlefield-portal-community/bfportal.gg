@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0010_auto_20220117_2339'),
+        ("core", "0010_auto_20220117_2339"),
     ]
 
     operations = [
         migrations.RemoveConstraint(
-            model_name='experiencepage',
-            name='core_experiencepage_code_or_exp_url',
+            model_name="experiencepage",
+            name="core_experiencepage_code_or_exp_url",
         ),
     ]

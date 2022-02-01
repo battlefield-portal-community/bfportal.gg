@@ -11,30 +11,26 @@ from wagtail.documents import urls as wagtaildocs_urls
 
 urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")),
-    path('django-admin/', admin.site.urls),
-    path('admin/', include(wagtailadmin_urls)),
-    path('documents/', include(wagtaildocs_urls)),
-
+    path("django-admin/", admin.site.urls),
+    path("admin/", include(wagtailadmin_urls)),
+    path("documents/", include(wagtaildocs_urls)),
     # allow only social login :)
-    path('password/change/', RedirectView.as_view(url='/')),
-    path('password/set/', RedirectView.as_view(url='/')),
-    path('password/reset/', RedirectView.as_view(url='/')),
-    path('password/reset/done/', RedirectView.as_view(url='/')),
-    re_path('^password/reset/key/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)/$',
-            RedirectView.as_view(url='/')),
-    path('password/reset/key/done/', RedirectView.as_view(url='/')),
-    path('email/', RedirectView.as_view(url='/')),
-    path('confirm-email/', RedirectView.as_view(url='/')),
-
-    re_path('^confirm-email/(?P<key>[-:\\w]+)/$',
-            RedirectView.as_view(url='/')),
+    path("password/change/", RedirectView.as_view(url="/")),
+    path("password/set/", RedirectView.as_view(url="/")),
+    path("password/reset/", RedirectView.as_view(url="/")),
+    path("password/reset/done/", RedirectView.as_view(url="/")),
+    re_path(
+        "^password/reset/key/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)/$",
+        RedirectView.as_view(url="/"),
+    ),
+    path("password/reset/key/done/", RedirectView.as_view(url="/")),
+    path("email/", RedirectView.as_view(url="/")),
+    path("confirm-email/", RedirectView.as_view(url="/")),
+    re_path("^confirm-email/(?P<key>[-:\\w]+)/$", RedirectView.as_view(url="/")),
     path("signup/", RedirectView.as_view(url="/")),
-
     # go straight to discord login
-    path('login/', RedirectView.as_view(url="/discord/login/?process=login")),
-    
-    path('', include('allauth.urls')),
-
+    path("login/", RedirectView.as_view(url="/discord/login/?process=login")),
+    path("", include("allauth.urls")),
 ]
 
 
@@ -51,7 +47,6 @@ urlpatterns = urlpatterns + [
     # Wagtail's page serving mechanism. This should be the last pattern in
     # the list:
     path("", include(wagtail_urls)),
-
     # Alternatively, if you want Wagtail pages to be served from a subpath
     # of your site, rather than the site root:
     #    path("pages/", include(wagtail_urls)),

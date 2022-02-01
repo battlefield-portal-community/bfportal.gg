@@ -7,13 +7,15 @@ import modelcluster.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0013_experiencescategory'),
+        ("core", "0013_experiencescategory"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='experiencepage',
-            name='categories',
-            field=modelcluster.fields.ParentalManyToManyField(blank=True, to='core.ExperiencesCategory'),
+            model_name="experiencepage",
+            name="categories",
+            field=modelcluster.fields.ParentalManyToManyField(
+                blank=True, to="core.ExperiencesCategory"
+            ),
         ),
     ]

@@ -10,7 +10,7 @@ def get_item(dictionary, key):
 
 @register.simple_tag
 def get_social_account(user):
-    usr = getattr(user, 'socialaccount_set', None)
+    usr = getattr(user, "socialaccount_set", None)
     if usr:
         all_acc = usr.all()
         if len(all_acc):
@@ -19,7 +19,7 @@ def get_social_account(user):
         return None
 
 
-@register.filter(name='sub')
+@register.filter(name="sub")
 def subtract(value, arg):
     return value - arg
 
@@ -34,13 +34,13 @@ def pagination_suffix(value):
             [Input] : tag=management&tag=since&page=3
             [Output] : &tag=management&tag=since
     """
-    suffix_params = re.sub(r"[&?]?page=\d+", '', value)
+    suffix_params = re.sub(r"[&?]?page=\d+", "", value)
     if len(suffix_params):
-        return ('&'+suffix_params).replace("&&", '&')
+        return ("&" + suffix_params).replace("&&", "&")
     else:
-        return ''
+        return ""
 
 
-@register.filter(name='abs')
+@register.filter(name="abs")
 def abs_filter(value):
     return abs(value)

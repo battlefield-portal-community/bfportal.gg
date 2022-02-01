@@ -7,28 +7,36 @@ import wagtail_color_panel.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0016_auto_20220127_1519'),
+        ("core", "0016_auto_20220127_1519"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='experiencescategory',
-            name='bg_color',
-            field=wagtail_color_panel.fields.ColorField(default='#474c50', max_length=7),
+            model_name="experiencescategory",
+            name="bg_color",
+            field=wagtail_color_panel.fields.ColorField(
+                default="#474c50", max_length=7
+            ),
         ),
         migrations.AlterField(
-            model_name='experiencescategory',
-            name='bg_hover_color',
-            field=wagtail_color_panel.fields.ColorField(default='#474c50', max_length=7),
+            model_name="experiencescategory",
+            name="bg_hover_color",
+            field=wagtail_color_panel.fields.ColorField(
+                default="#474c50", max_length=7
+            ),
         ),
         migrations.AlterField(
-            model_name='experiencescategory',
-            name='text_color',
-            field=wagtail_color_panel.fields.ColorField(default='#000000', max_length=7),
+            model_name="experiencescategory",
+            name="text_color",
+            field=wagtail_color_panel.fields.ColorField(
+                default="#000000", max_length=7
+            ),
         ),
         migrations.AlterField(
-            model_name='experiencescategory',
-            name='text_hover_color',
-            field=wagtail_color_panel.fields.ColorField(default='#000000', max_length=7),
+            model_name="experiencescategory",
+            name="text_hover_color",
+            field=wagtail_color_panel.fields.ColorField(
+                default="#000000", max_length=7
+            ),
         ),
     ]

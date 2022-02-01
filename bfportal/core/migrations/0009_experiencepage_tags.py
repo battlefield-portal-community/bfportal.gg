@@ -7,14 +7,20 @@ import modelcluster.contrib.taggit
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('taggit', '0003_taggeditem_add_unique_index'),
-        ('core', '0008_auto_20220117_2328'),
+        ("taggit", "0003_taggeditem_add_unique_index"),
+        ("core", "0008_auto_20220117_2328"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='experiencepage',
-            name='tags',
-            field=modelcluster.contrib.taggit.ClusterTaggableManager(blank=True, help_text='Some tags', through='taggit.TaggedItem', to='taggit.Tag', verbose_name='Tags'),
+            model_name="experiencepage",
+            name="tags",
+            field=modelcluster.contrib.taggit.ClusterTaggableManager(
+                blank=True,
+                help_text="Some tags",
+                through="taggit.TaggedItem",
+                to="taggit.Tag",
+                verbose_name="Tags",
+            ),
         ),
     ]

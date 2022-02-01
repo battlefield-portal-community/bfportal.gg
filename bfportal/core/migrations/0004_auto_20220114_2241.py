@@ -6,48 +6,48 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0003_experiencepage'),
+        ("core", "0003_experiencepage"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='experiencepage',
-            name='code',
-            field=models.CharField(default='', max_length=6),
+            model_name="experiencepage",
+            name="code",
+            field=models.CharField(default="", max_length=6),
         ),
         migrations.AddField(
-            model_name='experiencepage',
-            name='cover_img_url',
-            field=models.URLField(default=''),
+            model_name="experiencepage",
+            name="cover_img_url",
+            field=models.URLField(default=""),
         ),
         migrations.AddField(
-            model_name='experiencepage',
-            name='description',
-            field=models.TextField(default=''),
+            model_name="experiencepage",
+            name="description",
+            field=models.TextField(default=""),
         ),
         migrations.AddField(
-            model_name='experiencepage',
-            name='exp_url',
-            field=models.URLField(default=''),
+            model_name="experiencepage",
+            name="exp_url",
+            field=models.URLField(default=""),
         ),
         migrations.AddField(
-            model_name='experiencepage',
-            name='name',
-            field=models.CharField(default='', max_length=255),
+            model_name="experiencepage",
+            name="name",
+            field=models.CharField(default="", max_length=255),
         ),
         migrations.AddField(
-            model_name='experiencepage',
-            name='no_bots',
+            model_name="experiencepage",
+            name="no_bots",
             field=models.IntegerField(default=-1),
         ),
         migrations.AddField(
-            model_name='experiencepage',
-            name='no_players',
+            model_name="experiencepage",
+            name="no_players",
             field=models.IntegerField(default=-1),
         ),
         migrations.AddField(
-            model_name='experiencepage',
-            name='vid_url',
-            field=models.URLField(default=''),
+            model_name="experiencepage",
+            name="vid_url",
+            field=models.URLField(default=""),
         ),
     ]

@@ -11,38 +11,37 @@ class ExperiencePageForm(forms.ModelForm):
     #     required=False
     # )
 
-
     class Meta:
         model = ExperiencePage
         fields = [
-            'title',
-            'description',
-            'categories',
-            'exp_url',
-            'code',
-            'tags',
-            'no_players',
-            'no_bots',
-            'cover_img_url',
-            'vid_url'
+            "title",
+            "description",
+            "categories",
+            "exp_url",
+            "code",
+            "tags",
+            "no_players",
+            "no_bots",
+            "cover_img_url",
+            "vid_url",
         ]
 
     field_order = [
-        'exp_url',
-        'title',
-        'description',
-        'code',
-        'tags',
-        'no_players',
-        'no_bots',
-        'cover_img_url',
-        'vid_url',
-        'categories',
+        "exp_url",
+        "title",
+        "description",
+        "code",
+        "tags",
+        "no_players",
+        "no_bots",
+        "cover_img_url",
+        "vid_url",
+        "categories",
     ]
 
     def clean_categories(self):
-        if len(self.cleaned_data['categories']) > 1:
-            raise forms.ValidationError('Select no more than 1.')
-        elif len(self.cleaned_data['categories']) == 0:
-            raise forms.ValidationError('Select at least one category')
-        return self.cleaned_data['categories']
+        if len(self.cleaned_data["categories"]) > 1:
+            raise forms.ValidationError("Select no more than 1.")
+        elif len(self.cleaned_data["categories"]) == 0:
+            raise forms.ValidationError("Select at least one category")
+        return self.cleaned_data["categories"]
