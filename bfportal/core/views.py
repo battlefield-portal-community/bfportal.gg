@@ -1,10 +1,19 @@
+import json
+
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest
+from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render
+from django.core import serializers
 from loguru import logger
+from taggit.models import Tag
 
 from core.forms import ExperiencePageForm
-from core.models import ExperiencePage, HomePage, ExperiencesPage
+from core.models import (
+    ExperiencePage,
+    HomePage,
+    ExperiencesPage,
+    ExperiencesCategory,
+)
 from core.utils.helper import unique_slug_generator
 
 
@@ -71,3 +80,25 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
                 "form": ExperiencePageForm(instance=experience_page),
             },
         )
+
+
+def get_categories(request: HttpRequest):
+    return JsonResponse(
+        {
+            "categories": json.loads(
+                serializers.serialize(
+                    "json", ExperiencesCategory.objects.all(), fields="name"
+                )
+            )
+        }
+    )
+
+
+def get_tags(request: HttpRequest):
+    return JsonResponse(
+        {
+            "categories": json.loads(
+                serializers.serialize("json", Tag.objects.all(), fields="name")
+            )
+        }
+    )
