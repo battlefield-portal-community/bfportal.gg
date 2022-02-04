@@ -24,7 +24,6 @@
     </head>
 
     <body class="bg-bg-default min-h-screen m-0 flex flex-col bg-repeated-square gap-y-12 {% block body_class %}{% endblock %}">
-        {% wagtailuserbar %}
 
         {% block header %}
             {% include nav_tmpl|default:'navbar.html' %}
@@ -38,7 +37,7 @@
         <script type="text/javascript" src="{% static 'js/bfportal.js' %}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script type="application/javascript" src="https://unpkg.com/@popperjs/core@2" charset="utf-8"></script>
+        <script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
         <script type="text/javascript">
           var tooltipTriggerList = [].slice.call(
             document.querySelectorAll('[data-bs-toggle="tooltip"]')
@@ -48,44 +47,50 @@
           });
         </script>
         <script>
-                $('#filters_button').click(function (e){
-                    console.log("DO IT!!!");
-                    const filters = document.getElementById('filters');
-                    if (filters.style.opacity !== "" && filters.style.opacity > 0) {
-                        anime({
-                            targets: '#filters',
-                            left: '80%',
-                            opacity: '0',
-                            easing: 'easeOutExpo',
-                            begin: function (){
-                              document.getElementById("filter-plus-item").textContent = '⊕';
-                            },
-                            complete: function () {
-                                filters.classList.add('invisible')
-                                filters.style.left = "0%"
-                            }
-                        });
-                    } else {
-                        filters.classList.remove('invisible');
-                        anime({
-                            targets: '#filters',
-                            left: '50%',
-                            translateX: '-50%',
-                            opacity: '100%',
-                            easing: 'easeOutQuint',
-                            begin: function (){
-                              document.getElementById("filter-plus-item").textContent = '⊗';
-                            },
-                        });
-                    }
-                })
                 function showTags() {
                     {#todo: Complete ShowTags#}
                     console.log("Show tags");
                 }
-                function showCategories() {
+                async function showCategories() {
                     {#todo: Complete showCategories#}
-                    console.log("Show Categories");
+                    const pane = document.getElementById("categoriesPane");
+                    pane.innerHTML = ''
+                    {#todo: add a spinner svg to represent loading#}
+                    {#const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");#}
+                    {#svg.classList.add('animate-spin');#}
+                    {#svg.setAttributeNS('viewBox', )#}
+                    {#svg.viewBox = '0 0 24 24';#}
+                    {#pane.appendChild(svg);#}
+
+                    if (pane.style.opacity !== "" && pane.style.opacity > 0) {
+                        anime({
+                            targets: '#categoriesPane',
+                            left:'150%',
+                            opacity: '0',
+                            easing: 'easeOutExpo',
+                            complete: function () {
+                                pane.classList.add('invisible');
+                                pane.style.left = "50%"
+                            }
+                        });
+                    } else {
+                        fetch('/api/categories/')
+                            .then(resp => resp.json())
+                            .then(data => {
+                                data['categories'].forEach(elm => {
+                                    let span = document.createElement('span');
+                                    span.innerText = elm['fields']['name'];
+                                    pane.appendChild(span)
+                                });
+                            });
+                        pane.classList.remove('invisible');
+                        anime({
+                            targets: '#categoriesPane',
+                            left: '100%',
+                            opacity: '100%',
+                            easing: 'easeOutQuint',
+                        });
+                    }
                 }
         </script>
         {% block extra_js %}

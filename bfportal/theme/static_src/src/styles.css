@@ -36,16 +36,16 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .scrollable::-webkit-scrollbar {
-  height: 8px;
+    width: 6px;
 }
 /* Handle */
 .scrollable::-webkit-scrollbar-thumb {
     background: #011C26;
-    border-radius: 5px;
+    border-radius: 0.5rem;
 }
 .scrollable::-webkit-scrollbar-track {
     background: #303030;
-    border-radius: 5px;
+    border-radius: 0.5rem;
 }
 
 .scrollable {
