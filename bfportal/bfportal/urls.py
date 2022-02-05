@@ -8,6 +8,7 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
+from core.views import get_categories, get_tags
 
 urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")),
@@ -31,6 +32,8 @@ urlpatterns = [
     # go straight to discord login
     path("login/", RedirectView.as_view(url="/discord/login/?process=login")),
     path("", include("allauth.urls")),
+    path("api/categories/", get_categories),
+    path("api/tags/", get_tags),
 ]
 
 
