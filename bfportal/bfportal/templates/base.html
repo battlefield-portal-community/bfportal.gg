@@ -111,13 +111,13 @@
                             categoriesList.appendChild(container);
                         });
                     }).then(data => {
-                        const searchParms = new URLSearchParams(window.location.search),
-                            cats = document.querySelectorAll('input[id^=cat_]');
-                        [...cats].forEach(elm => {
-                            if (searchParms.getAll('category').includes(elm.value)) {
-                                elm.checked = true;
-                            }
-                        })
+                    const searchParms = new URLSearchParams(window.location.search),
+                        cats = document.querySelectorAll('input[id^=cat_]');
+                    [...cats].forEach(elm => {
+                        if (searchParms.getAll('category').includes(elm.value)) {
+                            elm.checked = true;
+                        }
+                    })
                 })
             }
             pane.classList.remove('invisible');
@@ -130,6 +130,18 @@
         }
     }
 
+    document.getElementById("categoriesList").addEventListener('click', function (event) {
+        event.stopPropagation();
+    });
+    window.onclick = function (event) {
+        if (!event.target.closest('#showCategoriesButton')) {
+            const pane = document.getElementById('categoriesPane');
+            if (!pane.classList.contains('invisible')) {
+                pane.classList.add('invisible');
+                pane.style.left = '50%';
+            }
+        }
+    }
 </script>
 {% block extra_js %}
     {# Override this in templates to add extra javascript #}
