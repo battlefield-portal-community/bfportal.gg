@@ -11,7 +11,7 @@
                         <span class="text-center w-6 bg-card-bg drop-shadow">
                             <a href="?page={{ posts.previous_page_number }}{{ suffix }}">&lt;</a>
                         </span>
-                        {% if posts.number >= 4  %}
+                        {% if posts.number >= 4 %}
                             <span class="text-center w-6 bg-card-bg drop-shadow hover:text-bf2042-4">
                                 <a href="?page=1{{ suffix }}">1</a>
                             </span>
@@ -23,7 +23,7 @@
                         {% if page_num|sub:posts.number|abs <= 2 %}
 
                         {% endif %}
-                            <span class="
+                        <span class="
                             text-center  px-2
                             {% if page_num == posts.number %} bg-hover-bg-light text-bf2042-6 drop-shadow-none
                             {% else %} bg-card-bg hover:text-bf2042-4 drop-shadow-lg
@@ -38,13 +38,14 @@
                             </span>
                     {% endfor %}
 
-                        {% if posts.paginator.num_pages|sub:posts.number > 2 %}
-                            <span class=" text-center w-6 drop-shadow bg-card-bg hover:text-bf2042-4 ">..</span>
-                            <span class="text-center w-6 bg-card-bg drop-shadow hover:text-bf2042-4">
-                                <a href="?page={{ posts.paginator.num_pages }}{{ suffix }}">{{ posts.paginator.num_pages }}</a>
+                    {% if posts.paginator.num_pages|sub:posts.number > 2 %}
+                        <span class=" text-center w-6 drop-shadow bg-card-bg hover:text-bf2042-4 ">..</span>
+                        <span class="text-center w-6 bg-card-bg drop-shadow hover:text-bf2042-4">
+                                <a href="?page=
+                                        {{ posts.paginator.num_pages }}{{ suffix }}">{{ posts.paginator.num_pages }}</a>
                             </span>
-                        {% endif %}
-                {% if posts.has_next %}
+                    {% endif %}
+                    {% if posts.has_next %}
                         <span class="text-center w-6 bg-card-bg drop-shadow">
                             <a href="?page={{ posts.next_page_number }}{{ suffix }}" class="page-link">
                               <span>&gt;</span>
@@ -55,7 +56,7 @@
                               <span>&raquo;</span>
                             </a>
                         </span>
-                {% endif %}
+                    {% endif %}
                 </div>
             {% endif %}
             {% if filters %}
@@ -65,24 +66,27 @@
                         <p class="px-2 bg-card-bg rounded-lg text-white" onclick="showTags()">
                             Tags
                         </p>
-                        <p class="px-2 bg-card-bg rounded-lg text-white" onclick="showCategories()">
+                        <p id="showCategoriesButton" class="px-2 bg-card-bg rounded-lg text-white"
+                           onclick="showCategories()">
                             Category
                         </p>
                         <p class="px-2 bg-bf2042-2 font-bold rounded-lg text-white" onclick="applyFilters()">
                             Apply
                         </p>
                     </div>
-    {#                <div id="tagsPane" class="bg-hover-bg-light absolute flex flex-col gap-y-2 p-2 border-none ml-4 h-36 p-4 overflow-y-auto left-full bottom-0 rounded-lg scrollable"></div>#}
+                    {#                <div id="tagsPane" class="bg-hover-bg-light absolute flex flex-col gap-y-2 p-2 border-none ml-4 h-36 p-4 overflow-y-auto left-full bottom-0 rounded-lg scrollable"></div>#}
                 </div>
-            </div>
-            <div class="-z-10 absolute top-0 left-0 -z-1 bg-hover-bg-light rounded-lg w-full h-full group-hover:drop-shadow-bf2042-4 transition duration-300 ease-in-out"><span></span></div>
-        </div>
-        <div id="categoriesPane" class="bg-hover-bg-light absolute p-2 border-none ml-4 h-36  overflow-y-auto left-1/2 opacity-0 invisible bottom-0 rounded-lg scrollable">
-            <div id="categoriesList" class="flex flex-col gap-y-2 w-max mr-2 text-white">
+                </div>
+                <div class="-z-10 absolute top-0 left-0 -z-1 bg-hover-bg-light rounded-lg w-full h-full group-hover:drop-shadow-bf2042-4 transition duration-300 ease-in-out">
+                    <span></span></div>
+                </div>
+                <div id="categoriesPane"
+                     class="bg-hover-bg-light absolute p-2 border-none ml-4 h-36  overflow-y-auto left-1/2 opacity-0 invisible bottom-0 rounded-lg scrollable">
+                    <div id="categoriesList" class="flex flex-col gap-y-2 w-max mr-2 text-white">
 
-            </div>
-        </div>
-        {% else %}
+                    </div>
+                </div>
+            {% else %}
                 </div></div>
-        {% endif %}
+            {% endif %}
 </div>
