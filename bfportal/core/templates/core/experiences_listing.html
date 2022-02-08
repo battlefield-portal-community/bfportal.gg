@@ -41,7 +41,9 @@
             </div>
         {% endfor %}
     </div>
-    {% include 'core/pagination.html' %}
+    {% if posts.paginator.num_pages > 1 %}
+        {% include 'core/pagination.html' %}
+    {% endif %}
 </div>
 
 <script>
