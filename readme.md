@@ -1,5 +1,6 @@
 # Source code of bfportal.gg [WIP]
 ## How to run locally  
+- create and activate a venv
 - install dependencies `python -m pip install -r requirements.txt`
 - Do first run migrate and createsuperuser
 - run server with `python manage.py runserver`
