@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     "wagtail_color_panel",
     "modelcluster",
     "taggit",
+    'dal',
+    'dal_select2',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
