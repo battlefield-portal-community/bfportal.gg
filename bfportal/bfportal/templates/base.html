@@ -54,7 +54,6 @@
                 async function showCategories() {
                     {#todo: Complete showCategories#}
                     const pane = document.getElementById("categoriesPane");
-                    pane.innerHTML = ''
                     {#todo: add a spinner svg to represent loading#}
                     {#const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");#}
                     {#svg.classList.add('animate-spin');#}
@@ -74,15 +73,17 @@
                             }
                         });
                     } else {
-                        fetch('/api/categories/')
-                            .then(resp => resp.json())
-                            .then(data => {
-                                data['categories'].forEach(elm => {
-                                    let span = document.createElement('span');
-                                    span.innerText = elm['fields']['name'];
-                                    pane.appendChild(span)
+                        if (!pane.children.length > 0) {
+                            fetch('/api/categories/')
+                                .then(resp => resp.json())
+                                .then(data => {
+                                    data['categories'].forEach(elm => {
+                                        let span = document.createElement('span');
+                                        span.innerText = elm['fields']['name'];
+                                        pane.appendChild(span)
+                                    });
                                 });
-                            });
+                        }
                         pane.classList.remove('invisible');
                         anime({
                             targets: '#categoriesPane',
