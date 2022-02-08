@@ -1,101 +1,138 @@
 {% load static wagtailcore_tags wagtailuserbar account socialaccount tailwind_tags %}
 <!DOCTYPE html>
 <html class="no-js" lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>
-            {% block title %}
-                {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
-            {% endblock %}
-            {% block title_suffix %}
-                {% wagtail_site as current_site %}
-                {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
-            {% endblock %}
-        </title>
-        <meta name="description" content="" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-        {# Global stylesheets #}
-        {% tailwind_css %}
-
-        {% block extra_css %}
-            {# Override this in templates to add extra stylesheets #}
+<head>
+    <meta charset="utf-8"/>
+    <title>
+        {% block title %}
+            {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
         {% endblock %}
-    </head>
-
-    <body class="bg-bg-default min-h-screen m-0 flex flex-col bg-repeated-square gap-y-12 {% block body_class %}{% endblock %}">
-
-        {% block header %}
-            {% include nav_tmpl|default:'navbar.html' %}
+        {% block title_suffix %}
+            {% wagtail_site as current_site %}
+            {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
         {% endblock %}
-        {% block content %}{% endblock %}
+    </title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-        {% block footer %}
-            {% include 'footer.html' %}
-        {% endblock %}
-        {# Global javascript #}
-        <script type="text/javascript" src="{% static 'js/bfportal.js' %}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
-        <script type="text/javascript">
-          var tooltipTriggerList = [].slice.call(
-            document.querySelectorAll('[data-bs-toggle="tooltip"]')
-          );
-          var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new Tooltip(tooltipTriggerEl);
-          });
-        </script>
-        <script>
-                function showTags() {
-                    {#todo: Complete ShowTags#}
-                    console.log("Show tags");
+    {# Global stylesheets #}
+    {% tailwind_css %}
+
+    {% block extra_css %}
+        {# Override this in templates to add extra stylesheets #}
+    {% endblock %}
+</head>
+
+<body class="bg-bg-default min-h-screen m-0 flex flex-col bg-repeated-square gap-y-12
+        {% block body_class %}{% endblock %}">
+
+{% block header %}
+    {% include nav_tmpl|default:'navbar.html' %}
+{% endblock %}
+{% block content %}{% endblock %}
+
+{% block footer %}
+    {% include 'footer.html' %}
+{% endblock %}
+{# Global javascript #}
+<script type="text/javascript" src="{% static 'js/bfportal.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"
+        integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
+<script type="text/javascript">
+    var tooltipTriggerList = [].slice.call(
+        document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    );
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new Tooltip(tooltipTriggerEl);
+    });
+</script>
+<script>
+    function applyFilters() {
+        const urlParams = new URLSearchParams(window.location.search),
+            checked_cats = document.querySelectorAll('input[id^=cat_]:checked');
+        urlParams.delete('category');
+        urlParams.delete('tag');
+        [...checked_cats].forEach(elm => {
+            urlParams.append('category', elm.value)
+        });
+        window.location.search = urlParams;
+
+    }
+
+    function showTags() {
+        {#todo: Complete ShowTags#}
+        console.log("Show tags");
+    }
+
+    async function showCategories() {
+        const pane = document.getElementById("categoriesPane"),
+            categoriesList = document.getElementById('categoriesList');
+        {#todo: add a spinner svg to represent loading#}
+        {#const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");#}
+        {#svg.classList.add('animate-spin');#}
+        {#svg.setAttributeNS('viewBox', )#}
+        {#svg.viewBox = '0 0 24 24';#}
+        {#pane.appendChild(svg);#}
+
+        if (pane.style.opacity !== "" && pane.style.opacity > 0) {
+            anime({
+                targets: '#categoriesPane',
+                opacity: '0',
+                easing: 'easeOutExpo',
+                complete: function () {
+                    pane.classList.add('invisible');
+                    pane.style.left = "50%"
                 }
-                async function showCategories() {
-                    {#todo: Complete showCategories#}
-                    const pane = document.getElementById("categoriesPane");
-                    {#todo: add a spinner svg to represent loading#}
-                    {#const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");#}
-                    {#svg.classList.add('animate-spin');#}
-                    {#svg.setAttributeNS('viewBox', )#}
-                    {#svg.viewBox = '0 0 24 24';#}
-                    {#pane.appendChild(svg);#}
-
-                    if (pane.style.opacity !== "" && pane.style.opacity > 0) {
-                        anime({
-                            targets: '#categoriesPane',
-                            left:'150%',
-                            opacity: '0',
-                            easing: 'easeOutExpo',
-                            complete: function () {
-                                pane.classList.add('invisible');
-                                pane.style.left = "50%"
+            });
+        } else {
+            if (!categoriesList.children.length > 0) {
+                fetch('/api/categories/')
+                    .then(resp => resp.json())
+                    .then(data => {
+                        data['results'].forEach(elm => {
+                            const input = document.createElement('input'),
+                                label = document.createElement('label'),
+                                container = document.createElement('div');
+                            input.type = 'checkbox';
+                            input.id = `cat_${elm['text']}`;
+                            input.value = elm['text'];
+                            input.className = "form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 my-1 align-top bg-no-repeat bg-center bg-contain float-left cursor-pointer";
+                            label.setAttribute('for', input.id);
+                            label.appendChild(input);
+                            label.innerHTML = `${input.outerHTML}&nbsp;${elm['text']}`
+                            container.className = 'bg-card-bg rounded-lg p-1';
+                            container.appendChild(label);
+                            categoriesList.appendChild(container);
+                        });
+                    }).then(data => {
+                        const searchParms = new URLSearchParams(window.location.search),
+                            cats = document.querySelectorAll('input[id^=cat_]');
+                        [...cats].forEach(elm => {
+                            if (searchParms.getAll('category').includes(elm.value)) {
+                                elm.checked = true;
                             }
-                        });
-                    } else {
-                        if (!pane.children.length > 0) {
-                            fetch('/api/categories/')
-                                .then(resp => resp.json())
-                                .then(data => {
-                                    data['categories'].forEach(elm => {
-                                        let span = document.createElement('span');
-                                        span.innerText = elm['fields']['name'];
-                                        pane.appendChild(span)
-                                    });
-                                });
-                        }
-                        pane.classList.remove('invisible');
-                        anime({
-                            targets: '#categoriesPane',
-                            left: '100%',
-                            opacity: '100%',
-                            easing: 'easeOutQuint',
-                        });
-                    }
-                }
-        </script>
-        {% block extra_js %}
-            {# Override this in templates to add extra javascript #}
-        {% endblock %}
-    </body>
+                        })
+                })
+            }
+            pane.classList.remove('invisible');
+            anime({
+                targets: '#categoriesPane',
+                left: '100%',
+                opacity: '100%',
+                easing: 'easeOutQuint',
+            });
+        }
+    }
+
+</script>
+{% block extra_js %}
+    {# Override this in templates to add extra javascript #}
+{% endblock %}
+</body>
 </html>
