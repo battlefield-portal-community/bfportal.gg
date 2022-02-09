@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
     {% include 'core/experiences_listing.html' %}
 {% endblock content %}
+{% block extra_js %}
+    <script href="{% static 'core/js/pagination.js' %}"></script>
+{% endblock %}
