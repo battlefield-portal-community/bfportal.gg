@@ -85,7 +85,7 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
 
 class CategoriesAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        qs = ExperiencesCategory.objects.all()
+        qs = ExperiencesCategory.objects.all().order_by('id')
         if self.q:
             qs = qs.filter(name__istartswith=self.q)
         return qs
@@ -93,7 +93,7 @@ class CategoriesAutocomplete(autocomplete.Select2QuerySetView):
 
 class TagsAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        qs = Tag.objects.all()
+        qs = Tag.objects.all().order_by('id')
         if self.q:
             qs = qs.filter(name__istartswith=self.q)
             return qs
