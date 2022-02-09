@@ -52,11 +52,14 @@ def filter_tags_category(request: HttpRequest, posts: models.query.QuerySet):
     all_posts = posts
     if tags := request.GET.getlist("tag", None):
         all_posts = all_posts.filter(tags__slug__in=tags)
-    if category := request.GET.get("category", None):
+    if category := request.GET.getlist("category", None):
+        category = list(map(str.lower, category))
+        logger.debug(category)
+        post: ExperiencePage
         all_posts = [
             post
             for post in all_posts
-            if category.lower() in [cat.name.lower() for cat in post.categories.all()]
+            if any(i in category for i in [cat.name.lower() for cat in post.categories.all()])
         ]
 
     if tags or category:

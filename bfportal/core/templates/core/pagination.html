@@ -1,0 +1,110 @@
+{% load static %}
+<div class="relative my-10 {% if filters %} min-w-[20rem] {% endif %}">
+    <div class="group">
+        <div class="flex flex-col py-1 px-2 bg-hover-bg-light rounded-lg {% if filters %} divide-y gap-y-2 divide-bf2042-3 {% endif %}">
+            {% if posts.paginator.num_pages > 1 %}
+                {% pagination_suffix request.GET.urlencode as suffix %}
+                <div class="pagination text-white flex flex-row text-lg mx-auto">
+                    {% if posts.has_previous %}
+                        <span class="text-center w-6 bg-card-bg drop-shadow rounded-l-lg">
+                            <a href="?page=1{{ suffix }}">&laquo;</a>
+                        </span>
+                        <span class="text-center w-6 bg-card-bg drop-shadow">
+                            <a href="?page={{ posts.previous_page_number }}{{ suffix }}">&lt;</a>
+                        </span>
+                        {% if posts.number >= 4 %}
+                            <span class="text-center w-6 bg-card-bg drop-shadow hover:text-bf2042-4">
+                                <a href="?page=1{{ suffix }}">1</a>
+                            </span>
+                            <span class=" text-center w-6 drop-shadow bg-card-bg hover:text-bf2042-4 ">..</span>
+                        {% endif %}
+                    {% endif %}
+
+                    {% for page_num in posts.paginator.page_range %}
+                        {% if page_num|sub:posts.number|abs <= 2 %}
+
+                        {% endif %}
+                        <span class="
+                            text-center  px-2
+                            {% if page_num == posts.number %} bg-hover-bg-light text-bf2042-6 drop-shadow-none
+                            {% else %} bg-card-bg hover:text-bf2042-4 drop-shadow-lg
+                            {% endif %}
+                            {% if page_num|sub:posts.number == -1 %} rounded-r-lg
+                            {% elif page_num|sub:posts.number == 1 %} rounded-l-lg
+                            {% endif %}
+                            ">
+                                <a href="?page={{ page_num }}{{ suffix }}" class="page-link">
+                                  {{ page_num }}
+                                </a>
+                            </span>
+                    {% endfor %}
+
+                    {% if posts.paginator.num_pages|sub:posts.number > 2 %}
+                        <span class=" text-center w-6 drop-shadow bg-card-bg hover:text-bf2042-4 ">..</span>
+                        <span class="text-center w-6 bg-card-bg drop-shadow hover:text-bf2042-4">
+                                <a href="?page=
+                                        {{ posts.paginator.num_pages }}{{ suffix }}">{{ posts.paginator.num_pages }}</a>
+                            </span>
+                    {% endif %}
+                    {% if posts.has_next %}
+                        <span class="text-center w-6 bg-card-bg drop-shadow">
+                            <a href="?page={{ posts.next_page_number }}{{ suffix }}" class="page-link">
+                              <span>&gt;</span>
+                            </a>
+                        </span>
+                        <span class="text-center w-6 bg-card-bg drop-shadow rounded-r-lg">
+                            <a href="?page={{ posts.paginator.num_pages }}{{ suffix }}" class="page-link">
+                              <span>&raquo;</span>
+                            </a>
+                        </span>
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% if filters %}
+                <div class="flex {% if posts.paginator.num_pages > 1 %} pt-1 {% endif %} gap-x-6 text-sm cursor-pointer text-center">
+                    <p id="filters_button" class="text-gray-400 hover:text-gray-200">Filters</p>
+                    <div id="filters" class="flex gap-x-2 absolute bottom-0.5 left-1/2 -translate-x-1/2">
+                        <p id="showTagsButton" class="px-2 bg-card-bg rounded-lg text-white" onclick="showTags()">
+                            Tags
+                        </p>
+                        <p id="showCategoriesButton" class="px-2 bg-card-bg rounded-lg text-white"
+                           onclick="showCategories()">
+                            Category
+                        </p>
+                        <p class="px-2 bg-bf2042-2 font-bold rounded-lg text-white" onclick="applyFilters()">
+                            Apply
+                        </p>
+                        <p class="px-2 bg-card-bg font-bold rounded-lg text-white" onclick="clearFilters()">
+                            clear
+                        </p>
+                    </div>
+                    {#                <div id="tagsPane" class="bg-hover-bg-light absolute flex flex-col gap-y-2 p-2 border-none ml-4 h-36 p-4 overflow-y-auto left-full bottom-0 rounded-lg scrollable"></div>#}
+                </div>
+                </div>
+                <div class="-z-10 absolute top-0 left-0 -z-1 bg-hover-bg-light rounded-lg w-full h-full group-hover:drop-shadow-bf2042-4 transition duration-300 ease-in-out">
+                    <span></span></div>
+                </div>
+                <div id="categoriesPane"
+                     class="bg-hover-bg-light absolute p-2 border-none ml-4 h-36  overflow-y-auto left-1/2 opacity-0 invisible bottom-0 rounded-lg scrollable">
+                    <div id="categoriesList" class="flex flex-col gap-y-2 w-max mr-2 text-white">
+
+                    </div>
+                </div>
+                <div id="tagsPane"
+                     class="bg-hover-bg-light absolute p-2 border-none ml-4 h-40 min-w-[8rem] left-1/2  bottom-0 rounded-lg invisible">
+                    <div class="w-full h-full last:pb-10">
+                        <div id="tagsList" class="flex flex-col gap-y-2 mr-2 h-full overflow-y-auto  text-white pr-4 w-full scrollable"></div>
+                        <div class="absolute bottom-0.5 left-1/2 -translate-x-1/2">
+                            <label>
+                                <input id="tagsInputBox" type="text" oninput="populateTags()" size="10">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                </div></div>
+            {% endif %}
+</div>
+{% if filters %}
+    <script type="text/javascript" src="{% static 'js/pagination.js' %}"></script>
+{% endif %}

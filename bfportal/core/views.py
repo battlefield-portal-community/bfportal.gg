@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.core import serializers
 from loguru import logger
 from taggit.models import Tag
+from dal import autocomplete
 
 from core.forms import ExperiencePageForm
 from core.models import (
@@ -82,23 +83,18 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
         )
 
 
-def get_categories(request: HttpRequest):
-    return JsonResponse(
-        {
-            "categories": json.loads(
-                serializers.serialize(
-                    "json", ExperiencesCategory.objects.all(), fields="name"
-                )
-            )
-        }
-    )
+class CategoriesAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = ExperiencesCategory.objects.all()
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+        return qs
 
 
-def get_tags(request: HttpRequest):
-    return JsonResponse(
-        {
-            "categories": json.loads(
-                serializers.serialize("json", Tag.objects.all(), fields="name")
-            )
-        }
-    )
+class TagsAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = Tag.objects.all()
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+            return qs
+        return qs[0:10]

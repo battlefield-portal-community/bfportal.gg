@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     "wagtail_color_panel",
     "modelcluster",
     "taggit",
+    'dal',
+    'dal_select2',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -169,6 +171,7 @@ STATICFILES_FINDERS = [
 
 STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, "static"),
+    os.path.join(PROJECT_DIR, "core/static"),
 ]
 
 # ManifestStaticFilesStorage is recommended in production, to prevent outdated
