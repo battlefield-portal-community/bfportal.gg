@@ -26,6 +26,7 @@ module.exports = {
          */
         '../../**/templates/**/*.html',
         './node_modules/tw-elements/dist/js/**/*.js',
+        '../../**/static/js/*.js',
 
         /**
          * JS: If you use Tailwind CSS in JavaScript, uncomment the following lines and make sure
