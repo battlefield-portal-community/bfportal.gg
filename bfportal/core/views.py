@@ -96,4 +96,5 @@ class TagsAutocomplete(autocomplete.Select2QuerySetView):
         qs = Tag.objects.all()
         if self.q:
             qs = qs.filter(name__istartswith=self.q)
-        return qs
+            return qs
+        return qs[0:10]
