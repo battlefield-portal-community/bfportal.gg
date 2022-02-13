@@ -13,6 +13,7 @@ class ExperiencePageForm(forms.ModelForm):
 
     class Meta:
         model = ExperiencePage
+        exclude = ['featured']
         fields = [
             "title",
             "description",
