@@ -20,7 +20,12 @@
                     </div>
                     <div class="grid grid-cols-1 grid-flow-row mt-3 h-1/3 gap-y-2">
                         <a href="{{ post.url }}" class="main-link">
-                            <div class="font-bold font-mono text-3xl text-white transition duration-500 ease-in-out ">{{ post.title|title }}</div>
+                            <div class="font-bold font-mono text-3xl text-white transition duration-500 ease-in-out ">
+                                {{ post.title|title }}
+                                {% if post.featured %}
+                                    <img src="{% static 'images/icons/featured.png' %}" class="w-6 inline-block">
+                                {% endif %}
+                            </div>
                         </a>
                         <div class="text-gray-400 pb-4 h-12  text-ellipsis hover:shadow-bf2042-4 transition duration-200 ease-in-out overflow-hidden"><p>{{ post.description|truncatewords:15 }}</p></div>
                         <div class=" flex text-xs gap-x-2 pt-2 w-full overflow-hidden">
