@@ -1,35 +1,83 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags static embed_video_tags wagtailimages_tags %}
 {% block content %}
-    {% if page.owner == request.user %}
-        <h1>Your page</h1>
-    {% else %}
-        <h1>Nope</h1>
-    {% endif %}
-    <br><br>
-    au {{ page.owner }} <br>
-    title {{ page.title }} <br>
-    desc {{ page.description }} <br>
-    <br>
-    exp_url {{ page.exp_url }} <br>
-    code {{ page.code }} <br>
-    <br>
-    tags {{ page.tags.all | join:", "}} <br>
-    cover {{ page.cover_img_url }} <br>
-    vid_url {{ page.vid_url }} <br>
-    cate {{ page.categories.all | join:", " }} <br>
-{#    {% with categories=page.categories.all %}#}
-{#        {% if categories %}#}
-{#                {% for category in categories %}#}
-{#                        {{category.name}}#}
-{#                {% endfor %}#}
-{#        {% endif %}#}
-{#    {% endwith %}#}
+    <div class="flex flex-col text-white gap-y-8">
+        <div>
+            <img class="object-cover w-full h-96" src="{% static "images/placeholder.png" %}" alt="Cover Img"
+                 onerror="this.onerror=null;this.src={% static "images/placeholder.png" %}">
+        </div>
+        <div class="flex flex-col w-11/12 mx-auto bg-card-bg rounded-xl p-4 gap-y-8  hover:drop-shadow-bf2042-3 transition duration-100 ease-in">
+            <div class="text-8xl">{{ page.title|title }}</div>
+            <div class="flex flex-row gap-x-2">
+                {% if page.featured %}
+                    <a class="text-sm bg-hover-bg-light ho w-max rounded-full hover:border-bf2042-3 hover:drop-shadow-bf2042-3-sm transition duration-100 ease-in" href="/experiences/featured">
+                        <div class="px-2 ">
+                            <img src="{% static 'images/icons/featured.png' %}" class="w-6 inline-block">
+                            Featured
+                        </div>
+                    </a>
+                {% endif %}
+                {% for cat in page.categories.all %}
+                    <a class="text-sm bg-hover-bg-light ho w-max rounded-full hover:border-bf2042-3 hover:drop-shadow-bf2042-3-sm transition duration-100 ease-in" href="/experiences/?category={{ cat.name }}">
+                        <div class="px-2 ">
+                            {% image cat.icon width-24 class="inline-block" %}
+                            {{ cat.name }}
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+            <div class="flex flex-row gap-x-1">
+                <div class="text-sm">
+                    <div class="inline-block text-xs text-bg-light align-middle">Created by</div>
+                    <div class="inline-block bg-hover-bg-light rounded-full px-2 hover:bg-bf2042-2 transition duration-100 ease-in">
+                        {% with page.owner.socialaccount_set.all.0 as owner %}
+                            <a href="/users/{{ owner.uid }}">
+                                <img class="w-6 rounded-full inline-block" src="{{ owner.get_avatar_url }}" alt="pfp">
+                                {{ owner }}
+                            </a>
+                        {% endwith %}
+                    </div>
+                </div>
+                <div class="text-sm">
+                    <div class="inline-block text-xs text-bg-light">on</div>
+                    {{ page.first_published_at }}</div>
+                <div class="text-sm">
+                    <div class="inline-block text-xs text-bg-light">last updated on</div>
+                    {{ page.last_published_at }}</div>
+            </div>
+            <div class="flex flex-col bg-default w-max rounded-xl px-2">
+                <div class="flex flex-row gap-x-2">
+                    <div class="font-mono">Experience Url</div>
+                    <div class="font-bold"><a class="hover:text-bf2042-4 transition duration-200 ease-in-out"
+                                              href="{{ page.exp_url }}"> {{ page.exp_url }} </a></div>
+                </div>
+                <div class="flex flex-row gap-x-2">
+                    <div class="font-mono">Experience Share Code</div>
+                    <div class="font-bold hover:text-bf2042-4 transition duration-200 ease-in-out"> {{ page.code }}</div>
+                </div>
+                <div class="flex flex-row gap-x-2">
+                    <div class="font-mono">Human Players</div>
+                    <div class="font-bold hover:text-bf2042-4 transition duration-200 ease-in-out"> {{ page.no_players }} </div>
+                </div>
+                <div class="flex flex-row gap-x-2">
+                    <div class="font-mono">No. Bots</div>
+                    <div class="font-bold hover:text-bf2042-4 transition duration-200 ease-in-out"> {{ page.no_bots }} </div>
+                </div>
+            </div>
+            <div class="flex flex-row">
+                {% for tag in page.tags.all|slice:"0:5" %}
+                    <a href="/experiences/?tag={{ tag }}" class="border bg-discord-light-dark border-2 text-white border-1/2  border-card-bg rounded-lg px-2 py-0 mb-1 hover:border-bf2042-3 hover:drop-shadow-bf2042-3-sm transition duration-100 ease-in ">{{ tag|title }}</a>
+                {% endfor %}
+            </div>
+            <div class="font-sans text-justify text-bg-light rounded-xl px-1 hover:text-gray-200  transition duration-200 ease-in-out">{{ page.description }}</div>
 
 
-    <br>
-    no_player {{ page.no_players }} <br>
-    no_bots {{ page.no_bots }} <br>
-
+            {% if page.vid_url|length > 0 %}
+                <div class="w-full h-[42rem]">
+                    {% video page.vid_url '100% x 100%' %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
 
 {% endblock content %}
