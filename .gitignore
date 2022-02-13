@@ -169,6 +169,6 @@ build/
 tests/report/
 .vscode/
 # dont save wagtail reditions
-*/media/images/
+*/media
 
 *_temp_*
