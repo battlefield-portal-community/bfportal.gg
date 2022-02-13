@@ -63,7 +63,7 @@
             {% if filters %}
                 <div class="flex {% if posts.paginator.num_pages > 1 %} pt-1 {% endif %} gap-x-6 text-sm cursor-pointer text-center">
                     <p id="filters_button" class="text-gray-400 hover:text-gray-200">Filters</p>
-                    <div id="filters" class="flex gap-x-2 absolute bottom-0.5 left-1/2 -translate-x-1/2">
+                    <div id="filters" class="flex ml-4 gap-x-2 absolute bottom-[0.rem] left-1/2 -translate-x-1/2">
                         <p id="showTagsButton" class="px-2 bg-card-bg rounded-lg text-white" onclick="showTags()">
                             Tags
                         </p>
