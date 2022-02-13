@@ -2,17 +2,18 @@ function applyFilters() {
     const urlParams = new URLSearchParams(window.location.search),
         checked_cats = document.querySelectorAll('input[id^=cat_]:checked'),
         checked_tags = document.querySelectorAll('input[id^=tag_]:checked');
-    if (checked_cats.length > 0 || checked_tags.length > 0) {
-        urlParams.delete('category');
-        urlParams.delete('tag');
-        [...checked_cats].forEach(elm => {
-            urlParams.append('category', elm.value)
-        });
-        [...checked_tags].forEach(elm => {
-            urlParams.append('tag', elm.value)
-        });
-        window.location.search = urlParams;
-    }
+
+    // will work as clear if no tag or cat is selected
+
+    urlParams.delete('category');
+    urlParams.delete('tag');
+    [...checked_cats].forEach(elm => {
+        urlParams.append('category', elm.value)
+    });
+    [...checked_tags].forEach(elm => {
+        urlParams.append('tag', elm.value)
+    });
+    window.location.search = urlParams;
 }
 function clearFilters() {
     const urlParams = new URLSearchParams(window.location.search);

@@ -81,7 +81,9 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
                 "form": ExperiencePageForm(instance=experience_page),
             },
         )
-
+# to sort tags based on how many time its used
+# >>> a = ExperiencePageTag.objects.values_list('tag_id').annotate(tag_count=Count('tag_id')).order_by('-tag_count')
+# >>> [Tag.objects.get(id=i[0]) for i in a]
 
 class CategoriesAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
