@@ -26,6 +26,12 @@
                class="inline-block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white p-1 rounded-lg mr-4 hover:text-bf2042-6 transition duration-200 ease-in-out">
                 Submit Experience
             </a>
+            {% if page.is_experience_page and  page.owner == request.user %}
+                <a href="edit/"
+                   class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4 transition duration-200 ease-in-out">
+                    Edit Experience
+                </a>
+            {% endif %}
             {% block extend_navbar %}
 
             {% endblock %}
