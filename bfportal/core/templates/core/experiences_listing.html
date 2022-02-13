@@ -1,4 +1,4 @@
-{% load static %}
+{% load static wagtailimages_tags %}
 <div class="w-11/12 mx-auto grid grid-cols-1 justify-items-center">
     {% include 'core/pagination.html' with filters=True%}
     <div class="flex flex-wrap flex-row justify-center gap-x-3 gap-y-5">
@@ -7,10 +7,13 @@
                 <div class="m-2">
                     <div class="-m-2 drop-shadow-xl h-3/5">
                         <img class="rounded-lg h-full w-full" src="{% static 'images/placeholder.png' %}" alt="{{ post.slug }}">
-                        <div class="absolute top-0 left-0 flex flex-row flex-wrap p-2 gap-x-1">
+                        <div class="absolute top-0 left-0 flex flex-row flex-wrap p-2 gap-x-1 ">
                             {% for cat in post.categories.all %}
                                 <a href="/experiences/?category={{ cat }}">
-                                <p class="category_pill font-semibold oldstyle-nums font-sans rounded-lg px-2 hover:border hover:border-white" style="--category_pill_bg_color: {{ cat.bg_color }}; --category_pill_bg_hover_color: {{ cat.bg_hover_color }}; --category_pill_text_color: {{ cat.text_color }}; --category_pill_text_hover_color: {{ cat.text_hover_color }}">{{ cat }}</p>
+                                <p class="category_pill font-semibold oldstyle-nums font-sans border border-transparent rounded-lg px-2 hover:border hover:border-white" style="--category_pill_bg_color: {{ cat.bg_color }}; --category_pill_bg_hover_color: {{ cat.bg_hover_color }}; --category_pill_text_color: {{ cat.text_color }}; --category_pill_text_hover_color: {{ cat.text_hover_color }}">
+                                    {% image cat.icon width-24 class="inline-block" %}
+                                    {{ cat }}
+                                </p>
                                 </a>
                             {% endfor %}
                         </div>
@@ -22,7 +25,9 @@
                         <div class="text-gray-400 pb-4 h-12  text-ellipsis hover:shadow-bf2042-4 transition duration-200 ease-in-out overflow-hidden"><p>{{ post.description|truncatewords:15 }}</p></div>
                         <div class=" flex text-xs gap-x-2 pt-2 w-full overflow-hidden">
                             {% for tag in post.tags.all|slice:"0:5" %}
-                                <a href="/experiences/?tag={{ tag }}" class="border bg-discord-light-dark border-2 text-white border-1/2  border-card-bg rounded-lg px-2 py-0 mb-1  group-hover:bg-gray-600 group-hover:border-bf2042-3  hover:border-bf2042-3 hover:drop-shadow-bf2042-3 transition duration-100 ease-in ">{{ tag|title }}</a>
+                                <a href="/experiences/?tag={{ tag }}" class="border bg-discord-light-dark border-2 text-white border-1/2  border-card-bg rounded-lg px-2 py-0 mb-1  group-hover:bg-gray-600 group-hover:border-bf2042-3  hover:border-bf2042-3 hover:drop-shadow-bf2042-3 transition duration-100 ease-in ">
+                                    {{ tag|title }}
+                                </a>
                             {% endfor %}
 
                         </div>
