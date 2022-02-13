@@ -159,6 +159,14 @@ class ExperiencesPage(RoutablePageMixin, Page):
             ExperiencePage.objects.live().public().order_by("-first_published_at"),
         )
         return context
+    @route(r"^featured/$")
+    def featured_experiences(self, request: HttpRequest):
+        return TemplateResponse(
+            request,
+            self.get_template(request),
+            {'posts': ExperiencePage.objects.live().filter(featured__exact=True).order_by("-first_published_at")}
+
+        )
 
 
 class ExperiencePage(RoutablePageMixin, Page):
