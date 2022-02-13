@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "theme",
     "django_browser_reload",
     "widget_tweaks",
+    "embed_video",
 ]
 
 SITE_ID = 1

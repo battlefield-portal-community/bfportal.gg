@@ -24,6 +24,7 @@ from wagtail_color_panel.fields import ColorField
 from wagtail_color_panel.edit_handlers import NativeColorPanel
 
 from loguru import logger
+from embed_video.fields import EmbedVideoField
 
 from bfportal.settings.base import LOGIN_URL
 from core.utils.helper import safe_cast
@@ -161,6 +162,11 @@ class ExperiencesPage(RoutablePageMixin, Page):
 
 
 class ExperiencePage(RoutablePageMixin, Page):
+    featured = models.BooleanField(
+        default=False,
+        help_text="Is this experience a featured experience",
+        verbose_name="Set Featured"
+    )
     description = models.TextField(
         default="",
         help_text="Description of Your experience",
@@ -187,7 +193,7 @@ class ExperiencePage(RoutablePageMixin, Page):
         through=ExperiencePageTag,
         verbose_name="Tags",
     )
-    vid_url = models.URLField(
+    vid_url = EmbedVideoField(
         blank=True,
         default="",
         help_text="Link to vid showcasing your experience",
@@ -219,6 +225,7 @@ class ExperiencePage(RoutablePageMixin, Page):
     content_panels = Page.content_panels + [
         MultiFieldPanel(
             [
+                FieldPanel("featured", classname="full",),
                 FieldPanel("description", classname="full"),
                 FieldPanel("categories", widget=forms.CheckboxSelectMultiple),
             ],
@@ -270,6 +277,8 @@ class ExperiencePage(RoutablePageMixin, Page):
         else:
             return redirect(LOGIN_URL)
 
+    def is_experience_page(self):
+        return True
 
 def social_user(discord_id: int):
     """Returns a User object for a discord id"""
