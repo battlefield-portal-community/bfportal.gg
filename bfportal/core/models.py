@@ -1,30 +1,24 @@
-from typing import Union
-
-from django.db import models
+from allauth.socialaccount.models import SocialAccount
 from django import forms
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db import models
 from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect
 from django.template.response import TemplateResponse
-from django.shortcuts import render, redirect
-
-from wagtail.core.models import Page
+from embed_video.fields import EmbedVideoField
+from loguru import logger
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.models import ParentalKey, ParentalManyToManyField
+from taggit.models import TaggedItemBase
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from wagtail.core.models import Page
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.models import register_snippet
-
-from allauth.socialaccount.models import SocialAccount
-from taggit.models import TaggedItemBase
-
-from modelcluster.models import ParentalKey, ParentalManyToManyField
-from modelcluster.contrib.taggit import ClusterTaggableManager
-from wagtail_color_panel.fields import ColorField
 from wagtail_color_panel.edit_handlers import NativeColorPanel
-
-from loguru import logger
-from embed_video.fields import EmbedVideoField
+from wagtail_color_panel.fields import ColorField
 
 from bfportal.settings.base import LOGIN_URL
 from core.utils.helper import safe_cast
@@ -159,12 +153,15 @@ class ExperiencesPage(RoutablePageMixin, Page):
             ExperiencePage.objects.live().public().order_by("-first_published_at"),
         )
         return context
+
     @route(r"^featured/$")
     def featured_experiences(self, request: HttpRequest):
         return TemplateResponse(
             request,
             self.get_template(request),
-            {'posts': ExperiencePage.objects.live().filter(featured__exact=True).order_by("-first_published_at")}
+            {
+                'posts': ExperiencePage.objects.live().filter(featured__exact=True).order_by("-first_published_at"),
+            }
 
         )
 
@@ -233,7 +230,7 @@ class ExperiencePage(RoutablePageMixin, Page):
     content_panels = Page.content_panels + [
         MultiFieldPanel(
             [
-                FieldPanel("featured", classname="full",),
+                FieldPanel("featured", classname="full", ),
                 FieldPanel("description", classname="full"),
                 FieldPanel("categories", widget=forms.CheckboxSelectMultiple),
             ],
@@ -288,6 +285,7 @@ class ExperiencePage(RoutablePageMixin, Page):
     def is_experience_page(self):
         return True
 
+
 def social_user(discord_id: int):
     """Returns a User object for a discord id"""
     try:
@@ -316,9 +314,9 @@ class ProfilePage(RoutablePageMixin, Page):
         context = super().get_context(request, *args, **kwargs)
         all_posts = (
             ExperiencePage.objects.live()
-            .public()
-            .filter(owner=user_acc)
-            .order_by("-first_published_at")
+                .public()
+                .filter(owner=user_acc)
+                .order_by("-first_published_at")
         )
         if not user_acc:
             user_acc = request.user
