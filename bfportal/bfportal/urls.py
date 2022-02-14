@@ -41,7 +41,7 @@ if settings.DEBUG:
     from django.conf.urls.static import static
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
     # A temp url to serve templates directly
-    urlpatterns += path("temp/", TemplateView.as_view(template_name="core/after_submit.html"), name="temp")
+    urlpatterns.append(path("temp/", TemplateView.as_view(template_name="core/after_submit.html")))
     # Serve static and media files from development server
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
