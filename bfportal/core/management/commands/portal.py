@@ -1,6 +1,8 @@
-from django.core.management import BaseCommand
-import requests
 import json
+
+import requests
+from django.core.management import BaseCommand
+
 from core.models import AvailableTags
 
 

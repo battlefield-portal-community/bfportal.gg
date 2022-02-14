@@ -1,6 +1,6 @@
-from django.template.defaulttags import register
-from loguru import logger
 import re
+
+from django.template.defaulttags import register
 
 
 @register.filter

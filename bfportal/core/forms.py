@@ -1,7 +1,6 @@
 from django import forms
-from core.models import ExperiencePage, ExperiencesCategory
 
-from loguru import logger
+from core.models import ExperiencePage
 
 
 class ExperiencePageForm(forms.ModelForm):

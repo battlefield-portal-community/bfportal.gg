@@ -1,12 +1,9 @@
-import json
-
+from dal import autocomplete
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, JsonResponse
+from django.http import HttpRequest
 from django.shortcuts import render
-from django.core import serializers
 from loguru import logger
 from taggit.models import Tag
-from dal import autocomplete
 
 from core.forms import ExperiencePageForm
 from core.models import (
