@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
-
+{% block title %}
+    BF Portal Library
+{% endblock %}
 {% block content %}
     <div class="w-11/12 mx-auto">
         {% if request.user.is_authenticated %}

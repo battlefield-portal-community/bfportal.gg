@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
+{% block title %}
+    {% if "/featured/" in request.path %}
+        Featured Experiences
+    {% else %}
+        Experiences
+    {% endif %}
+{% endblock %}
 {% block content %}
     {% include 'core/experiences_listing.html' %}
 {% endblock content %}
