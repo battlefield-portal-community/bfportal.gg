@@ -1,8 +1,21 @@
 {% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "successful" %}{% endblock %}
+
 {% block content %}
-    {% if after_edit %}
-        <h1>edit succesufull for {{exp_name}} wait for approval</h1>
-    {% else %}
-        <h1>Submit succesufull for {{exp_name}} wait for approval</h1>
-    {% endif %}
+    <div class="absolute table text-white h-[90%] w-full left-0 top-0">
+        <div class="table-cell align-middle">
+                <div class="flex flex-col text-center mx-auto gap-y-4 w-max bg-card-bg p-4 rounded-xl divider divide-y divide-bf2042-3 drop-shadow-hover-bg-light-lg transition hover:drop-shadow-bf2042-3-lg duration-300 ease-in-out">
+                    <div class="text-xl pt-4">
+                        {% trans "Experience Submited Successfully" %}
+                    </div>
+                    <div class="">
+                        <a href="/">
+                            <button class="mt-4 p-4 bg-hover-bg-light rounded-xl hover:drop-shadow-bf2042-2 transition duration-100 ease-in-out" type="submit">{% trans 'Back To Home' %}</button>
+                        </a>
+                    </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
