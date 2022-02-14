@@ -11,7 +11,6 @@ from wagtail.documents import urls as wagtaildocs_urls
 from core.views import CategoriesAutocomplete, TagsAutocomplete
 
 urlpatterns = [
-    path("__reload__/", include("django_browser_reload.urls")),
     path("django-admin/", admin.site.urls),
     path("admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
@@ -40,6 +39,8 @@ urlpatterns = [
 if settings.DEBUG:
     from django.conf.urls.static import static
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+    # auto reload on static or template edit
+    urlpatterns.append(path("__reload__/", include("django_browser_reload.urls")))
     # A temp url to serve templates directly
     urlpatterns.append(path("temp/", TemplateView.as_view(template_name="core/after_submit.html")))
     # Serve static and media files from development server
