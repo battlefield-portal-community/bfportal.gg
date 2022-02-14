@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+
+  web_run:
+    build: .
+    command: bash -c "python manage.py migrate --noinput && python manage.py ensure_superuser --username bfportal --email superuser@bfportal.com --password ${SU_PASSWD} && python manage.py runserver 0.0.0.0:8000"
+    profiles:
+      - donotstart
+    ports:
+      - "8000:8000"
