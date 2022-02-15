@@ -1,11 +1,25 @@
 version: "3.9"
 
 services:
-
+  db:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_NAME=${DB_NAME}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
   web_run:
     build: .
-    command: bash -c "python manage.py migrate --noinput && python manage.py ensure_superuser --username bfportal --email superuser@bfportal.com --password ${SU_PASSWD} && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py migrate --noinput && python manage.py ensure_superuser --username bfportal --email superuser@bfportal.com --password ${SU_PASSWD} &&  python manage.py ensure_initialization && python manage.py runserver 0.0.0.0:8000"
     profiles:
       - donotstart
     ports:
       - "8000:8000"
+    environment:
+      - POSTGRES_NAME=${DB_NAME}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_HOST=db # takes precedent over .env file
+    depends_on:
+      - db
