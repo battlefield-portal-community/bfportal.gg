@@ -15,7 +15,7 @@
 - Do first run migrate
 - run `python manage.py ensure_superuser`
 - run `python manage.py ensure_initialization`
-- run server with `python manage.py runserver`
+- run server with `python manage.py runserver localhost:8000`
 - login via discord to create a new user 
 - run command `python manage.py fake --generate 50` to create a few fake pages
 - reload admin now u should and a data to explore
