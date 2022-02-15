@@ -172,3 +172,4 @@ tests/report/
 */media
 
 *_temp_*
+/bfportal/data/
