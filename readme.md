@@ -2,10 +2,20 @@
 ## How to run locally  
 - create and activate a venv
 - install dependencies `python -m pip install -r requirements.txt`
-- Do first run migrate and createsuperuser
+- create a .env file with the following values
+- ``` 
+      DB_NAME=<postgres_db_name>
+      DB_USERNAME=<postgres_username>
+      DB_PASSWORD=<postgres_password>
+      POSTGRES_HOST=127.0.0.1
+      SU_PASSWD=1234
+      DISCORD_CLIENT_ID=931965340764737608
+      DISCORD_SECRET=SuzQK6oAV_ArY3HGXUYIOUjFT46C5OtW
+    ```
+- Do first run migrate
+- run `python manage.py ensure_superuser`
+- run `python manage.py ensure_initialization`
 - run server with `python manage.py runserver`
-- Add home page as root page of a website in wagtail admin
-- add ExperiencesPage and Profile Page
 - login via discord to create a new user 
 - run command `python manage.py fake --generate 50` to create a few fake pages
 - reload admin now u should and a data to explore
