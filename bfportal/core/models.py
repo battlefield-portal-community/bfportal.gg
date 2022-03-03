@@ -12,9 +12,12 @@ from loguru import logger
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.models import ParentalKey, ParentalManyToManyField
 from taggit.models import TaggedItemBase
-from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, StreamFieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.core.models import Page
+from wagtail.core.fields import StreamField
+from wagtail.images.blocks import ImageChooserBlock
+from wagtail.core import blocks
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.models import register_snippet
 from wagtail_color_panel.edit_handlers import NativeColorPanel
@@ -64,7 +67,32 @@ def filter_tags_category(request: HttpRequest, posts: models.query.QuerySet):
     return all_posts
 
 
-class HomePage(RoutablePageMixin, Page):
+class ExtraContent(blocks.StreamBlock):
+    heading = blocks.CharBlock(form_classname="full title")
+    cover_image = ImageChooserBlock()
+    text = blocks.RichTextBlock()
+
+    class Meta:
+        template = "core/blocks/extra_content.html"
+        icon = "user"
+        default = False
+        help_text = "Custom Content for a page"
+
+
+class CustomBasePage(Page):
+    extra_content = StreamField(ExtraContent())
+    content_panels = Page.content_panels + [
+        StreamFieldPanel(
+            'extra_content',
+            classname="collapsible"
+        )
+    ]
+
+    class Meta:
+        abstract = True
+
+
+class HomePage(RoutablePageMixin, CustomBasePage):
     max_count = 1
     parent_page_types = ["wagtailcore.Page"]
     subpage_types = ["core.ExperiencesPage", "core.ProfilePage"]
@@ -139,7 +167,7 @@ class ExperiencePageTag(TaggedItemBase):
     )
 
 
-class ExperiencesPage(RoutablePageMixin, Page):
+class ExperiencesPage(RoutablePageMixin, CustomBasePage):
     max_count = 1
     parent_page_types = ["core.HomePage"]
     subpage_types = ["core.ExperiencePage"]
@@ -166,7 +194,7 @@ class ExperiencesPage(RoutablePageMixin, Page):
         )
 
 
-class ExperiencePage(RoutablePageMixin, Page):
+class ExperiencePage(RoutablePageMixin, CustomBasePage):
     featured = models.BooleanField(
         default=False,
         help_text="Is this experience a featured experience",
@@ -297,7 +325,7 @@ def social_user(discord_id: int):
         return False
 
 
-class ProfilePage(RoutablePageMixin, Page):
+class ProfilePage(RoutablePageMixin, CustomBasePage):
     max_count = 1
     parent_page_types = ["core.HomePage"]
     subpage_types = []
