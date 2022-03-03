@@ -4,12 +4,9 @@
     BF Portal Library
 {% endblock %}
 {% block content %}
-    <div class="w-11/12 mx-auto">
-        {% if request.user.is_authenticated %}
-        {% else %}
-            <iframe src="https://discord.com/widget?id=870246147455877181&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
-        {% endif %}
-    </div>
     {% include 'core/experiences_listing.html'%}
+    {% if not request.user.is_authenticated %}
+        <iframe src="https://discord.com/widget?id=870246147455877181&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+    {% endif %}
 
 {% endblock %}
