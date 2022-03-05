@@ -75,16 +75,16 @@ class ExtraContent(blocks.StreamBlock):
     class Meta:
         template = "core/blocks/extra_content.html"
         icon = "user"
-        default = False
+        required = False
         help_text = "Custom Content for a page"
 
 
 class CustomBasePage(Page):
-    extra_content = StreamField(ExtraContent())
+    extra_content = StreamField(ExtraContent(), blank=True)
     content_panels = Page.content_panels + [
         StreamFieldPanel(
             'extra_content',
-            classname="collapsible"
+            classname="collapsible",
         )
     ]
 
@@ -290,7 +290,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
             heading="Settings info",
             classname="collapsible",
         ),
-    ]
+    ] + [CustomBasePage.content_panels[-1]]
 
     parent_page_types = ["core.ExperiencesPage"]
     subpage_types = []
