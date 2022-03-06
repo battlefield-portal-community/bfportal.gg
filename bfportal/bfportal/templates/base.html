@@ -29,6 +29,7 @@
 {% block header %}
     {% include nav_tmpl|default:'navbar.html' %}
 {% endblock %}
+{% include_block page.extra_content %}
 {% block content %}{% endblock %}
 
 {% block footer %}
