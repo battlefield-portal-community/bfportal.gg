@@ -1,4 +1,18 @@
 {% load wagtailcore_tags wagtailimages_tags %}
-<div class="extra_content">
-    <h1>{% include_block value.heading %}</h1>
+
+<div class="w-11/12 mx-auto flex flex-col gap-y-2  -mt-12 extra_content text-white">
+    {% for block in value %}
+        {% if block.block_type == "heading"%}
+            <div class="text-6xl">{{ block.value }}</div>
+        {% elif block.block_type == "cover_image" %}
+            {% image block.value original as img %}
+            <div class="h-80 relative w-screen inset-x-1/2 mx-[-50vw]"><img class="h-full w-full" src="{{ img.url }}" alt="{{ img.alt }}"></div>
+        {% else %}
+            <div>
+                {{ block }}
+            </div>
+        {% endif %}
+
+    {% endfor %}
+
 </div>
