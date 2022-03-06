@@ -95,7 +95,7 @@ class CustomBasePage(Page):
 class HomePage(RoutablePageMixin, CustomBasePage):
     max_count = 1
     parent_page_types = ["wagtailcore.Page"]
-    subpage_types = ["core.ExperiencesPage", "core.ProfilePage"]
+    subpage_types = ["core.ExperiencesPage", "core.ProfilePage", "core.BlogPage"]
 
     @route(r"^$")
     def base(self, request):
@@ -170,7 +170,7 @@ class ExperiencePageTag(TaggedItemBase):
 class ExperiencesPage(RoutablePageMixin, CustomBasePage):
     max_count = 1
     parent_page_types = ["core.HomePage"]
-    subpage_types = ["core.ExperiencePage"]
+    subpage_types = ["core.ExperiencePage", "core.BlogPage"]
 
     def get_context(self, request, *args, **kwargs):
         """Adding custom stuff to our context."""
@@ -192,6 +192,10 @@ class ExperiencesPage(RoutablePageMixin, CustomBasePage):
             }
 
         )
+
+
+class BlogPage(CustomBasePage):
+    pass
 
 
 class ExperiencePage(RoutablePageMixin, CustomBasePage):
@@ -328,7 +332,7 @@ def social_user(discord_id: int):
 class ProfilePage(RoutablePageMixin, CustomBasePage):
     max_count = 1
     parent_page_types = ["core.HomePage"]
-    subpage_types = []
+    subpage_types = ["core.BlogPage"]
 
     def serve(self, request, view=None, args=None, kwargs=None):
         if request.user.is_authenticated:
@@ -340,12 +344,12 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
         l = kwargs.pop("list_experiences", None)
         user_acc = kwargs.pop("user", None)
         context = super().get_context(request, *args, **kwargs)
-        all_posts = (
-            ExperiencePage.objects.live()
-                .public()
-                .filter(owner=user_acc)
-                .order_by("-first_published_at")
-        )
+        all_posts = ExperiencePage.objects\
+            .live()\
+            .public()\
+            .filter(owner=user_acc)\
+            .order_by("-first_published_at")
+
         if not user_acc:
             user_acc = request.user
         if l:
