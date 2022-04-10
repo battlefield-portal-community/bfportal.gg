@@ -1,4 +1,4 @@
-## What this is ? 
+## What is this ? 
 With the release of battlefield 2042, ripple effect studio, added the ability to make custom game modes called "experiences", currently there is no way to share a game mode outside of the game, this project aims to fill that gap.  
 This project will replace the current website at https://bfportal.gg/
 
