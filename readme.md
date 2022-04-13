@@ -1,4 +1,10 @@
-## What is this ? 
+<p align="center">
+  <img width="300" src="https://raw.githubusercontent.com/battlefield-portal-community/Image-CDN/main/bf_portal_logo_bc.png#gh-dark-mode-only">
+  <img width="300" src="https://raw.githubusercontent.com/battlefield-portal-community/Image-CDN/main/bf_portal_logo_noir.png#gh-light-mode-only">
+  </p>
+ 
+# What is this ? 
+
 With the release of battlefield 2042, ripple effect studio, added the ability to make custom game modes called "experiences", currently there is no way to share a game mode outside of the game, this project aims to fill that gap.  
 This project will replace the current website at https://bfportal.gg/
 
