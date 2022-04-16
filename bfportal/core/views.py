@@ -5,7 +5,7 @@ from allauth.socialaccount.models import SocialAccount
 from dal import autocomplete
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.conf import settings
 from django.utils import timezone
 from loguru import logger
@@ -186,6 +186,7 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
             "core/submit_experience_page.html",
             {
                 "form": ExperiencePageForm(instance=experience_page),
+                "is_edit": True
             },
         )
 
