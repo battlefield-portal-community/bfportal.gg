@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import platform
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -59,11 +60,14 @@ INSTALLED_APPS = [
     "django_browser_reload",
     "widget_tweaks",
     "embed_video",
+    'django_extensions',
 ]
 
 SITE_ID = 1
 TAILWIND_APP_NAME = "theme"
-NPM_BIN_PATH = r"D:\Program Files\nodejs\npm.cmd"
+if platform.system() == "Windows":
+    # todo instead of this; check if npm is installed or not
+    NPM_BIN_PATH = r"D:\Program Files\nodejs\npm.cmd"
 SOCIALACCOUNT_PROVIDERS = {
     "discord": {
         "APP": {
