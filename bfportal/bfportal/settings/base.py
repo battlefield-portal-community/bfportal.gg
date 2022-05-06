@@ -63,7 +63,7 @@ INSTALLED_APPS = [
 
 SITE_ID = 1
 TAILWIND_APP_NAME = "theme"
-NPM_BIN_PATH = r"D:\Program Files\nodejs\npm.cmd"
+NPM_BIN_PATH = os.getenv("NPM_BIN_PATH", r"D:\Program Files\nodejs\npm.cmd")
 SOCIALACCOUNT_PROVIDERS = {
     "discord": {
         "APP": {
