@@ -1,6 +1,7 @@
 from allauth.socialaccount.models import SocialAccount
 from django import forms
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
@@ -314,8 +315,20 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         else:
             return redirect(LOGIN_URL)
 
-    def is_experience_page(self):
-        return True
+    @route(r"^delete/$")
+    def delete_experience(self, request: HttpRequest):
+        if request.user.is_authenticated:
+            if self.owner == request.user:
+                # todo actually delete it
+                print("Delete experience")
+                return redirect(request.META['HTTP_REFERER'])
+            else:
+                logger.debug(
+                    f"{request.user} tried to delete a experience they dont own exp: {request.path}"
+                )
+                return HttpResponse("Unauthorized", status=401)
+        else:
+            return redirect(LOGIN_URL)
 
 
 def social_user(discord_id: int):
