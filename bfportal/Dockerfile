@@ -2,7 +2,7 @@
 FROM python:3.10-slim-buster
 
 # Add user that will be used in the container.
-RUN useradd wagtail
+RUN useradd --create-home wagtail
 
 # Port used by this container to serve HTTP.
 EXPOSE 8000
@@ -13,17 +13,26 @@ EXPOSE 8000
 #    command.
 ENV PYTHONUNBUFFERED=1 \
     PORT=8000 \
-    PYTHONDONTWRITEBYTECODE=1
+    PYTHONDONTWRITEBYTECODE=1 \
+    PATH="${PATH}:/home/wagtail/.local/bin" \
+    USER="wagtail"
 
 # Install system packages required by Wagtail and Django.
 RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-recommends \
     build-essential \
+    curl \
     libpq-dev \
     libmariadbclient-dev \
     libjpeg62-turbo-dev \
     zlib1g-dev \
     libwebp-dev \
- && rm -rf /var/lib/apt/lists/*
+    software-properties-common \
+    npm
+RUN npm install npm@latest -g && \
+    npm install n -g && \
+    n 8.1.2 \
+    && rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man \
+    && apt-get clean
 
 # Install the application server.
 RUN pip install "gunicorn==20.0.4"
@@ -46,4 +55,5 @@ COPY --chown=wagtail:wagtail . .
 # Use user "wagtail" to run the build commands below and the server itself.
 USER wagtail
 
+RUN python manage.py tailwind build --no-input
 RUN python manage.py collectstatic --noinput --clear
