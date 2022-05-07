@@ -15,11 +15,17 @@ services:
     profiles:
       - donotstart
     ports:
-      - "8000:8000"
+      - target: 8000
+        published: 8000
+        protocol: tcp
+        mode: host
     environment:
-      - POSTGRES_NAME=${DB_NAME}
-      - POSTGRES_USER=${DB_USERNAME}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - PRODUCTION_KEY=${PRODUCTION_KEY}
+      - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
+      - DISCORD_SECRET=${DISCORD_SECRET}
+      - DB_NAME=${DB_NAME}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
       - POSTGRES_HOST=db # takes precedent over .env file
     depends_on:
       - db
