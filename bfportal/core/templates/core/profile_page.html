@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load socialaccount %}
+{% load socialaccount static %}
 {% block title %}
     {{ user|title }}'s profile
 {% endblock %}
@@ -10,10 +10,16 @@
             {% if accounts %}
                 {% with account=accounts.discord.0 %}
                     <div class="profile_banner flex flex-col justify-center items-center text-sm px-2  py-4 space-y-2  rounded-lg text-bf2042-4 bg-card-bg hover:drop-shadow-bf2042-4 transition duration-200 ease-in-out ">
-                        <img src="{{ account.get_avatar_url }}" class="block rounded-full " alt="@p"/>
+                        <div class="w-28">
+                        {% if account.extra_data.avatar %}
+                            <img src="{{ account.get_avatar_url }}" class="block rounded-full " alt="@p"/>
+                        {% else %}
+                            <img src="{% static 'images/default_discord_avatar.png' %}" class="block rounded-full " alt="@p"/>
+                        {% endif %}
+                        </div>
                         <div class="flex flex-row  text-bf2042-4">
                             <div>
-                               {{ account }}<p class="inline text-bf2042-3">#{{ account.extra_data.discriminator }}</p>
+                               {{ account.extra_data.username }}<p class="inline text-bf2042-3">#{{ account.extra_data.discriminator }}</p>
                             </div>
                         </div>
                     </div>

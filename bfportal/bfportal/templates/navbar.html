@@ -42,7 +42,13 @@
                 {% with account=accounts.discord.0 %}
                     <div id="profileButton"
                          class="profileButton relative inline-block group px-4 py-1 leading-none border rounded text-bf2042-4 border-hover-bg-light hover:border-transparent hover:text-bf2042-6 hover:bg-hover-bg-light mt-4 lg:mt-0 transition duration-200 ease-in-out">
-                        <img src="{{ account.get_avatar_url }}" class="inline rounded-full" width="30" alt="@p"/>
+                        <div class="w-max">
+                            {% if account.extra_data.avatar %}
+                                <img src="{{ account.get_avatar_url }}" class="block rounded-full " alt="@p"/>
+                            {% else %}
+                                <img src="{% static 'images/default_discord_avatar.png' %}" class="inline rounded-full" width="30" alt="@p"/>
+                            {% endif %}
+                        </div>
                         <div id="myDropdown"
                              class="dropdown-content flex flex-col text-center text-md gap-y-2 bg-card-bg p-2 -top-2.5 rounded-lg absolute -left-1 text-white invisible">
                             <a href="/users/{{ account.uid }}">Profile</a>
