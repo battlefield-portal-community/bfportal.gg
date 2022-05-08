@@ -50,7 +50,8 @@ def pagination_wrapper(request: HttpRequest, posts: models.query.QuerySet) -> Pa
 def filter_tags_category(request: HttpRequest, posts: models.query.QuerySet):
     all_posts = posts
     if tags := request.GET.getlist("tag", None):
-        all_posts = all_posts.filter(tags__slug__in=tags)
+        logger.debug(tags)
+        all_posts = all_posts.filter(tags__name__in=tags).distinct()
     if category := request.GET.getlist("category", None):
         category = list(map(str.lower, category))
         logger.debug(category)
