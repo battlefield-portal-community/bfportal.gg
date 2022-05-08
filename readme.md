@@ -3,6 +3,7 @@
   <img width="300" src="https://raw.githubusercontent.com/battlefield-portal-community/Image-CDN/main/bf_portal_logo_noir.png#gh-light-mode-only">
   </p>
  
+ [![Docker Build](https://github.com/battlefield-portal-community/bfportal.gg/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/battlefield-portal-community/bfportal.gg/actions/workflows/main.yml)
 # What is this ? 
 
 With the release of battlefield 2042, ripple effect studio, added the ability to make custom game modes called "experiences", currently there is no way to share a game mode outside of the game, this project aims to fill that gap.  
