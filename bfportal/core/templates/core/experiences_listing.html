@@ -32,7 +32,7 @@
                         <div class="text-gray-400 pb-4 h-12  text-ellipsis hover:shadow-bf2042-4 transition duration-200 ease-in-out overflow-hidden"><p>{{ post.description|truncatewords:15 }}</p></div>
                         <div class=" flex text-xs gap-x-2 pt-2 w-full overflow-hidden">
                             {% for tag in post.tags.all|slice:"0:5" %}
-                                <a href="/experiences/?tag={{ tag }}" class="border bg-discord-light-dark border-2 text-white border-1/2  border-card-bg rounded-lg px-2 py-0 mb-1  group-hover:bg-gray-600 group-hover:border-bf2042-3  hover:border-bf2042-3 hover:drop-shadow-bf2042-3 transition duration-100 ease-in ">
+                                <a href="/experiences/?tag={{ tag }}" class="border bg-discord-light-dark whitespace-nowrap border-2 text-white border-1/2  border-card-bg rounded-lg px-2 py-0 mb-1  group-hover:bg-gray-600 group-hover:border-bf2042-3  hover:border-bf2042-3 hover:drop-shadow-bf2042-3 transition duration-100 ease-in ">
                                     {{ tag|title }}
                                 </a>
                             {% endfor %}
