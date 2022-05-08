@@ -1,6 +1,8 @@
+import os
+
 from .base import *
 
-DEBUG = False
+DEBUG = True if os.environ.get("DEBUG", "False") == "True" else False
 SECRET_KEY = os.environ.get("PRODUCTION_KEY")
 ALLOWED_HOSTS = ["*"]  # todo add aws host soon 😊
 
