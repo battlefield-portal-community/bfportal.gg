@@ -33,8 +33,13 @@
                     <div class="inline-block bg-hover-bg-light rounded-full px-2 hover:bg-bf2042-2 transition duration-100 ease-in">
                         {% with page.owner.socialaccount_set.all.0 as owner %}
                             <a href="/users/{{ owner.uid }}">
-                                <img class="w-6 rounded-full inline-block" src="{{ owner.get_avatar_url }}" alt="pfp">
-                                {{ owner }}
+                                {% if owner.extra_data.avatar %}
+                                    <img class="w-6 rounded-full inline-block" src="{{ owner.get_avatar_url }}" alt="pfp">
+                                {% else %}
+                                    <img class="w-6 rounded-full inline-block" src="{% static 'images/default_discord_avatar.png' %}" alt="pfp"/>
+                                {% endif %}
+
+                                {{ owner.extra_data.username }}
                             </a>
                         {% endwith %}
                     </div>
