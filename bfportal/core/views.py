@@ -180,6 +180,15 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
                 "core/after_submit.html",
                 {"exp_name": experience_page.title, "after_edit": True},
             )
+        else:
+            return render(
+                request,
+                "core/submit_experience_page.html",
+                {
+                    "form": form,
+                    "is_edit": True
+                },
+            )
     else:
         return render(
             request,
