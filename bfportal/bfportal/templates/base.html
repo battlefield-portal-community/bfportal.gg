@@ -12,6 +12,26 @@
             {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
         {% endblock %}
     </title>
+    <meta property="og:title" content="{{ page.title|title   }}" />
+    {% if page.is_experience_page %}
+        <meta property="og:type" content="article" />
+        <meta property="og:article:published_time" content="{{ page.first_published_at|date:"c" }}" />
+        <meta property="og:article:modified_time" content="{{ page.last_published_at|date:"c" }}" />
+        {% with page.owner.socialaccount_set.all.0 as owner %}
+            <meta property="og:article:author" content="{{ owner.extra_data.username }}" />
+        {% endwith %}
+        <meta property="og:article:tag" content="{{ page.tags.all|join:"," }}" />
+
+        <meta property="og:description" content="{{ page.description  }}" />
+        <meta property="og:image" content="{% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{{request.scheme}}://{{request.META.HTTP_HOST}}{% static 'images/placeholder.png' %}{% endif %}" />
+        {% if page.vid_url %}
+            <meta property="og:video" content="{{ page.vid_url  }}" />
+        {% endif %}
+    {% else %}
+        <meta property="og:description" content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}" />
+        <meta property="og:image" content="{{request.scheme}}://{{request.META.HTTP_HOST}}{% static 'images/bf_portal_logo_bc.png' %}" />
+    {% endif %}
+
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
