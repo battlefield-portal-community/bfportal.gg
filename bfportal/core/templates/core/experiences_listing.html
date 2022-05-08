@@ -47,7 +47,7 @@
                             By
                             {% get_social_account post.owner as social_account %}
                             {% if social_account %}
-                                <a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-thin oldstyle-nums text-bf2042-3 hover:text-bf2042-6">{{post.owner}}</a>
+                                <a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-thin oldstyle-nums text-bf2042-3 hover:text-bf2042-6">{{social_account.extra_data.username}}</a>
                             {% else %}
                                 {{post.owner}}
                             {% endif %}
