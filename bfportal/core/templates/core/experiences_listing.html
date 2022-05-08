@@ -6,7 +6,9 @@
             <div class="static experience_container group block w-min h-min w-96 bg-accent-bg rounded-lg scroll-mt-6 hover:shadow-xl hover:cursor-pointer hover:drop-shadow-bf2042-4 hover:-translate-y-2 transition duration-500 ease-in-out">
                 <div class="m-2">
                     <div class="-m-2 drop-shadow-xl h-3/5">
-                        <img class="rounded-lg h-full w-full" src="{% static 'images/placeholder.png' %}" alt="{{ post.slug }}">
+                        <div class="h-72">
+                            <img class="rounded-lg w-full h-full" src="{{ post.cover_img_url }}" alt="{{ post.slug }}"  onerror="this.onerror=null;this.src={% static "images/placeholder.png" %}">
+                        </div>
                         <div class="absolute top-0 left-0 flex flex-row flex-wrap p-2 gap-x-1 ">
                             {% for cat in post.categories.all %}
                                 <a href="/experiences/?category={{ cat }}">
