@@ -330,6 +330,10 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         else:
             return redirect(LOGIN_URL)
 
+    @staticmethod
+    def is_experience_page():
+        return True
+
 
 def social_user(discord_id: int):
     """Returns a User object for a discord id"""
