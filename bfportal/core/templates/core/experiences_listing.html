@@ -38,6 +38,11 @@
                             {% endfor %}
 
                         </div>
+                        <div class="flex gap-x-2 text-xs text-white">
+                            Share code
+                            <span class="text-bf2042-4 font-bold hover:text-bf2042-6 transition duration-200 ease-in-out clickable" onclick="copyDivToClipboard(this)">{{ post.code }}</span>
+                            <span class="text-card-bg">[Click on code to copy]</span>
+                        </div>
                         <div class="text-xs font-semibold text-gray-500 mt-1">
                             By
                             {% get_social_account post.owner as social_account %}
@@ -62,7 +67,7 @@
     const cards = document.querySelectorAll(".experience_container");
     [...cards].forEach(card => {
             const mainLink = card.querySelector(".main-link");
-            const clickableElements = Array.from(card.querySelectorAll("a"));
+            const clickableElements = Array.from(card.querySelectorAll("a, .clickable"));
             //we are using 'a' here for simplicity but ideally you should put a class like 'clickable' on every clickable element inside card(a, button) and use that in query selector
 
             clickableElements.forEach((ele) =>
@@ -78,4 +83,16 @@
             }
             card.addEventListener("click", handleClick);
     });
+</script>
+<script>
+    function copyDivToClipboard(elem) {
+        let range = document.createRange();
+        range.selectNode(elem);
+        window.getSelection().removeAllRanges(); // clear current selection
+        window.getSelection().addRange(range); // to select text
+        document.execCommand("copy");
+        window.getSelection().removeAllRanges();// to deselect
+        elem.nextElementSibling.textContent = "[Copied!!]";
+
+    }
 </script>
