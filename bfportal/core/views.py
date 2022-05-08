@@ -25,7 +25,7 @@ from core.utils.helper import unique_slug_generator
 def send_approve_request(page: ExperiencePage, type: str = "new"):
     logger.debug("send_approve_request called")
     if (token := os.getenv('APPROVAL_CHANNEL_WEBHOOK_TOKEN', None)) is not None:
-        webhook_id = os.getenv("APPROVAL_CHANNEL_WEBHOOK_ID") if not settings.DEBUG else "944252843009917039"
+        webhook_id = os.getenv("APPROVAL_CHANNEL_WEBHOOK_ID")
         webhook_url = f"https://discord.com/api/webhooks/{webhook_id}/{token}"
         uid = SocialAccount.objects.get(user_id=page.owner.id).uid
         data = dict()
@@ -38,7 +38,7 @@ def send_approve_request(page: ExperiencePage, type: str = "new"):
                         "title": page.title,
                         "description": page.description[0:200] + ".....",
                         "image": {
-                            "url": "https://super-static-assets.s3.amazonaws.com/19d9fbc6-6292-4be8-ac70-5a186b556054%2Fimages%2Fb6495922-b4c7-4002-9c3d-56bfaa5b98b5.jpg"
+                            "url": page.cover_img_url if page.cover_img_url else "https://super-static-assets.s3.amazonaws.com/19d9fbc6-6292-4be8-ac70-5a186b556054%2Fimages%2Fb6495922-b4c7-4002-9c3d-56bfaa5b98b5.jpg"
                         },
                         "fields": [
                             {
