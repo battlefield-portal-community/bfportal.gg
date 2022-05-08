@@ -125,7 +125,7 @@
                                 const tagElm = document.getElementById("id_tags");
                                 tagElm.value = tags;
                                 if(tags.length > 1) {
-                                    tagElm.disabled = true;
+                                    tagElm.readOnly = true;
                                     document.getElementById(tagElm.id+"Reason").textContent = "[Auto Completed as Exp Url is Provided]"
                                 }
                                 document.getElementById("id_no_players").value = resp['mapRotation']['maps'][0]['gameSize'];
