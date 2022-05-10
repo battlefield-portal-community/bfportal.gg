@@ -8,14 +8,14 @@
                 {% csrf_token %}
                 <table class="expSubmitTable border-separate w-full">
                     {% for field in form %}
-                        {% if forloop.counter0 == 1 %}
-                            <tr>
-                                <td class="font-bold text-2xl text-[#474747] text-center">-- or --</td>
-                            </tr>
-                        {% endif %}
+{#                        {% if forloop.counter0 == 1 %}#}
+{#                            <tr>#}
+{#                                <td class="font-bold text-2xl text-[#474747] text-center">-- or --</td>#}
+{#                            </tr>#}
+{#                        {% endif %}#}
                         <tr>
                             <td>
-                                <div class="flex flex-col gap-y-4">
+                                <div id="form-fields-container" class="flex flex-col gap-y-4">
                                     <div>
                                         <div class="inline-block text-bf2042-3">
                                             {{ field.label }}
@@ -40,14 +40,16 @@
                                     </div>
                                     <div>
                                         {% if field.html_name == "categories" %}
-                                                <ul class="inline bg-default">
+                                                <ul id="cat-checkboxes" class="inline bg-default">
                                                 {% for choice in form.categories.field.choices %}
                                                     <li class="inline text-white bg-default mt-0 px-0.5">
-                                                    <input type="checkbox" class="form-checkbox appearance-none border border-red-300 rounded-sm bg-default checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 bg-no-repeat bg-center bg-contain mr-2 cursor-pointer" name="categories" value="{{choice.0}}"
-                                                      {% ifequal form.categories.data choice.0 %}
-                                                         checked="checked"
-                                                      {% endifequal %}/>
-                                                    <label>{{choice.1}}</label>
+                                                        <label>
+                                                            <input type="checkbox" class="form-checkbox appearance-none border border-red-300 rounded-sm bg-default checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 bg-no-repeat bg-center bg-contain mr-2 cursor-pointer" name="categories" value="{{choice.0}}"
+                                                              {% if form.categories.data == choice.0 %}
+                                                                 checked="checked"
+                                                              {% endif %}/>
+                                                            {{choice.1}}
+                                                        </label>
                                                     </li>
                                                 {% endfor %}
                                                 </ul>
@@ -88,54 +90,6 @@
 {% endblock %}
 {% block extra_js %}
     <script>
-    async function GetPlaygroundInfo(url){
-        const api_url = `https://api.gametools.network/bf2042/playground/?playgroundid=${url.search.split('=').at(-1)}`
-        console.log(api_url)
-        const resp = await fetch(api_url);
-        return resp.json()
-    }
-    </script>
-    <script>
-    $('input[type="checkbox"]').on('change', function() {
-       $('input[type="checkbox"]').not(this).prop('checked', false);
-    });
-    </script>
-    <script>
-    function toTitleCase(str) {
-      return str.replace(
-        /\w\S*/g,
-        function(txt) {
-          return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-        }
-      );
-    }
-    $('#id_exp_url').on('change', function () {
-        if ($(this).val()){
-            const url = new URL($(this).val());
-            if (url.origin === "https://portal.battlefield.com"){
-                if (url.search.split('=').at(0) === "?playgroundId"){
-                    if (url.search.split('=').at(-1).length === 36){
-                        GetPlaygroundInfo(url).then(resp => {
-                            if (!resp.hasOwnProperty('errors')) {
-                                let tags = ""
-                                resp['tag'].forEach(elm => tags = tags.concat(elm["values"][0]["readableSettingName"], ","))
-                                resp = resp['validatedPlayground']
-                                document.getElementById("id_title").value = toTitleCase(resp['playgroundName']);
-                                document.getElementById("id_description").value = resp['playgroundDescription'];
-                                const tagElm = document.getElementById("id_tags");
-                                tagElm.value = tags;
-                                if(tags.length > 1) {
-                                    tagElm.readOnly = true;
-                                    document.getElementById(tagElm.id+"Reason").textContent = "[Auto Completed as Exp Url is Provided]"
-                                }
-                                document.getElementById("id_no_players").value = resp['mapRotation']['maps'][0]['gameSize'];
-                                {#document.getElementById("id_no_bots").value = resp['mapRotation']['maps'][0]['gameSize'];#}
-                            }
-                        });
-                    }
-                }
-            }
-        }
-    });
+
     </script>
 {% endblock %}
