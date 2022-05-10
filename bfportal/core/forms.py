@@ -27,6 +27,7 @@ class ExperiencePageForm(forms.ModelForm):
         ]
 
     field_order = [
+        "categories",
         "exp_url",
         "title",
         "description",
@@ -36,7 +37,6 @@ class ExperiencePageForm(forms.ModelForm):
         "no_bots",
         "cover_img_url",
         "vid_url",
-        "categories",
     ]
 
     def clean_categories(self):
