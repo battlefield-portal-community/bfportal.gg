@@ -14,7 +14,7 @@ function applyFilters() {
         urlParams.append('tag', elm.value)
     });
     window.location.search = urlParams;
-}
+};
 function clearFilters() {
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.delete('category');
@@ -107,6 +107,9 @@ function animateFilters(root, listElement) {
             left: '100%',
             opacity: '100%',
             easing: 'easeOutQuint',
+            begin: function () {
+                document.getElementById("tagsInputBox").focus();
+            }
         });
     }
 }
@@ -167,5 +170,27 @@ window.onclick = function (event) {
                 pane.style.left = '50%';
             }
         }
-    })
+    });
+};
+function innerDimensions(elem) {
+    "use strict";
+  let computedStyle = getComputedStyle(elem);
+
+  let width = elem.clientWidth; // width with padding
+  let height = elem.clientHeight; // height with padding
+
+  height -= parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom);
+  width -= parseFloat(computedStyle.paddingLeft) + parseFloat(computedStyle.paddingRight);
+  return { height, width };
 }
+
+function resizeTagsInput() {
+    let elm = document.getElementById("tagsPane");
+    console.log(innerDimensions(elm));
+}
+const observer = new ResizeObserver(entries => {
+  entries.forEach(entry => {
+        document.getElementById("tagsInputBox").style.width = `${innerDimensions(entry.target).width}px`;
+  });
+});
+observer.observe(document.getElementById("tagsPane"));
