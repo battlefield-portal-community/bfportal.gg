@@ -217,7 +217,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         max_length=6,
         default="",
         help_text="Six letter alpha-numeric code of you experience",
-        verbose_name="Share Code",
+        verbose_name="Experience Code",
     )
     exp_url = models.URLField(
         blank=True,
