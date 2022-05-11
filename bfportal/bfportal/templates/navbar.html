@@ -1,34 +1,32 @@
 {% load static wagtailcore_tags socialaccount %}
-<nav class="sticky relative top-0 z-50 border-b-1/2 border-bf2042-3 bg-card-bg shadow-bf2042-3 flex items-center justify-between hover:shadow hover:shadow-bf2042-4 flex-wrap px-6 py-3 transition-shadow duration-200">
-    <a href="/">
-        <div class="flex group items-center flex-shrink-0 text-white mr-6">
-            <img class="fill-current h-8 w-8 mr-2" width="54" height="54"
-                 src="{% static 'images/bf_portal_logo_bc.png' %}"
-                 alt=""/>
-            <span class="font-semibold text-2xl tracking-tight group-hover:text-bf2042-4 transition duration-200 ease-in-out drop-shadow-[0_0_2.5px_#ffffff] hover:drop-shadow-[0_0_2.5px_#08A696]">BF Portal</span>
-        </div>
+<nav class="sticky relative top-0 z-50 border-b-1/2 border-bf2042-3 bg-card-bg shadow-bf2042-3 flex items-center w-full gap-x-6 px-6 py-4 hover:shadow hover:shadow-bf2042-4 transition-shadow duration-200">
+    <a class="flex basis-auto group text-white flex-nowrap " href="/">
+                <img class="fill-current h-8 w-8 mr-2" width="54" height="54"
+                     src="{% static 'images/bf_portal_logo_bc.png' %}"
+                     alt=""/>
+                <span class="shrink-0 font-semibold text-2xl tracking-tight group-hover:text-bf2042-4 transition duration-200 ease-in-out drop-shadow-[0_0_2.5px_#ffffff] hover:drop-shadow-[0_0_2.5px_#08A696]">BF Portal</span>
     </a>
-    <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-        <div class="text-base lg:flex-grow">
+    <div class="flex flex-grow items-center">
+        <div class="hidden text-base md:flex-grow md:flex">
             <a href="/experiences/"
-               class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4 transition duration-200 ease-in-out">
+               class="block lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4 transition duration-200 ease-in-out">
                 Library
             </a>
             <a href="#"
-               class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4 transition duration-200 ease-in-out">
+               class="block lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4 transition duration-200 ease-in-out">
                 Docs
             </a>
             <a href="/experiences/featured"
-               class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4 transition duration-200 ease-in-out">
+               class="block lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4 transition duration-200 ease-in-out">
                 Featured
             </a>
             <a href="/submit/"
-               class="inline-block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white p-1 rounded-lg mr-4 hover:text-bf2042-6 transition duration-200 ease-in-out">
+               class="inline-block lg:inline-block lg:mt-0 text-teal-200 hover:text-white  rounded-lg mr-4 hover:text-bf2042-6 transition duration-200 ease-in-out">
                 Submit Experience
             </a>
             {% if page.is_experience_page and  page.owner == request.user %}
                 <a href="edit/"
-                   class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4 transition duration-200 ease-in-out">
+                   class="block lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4 transition duration-200 ease-in-out">
                     Edit Experience
                 </a>
             {% endif %}
@@ -36,12 +34,13 @@
 
             {% endblock %}
         </div>
+        <div class="flex flex-grow justify-end">
         {% if request.user.is_authenticated %}
             {% get_social_accounts user as accounts %}
             {% if accounts %}
                 {% with account=accounts.discord.0 %}
                     <div id="profileButton"
-                         class="profileButton relative inline-block group px-4 py-1 leading-none border rounded text-bf2042-4 border-hover-bg-light hover:border-transparent hover:text-bf2042-6 hover:bg-hover-bg-light mt-4 lg:mt-0 transition duration-200 ease-in-out">
+                         class="profileButton float-left relative inline-block group px-4 py-1 leading-none border rounded text-bf2042-4 border-hover-bg-light hover:border-transparent hover:text-bf2042-6 hover:bg-hover-bg-light transition duration-200 ease-in-out">
                         <div class="w-max">
                             {% if account.extra_data.avatar %}
                                 <img src="{{ account.get_avatar_url }}" class="block rounded-full " width="30" alt="@p"/>
@@ -59,8 +58,9 @@
             {% endif %}
         {% else %}
             <a href="{% provider_login_url 'discord' process='login' %}"
-               class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">Login</a>
+               class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white  lg:mt-0">Login</a>
         {% endif %}
+        </div>
     </div>
 </nav>
 <script>
