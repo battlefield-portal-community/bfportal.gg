@@ -35,31 +35,74 @@
             {% endblock %}
         </div>
         <div class="flex flex-grow justify-end">
-        {% if request.user.is_authenticated %}
-            {% get_social_accounts user as accounts %}
-            {% if accounts %}
-                {% with account=accounts.discord.0 %}
-                    <div id="profileButton"
-                         class="profileButton float-left relative inline-block group px-4 py-1 leading-none border rounded text-bf2042-4 border-hover-bg-light hover:border-transparent hover:text-bf2042-6 hover:bg-hover-bg-light transition duration-200 ease-in-out">
-                        <div class="w-max">
-                            {% if account.extra_data.avatar %}
-                                <img src="{{ account.get_avatar_url }}" class="block rounded-full " width="30" alt="@p"/>
-                            {% else %}
-                                <img src="{% static 'images/default_discord_avatar.png' %}" class="inline rounded-full" width="30" alt="@p"/>
-                            {% endif %}
+            {% if request.user.is_authenticated %}
+                {% get_social_accounts user as accounts %}
+                {% if accounts %}
+                    {% with account=accounts.discord.0 %}
+                        <div id="profileButton"
+                             class="hidden profileButton relative inline-block group px-4 py-1 leading-none border rounded text-bf2042-4 border-hover-bg-light md:block hover:border-transparent hover:text-bf2042-6 hover:bg-hover-bg-light transition duration-200 ease-in-out">
+                            <div class="w-max">
+                                {% if account.extra_data.avatar %}
+                                    <img src="{{ account.get_avatar_url }}" class="block rounded-full " width="30" alt="@p"/>
+                                {% else %}
+                                    <img src="{% static 'images/default_discord_avatar.png' %}" class="inline rounded-full" width="30" alt="@p"/>
+                                {% endif %}
+                            </div>
+                            <div id="myDropdown"
+                                 class="dropdown-content flex flex-col text-center text-md gap-y-2 bg-card-bg p-2 -top-2.5 rounded-lg absolute -left-1 text-white invisible">
+                                <a href="/users/{{ account.uid }}">Profile</a>
+                                <a href="/logout" class="text-red-400">Logout</a>
+                            </div>
                         </div>
-                        <div id="myDropdown"
-                             class="dropdown-content flex flex-col text-center text-md gap-y-2 bg-card-bg p-2 -top-2.5 rounded-lg absolute -left-1 text-white invisible">
-                            <a href="/users/{{ account.uid }}">Profile</a>
-                            <a href="/logout" class="text-red-400">Logout</a>
-                        </div>
-                    </div>
-                {% endwith %}
+                    {% endwith %}
+                {% endif %}
+            {% else %}
+                <a href="{% provider_login_url 'discord' process='login' %}"
+                   class="hidden md:inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white  lg:mt-0">Login</a>
             {% endif %}
-        {% else %}
-            <a href="{% provider_login_url 'discord' process='login' %}"
-               class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white  lg:mt-0">Login</a>
-        {% endif %}
+            <div id="menuIcon" class="group flex flex-col gap-y-1 cursor-pointer md:hidden">
+                <div class="w-4 h-0.5 rounded-lg bg-bf2042-4 group-hover:bg-bf2042-6 transition duration-200 ease-in-out"></div>
+                <div class="w-4 h-0.5 rounded-lg bg-bf2042-4 group-hover:bg-bf2042-6 transition duration-200 ease-in-out"></div>
+                <div class="w-4 h-0.5 rounded-lg bg-bf2042-4 group-hover:bg-bf2042-6 transition duration-200 ease-in-out"></div>
+            </div>
+            <div id="nav-bar-pane" class="flex flex-col absolute bg-card-bg top-full right-0 items-center h-screen md:hidden">
+                    <div class="flex flex-col items-end  text-lg ml-4 mr-2 gap-y-2 mt-2">
+                        <a href="/experiences/"
+                           class="text-teal-200 hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
+                            Library
+                        </a>
+                        <a href="#"
+                           class="text-teal-200 hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px]  border-b-2 border-white">
+                            Docs
+                        </a>
+                        <a href="/experiences/featured"
+                           class="text-teal-200 hover:text-bf2042-5  transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
+                            Featured
+                        </a>
+                        <a href="/submit/"
+                           class="lg:mt-0 text-teal-200 hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
+                            Submit Experience
+                        </a>
+                        {% if page.is_experience_page and  page.owner == request.user %}
+                            <a href="edit/"
+                               class="text-teal-200 hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
+                                Edit Experience
+                            </a>
+                        {% endif %}
+                        {% if request.user.is_authenticated %}
+                            {% get_social_accounts user as accounts %}
+                            {% if accounts %}
+                                {% with account=accounts.discord.0 %}
+                                    <a class="lg:mt-0 text-teal-200 hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white" href="/users/{{ account.uid }}">Profile</a>
+                                    <a class="lg:mt-0 text-teal-200 hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white" href="/logout/" >Logout</a>
+                                {% endwith %}
+                            {% endif %}
+                        {% else %}
+                            <a href="{% provider_login_url 'discord' process='login' %}"
+                               class="lg:mt-0 text-teal-200 hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">Login</a>
+                        {% endif %}
+                    </div>
+            </div>
         </div>
     </div>
 </nav>

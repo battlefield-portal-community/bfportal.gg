@@ -1,5 +1,8 @@
 $(document).ready(function() {
     "use strict";
+    $("body").on('click touch', function (event) {
+        animateNavBarPane(true);
+    });
     $('#cat-checkboxes input[type="checkbox"]').on('change', function () {
         $('input[type="checkbox"]').not(this).prop('checked', false);
         const selected_label = ($.trim(this.closest('label').textContent));
@@ -98,6 +101,27 @@ $(document).ready(function() {
         }
     });
 
+    const navBarPane = $('#nav-bar-pane');
+    navBarPane.css({
+        'right': `-${navBarPane.width()}px`
+    });
+    navBarPane.on('click touch', function (event) {
+        event.stopPropagation();
+    });
+
+    function animateNavBarPane(hide=null) {
+        if (hide) { navBarPane.animate({'right': `-${navBarPane.width()}px`}, 100); return; }
+        if (navBarPane.css('right') === '0px'){
+            navBarPane.animate({'right': `-${navBarPane.width()}px`}, 100);
+        } else {
+            navBarPane.animate({'right': '0px'}, 300);
+        }
+    }
+
+    $('#menuIcon').on('click touch', function (e) {
+        e.stopPropagation();
+        animateNavBarPane();
+    });
 
 
     $('#expUrlSpan').on('click touch', function () {
