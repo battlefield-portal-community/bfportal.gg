@@ -45,3 +45,8 @@ class ExperiencePageForm(forms.ModelForm):
         elif len(self.cleaned_data["categories"]) == 0:
             raise forms.ValidationError("Select at least one category")
         return self.cleaned_data["categories"]
+
+    def clean_code(self):
+        if not self.cleaned_data["code"].isalnum():
+            raise forms.ValidationError("Only Alphanumeric string is allowed as Experience Code")
+        return self.cleaned_data["code"]

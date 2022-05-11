@@ -8,11 +8,15 @@
                 {% csrf_token %}
                 <table class="expSubmitTable border-separate w-full">
                     {% for field in form %}
-{#                        {% if forloop.counter0 == 1 %}#}
-{#                            <tr>#}
-{#                                <td class="font-bold text-2xl text-[#474747] text-center">-- or --</td>#}
-{#                            </tr>#}
-{#                        {% endif %}#}
+                        {% if forloop.counter0 == 2%}
+                            <tr>
+                                <td class="text-center">
+                                    <div class="mx-auto w-fit text-bf2042-4 hover:text-bf2042-1 bg-bf2042-1 rounded-lg px-2 py-1 hover:bg-bf2042-4 transition duration-300 ease-in-out">
+                                        <button id="autoFillBtn" class="font-bold" type="button">Autofill</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endif %}
                         <tr>
                             <td>
                                 <div id="form-fields-container" class="flex flex-col gap-y-4">

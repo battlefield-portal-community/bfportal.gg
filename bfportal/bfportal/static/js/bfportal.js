@@ -1,11 +1,3 @@
-async function GetPlaygroundInfo(url){
-    "use strict";
-    const api_url = `https://api.gametools.network/bf2042/playground/?playgroundid=${url.search.split('=').at(-1)}`;
-    console.log(api_url);
-    const resp = await fetch(api_url);
-    return resp.json();
-}
-
 $(document).ready(function() {
     "use strict";
     $('#cat-checkboxes input[type="checkbox"]').on('change', function () {
@@ -47,39 +39,67 @@ $(document).ready(function() {
         );
     }
 
-    $('#id_exp_url').on('change', function () {
-        if ($(this).val()) {
-            const url = new URL($(this).val());
-            if (url.origin === "https://portal.battlefield.com") {
-                if (url.search.split('=').at(0) === "?playgroundId") {
-                    if (url.search.split('=').at(-1).length === 36) {
-                        GetPlaygroundInfo(url).then(resp => {
-                            resp.playgroundName = String;
-                            resp.playgroundDescription = String;
-                            if (!resp.hasOwnProperty('errors')) {
-                                let tags = "";
-                                resp.tag.forEach(elm => tags = tags.concat(elm.values[0].readableSettingName, ","));
-                                resp = resp.validatedPlayground;
-                                document.getElementById("id_title").value = toTitleCase(resp.playgroundName);
-                                document.getElementById("id_description").value = resp.playgroundDescription;
-                                const tagElm = document.getElementById("id_tags");
-                                tagElm.value = tags;
-                                if (tags.length > 1) {
-                                    tagElm.readOnly = true;
-                                    document.getElementById(tagElm.id + "Reason").textContent = "[Auto Completed as Exp Url is Provided]";
-                                }
-                                document.getElementById("id_no_players").value = resp.mapRotation.maps[0].gameSize;
-                                {
-                                    document.getElementById("id_no_bots").value = resp.mapRotation.maps[0].gameSize;
 
-                                }
-                            }
-                        });
-                    }
+    async function GetPlaygroundInfo(url=null, experienceCode=null ){
+        let api_url;
+        if (url) {
+            api_url = `https://api.gametools.network/bf2042/playground/?playgroundid=${url.search.split('=').at(-1)}&blockydata=false&lang=en-us`;
+        } else if (experienceCode) {
+            // https://api.gametools.network/bf2042/playground/?experiencecode=aava5b&blockydata=false&lang=en-us
+            api_url = `https://api.gametools.network/bf2042/playground/?experiencecode=${experienceCode}&blockydata=false&lang=en-us`;
+        }
+        console.log(api_url);
+        const resp = await fetch(api_url);
+        return resp.json();
+    }
+
+    function fillForm(GTApiResponse) {
+            GTApiResponse.playgroundName = String;
+            GTApiResponse.playgroundDescription = String;
+            if (!GTApiResponse.hasOwnProperty('errors')) {
+                let tags = "";
+                GTApiResponse.tag.forEach(elm => tags = tags.concat(elm.values[0].readableSettingName, ","));
+                GTApiResponse = GTApiResponse.validatedPlayground;
+                document.getElementById("id_title").value = toTitleCase(GTApiResponse.playgroundName);
+                document.getElementById("id_description").value = GTApiResponse.playgroundDescription;
+                const tagElm = document.getElementById("id_tags");
+                tagElm.value = tags;
+                if (tags.length > 1) {
+                    tagElm.readOnly = true;
+                    document.getElementById(tagElm.id + "Reason").textContent = "[Auto Completed as Exp Url is Provided]";
                 }
+                document.getElementById("id_no_players").value = GTApiResponse.mapRotation.maps[0].gameSize;
+                {
+                    document.getElementById("id_no_bots").value = GTApiResponse.mapRotation.maps[0].gameSize;
+
+                }
+            }
+    }
+
+    $('#autoFillBtn').on('click touch', function (){
+        let expUrl = $("#id_exp_url");
+        let experienceCode = $("#id_code");
+
+        if (expUrl.val()) {
+            expUrl = new URL(expUrl.val());
+            if (expUrl.origin === "https://portal.battlefield.com" && expUrl.search.split('=').at(0) === "?playgroundId" && expUrl.search.split('=').at(-1).length === 36) {
+                GetPlaygroundInfo(expUrl).then(resp => {
+                    fillForm(resp);
+
+                });
+            }
+        } else if (experienceCode.val()) {
+            experienceCode = experienceCode.val();
+            if (experienceCode.length === 6) {
+                GetPlaygroundInfo(null, experienceCode).then(resp => {
+                    fillForm(resp);
+                });
             }
         }
     });
+
+
+
     $('#expUrlSpan').on('click touch', function () {
         navigator.clipboard.writeText($(this).attr('expurl'));
     });
