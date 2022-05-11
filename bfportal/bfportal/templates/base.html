@@ -12,32 +12,39 @@
             {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
         {% endblock %}
     </title>
-    <meta property="og:title" content="{{ page.title|title   }}" />
+    <meta property="og:title" content="{{ page.title|title }}"/>
     <meta property="og:type" content="website">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta property="twitter:domain" content="vmi659995.contaboserver.net">
     <meta property="twitter:url" content="{{ request.build_absolute_uri }}">
-    <meta name="twitter:title" content="{{ page.title|title   }}">
+    <meta name="twitter:title" content="{{ page.title|title }}">
 
     {% if page.is_experience_page %}
 
-        <meta property="og:description" content="{{ page.description  }}" />
-        <meta name="description" content="{{ page.description  }}"/>
-        <meta property="og:image" content="{% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{{request.scheme}}://{{request.META.HTTP_HOST}}{% static 'images/placeholder.png' %}{% endif %}" />
+        <meta property="og:description" content="{{ page.description }}"/>
+        <meta name="description" content="{{ page.description }}"/>
+        <meta property="og:image" content="
+                {% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/placeholder.png' %}{% endif %}"/>
 
         <!-- Twitter Meta Tags -->
 
-        <meta name="twitter:description" content="{{ page.description  }}">
-        <meta name="twitter:image" content="{% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{{request.scheme}}://{{request.META.HTTP_HOST}}{% static 'images/placeholder.png' %}{% endif %}">
+        <meta name="twitter:description" content="{{ page.description }}">
+        <meta name="twitter:image" content="
+                {% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/placeholder.png' %}{% endif %}">
 
     {% else %}
-        <meta name="twitter:description" content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}">
-        <meta name="twitter:image" content="{{request.scheme}}://{{request.META.HTTP_HOST}}{% static 'images/bf_portal_logo_bc.png' %}">
+        <meta name="twitter:description"
+              content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}">
+        <meta name="twitter:image"
+              content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/bf_portal_logo_bc.png' %}">
 
-        <meta name="description" content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}"/>
-        <meta property="og:description" content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}" />
-        <meta property="og:image" content="{{request.scheme}}://{{request.META.HTTP_HOST}}{% static 'images/bf_portal_logo_bc.png' %}" />
+        <meta name="description"
+              content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}"/>
+        <meta property="og:description"
+              content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}"/>
+        <meta property="og:image"
+              content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/bf_portal_logo_bc.png' %}"/>
     {% endif %}
 
 
@@ -61,29 +68,30 @@
 {% include_block page.extra_content %}
 {% block content %}{% endblock %}
 
-{% block footer %}
-    {% include 'footer.html' %}
-{% endblock %}
-{# Global javascript #}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"
-        integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
-<script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
-<script type="text/javascript" src="{% static 'js/bfportal.js' %}"></script>
-<script type="text/javascript">
-    var tooltipTriggerList = [].slice.call(
-        document.querySelectorAll('[data-bs-toggle="tooltip"]')
-    );
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new Tooltip(tooltipTriggerEl);
-    });
-</script>
-{% block extra_js %}
-    {# Override this in templates to add extra javascript #}
-{% endblock %}
+    {% block footer %}
+        {% include 'footer.html' %}
+    {% endblock %}
+    {# Global javascript #}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"
+            integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/bfportal.js' %}"></script>
+    <script type="text/javascript">
+        var tooltipTriggerList = [].slice.call(
+            document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        );
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new Tooltip(tooltipTriggerEl);
+        });
+    </script>
+    {% block extra_js %}
+        {# Override this in templates to add extra javascript #}
+    {% endblock %}
+</div>
 </body>
 </html>
