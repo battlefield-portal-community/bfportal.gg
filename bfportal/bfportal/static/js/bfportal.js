@@ -109,12 +109,20 @@ $(document).ready(function() {
         event.stopPropagation();
     });
 
+    function toggleHidden(){
+        navBarPane.toggleClass("hidden");
+    }
+
     function animateNavBarPane(hide=null) {
-        if (hide) { navBarPane.animate({'right': `-${navBarPane.width()}px`}, 100); return; }
-        if (navBarPane.css('right') === '0px'){
-            navBarPane.animate({'right': `-${navBarPane.width()}px`}, 100);
+        if (hide) {
+            navBarPane.animate({'right': `-${navBarPane.width()}px`}, 100, toggleHidden);
         } else {
-            navBarPane.animate({'right': '0px'}, 300);
+            if (navBarPane.css('right') === '0px'){
+                navBarPane.animate({'right': `-${navBarPane.width()}px`}, 100, toggleHidden);
+            } else {
+                toggleHidden();
+                navBarPane.animate({'right': '0px'}, 300);
+            }
         }
     }
 

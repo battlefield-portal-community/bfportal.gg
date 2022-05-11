@@ -1,5 +1,5 @@
 {% load static wagtailcore_tags socialaccount %}
-<nav class="sticky relative top-0 z-50 border-b-1/2 border-bf2042-3 bg-card-bg shadow-bf2042-3 flex items-center w-full gap-x-6 px-6 py-4 hover:shadow hover:shadow-bf2042-4 transition-shadow duration-200">
+<nav class="sticky relative top-0 z-[1] border-b-1/2 border-bf2042-3 bg-card-bg shadow-bf2042-3 flex items-center w-full gap-x-6 px-6 py-4 hover:shadow hover:shadow-bf2042-4 transition-shadow duration-200">
     <a class="flex basis-auto group text-white flex-nowrap " href="/">
                 <img class="fill-current h-8 w-8 mr-2" width="54" height="54"
                      src="{% static 'images/bf_portal_logo_bc.png' %}"
@@ -65,43 +65,43 @@
                 <div class="w-4 h-0.5 rounded-lg bg-bf2042-4 group-hover:bg-bf2042-6 transition duration-200 ease-in-out"></div>
                 <div class="w-4 h-0.5 rounded-lg bg-bf2042-4 group-hover:bg-bf2042-6 transition duration-200 ease-in-out"></div>
             </div>
-            <div id="nav-bar-pane" class="flex flex-col absolute bg-card-bg top-full right-0 items-center h-screen md:hidden">
-                    <div class="flex flex-col items-end  text-lg ml-4 mr-2 gap-y-2 mt-2">
-                        <a href="/experiences/"
+            <div id="nav-bar-pane" class="hidden flex flex-col absolute bg-card-bg top-full right-0 backdrop-brightness-50 items-center h-screen md:hidden">
+                <div class="flex flex-col items-end  text-lg ml-4 mr-2 gap-y-2 mt-2">
+                    <a href="/experiences/"
+                       class="text-teal-200 hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
+                        Library
+                    </a>
+                    <a href="#"
+                       class="text-teal-200 hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px]  border-b-2 border-white">
+                        Docs
+                    </a>
+                    <a href="/experiences/featured"
+                       class="text-teal-200 hover:text-bf2042-5  transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
+                        Featured
+                    </a>
+                    <a href="/submit/"
+                       class="lg:mt-0 text-teal-200 hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
+                        Submit Experience
+                    </a>
+                    {% if page.is_experience_page and  page.owner == request.user %}
+                        <a href="edit/"
                            class="text-teal-200 hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
-                            Library
+                            Edit Experience
                         </a>
-                        <a href="#"
-                           class="text-teal-200 hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px]  border-b-2 border-white">
-                            Docs
-                        </a>
-                        <a href="/experiences/featured"
-                           class="text-teal-200 hover:text-bf2042-5  transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
-                            Featured
-                        </a>
-                        <a href="/submit/"
-                           class="lg:mt-0 text-teal-200 hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
-                            Submit Experience
-                        </a>
-                        {% if page.is_experience_page and  page.owner == request.user %}
-                            <a href="edit/"
-                               class="text-teal-200 hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
-                                Edit Experience
-                            </a>
+                    {% endif %}
+                    {% if request.user.is_authenticated %}
+                        {% get_social_accounts user as accounts %}
+                        {% if accounts %}
+                            {% with account=accounts.discord.0 %}
+                                <a class="lg:mt-0 text-teal-200 hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white" href="/users/{{ account.uid }}">Profile</a>
+                                <a class="lg:mt-0 text-teal-200 hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white" href="/logout/" >Logout</a>
+                            {% endwith %}
                         {% endif %}
-                        {% if request.user.is_authenticated %}
-                            {% get_social_accounts user as accounts %}
-                            {% if accounts %}
-                                {% with account=accounts.discord.0 %}
-                                    <a class="lg:mt-0 text-teal-200 hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white" href="/users/{{ account.uid }}">Profile</a>
-                                    <a class="lg:mt-0 text-teal-200 hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white" href="/logout/" >Logout</a>
-                                {% endwith %}
-                            {% endif %}
-                        {% else %}
-                            <a href="{% provider_login_url 'discord' process='login' %}"
-                               class="lg:mt-0 text-teal-200 hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">Login</a>
-                        {% endif %}
-                    </div>
+                    {% else %}
+                        <a href="{% provider_login_url 'discord' process='login' %}"
+                           class="lg:mt-0 text-teal-200 hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">Login</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
