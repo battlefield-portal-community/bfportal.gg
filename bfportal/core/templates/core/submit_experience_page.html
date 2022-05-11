@@ -6,6 +6,29 @@
         <div class="flex flex-col gap-y-2">
             <form action="." method="POST">
                 {% csrf_token %}
+                {% if form.errors %}
+                <ul class="user-msg error text-center border border-red-300 rounded-lg mb-8">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>
+                          {% if field != '__all__' %}
+{#                              <span class="text-white">{{ field.auto_id }}</span>#}
+                              <span class="text-white">{{ field.non_field_errors  }}</span>
+                              <strong class="text-red-700">{{ field.label }}:</strong>
+                              <script>
+                                console.log('{{ field.auto_id }}')
+                                defer(function () {
+                                    const tr = $('#{% if field.auto_id == "id_categories" %}id_categoriesReason{% else %}{{ field.auto_id }}{% endif %}').closest('tr');
+                                    tr.fadeTo(500, 0.1, function() { $(this).fadeTo(500, 1.0); });
+                                });
+                              </script>
+                          {% endif %}
+                          <p class="inline-block text-red-400">{{ error }}</p>
+                        </li>
+                    {% endfor %}
+                {% endfor %}
+                </ul>
+                {% endif %}
                 <table class="expSubmitTable border-separate w-full">
                     {% for field in form %}
                         {% if forloop.counter0 == 2%}
@@ -67,20 +90,6 @@
                     {% endfor %}
                 </table>
                 <br>
-                {% if form.errors %}
-                <ul class="user-msg error text-center border border-red-300 rounded-lg mb-8">
-                {% for field in form %}
-                    {% for error in field.errors %}
-                        <li>
-                          {% if field != '__all__' %}
-                            <strong class="text-red-700">{{ field.label }}:</strong>
-                          {% endif %}
-                          <p class="inline-block text-red-400">{{ error }}</p>
-                        </li>
-                    {% endfor %}
-                {% endfor %}
-                </ul>
-                {% endif %}
                 <button type="submit" class="text-bf2042-4 font-bold hover:text-bf2042-1 bg-bf2042-1 rounded-lg px-2 py-1 hover:bg-bf2042-4 transition duration-300 ease-in-out">Submit Experience</button>
             </form>
             {% if is_edit %}
