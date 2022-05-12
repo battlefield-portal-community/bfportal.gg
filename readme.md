@@ -9,6 +9,10 @@
 With the release of battlefield 2042, ripple effect studio, added the ability to make custom game modes called "experiences", currently there is no way to share a game mode outside of the game, this project aims to fill that gap.  
 This project will replace the current website at https://bfportal.gg/
 
+# Info 
+project is now in beta testing  
+head over to http://vmi659995.contaboserver.net:8000/, and try it out 
+
 ### Screenshots of several parts of the website
 <details>
   
