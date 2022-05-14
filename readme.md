@@ -82,4 +82,4 @@ You can later edit your experience if u like.
   - [gametools.network](https://gametools.network/) for providing API to auto fill submisson form 🥰
   - [Wagtail](https://github.com/wagtail/wagtail) for providing a awesome framework that makes managing submissions very easy ✅
   - [tailwindcss](https://github.com/tailwindlabs/tailwindcss) for saving the lives of  backend developers. 🙏 
-  - Matavatar from BFportal discord community for providing valuable feedback 🤝
+  - [Matavatar](https://discord.com/users/236802771381125120) from BFportal discord community for providing valuable feedback 🤝
