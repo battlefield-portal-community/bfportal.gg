@@ -7,9 +7,9 @@
                 <div class="m-2">
                     <div class="-m-2 drop-shadow-xl h-3/5">
                         <div class="h-72">
-                            <img class="rounded-lg w-full h-full" src="{{ post.cover_img_url }}" alt="{{ post.slug }}"  onerror="this.onerror=null;this.src={% static "images/placeholder.png" %}">
+                            <img class="rounded-lg w-full h-full" src="{% if debug %} {% static "images/placeholder.png" %} {% else %} {{ post.cover_img_url }} {% endif %}" alt="{{ post.slug }}"  onerror="this.onerror=null;this.src={% static "images/placeholder.png" %}">
                         </div>
-                        <div class="absolute top-0 left-0 flex flex-row flex-wrap p-2 gap-x-1 ">
+                        <div class="absolute top-0 left-0 flex flex-row flex-wrap p-2 gap-x-1">
                             {% for cat in post.categories.all %}
                                 <a href="/experiences/?category={{ cat }}">
                                 <p class="category_pill font-semibold oldstyle-nums font-sans border border-transparent rounded-lg px-2 hover:border hover:border-white" style="--category_pill_bg_color: {{ cat.bg_color }}; --category_pill_bg_hover_color: {{ cat.bg_hover_color }}; --category_pill_text_color: {{ cat.text_color }}; --category_pill_text_hover_color: {{ cat.text_hover_color }}">
