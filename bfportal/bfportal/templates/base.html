@@ -59,13 +59,13 @@
     <script type="text/javascript" src="{% static 'js/preload.js' %}"></script>
 </head>
 
-<body class="bg-bg-default min-h-screen m-0 flex flex-col gap-y-12 relative
+<body class="bg-bg-default min-h-screen m-0  relative
         {% block body_class %}{% endblock %}">
 
 {% block header %}
     {% include nav_tmpl|default:'navbar.html' %}
 {% endblock %}
-<div id="main" class="main-content">
+<div id="main" class="main-content flex flex-col gap-y-12 overflow-x-hidden">
     {% include_block page.extra_content %}
     {% block content %}{% endblock %}
 </div>
