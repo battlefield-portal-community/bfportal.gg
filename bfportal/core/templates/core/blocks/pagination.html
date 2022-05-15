@@ -1,0 +1,62 @@
+{% load static %}
+<div class="relative group my-10 flex flex-col max-w-fit py-1 px-2 bg-hover-bg-light rounded-lg hover:shadow-bf2042-4 transition duration-200 ease-in-out" >
+    <div class="-z-10 absolute top-0 left-0 -z-1 bg-hover-bg-light rounded-lg w-full h-full group-hover:drop-shadow-bf2042-4 transition duration-300 ease-in-out"></div>
+    {% if posts.paginator.num_pages > 1 %}
+        {% pagination_suffix request.GET.urlencode as suffix %}
+        <div class="pagination text-white flex flex-row text-lg mx-auto">
+            {% if posts.has_previous %}
+                <span class="text-center w-6 bg-card-bg drop-shadow rounded-l-lg">
+                    <a href="?page=1{{ suffix }}">&laquo;</a>
+                </span>
+                <span class="text-center w-6 bg-card-bg drop-shadow">
+                    <a href="?page={{ posts.previous_page_number }}{{ suffix }}">&lt;</a>
+                </span>
+                {% if posts.number >= 4 %}
+                    <span class="text-center w-6 bg-card-bg drop-shadow hover:text-bf2042-4">
+                        <a href="?page=1{{ suffix }}">1</a>
+                    </span>
+                    <span class=" text-center w-6 drop-shadow bg-card-bg hover:text-bf2042-4 ">..</span>
+                {% endif %}
+            {% endif %}
+
+            {% for page_num in posts.paginator.page_range %}
+                {% if page_num|sub:posts.number|abs <= 2 %}
+
+                {% endif %}
+                <span class="
+                    text-center  px-2
+                    {% if page_num == posts.number %} bg-hover-bg-light text-bf2042-6 drop-shadow-none
+                    {% else %} bg-card-bg hover:text-bf2042-4 drop-shadow-lg
+                    {% endif %}
+                    {% if page_num|sub:posts.number == -1 %} rounded-r-lg
+                    {% elif page_num|sub:posts.number == 1 %} rounded-l-lg
+                    {% endif %}
+                    ">
+                        <a href="?page={{ page_num }}{{ suffix }}" class="page-link">
+                          {{ page_num }}
+                        </a>
+                    </span>
+            {% endfor %}
+
+            {% if posts.paginator.num_pages|sub:posts.number > 2 %}
+                <span class=" text-center w-6 drop-shadow bg-card-bg hover:text-bf2042-4 ">..</span>
+                <span class="text-center w-6 bg-card-bg drop-shadow hover:text-bf2042-4">
+                        <a href="?page=
+                                {{ posts.paginator.num_pages }}{{ suffix }}">{{ posts.paginator.num_pages }}</a>
+                    </span>
+            {% endif %}
+            {% if posts.has_next %}
+                <span class="text-center w-6 bg-card-bg drop-shadow">
+                    <a href="?page={{ posts.next_page_number }}{{ suffix }}" class="page-link">
+                      <span>&gt;</span>
+                    </a>
+                </span>
+                <span class="text-center w-6 bg-card-bg drop-shadow rounded-r-lg">
+                    <a href="?page={{ posts.paginator.num_pages }}{{ suffix }}" class="page-link">
+                      <span>&raquo;</span>
+                    </a>
+                </span>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
