@@ -1,6 +1,13 @@
 {% load static wagtailimages_tags %}
-<div class="w-11/12 mx-auto grid grid-cols-1 justify-items-center">
-    {% include 'core/pagination.html' with filters=True%}
+<div class="w-11/12 mx-auto grid grid-cols-1 justify-items-center gap-y-4">
+
+    {% include 'core/blocks/filters.html' %}
+    {% if posts.paginator.num_pages > 20 %}
+        {% if posts.paginator.num_pages > 1 %}
+            {% include 'core/blocks/pagination.html' %}
+        {% endif %}
+    {% endif %}
+
     <div class="flex flex-wrap flex-row justify-center gap-x-3 gap-y-5">
         {% for post in posts %}
             <div class="static experience_container group block h-[30rem] w-96 bg-accent-bg rounded-lg scroll-mt-6 hover:shadow-xl hover:cursor-pointer hover:drop-shadow-bf2042-4 hover:-translate-y-2 transition duration-500 ease-in-out">
@@ -59,7 +66,7 @@
         {% endfor %}
     </div>
     {% if posts.paginator.num_pages > 1 %}
-        {% include 'core/pagination.html' %}
+        {% include 'core/blocks/pagination.html' %}
     {% endif %}
 </div>
 
