@@ -1,15 +1,22 @@
 {% load static wagtailimages_tags %}
-<div class="w-11/12 mx-auto grid grid-cols-1 justify-items-center">
-    {% include 'core/pagination.html' with filters=True%}
+<div class="w-11/12 mx-auto grid grid-cols-1 justify-items-center gap-y-4">
+
+    {% include 'core/blocks/filters.html' %}
+    {% if posts.paginator.num_pages > 20 %}
+        {% if posts.paginator.num_pages > 1 %}
+            {% include 'core/blocks/pagination.html' %}
+        {% endif %}
+    {% endif %}
+
     <div class="flex flex-wrap flex-row justify-center gap-x-3 gap-y-5">
         {% for post in posts %}
             <div class="static experience_container group block h-[30rem] w-96 bg-accent-bg rounded-lg scroll-mt-6 hover:shadow-xl hover:cursor-pointer hover:drop-shadow-bf2042-4 hover:-translate-y-2 transition duration-500 ease-in-out">
                 <div class="m-2">
                     <div class="-m-2 drop-shadow-xl h-3/5">
                         <div class="h-72">
-                            <img class="rounded-lg w-full h-full" src="{{ post.cover_img_url }}" alt="{{ post.slug }}"  onerror="this.onerror=null;this.src={% static "images/placeholder.png" %}">
+                            <img class="rounded-lg w-full h-full" src="{% if debug %} {% static "images/placeholder.png" %} {% else %} {{ post.cover_img_url }} {% endif %}" alt="{{ post.slug }}"  onerror="this.onerror=null;this.src={% static "images/placeholder.png" %}">
                         </div>
-                        <div class="absolute top-0 left-0 flex flex-row flex-wrap p-2 gap-x-1 ">
+                        <div class="absolute top-0 left-0 flex flex-row flex-wrap p-2 gap-x-1">
                             {% for cat in post.categories.all %}
                                 <a href="/experiences/?category={{ cat }}">
                                 <p class="category_pill font-semibold oldstyle-nums font-sans border border-transparent rounded-lg px-2 hover:border hover:border-white" style="--category_pill_bg_color: {{ cat.bg_color }}; --category_pill_bg_hover_color: {{ cat.bg_hover_color }}; --category_pill_text_color: {{ cat.text_color }}; --category_pill_text_hover_color: {{ cat.text_hover_color }}">
@@ -59,7 +66,7 @@
         {% endfor %}
     </div>
     {% if posts.paginator.num_pages > 1 %}
-        {% include 'core/pagination.html' %}
+        {% include 'core/blocks/pagination.html' %}
     {% endif %}
 </div>
 

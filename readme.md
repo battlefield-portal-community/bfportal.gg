@@ -9,6 +9,10 @@
 With the release of battlefield 2042, ripple effect studio, added the ability to make custom game modes called "experiences", currently there is no way to share a game mode outside of the game, this project aims to fill that gap.  
 This project will replace the current website at https://bfportal.gg/
 
+# Info 
+project is now in beta testing  
+head over to http://vmi659995.contaboserver.net:8000/, and try it out 
+
 ### Screenshots of several parts of the website
 <details>
   
@@ -78,4 +82,4 @@ You can later edit your experience if u like.
   - [gametools.network](https://gametools.network/) for providing API to auto fill submisson form 🥰
   - [Wagtail](https://github.com/wagtail/wagtail) for providing a awesome framework that makes managing submissions very easy ✅
   - [tailwindcss](https://github.com/tailwindlabs/tailwindcss) for saving the lives of  backend developers. 🙏 
-  - Matavatar from BFportal discord community for providing valuable feedback 🤝
+  - [Matavatar](https://discord.com/users/236802771381125120) from BFportal discord community for providing valuable feedback 🤝

@@ -5,8 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
+from django.db.models.functions import Concat
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
+from django.db.models import Value as V
 from django.template.response import TemplateResponse
 from embed_video.fields import EmbedVideoField
 from loguru import logger
@@ -23,6 +25,7 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.models import register_snippet
 from wagtail_color_panel.edit_handlers import NativeColorPanel
 from wagtail_color_panel.fields import ColorField
+from datetime import datetime
 
 from bfportal.settings.base import LOGIN_URL
 from core.utils.helper import safe_cast
@@ -30,7 +33,7 @@ from core.utils.helper import safe_cast
 
 def pagination_wrapper(request: HttpRequest, posts: models.query.QuerySet) -> Paginator:
     paginator = Paginator(
-        filter_tags_category(request, posts), request.GET.get("n", 10)
+        apply_filters(request, posts), request.GET.get("n", 10)
     )
     curr_page = safe_cast(request.GET.get("page", None), int, 1)
     try:
@@ -47,11 +50,39 @@ def pagination_wrapper(request: HttpRequest, posts: models.query.QuerySet) -> Pa
     return posts
 
 
-def filter_tags_category(request: HttpRequest, posts: models.query.QuerySet):
+def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
     all_posts = posts
+    logger.debug("Starting filtering Posts")
+    if experience := request.GET.get("experience", None):
+        logger.debug(f"Experience Name :- {experience}")
+        all_posts = all_posts.filter(title__contains=experience)
+
+    from_date = request.GET.get("From", None)
+    if from_date is None or from_date == '':
+        from_date = datetime.utcfromtimestamp(0)  # use date provided else use epoch
+    else:
+        from_date = datetime.fromisoformat(from_date)
+
+    to_date = request.GET.get("To")
+    if to_date is None or to_date == '':
+        to_date = datetime.utcnow()  # use date provided else use current time
+    else:
+        to_date = datetime.fromisoformat(to_date)
+
+    logger.debug(f"From {from_date} to {to_date}")
+    all_posts = all_posts.filter(first_published_at__range=(from_date, to_date))
+    if username := request.GET.get("user", ''):
+        if username != '':
+            all_posts = all_posts.annotate(
+                    discord_username=Concat('owner__first_name', V(' '), 'owner__last_name')
+            )
+            logger.debug(f"username is {username}")
+            all_posts =  all_posts.filter(discord_username__icontains=username)
+
     if tags := request.GET.getlist("tag", None):
         logger.debug(tags)
         all_posts = all_posts.filter(tags__name__in=tags).distinct()
+
     if category := request.GET.getlist("category", None):
         category = list(map(str.lower, category))
         logger.debug(category)
