@@ -20,15 +20,24 @@ defer(function () {
             });
             observer.observe(document.getElementById(`${elm}Input`));
         });
+        const filtersContainer = $('#filtersContainer'),
+            hideFiltersButton = $('#hideFilterButton'),
+            mainBtn = $('#mainBtn');
         if ([...searchParams.keys()].length <= 1 && (searchParams.keys().next().value === 'page' || !searchParams.keys().next().value)){
-            $('#hideFilterButton').text("Show Filters");
-            $('#filtersContainer').hide();
-            $('#mainBtn').hide();
+            hideFiltersButton.text("Show Filters");
+            filtersContainer.hide();
+            filtersContainer.removeClass('visible');
+            filtersContainer.addClass('invisible');
+            mainBtn.hide();
+
         } else {
+
+            filtersContainer.removeClass('invisible');
+            filtersContainer.addClass('visible');
+            hideFiltersButton.text("Hide Filter");
+            filtersContainer.show();
             populateFilters();
-            $('#hideFilterButton').text("Hide Filter");
-            $('#filtersContainer').show();
-            $('#mainBtn').show();
+            mainBtn.show();
         }
 
     });
@@ -61,11 +70,17 @@ defer(function () {
             });
         });
         ["experience", "user"].forEach(input => {
-            const currInput = $(`#${input}NameInput`);
-            queryParamList.push(`${input}=${encodeURIComponent($(currInput).val())}`);
+            const currInput = $(`#${input}NameInput`),
+                val = $(currInput).val();
+            if (val) {
+                queryParamList.push(`${input}=${encodeURIComponent(val)}`);
+            }
         });
         ["From", "To"].forEach(date => {
-            queryParamList.push(`${date}=${encodeURIComponent($(`#date${date}`).val())}`);
+            const val = $(`#date${date}`).val();
+            if (val) {
+                queryParamList.push(`${date}=${encodeURIComponent(val)}`);
+            }
         });
         // window.history.replaceState({}, '', `${location.pathname}?${queryParamList.join("&")}`);
         console.log(`?${queryParamList.join("&")}`);
@@ -173,8 +188,13 @@ function hideAllFilters() {
     populateGrids("tagsInputHolder", false, "");
     populateGrids("catsInput", false, "");
     if (btn.text() === "Show Filters") {
+        filtersContainer.removeClass('invisible');
+        filtersContainer.addClass('visible');
         btn.text("Hide Filters");
+
     } else {
+        filtersContainer.removeClass('visible');
+        filtersContainer.addClass('invisible');
         btn.text("Show Filters");
     }
 
