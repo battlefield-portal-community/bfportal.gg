@@ -28,7 +28,7 @@ $(document).ready(function() {
         
         otherInp.prop("required", false);
         inp.prop("required", true);
-        cat.after(inp.closest('tr'));
+        // cat.after(inp.closest('tr'));
 
 
     });
