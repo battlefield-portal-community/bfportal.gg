@@ -1,4 +1,6 @@
 import re
+from urllib.parse import urlparse
+from urllib.parse import parse_qs
 
 from django.template.defaulttags import register
 
@@ -44,3 +46,11 @@ def pagination_suffix(value):
 @register.filter(name="abs")
 def abs_filter(value):
     return abs(value)
+
+
+@register.filter(name="expCode")
+def get_exp_code(url: str) -> str:
+    #  playgroundId=45e436e0-4cf7-11ec-be7b-76c50778a53a
+    return parse_qs(
+        urlparse(url).query
+    ).get('playgroundId', ['null'])[0]

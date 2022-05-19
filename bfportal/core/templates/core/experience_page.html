@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags static embed_video_tags wagtailimages_tags %}
 {% block content %}
-    <div class="flex flex-col text-white gap-y-8">
+    <div class="flex flex-col text-white gap-y-8 mb-4">
         <div>
             <img class="object-cover w-full h-96" src="{{ page.cover_img_url }}" alt="Cover Img"
                  onerror="this.onerror=null;this.src={% static "images/placeholder.png" %}">
@@ -91,6 +91,12 @@
             <div class="font-sans text-justify text-bg-light rounded-xl px-1 hover:text-gray-200  transition duration-200 ease-in-out">{{ page.description }}</div>
 
 
+            <div id="mapsRotationContainer" class="flex flex-wrap flex-col gap-y-4">
+                <div class="text-2xl text-white">Maps</div>
+                <div><button id="showMapsRotation" class="bg-hover-bg-light hover:bg-bf2042-2 text-bf2042-4 px-2 rounded">Show Maps Rotation</button></div>
+                <div id="mapsRotation" class="flex flex-wrap gap-2 relative"></div>
+            </div>
+
             {% if page.vid_url|length > 0 %}
                 <div class="w-full h-[42rem]">
                     {% video page.vid_url '100% x 100%' %}
@@ -100,3 +106,95 @@
     </div>
 
 {% endblock content %}
+
+{% block extra_js %}
+    <script type="text/javascript">
+    let mapsShown = false;
+    $('#showMapsRotation').on('click touch', function () {
+        const val = $(this).text(),
+            mapRotation = $('#mapsRotation');
+        if (val === "Show Maps Rotation"){
+            $(this).text("Hide Maps Rotation");
+            mapRotation.show(200);
+        } else {
+            $(this).text("Show Maps Rotation");
+            mapRotation.hide(200);
+        }
+        populateMapsRotation();
+    });
+
+    function populateMapsRotation(){
+        const mapRotation = document.getElementById('mapsRotation');
+        if (!mapsShown) {
+            const playgroundId = {% if page.exp_url %}"{{ page.exp_url | expCode }}"{% else %}null{% endif %},
+                expCode = {% if page.code %}"{{ page.code }}"{% else %}null{% endif %};
+
+            let queryParam;
+            if (playgroundId) {
+                queryParam = `playgroundid=${playgroundId}`;
+            } else if (expCode) {
+                queryParam = `experiencecode=${expCode}`
+            }
+            if (queryParam) {
+                fetch(`https://api.gametools.network/bf2042/playground/?${queryParam}`).then(resp => resp.json().then(resp_json => {
+                    let maps = resp_json['validatedPlayground']['mapRotation']['maps'];
+                    console.log(maps);
+                    maps.forEach(function (map) {
+                        console.log(map);
+                        const root = document.createElement('div'),
+                            img = document.createElement('img'),
+                            infoContainer = document.createElement('div'),
+                            info = document.createElement('div'),
+                            mapName = document.createElement('div');
+                        root.className = "h-36 w-88 rounded-lg relative";
+                        img.className = "object-contain w-full h-full rounded-lg";
+                        infoContainer.className = "absolute bg-hover-bg-light/90 w-full h-16 inset-x-0 bottom-0 rounded-b-lg p-2"
+                        info.className = "flex flex-col";
+                        mapName.className = "max-w-full h-6 truncate";
+                        let mapSize;
+                        if ("location" in map){
+                            mapSize = document.createElement('div');
+                            const span = document.createElement('span'),
+                                location = map['location'];
+                            mapSize.className = "max-w-full";
+                            if (location === "ModBuilderCustom2"){
+                                span.textContent = "Large";
+                            } else if (location === "ModBuilderCustom1") {
+                                span.textContent = "Normal";
+                            } else {
+                                span.textContent = "Small";
+                            }
+                            mapSize.textContent = "Map Size "
+                            mapSize.appendChild(span);
+                        }
+                        img.src = map['image'];
+                        mapName.textContent = map['mapname'];
+                        info.appendChild(mapName)
+                        if (mapSize) {
+                            info.appendChild(mapSize);
+                        }
+                        infoContainer.appendChild(info);
+                        root.appendChild(img);
+                        root.appendChild(infoContainer);
+                        mapRotation.appendChild(root);
+                    })
+                    mapsShown = true;
+                    mapRotation.scrollIntoView();
+                }))
+            }
+        }
+    }
+    </script>
+{#https://api.gametools.network/bf2042/playground/?playgroundid=45e436e0-4cf7-11ec-be7b-76c50778a53a#}
+{##}
+{#                        <div class="h-36 w-88 rounded-lg relative">#}
+{#                        <img class="object-contain w-full h-full rounded-lg" src="https://portal.battlefield.com/1916651/assets/images/maps/Map_Art_BF2042_IRR_S.jpg" alt="test">#}
+{#                        <div class="absolute bg-hover-bg-light/90 w-full h-16 inset-x-0 bottom-0 rounded-b-lg p-2">#}
+{#                            <div class="flex flex-col">#}
+{#                                <div class="max-w-full h-6 truncate">Breakaway</div>#}
+{#                                <div class="max-w-full">Map Size <span>Large</span></div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+
+{% endblock %}
