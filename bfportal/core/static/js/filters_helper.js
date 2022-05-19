@@ -185,9 +185,9 @@ function hideAllFilters() {
         btn = $('#hideFilterButton');
     filtersContainer.toggle(200);
     mainBtn.toggle();
-    populateGrids("tagsInputHolder", false, "");
-    populateGrids("catsInput", false, "");
     if (btn.text() === "Show Filters") {
+        populateGrids("tagsInputHolder", false, "");
+        populateGrids("catsInput", false, "");
         filtersContainer.removeClass('invisible');
         filtersContainer.addClass('visible');
         btn.text("Hide Filters");
