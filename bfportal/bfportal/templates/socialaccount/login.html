@@ -8,12 +8,15 @@
     <div class="table-cell align-middle">
             <div class="flex flex-col mx-auto w-max bg-card-bg p-4 rounded-xl divider divide-y divide-bf2042-3 drop-shadow-hover-bg-light-lg transition hover:drop-shadow-bf2042-2-lg duration-300 ease-in-out">
                 <div class="text-6xl pb-4 text-center">{% blocktrans with provider.name as provider %}Sign In Via <div class="inline-block text-[#5865F2]"> {{ provider }}</div>{% endblocktrans %}</div>
-            <div class="text-xl pt-4">
+            <div class="text-xl pt-4 pb-4">
                 {% blocktrans with provider.name as provider %}You are about to sign in using a third party account from {{ provider }}.{% endblocktrans %}
                 <form class="pt-8 text-center" method="post">
                   {% csrf_token %}
                   <button class="p-4 bg-hover-bg-light rounded-xl hover:drop-shadow-bf2042-3 transition duration-100 ease-in-out" type="submit">{% trans "Continue" %}</button>
                 </form>
+            </div>
+            <div class="text-accent-bg pt-4">
+                Need a discord account ? <a href="https://discord.com/register" class="text-blue-400">Register</a>
             </div>
         </div>
     </div>
