@@ -30,8 +30,7 @@ jobs:
     defaults:
       run:
         working-directory: ./bfportal
-    if: github.event_name == 'push'
-
+    
     steps:
       - uses: actions/checkout@v2
 
