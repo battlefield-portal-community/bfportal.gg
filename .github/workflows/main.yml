@@ -25,14 +25,12 @@ env:
 jobs:
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
-  push:
-  
+  production-deploy:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./bfportal
-    if: github.event_name == 'push'
-
+    
     steps:
       - uses: actions/checkout@v2
 
