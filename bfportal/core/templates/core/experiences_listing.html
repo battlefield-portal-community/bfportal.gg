@@ -14,7 +14,9 @@
                 <div class="m-2">
                     <div class="-m-2 drop-shadow-xl h-3/5">
                         <div class="h-72">
-                            <img class="rounded-lg w-full h-full" src="{% if debug %} {% static "images/placeholder.png" %} {% else %} {{ post.cover_img_url }} {% endif %}" alt="{{ post.slug }}"  onerror="this.onerror=null;this.src={% static "images/placeholder.png" %}">
+                            <object class="rounded-lg w-full h-full" data="{% if debug %}{% static "images/placeholder.png" %}{% else %}{{ post.cover_img_url }}{% endif %}" type="image/png">
+                                <img class="w-full h-full" src='{% static "images/placeholder.png" %}' alt="{{ post.slug }}"/>
+                            </object>
                         </div>
                         <div class="absolute top-0 left-0 flex flex-row flex-wrap p-2 gap-x-1">
                             {% for cat in post.categories.all %}

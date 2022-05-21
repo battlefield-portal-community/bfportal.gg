@@ -3,8 +3,9 @@
 {% block content %}
     <div class="flex flex-col text-white gap-y-8 mb-4">
         <div>
-            <img class="object-cover w-full h-96" src="{{ page.cover_img_url }}" alt="Cover Img"
-                 onerror="this.onerror=null;this.src={% static "images/placeholder.png" %}">
+            <object class="object-cover w-full h-96" data="{{ page.cover_img_url }}" type="image/png">
+                <img class="w-full h-full" src='{% static "images/placeholder.png" %}' alt="Cover Img"/>
+            </object>
         </div>
 
         <div class="flex flex-col w-11/12 mx-auto bg-card-bg rounded-xl p-4 gap-y-8  hover:drop-shadow-bf2042-3 transition duration-100 ease-in">
