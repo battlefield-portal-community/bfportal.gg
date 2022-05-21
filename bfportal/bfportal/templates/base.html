@@ -24,14 +24,12 @@
 
         <meta property="og:description" content="{{ page.description }}"/>
         <meta name="description" content="{{ page.description }}"/>
-        <meta property="og:image" content="
-                {% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/placeholder.png' %}{% endif %}"/>
+        <meta property="og:image" content="{% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/placeholder.png' %}{% endif %}"/>
 
         <!-- Twitter Meta Tags -->
 
         <meta name="twitter:description" content="{{ page.description }}">
-        <meta name="twitter:image" content="
-                {% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/placeholder.png' %}{% endif %}">
+        <meta name="twitter:image" content="{% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/placeholder.png' %}{% endif %}">
 
     {% else %}
         <meta name="twitter:description"
