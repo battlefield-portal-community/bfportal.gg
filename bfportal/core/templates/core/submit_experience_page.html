@@ -92,12 +92,12 @@
                 <br>
                 <button type="submit" class="text-bf2042-4 font-bold hover:text-bf2042-1 bg-bf2042-1 rounded-lg px-2 py-1 hover:bg-bf2042-4 transition duration-300 ease-in-out">Submit Experience</button>
             </form>
-            {% if is_edit %}
-                <form action="../delete/" method="post">
-                {% csrf_token %}
-                <button class="max-w-fit text-bf2042-6 font-bold bg-bf2042-1 rounded-lg px-2 py-1 hover:bg-bf2042-4 transition duration-300 ease-in-out" type="submit" name="delete-exp" value="1">Delete Experience</button>
-                </form>
-            {% endif %}
+{#            {% if is_edit %}#}
+{#                <form action="../delete/" method="post">#}
+{#                {% csrf_token %}#}
+{#                <button class="max-w-fit text-bf2042-6 font-bold bg-bf2042-1 rounded-lg px-2 py-1 hover:bg-bf2042-4 transition duration-300 ease-in-out" type="submit" name="delete-exp" value="1">Delete Experience</button>#}
+{#                </form>#}
+{#            {% endif %}#}
         </div>
     </div>
 {% endblock %}
