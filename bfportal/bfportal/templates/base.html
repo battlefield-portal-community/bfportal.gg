@@ -12,6 +12,7 @@
             {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
         {% endblock %}
     </title>
+    <link rel="icon" type="image/x-icon" href={% static "images/fav.gif" %}>
     <meta property="og:title" content="{{ page.title|title }}"/>
     <meta property="og:type" content="website">
 
