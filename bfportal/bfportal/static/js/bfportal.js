@@ -61,7 +61,7 @@ $(document).ready(function() {
             GTApiResponse.playgroundDescription = String;
             if (!GTApiResponse.hasOwnProperty('errors')) {
                 let tags = "";
-                GTApiResponse.tag.forEach(elm => tags = tags.concat(elm.values[0].readableSettingName, ","));
+                GTApiResponse.tag.forEach(elm => tags = tags.concat(elm.metadata.translations[0].localizedText, ","));
                 GTApiResponse = GTApiResponse.validatedPlayground;
                 document.getElementById("id_title").value = toTitleCase(GTApiResponse.playgroundName);
                 document.getElementById("id_description").value = GTApiResponse.playgroundDescription;
