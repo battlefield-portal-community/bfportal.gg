@@ -28,7 +28,7 @@
                     </a>
                 {% endfor %}
             </div>
-            <div class="flex flex-row gap-x-1">
+            <div class="flex flex-row gap-1 flex-wrap">
                 <div class="text-sm">
                     <div class="inline-block text-xs text-bg-light align-middle">Created by</div>
                     <div class="inline-block bg-hover-bg-light rounded-full px-2 hover:bg-bf2042-2 transition duration-100 ease-in">
@@ -37,18 +37,21 @@
                                 <div class="hidden md:inline-block md:w-6">
                                     <img class="w-6 h-full rounded-full inline-block" src="{% if owner.extra_data.avatar %} {{ owner.get_avatar_url }} {% else %} {% static 'images/default_discord_avatar.png' %}{% endif %}" alt="pfp">
                                 </div>
-
                                 {{ owner.extra_data.username }}
                             </a>
                         {% endwith %}
                     </div>
                 </div>
-                <div class="text-sm">
-                    <div class="block text-xs text-bg-light md:inline-block">on</div>
-                    {{ page.first_published_at }}</div>
-                <div class="text-sm">
-                    <div class="block text-xs text-bg-light md:inline-block">last updated on</div>
-                    {{ page.last_published_at }}</div>
+                <div class="flex flex-row gap-2 flex-wrap">
+                    <div class="text-sm">
+                        <div class="block text-xs text-bg-light md:inline-block">on</div>
+                        {{ page.first_published_at }}
+                    </div>
+                    <div class="text-sm">
+                        <div class="block text-xs text-bg-light md:inline-block">last updated on</div>
+                        {{ page.last_published_at }}
+                    </div>
+                </div>
             </div>
             <div class="flex flex-col bg-default w-full rounded-xl px-2 min-h-fit">
                 {% if page.exp_url %}
@@ -160,7 +163,6 @@
                     let maps = resp_json['validatedPlayground']['mapRotation']['maps'];
                     console.log(maps);
                     maps.forEach(function (map) {
-                        console.log(map);
                         const root = document.createElement('div'),
                             img = document.createElement('img'),
                             infoContainer = document.createElement('div'),
