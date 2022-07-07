@@ -11,7 +11,7 @@ This project will replace the current website at https://bfportal.gg/
 
 # Info 
 project is now in beta testing  
-head over to http://vmi659995.contaboserver.net:8000/, and try it out 
+head over to http://vmi656705.contaboserver.net:8000/, and try it out 
 
 ### Screenshots of several parts of the website
 <details>
