@@ -1,6 +1,7 @@
-from django import forms
-from urllib.parse import urlsplit, parse_qs
+from urllib.parse import parse_qs, urlsplit
+
 from core.models import ExperiencePage
+from django import forms
 from loguru import logger
 
 
@@ -13,7 +14,7 @@ class ExperiencePageForm(forms.ModelForm):
 
     class Meta:
         model = ExperiencePage
-        exclude = ['featured']
+        exclude = ["featured"]
         fields = [
             "title",
             "description",
@@ -26,11 +27,7 @@ class ExperiencePageForm(forms.ModelForm):
             "cover_img_url",
             "vid_url",
         ]
-        error_messages = {
-            "categories": {
-                "required": "Select at least one category"
-            }
-        }
+        error_messages = {"categories": {"required": "Select at least one category"}}
 
     field_order = [
         "categories",
@@ -44,8 +41,6 @@ class ExperiencePageForm(forms.ModelForm):
         "cover_img_url",
         "vid_url",
     ]
-
-
 
     def clean_categories(self):
         logger.debug("called")
@@ -78,13 +73,11 @@ class ExperiencePageForm(forms.ModelForm):
                 logger.warning(f"Invalid url {url} submitted ")
                 raise forms.ValidationError(
                     "only a URL from https://portal.battlefield.com/ is allowed",
-                    code='invalid_domain'
+                    code="invalid_domain",
                 )
             elif "playgroundId" not in query_dict.keys():
                 logger.info(f"url without playgroundId passed {url}")
                 raise forms.ValidationError(
-                    "must contain Playground ID",
-                    code='no_playground_id'
+                    "must contain Playground ID", code="no_playground_id"
                 )
         return url
-

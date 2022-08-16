@@ -42,8 +42,8 @@ INSTALLED_APPS = [
     "wagtail_color_panel",
     "modelcluster",
     "taggit",
-    'dal',
-    'dal_select2',
+    "dal",
+    "dal_select2",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -60,7 +60,7 @@ INSTALLED_APPS = [
     "django_browser_reload",
     "widget_tweaks",
     "embed_video",
-    'django_extensions',
+    "django_extensions",
 ]
 
 SITE_ID = 1
@@ -127,13 +127,13 @@ WSGI_APPLICATION = "bfportal.wsgi.application"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'postgres'),
-        'USER': os.environ.get('DB_USERNAME', 'postgres'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('POSTGRES_HOST', 'db'),  # fall back to docker default
-        'PORT': '5432',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("DB_NAME", "postgres"),
+        "USER": os.environ.get("DB_USERNAME", "postgres"),
+        "PASSWORD": os.environ.get("DB_PASSWORD"),
+        "HOST": os.environ.get("POSTGRES_HOST", "db"),  # fall back to docker default
+        "PORT": "5432",
     }
 }
 
@@ -215,4 +215,4 @@ LOGIN_URL = "/discord/login/"
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

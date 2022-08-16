@@ -6,13 +6,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0028_blogpage'),
+        ("core", "0028_blogpage"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='experiencepage',
-            name='code',
-            field=models.CharField(blank=True, default='', help_text='Six letter alpha-numeric code of you experience', max_length=6, verbose_name='Experience Code'),
+            model_name="experiencepage",
+            name="code",
+            field=models.CharField(
+                blank=True,
+                default="",
+                help_text="Six letter alpha-numeric code of you experience",
+                max_length=6,
+                verbose_name="Experience Code",
+            ),
         ),
     ]

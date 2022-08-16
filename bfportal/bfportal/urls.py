@@ -1,14 +1,13 @@
 from operator import imod
-from django.conf import settings
-from django.urls import include, path, re_path
-from django.contrib import admin
-from django.views.generic import TemplateView, RedirectView
 
+from core.views import CategoriesAutocomplete, TagsAutocomplete
+from django.conf import settings
+from django.contrib import admin
+from django.urls import include, path, re_path
+from django.views.generic import RedirectView, TemplateView
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
-
-from core.views import CategoriesAutocomplete, TagsAutocomplete
 
 urlpatterns = [
     path("django-admin/", admin.site.urls),
@@ -31,7 +30,11 @@ urlpatterns = [
     # go straight to discord login
     path("login/", RedirectView.as_view(url="/discord/login/?process=login")),
     path("", include("allauth.urls")),
-    path("api/categories/", CategoriesAutocomplete.as_view(), name="category-autocomplete"),
+    path(
+        "api/categories/",
+        CategoriesAutocomplete.as_view(),
+        name="category-autocomplete",
+    ),
     path("api/tags/", TagsAutocomplete.as_view(), name="tags-autocomplete"),
 ]
 
@@ -39,10 +42,13 @@ urlpatterns = [
 if settings.DEBUG:
     from django.conf.urls.static import static
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
     # auto reload on static or template edit
     urlpatterns.append(path("__reload__/", include("django_browser_reload.urls")))
     # A temp url to serve templates directly
-    urlpatterns.append(path("temp/", TemplateView.as_view(template_name="core/after_submit.html")))
+    urlpatterns.append(
+        path("temp/", TemplateView.as_view(template_name="core/after_submit.html"))
+    )
     # Serve static and media files from development server
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
