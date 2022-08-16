@@ -1,0 +1,55 @@
+# GitHub Action Workflow enforcing our code style.
+
+name: HouseKeeping
+
+# Trigger the workflow on both push (to the main repository, on the main branch)
+# and pull requests (against the main repository, but from any repo, from any branch).
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+# Brand new concurrency setting! This ensures that not more than one run can be triggered for the same commit.
+# It is useful for pull requests coming from the main repository since both triggers will match.
+concurrency: lint-${{ github.sha }}
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    env:
+      # The Python version your project uses. Feel free to change this if required.
+      PYTHON_VERSION: "3.10"
+
+    steps:
+      # Checks out the repository in the current folder.
+      - name: Info dump
+        run: |
+          echo ${{ github.event_name }}
+
+      - name: Checks out repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      # Set up the right version of Python
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Run pre-commit hooks
+        uses: pre-commit/action@v3.0.0
+
+      - name: Get commit message
+        id: get_commit_message
+        run: |
+          if   [[ '${{ github.event_name }}' == 'push' ]]; then
+            echo $(git log --format=%B -n 1 HEAD) >> /tmp/msg
+          elif [[ '${{ github.event_name }}' == 'pull_request' ]]; then
+            echo $(git log --format=%B -n 1 HEAD^2) >> /tmp/msg
+          fi
+
+      - name: Check for Valid commit message
+        run: |
+          pre-commit run --hook-stage commit-msg --commit-msg-filename /tmp/msg check-commit-msg
