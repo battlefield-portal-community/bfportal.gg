@@ -1,9 +1,7 @@
+from core.models import ExperiencesCategory, ExperiencesPage, HomePage, ProfilePage
 from django.core.management.base import BaseCommand
-
-from wagtail.core.models import Page, Site
 from loguru import logger
-
-from core.models import HomePage, ProfilePage, ExperiencesPage, ExperiencesCategory
+from wagtail.core.models import Page, Site
 
 
 class Command(BaseCommand):
@@ -22,7 +20,9 @@ class Command(BaseCommand):
             logger.info("setting new root page Successful")
             logger.info("Adding Sub-Page types")
             profile_page = ProfilePage(title="Profile page", slug="users")
-            experiences_listing_page = ExperiencesPage(title="Experiences", slug="experiences")
+            experiences_listing_page = ExperiencesPage(
+                title="Experiences", slug="experiences"
+            )
             new_home_page.add_child(instance=experiences_listing_page)
             new_home_page.add_child(instance=profile_page)
             new_home_page.save()
@@ -34,4 +34,3 @@ class Command(BaseCommand):
                 cat_obj = ExperiencesCategory(name=cat)
                 cat_obj.save()
             logger.info("Adding Experience Categories Successful")
-

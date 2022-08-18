@@ -6,13 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0020_alter_experiencepage_vid_url'),
+        ("core", "0020_alter_experiencepage_vid_url"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='experiencepage',
-            name='featured',
-            field=models.BooleanField(default=False, help_text='Is this experience a featured experience', verbose_name='Set Featured'),
+            model_name="experiencepage",
+            name="featured",
+            field=models.BooleanField(
+                default=False,
+                help_text="Is this experience a featured experience",
+                verbose_name="Set Featured",
+            ),
         ),
     ]

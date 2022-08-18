@@ -1,30 +1,24 @@
 import datetime
 import os
 
+import requests
 from allauth.socialaccount.models import SocialAccount
+from core.forms import ExperiencePageForm
+from core.models import ExperiencePage, ExperiencesCategory, ExperiencesPage, HomePage
+from core.utils.helper import unique_slug_generator
 from dal import autocomplete
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
-from django.shortcuts import render, redirect
-from django.conf import settings
+from django.shortcuts import redirect, render
 from django.utils import timezone
 from loguru import logger
 from taggit.models import Tag
-import requests
-
-from core.forms import ExperiencePageForm
-from core.models import (
-    ExperiencePage,
-    HomePage,
-    ExperiencesPage,
-    ExperiencesCategory,
-)
-from core.utils.helper import unique_slug_generator
 
 
 def send_approve_request(page: ExperiencePage, type: str = "new"):
     logger.debug("send_approve_request called")
-    if (token := os.getenv('APPROVAL_CHANNEL_WEBHOOK_TOKEN', None)) is not None:
+    if (token := os.getenv("APPROVAL_CHANNEL_WEBHOOK_TOKEN", None)) is not None:
         webhook_id = os.getenv("APPROVAL_CHANNEL_WEBHOOK_ID")
         webhook_url = f"https://discord.com/api/webhooks/{webhook_id}/{token}"
         uid = SocialAccount.objects.get(user_id=page.owner.id).uid
@@ -38,36 +32,39 @@ def send_approve_request(page: ExperiencePage, type: str = "new"):
                         "title": page.title,
                         "description": page.description[0:200] + ".....",
                         "image": {
-                            "url": page.cover_img_url if page.cover_img_url else "https://super-static-assets.s3.amazonaws.com/19d9fbc6-6292-4be8-ac70-5a186b556054%2Fimages%2Fb6495922-b4c7-4002-9c3d-56bfaa5b98b5.jpg"
+                            "url": page.cover_img_url
+                            if page.cover_img_url
+                            else "https://super-static-assets.s3.amazonaws.com/19d9fbc6-6292-4be8-ac70-5a186b556054%2Fimages%2Fb6495922-b4c7-4002-9c3d-56bfaa5b98b5.jpg"
                         },
                         "fields": [
-                            {
-                                "name": "Author",
-                                "value": f"<@{uid}>",
-                                "inline": True
-                            },
+                            {"name": "Author", "value": f"<@{uid}>", "inline": True},
                             {
                                 "name": "Submitted on",
                                 "value": f"<t:{int(page.first_published_at.timestamp())}>",
-                                "inline": True
+                                "inline": True,
                             },
                             {
                                 "name": "Featured",
-                                "value": ":white_check_mark:" if page.featured else ":x:",
-                                "inline": True
+                                "value": ":white_check_mark:"
+                                if page.featured
+                                else ":x:",
+                                "inline": True,
                             },
                             {
                                 "name": "Category",
-                                "value": ":white_small_square: " + "\u200B".join(
-                                    [str(i) for i in page.categories.all()]),
+                                "value": ":white_small_square: "
+                                + "\u200B".join(
+                                    [str(i) for i in page.categories.all()]
+                                ),
                             },
                             {
                                 "name": "Tags",
-                                "value": ":white_small_square: " + "".join([f"`{i}` " for i in page.tags.all()]),
+                                "value": ":white_small_square: "
+                                + "".join([f"`{i}` " for i in page.tags.all()]),
                             },
-                        ]
+                        ],
                     }
-                ]
+                ],
             }
         elif type == "edit":
             data = {
@@ -76,20 +73,12 @@ def send_approve_request(page: ExperiencePage, type: str = "new"):
                     {
                         "url": page.full_url,
                         "title": page.title,
-                        "fields": [
-                            {
-                                "name": "By",
-                                "value": f"<@{uid}>"
-                            }
-                        ]
-
+                        "fields": [{"name": "By", "value": f"<@{uid}>"}],
                     }
-                ]
+                ],
             }
         else:
-            data = {
-                "content": "There is Something Wrong with the server pls check 🤐"
-            }
+            data = {"content": "There is Something Wrong with the server pls check 🤐"}
 
         data["token"] = token
         data["components"] = [
@@ -101,16 +90,13 @@ def send_approve_request(page: ExperiencePage, type: str = "new"):
                         "style": 5,
                         "url": page.full_url,
                         "label": "Go to Dashboard",
-
                     }
-                ]
+                ],
             }
         ]
 
         print(data)
-        headers = {
-            "Content-Type": "application/json"
-        }
+        headers = {"Content-Type": "application/json"}
         result = requests.post(webhook_url, json=data, headers=headers)
         try:
             result.raise_for_status()
@@ -118,7 +104,9 @@ def send_approve_request(page: ExperiencePage, type: str = "new"):
             logger.debug(f"Error {err} while sending approve request for {page.title}")
             print(result.content)
         else:
-            logger.debug(f"{type.capitalize()} Experience request for {page.title} sent successfully ")
+            logger.debug(
+                f"{type.capitalize()} Experience request for {page.title} sent successfully "
+            )
 
 
 @login_required
@@ -184,19 +172,13 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
             return render(
                 request,
                 "core/submit_experience_page.html",
-                {
-                    "form": form,
-                    "is_edit": True
-                },
+                {"form": form, "is_edit": True},
             )
     else:
         return render(
             request,
             "core/submit_experience_page.html",
-            {
-                "form": ExperiencePageForm(instance=experience_page),
-                "is_edit": True
-            },
+            {"form": ExperiencePageForm(instance=experience_page), "is_edit": True},
         )
 
 
@@ -204,9 +186,10 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
 # >>> a = ExperiencePageTag.objects.values_list('tag_id').annotate(tag_count=Count('tag_id')).order_by('-tag_count')
 # >>> [Tag.objects.get(id=i[0]) for i in a]
 
+
 class CategoriesAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        qs = ExperiencesCategory.objects.all().order_by('id')
+        qs = ExperiencesCategory.objects.all().order_by("id")
         if self.q:
             qs = qs.filter(name__istartswith=self.q)
         return qs
@@ -214,7 +197,7 @@ class CategoriesAutocomplete(autocomplete.Select2QuerySetView):
 
 class TagsAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        qs = Tag.objects.all().order_by('id')
+        qs = Tag.objects.all().order_by("id")
         if self.q:
             qs = qs.filter(name__istartswith=self.q)
             return qs

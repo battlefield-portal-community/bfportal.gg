@@ -1,6 +1,5 @@
 import re
-from urllib.parse import urlparse
-from urllib.parse import parse_qs
+from urllib.parse import parse_qs, urlparse
 
 from django.template.defaulttags import register
 
@@ -32,7 +31,7 @@ def pagination_suffix(value):
     returns url for paginator suffix
     """
     """
-        sample 
+        sample
             [Input] : tag=management&tag=since&page=3
             [Output] : &tag=management&tag=since
     """
@@ -51,6 +50,4 @@ def abs_filter(value):
 @register.filter(name="expCode")
 def get_exp_code(url: str) -> str:
     #  playgroundId=45e436e0-4cf7-11ec-be7b-76c50778a53a
-    return parse_qs(
-        urlparse(url).query
-    ).get('playgroundId', ['null'])[0]
+    return parse_qs(urlparse(url).query).get("playgroundId", ["null"])[0]

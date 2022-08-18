@@ -7,13 +7,18 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0019_availabletags'),
+        ("core", "0019_availabletags"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='experiencepage',
-            name='vid_url',
-            field=embed_video.fields.EmbedVideoField(blank=True, default='', help_text='Link to vid showcasing your experience', verbose_name='Video Url'),
+            model_name="experiencepage",
+            name="vid_url",
+            field=embed_video.fields.EmbedVideoField(
+                blank=True,
+                default="",
+                help_text="Link to vid showcasing your experience",
+                verbose_name="Video Url",
+            ),
         ),
     ]
