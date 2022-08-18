@@ -45,6 +45,7 @@ class ExperiencePageForm(forms.ModelForm):
     ]
 
     def clean_categories(self):
+        """Called when categories field is being validated"""
         logger.debug("called")
         cats = self.cleaned_data["categories"]
         logger.debug(cats)
@@ -53,12 +54,14 @@ class ExperiencePageForm(forms.ModelForm):
         return self.cleaned_data["categories"]
 
     def clean_code(self):
+        """Called when code field is being validated"""
         code = self.cleaned_data["code"]
         if code and not code.isalnum():
             raise forms.ValidationError("can only contain alphanumeric characters")
         return self.cleaned_data["code"]
 
     def clean_exp_url(self):
+        """Called when experience url field is being validated"""
         url = self.cleaned_data["exp_url"]
         if url:
             # SplitResult(
