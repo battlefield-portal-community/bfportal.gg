@@ -1,20 +1,28 @@
-version: "3"
+version: "3.7"
 
 services:
     db:
       image: postgres
+      restart: always
       volumes:
         - postgress_db:/var/lib/postgresql/data
       environment:
         - POSTGRES_NAME=${DB_NAME}
         - POSTGRES_USER=${DB_USERNAME}
         - POSTGRES_PASSWORD=${DB_PASSWORD}
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U postgres"]
+        interval: "10s"
+        timeout: "5s"
+        retries: 5
+        start_period: "10s"
 
     web_run:
       image: docker.pkg.github.com/battlefield-portal-community/bfportal.gg/bfportal-community:latest
-      command: bash -c "python manage.py migrate --noinput && python manage.py ensure_superuser --username bfportal --email superuser@bfportal.com --password '${SU_PASSWD}' &&  python manage.py ensure_initialization && python manage.py runserver 0.0.0.0:8000 --settings=bfportal.settings.production"
+      restart: always
+      command: bash -c "python manage.py migrate --noinput && python manage.py ensure_superuser --username bfportal --email superuser@bfportal.com --password '${SU_PASSWD}' &&  python manage.py ensure_initialization && python manage.py runserver ${PRODUCTION_HOST}:${PRODUCTION_PORT} --settings=bfportal.settings.production"
       ports:
-        - "8000:8000"
+        - "${PRODUCTION_PORT}:${PRODUCTION_PORT}"
       environment:
         - PRODUCTION_KEY=${PRODUCTION_KEY}
         - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
@@ -24,14 +32,15 @@ services:
         - DB_PASSWORD=${DB_PASSWORD}
         - POSTGRES_HOST=db # takes precedent over .env file
         - DEBUG=False
+        - APPROVAL_CHANNEL_WEBHOOK_TOKEN=${APPROVAL_CHANNEL_WEBHOOK_TOKEN}
+        - APPROVAL_CHANNEL_WEBHOOK_ID=${APPROVAL_CHANNEL_WEBHOOK_ID}
       depends_on:
         - db
-      deploy:
-        restart_policy:
-          condition: on-failure
-          delay: 5s
-          max_attempts: 3
-          window: 120s
-
+      healthcheck:
+        test: curl -fk http://${PRODUCTION_HOST}:${PRODUCTION_PORT}/ || exit 1
+        interval: "60s"
+        timeout: "3s"
+        retries: 3
+        start_period: "5s"
 volumes:
    postgress_db:

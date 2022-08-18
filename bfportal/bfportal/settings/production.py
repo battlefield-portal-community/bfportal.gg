@@ -7,7 +7,7 @@ SECRET_KEY = os.environ.get("PRODUCTION_KEY")
 ALLOWED_HOSTS = [
     os.environ.get("PRODUCTION_HOST"),
     "localhost",
-]  # todo add aws host soon 😊
+]
 
 try:
     from .local import *  # noqa: F403,F401
