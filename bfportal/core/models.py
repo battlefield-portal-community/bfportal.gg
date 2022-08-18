@@ -31,24 +31,8 @@ from wagtail_color_panel.fields import ColorField
 from bfportal.settings.base import LOGIN_URL
 
 
-def pagination_wrapper(request: HttpRequest, posts: models.query.QuerySet) -> Paginator:
-    paginator = Paginator(apply_filters(request, posts), request.GET.get("n", 10))
-    curr_page = safe_cast(request.GET.get("page", None), int, 1)
-    try:
-        # If the page exists and the ?page=x is an int
-        posts = paginator.page(curr_page)
-    except PageNotAnInteger:
-        # If the ?page=x is not an int; show the first page
-        posts = paginator.page(1)
-    except EmptyPage:
-        # If the ?page=x is out of range (too high most likely)
-        # Then return the last page
-        posts = paginator.page(paginator.num_pages)
-
-    return posts
-
-
 def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
+    """Applies get param filters to database and returns posts"""
     all_posts = posts
     logger.debug("Starting filtering Posts")
     if experience := request.GET.get("experience", None):
@@ -101,6 +85,24 @@ def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
     return all_posts
 
 
+def pagination_wrapper(request: HttpRequest, posts: models.query.QuerySet) -> Paginator:
+    """Returns paginated result for a query"""
+    paginator = Paginator(apply_filters(request, posts), request.GET.get("n", 10))
+    curr_page = safe_cast(request.GET.get("page", None), int, 1)
+    try:
+        # If the page exists and the ?page=x is an int
+        posts = paginator.page(curr_page)
+    except PageNotAnInteger:
+        # If the ?page=x is not an int; show the first page
+        posts = paginator.page(1)
+    except EmptyPage:
+        # If the ?page=x is out of range (too high most likely)
+        # Then return the last page
+        posts = paginator.page(paginator.num_pages)
+
+    return posts
+
+
 class ExtraContent(blocks.StreamBlock):
     """Class defining extra fields available to all pages"""
 
@@ -141,18 +143,18 @@ class HomePage(RoutablePageMixin, CustomBasePage):
     subpage_types = ["core.ExperiencesPage", "core.ProfilePage", "core.BlogPage"]
 
     @route(r"^$")
-    def base(self, request):
+    def base(self, request):  # noqa: D102
         return TemplateResponse(
             request, self.get_template(request), self.get_context(request)
         )
 
     @route(r"^submit/$")
-    def submit_exp(self, request):
+    def submit_exp(self, request):  # noqa: D102
         from core.views import submit_experience
 
         return submit_experience(request, self)
 
-    def get_context(self, request, *args, **kwargs):
+    def get_context(self, request, *args, **kwargs):  # noqa: D102
         context = super().get_context(request, *args, **kwargs)
         posts = pagination_wrapper(
             request,
@@ -232,7 +234,7 @@ class ExperiencesPage(RoutablePageMixin, CustomBasePage):
         return context
 
     @route(r"^featured/$")
-    def featured_experiences(self, request: HttpRequest):
+    def featured_experiences(self, request: HttpRequest):  # noqa: D102
         return TemplateResponse(
             request,
             self.get_template(request),
@@ -364,7 +366,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
     subpage_types = []
 
     @route(r"^edit/$")
-    def edit_page(self, request: HttpRequest):
+    def edit_page(self, request: HttpRequest):  # noqa: D102
         if request.user.is_authenticated:
             if self.owner == request.user:
                 from .views import edit_experience
@@ -379,7 +381,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
             return redirect(LOGIN_URL)
 
     @route(r"^delete/$")
-    def delete_experience(self, request: HttpRequest):
+    def delete_experience(self, request: HttpRequest):  # noqa: D102
         if request.user.is_authenticated:
             if self.owner == request.user:
                 # todo actually delete it
@@ -394,7 +396,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
             return redirect(LOGIN_URL)
 
     @staticmethod
-    def is_experience_page():
+    def is_experience_page():  # noqa: D102
         return True
 
 
@@ -410,17 +412,20 @@ def social_user(discord_id: int):
 
 
 class ProfilePage(RoutablePageMixin, CustomBasePage):
+    """Class representing the details of a user profile page"""
+
     max_count = 1
     parent_page_types = ["core.HomePage"]
     subpage_types = ["core.BlogPage"]
 
     def serve(self, request, view=None, args=None, kwargs=None):
+        """Checks if a user is authenticated before serving the profile page"""
         if request.user.is_authenticated:
             return super().serve(request, view, args, kwargs)
         else:
             return redirect(LOGIN_URL)
 
-    def get_context(self, request, *args, **kwargs):
+    def get_context(self, request, *args, **kwargs):  # noqa: D102
         list_experiences = kwargs.pop("list_experiences", None)
         user_acc = kwargs.pop("user", None)
         context = super().get_context(request, *args, **kwargs)
@@ -446,11 +451,12 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
         return context
 
     @route(r"^$")
-    def root_profile_page(self, request):
+    def root_profile_page(self, request):  # noqa: D102
         return redirect("/")
 
     @route(r"^(\d{18})/$", name="discord_id")
     def profile_page_view(self, request: HttpRequest, discord_id):
+        """Serves a profile page for a user ID"""
         user = social_user(discord_id)
         if user:
             logger.debug(f"fetch profile for {user}")
@@ -464,6 +470,7 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
 
     @route(r"(\d{18})/experiences/$", name="discord_id")
     def user_experiences(self, request, discord_id):
+        """Servers a list of experiences by a user"""
         user = social_user(discord_id=discord_id)
         if user:
             logger.debug(f"fetch experiences for {user}")
@@ -476,7 +483,7 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
             return HttpResponse("User not Found", status=404)
 
 
-class AvailableTags(models.Model):
+class AvailableTags(models.Model):  # noqa: D101
     tags = models.TextField(
         blank=True, verbose_name="All available tags in BF 2042 Portal Rules editor"
     )
