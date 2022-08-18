@@ -11,11 +11,13 @@ class Command(BaseCommand):
     help = "Creates an admin user non-interactively if it doesn't exist"
 
     def add_arguments(self, parser):
+        """Adds agrs for command"""
         parser.add_argument("--username", help="Admin's username")
         parser.add_argument("--email", help="Admin's email")
         parser.add_argument("--password", help="Admin's password")
 
     def handle(self, *args, **options):
+        """Handler for Command"""
         user = get_user_model()
         if not user.objects.filter(username=options["username"]).exists():
             user.objects.create_superuser(
