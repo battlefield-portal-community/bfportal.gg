@@ -4,7 +4,6 @@ from allauth.socialaccount.models import SocialAccount
 from core.utils.helper import safe_cast
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
@@ -103,6 +102,8 @@ def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
 
 
 class ExtraContent(blocks.StreamBlock):
+    """Class defining extra fields available to all pages"""
+
     heading = blocks.CharBlock(form_classname="full title")
     cover_image = ImageChooserBlock()
     text = blocks.RichTextBlock()
@@ -115,6 +116,11 @@ class ExtraContent(blocks.StreamBlock):
 
 
 class CustomBasePage(Page):
+    """Base class for all pages in the app
+
+    Require to expose ExtraContent to all child pages
+    """
+
     extra_content = StreamField(ExtraContent(), blank=True)
     content_panels = Page.content_panels + [
         StreamFieldPanel(
@@ -128,6 +134,8 @@ class CustomBasePage(Page):
 
 
 class HomePage(RoutablePageMixin, CustomBasePage):
+    """Class defining the 'index' page of the website"""
+
     max_count = 1
     parent_page_types = ["wagtailcore.Page"]
     subpage_types = ["core.ExperiencesPage", "core.ProfilePage", "core.BlogPage"]
@@ -156,6 +164,8 @@ class HomePage(RoutablePageMixin, CustomBasePage):
 
 
 class ExperiencesCategory(models.Model):
+    """Class defining properties of experience category tag"""
+
     name = models.CharField(max_length=255)
     bg_color = ColorField(default="#474c50")
     bg_hover_color = ColorField(default="#474c50")
@@ -195,6 +205,8 @@ register_snippet(ExperiencesCategory)
 
 
 class ExperiencePageTag(TaggedItemBase):
+    """Class to link a tag to an Experience page"""
+
     content_object = ParentalKey(
         "ExperiencePage",
         related_name="tagged_items",
@@ -203,6 +215,8 @@ class ExperiencePageTag(TaggedItemBase):
 
 
 class ExperiencesPage(RoutablePageMixin, CustomBasePage):
+    """Class defining page that lists all experiences"""
+
     max_count = 1
     parent_page_types = ["core.HomePage"]
     subpage_types = ["core.ExperiencePage", "core.BlogPage"]
@@ -231,10 +245,17 @@ class ExperiencesPage(RoutablePageMixin, CustomBasePage):
 
 
 class BlogPage(CustomBasePage):
+    """Class for future usage"""
+
     pass
 
 
 class ExperiencePage(RoutablePageMixin, CustomBasePage):
+    """Class defining properties of an experience page
+
+    This is equivalent to a post in a blog
+    """
+
     featured = models.BooleanField(
         default=False,
         help_text="Is this experience a featured experience",
@@ -400,7 +421,7 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
             return redirect(LOGIN_URL)
 
     def get_context(self, request, *args, **kwargs):
-        l = kwargs.pop("list_experiences", None)
+        list_experiences = kwargs.pop("list_experiences", None)
         user_acc = kwargs.pop("user", None)
         context = super().get_context(request, *args, **kwargs)
         all_posts = (
@@ -412,7 +433,7 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
 
         if not user_acc:
             user_acc = request.user
-        if l:
+        if list_experiences:
             context["posts"] = pagination_wrapper(
                 request,
                 all_posts,

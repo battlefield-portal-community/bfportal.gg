@@ -3,6 +3,11 @@ from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
+    """Command to make a super-user from commandline
+
+    Super-user is only created when there is none present
+    """
+
     help = "Creates an admin user non-interactively if it doesn't exist"
 
     def add_arguments(self, parser):

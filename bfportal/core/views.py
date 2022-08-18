@@ -1,4 +1,3 @@
-import datetime
 import os
 
 import requests
@@ -7,10 +6,9 @@ from core.forms import ExperiencePageForm
 from core.models import ExperiencePage, ExperiencesCategory, ExperiencesPage, HomePage
 from core.utils.helper import unique_slug_generator
 from dal import autocomplete
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.utils import timezone
 from loguru import logger
 from taggit.models import Tag
@@ -34,7 +32,7 @@ def send_approve_request(page: ExperiencePage, type: str = "new"):
                         "image": {
                             "url": page.cover_img_url
                             if page.cover_img_url
-                            else "https://super-static-assets.s3.amazonaws.com/19d9fbc6-6292-4be8-ac70-5a186b556054%2Fimages%2Fb6495922-b4c7-4002-9c3d-56bfaa5b98b5.jpg"
+                            else "https://super-static-assets.s3.amazonaws.com/19d9fbc6-6292-4be8-ac70-5a186b556054%2Fimages%2Fb6495922-b4c7-4002-9c3d-56bfaa5b98b5.jpg"  # noqa: E501
                         },
                         "fields": [
                             {"name": "Author", "value": f"<@{uid}>", "inline": True},

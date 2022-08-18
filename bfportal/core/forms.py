@@ -6,6 +6,8 @@ from loguru import logger
 
 
 class ExperiencePageForm(forms.ModelForm):
+    """ModelForm for making an input form to submit a new experience"""
+
     # categories = forms.ModelMultipleChoiceField(
     #     queryset=ExperiencesCategory.objects.all(),
     #     help_text="Choose a Category for your experience",

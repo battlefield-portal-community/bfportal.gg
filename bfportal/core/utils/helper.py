@@ -9,7 +9,8 @@ def random_string_generator(size=10, chars=string.ascii_lowercase + string.digit
 
 
 def unique_slug_generator(instance, new_slug=None):
-    """
+    """Returns a unique string slug for a given post
+
     This is for a Django project and it assumes your instance
     has a model with a slug field and a title character (char) field.
     """

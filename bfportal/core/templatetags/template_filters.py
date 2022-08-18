@@ -6,11 +6,15 @@ from django.template.defaulttags import register
 
 @register.filter
 def get_item(dictionary, key):
+    """filter to get an item from a dictionary"""
+
     return dictionary.get(key)
 
 
 @register.simple_tag
 def get_social_account(user):
+    """tag that returns a social account for a django user"""
+
     usr = getattr(user, "socialaccount_set", None)
     if usr:
         all_acc = usr.all()
@@ -21,19 +25,17 @@ def get_social_account(user):
 
 
 @register.filter(name="sub")
-def subtract(value, arg):
+def subtract(value, arg):  # noqa: D103
     return value - arg
 
 
 @register.simple_tag
 def pagination_suffix(value):
-    """
-    returns url for paginator suffix
-    """
-    """
-        sample
-            [Input] : tag=management&tag=since&page=3
-            [Output] : &tag=management&tag=since
+    """Returns url for paginator suffix
+
+    sample
+        [Input] : tag=management&tag=since&page=3
+        [Output] : &tag=management&tag=since
     """
     suffix_params = re.sub(r"[&?]?page=\d+", "", value)
     if len(suffix_params):
@@ -44,10 +46,16 @@ def pagination_suffix(value):
 
 @register.filter(name="abs")
 def abs_filter(value):
+    """returns absolute value"""
+
     return abs(value)
 
 
 @register.filter(name="expCode")
 def get_exp_code(url: str) -> str:
-    #  playgroundId=45e436e0-4cf7-11ec-be7b-76c50778a53a
+    """returns playgroundID from a portal URL
+
+    playgroundId=45e436e0-4cf7-11ec-be7b-76c50778a53a
+    """
+
     return parse_qs(urlparse(url).query).get("playgroundId", ["null"])[0]
