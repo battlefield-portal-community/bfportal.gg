@@ -1,19 +1,22 @@
+import datetime
+import string
+from random import choice, choices, randint
+from uuid import uuid4
+
+from core.models import ExperiencePage, ExperiencesCategory, ExperiencesPage
+from django.contrib.auth import get_user_model
 from django.core.management import BaseCommand
 from django.utils.text import slugify
-from core.models import ExperiencePage, ExperiencesCategory, ExperiencesPage
 from faker import Faker
-from django.contrib.auth import get_user_model
-import string
-from random import choices, randint, choice
-from uuid import uuid4
 from loguru import logger
-import datetime
 
 
 class Command(BaseCommand):
+    """A command that generates fake data to populate experiences in Database"""
+
     help = "Generates fake data"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser):  # noqa: D102
         parser.add_argument("no_of_pages", metavar="N", type=int, nargs="+")
         # Named (optional) arguments
         parser.add_argument(
@@ -23,6 +26,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
+        """Handler for command, handles the generation of data"""
         if options["generate"]:
             factory = Faker()
             cats = ExperiencesCategory.objects.all()
