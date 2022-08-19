@@ -15,6 +15,10 @@ from taggit.models import Tag
 
 
 def send_approve_request(page: ExperiencePage, type: str = "new"):
+    """Tries to send an approval request embed to the
+
+    discord channel specified by APPROVAL_CHANNEL_WEBHOOK_ID env
+    """
     logger.debug("send_approve_request called")
     if (token := os.getenv("APPROVAL_CHANNEL_WEBHOOK_TOKEN", None)) is not None:
         webhook_id = os.getenv("APPROVAL_CHANNEL_WEBHOOK_ID")
@@ -109,6 +113,10 @@ def send_approve_request(page: ExperiencePage, type: str = "new"):
 
 @login_required
 def submit_experience(request: HttpRequest, home_page: HomePage):
+    """Called when a user submits an experience
+
+    This function handles the routing on successful submission
+    """
     if request.method == "POST":
         form = ExperiencePageForm(request.POST)
         if form.is_valid():
@@ -149,6 +157,10 @@ def submit_experience(request: HttpRequest, home_page: HomePage):
 
 @login_required
 def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
+    """Called when a user tries to edit an experience
+
+    handles the routing when a successful edit is done
+    """
     if request.method == "POST":
         form = ExperiencePageForm(request.POST, instance=experience_page)
         if form.is_valid():
@@ -185,18 +197,32 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
 # >>> [Tag.objects.get(id=i[0]) for i in a]
 
 
-class CategoriesAutocomplete(autocomplete.Select2QuerySetView):
-    def get_queryset(self):
-        qs = ExperiencesCategory.objects.all().order_by("id")
-        if self.q:
-            qs = qs.filter(name__istartswith=self.q)
+def filter_startswith(
+    model, starts_with_value: str = None, order_by: str = "id", max_count: int = None
+) -> list:
+    """Filters objects of a Model
+
+    returns all in DB if no starts_with_value
+    else returns the values whose name starts with starts_with_value
+    """
+    qs = model.objects.all().order_by(order_by)
+    if starts_with_value:
+        qs = qs.filter(name__istartswith=starts_with_value)
         return qs
+    return qs[0:max_count]
+
+
+class CategoriesAutocomplete(autocomplete.Select2QuerySetView):
+    """Used by filter API to get all categories"""
+
+    def get_queryset(self):
+        """Returns all the Categories that match the condition"""
+        return filter_startswith(ExperiencesCategory, self.q)
 
 
 class TagsAutocomplete(autocomplete.Select2QuerySetView):
+    """Used by filter API to get all tags starting with some value"""
+
     def get_queryset(self):
-        qs = Tag.objects.all().order_by("id")
-        if self.q:
-            qs = qs.filter(name__istartswith=self.q)
-            return qs
-        return qs[0:10]
+        """Returns all the tags that match the condition"""
+        return filter_startswith(Tag, self.q, max_count=10)
