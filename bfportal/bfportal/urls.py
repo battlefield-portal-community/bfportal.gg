@@ -1,5 +1,3 @@
-from operator import imod
-
 from core.views import CategoriesAutocomplete, TagsAutocomplete
 from django.conf import settings
 from django.contrib import admin

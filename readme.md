@@ -2,25 +2,25 @@
   <img width="300" src="https://raw.githubusercontent.com/battlefield-portal-community/Image-CDN/main/bf_portal_logo_bc.png#gh-dark-mode-only">
   <img width="300" src="https://raw.githubusercontent.com/battlefield-portal-community/Image-CDN/main/bf_portal_logo_noir.png#gh-light-mode-only">
   </p>
- 
+
  [![Docker Build](https://github.com/battlefield-portal-community/bfportal.gg/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/battlefield-portal-community/bfportal.gg/actions/workflows/main.yml)
-# What is this ? 
+# What is this ?
 
 With the release of battlefield 2042, ripple effect studio, added the ability to make custom game modes called "experiences", currently there is no way to share a game mode outside of the game, this project aims to fill that gap.  
 This project will replace the current website at https://bfportal.gg/
 
-# Info 
+# Info
 project is now in beta testing  
-head over to http://vmi656705.contaboserver.net:8000/, and try it out 
+head over to http://vmi656705.contaboserver.net:8000/, and try it out
 
 ### Screenshots of several parts of the website
 <details>
-  
+
   <summary>
     Click to show
   </summary>
- 
-  
+
+
   ## Home Page
   ![image](https://user-images.githubusercontent.com/22869882/162639043-ec231408-b2e2-4f7a-b89e-38e48fec75e3.png)
   ## Profile Page
@@ -35,7 +35,7 @@ head over to http://vmi656705.contaboserver.net:8000/, and try it out
 
 </details>
 
-## Features 
+## Features
 - User system (Discord login for intregation with bfportal community discord server)
 - Auto Fill API for forms
 - Pagination and website wide search
@@ -50,7 +50,7 @@ You can later edit your experience if u like.
 
 ## How to run locally  
 <details>
-  
+
   <summary>
     Click to show !!!
   </summary>
@@ -58,7 +58,7 @@ You can later edit your experience if u like.
 - create and activate a venv
 - install dependencies `python -m pip install -r requirements.txt`
 - create a .env file with the following values
-- ``` 
+- ```
       DB_NAME=<postgres_db_name>
       DB_USERNAME=<postgres_username>
       DB_PASSWORD=<postgres_password>
@@ -71,15 +71,15 @@ You can later edit your experience if u like.
 - run `python manage.py ensure_superuser --username bfportal --email superuser@bfportal.com --password <password>`
 - run `python manage.py ensure_initialization`
 - run server with `python manage.py runserver`
-- login via discord to create a new user 
+- login via discord to create a new user
 - run command `python manage.py fake --generate 50` to create a few fake pages
 - reload admin now u should and a data to explore
 
 </details>
 
-  
+
  ### Special Thanks to
   - [gametools.network](https://gametools.network/) for providing API to auto fill submisson form 🥰
   - [Wagtail](https://github.com/wagtail/wagtail) for providing a awesome framework that makes managing submissions very easy ✅
-  - [tailwindcss](https://github.com/tailwindlabs/tailwindcss) for saving the lives of  backend developers. 🙏 
+  - [tailwindcss](https://github.com/tailwindlabs/tailwindcss) for saving the lives of  backend developers. 🙏
   - [Matavatar](https://discord.com/users/236802771381125120) from BFportal discord community for providing valuable feedback 🤝

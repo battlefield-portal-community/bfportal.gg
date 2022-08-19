@@ -1,11 +1,8 @@
 from django.core.management import BaseCommand
 
-from allauth.socialaccount.models import SocialAccount
-from core.models import ExperiencePage
-import requests
-from loguru import logger
-
 
 class Command(BaseCommand):
-    def handle(self, *args, **options):
+    """Command that is used to develop other command and test stuff"""
+
+    def handle(self, *args, **options):  # noqa: D102
         print("pass")

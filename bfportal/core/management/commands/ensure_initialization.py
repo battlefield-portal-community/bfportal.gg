@@ -5,9 +5,12 @@ from wagtail.core.models import Page, Site
 
 
 class Command(BaseCommand):
+    """A command to initialize and ensure defaults for the whole app"""
+
     help = "Makes sure that the database is initialized and base pages and user groups are made"
 
     def handle(self, *args, **options):
+        """Handler for Command"""
         if len(HomePage.objects.all()) == 0:
             logger.info("Init New Website")
             logger.info("Adding and setting new root page")

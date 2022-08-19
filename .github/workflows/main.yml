@@ -2,7 +2,7 @@ name: Docker Build
 
 on:
   workflow_dispatch:
-  
+
   pull_request:
     # Publish `main` as Docker `latest` image.
     branches:
@@ -14,9 +14,9 @@ on:
 
   # Run tests for any PRs.
   push:
-    branches: 
+    branches:
       - main
-    
+
 
 env:
   # Image name
@@ -30,7 +30,7 @@ jobs:
     defaults:
       run:
         working-directory: ./bfportal
-    
+
     steps:
       - uses: actions/checkout@v2
 
