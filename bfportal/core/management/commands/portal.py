@@ -6,16 +6,18 @@ from django.core.management import BaseCommand
 
 
 class Command(BaseCommand):
+    """A command to get all tags from GameTools used for internal testing"""
+
     help = "Gets all the tags from gametools"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser):  # noqa: D102
         parser.add_argument(
             "--get_tags",
             action="store_true",
             help="Gets all tags from game tools",
         )
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options):  # noqa: D102
         if options.get("get_tags", None):
             all_tags_json = requests.get(
                 "https://api.gametools.network/bf2042/availabletags/?lang=en-us"
