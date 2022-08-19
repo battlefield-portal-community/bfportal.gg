@@ -25,7 +25,7 @@ $(document).ready(function() {
         if (otherReq.siblings().length > 2) {
             otherReq.prev().remove();
         }
-        
+
         otherInp.prop("required", false);
         inp.prop("required", true);
         // cat.after(inp.closest('tr'));
