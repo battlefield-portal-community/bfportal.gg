@@ -2,6 +2,7 @@ import os
 
 import requests
 from allauth.socialaccount.models import SocialAccount
+from core import get_page_url
 from core.models import ExperiencePage
 from django.http import HttpRequest
 from loguru import logger
@@ -16,19 +17,19 @@ def send_new_publish_embed(request: HttpRequest, page: ExperiencePage):
 
     discord channel specified by APPROVAL_SUCCESS_CHANNEL_WEBHOOK_ID env
     """
-    logger.debug("send_new_publish_embed called")
-
     if (
         isinstance(page, ExperiencePage)
         and page.first_publish
         and (token := os.getenv("APPROVAL_SUCCESS_CHANNEL_WEBHOOK_TOKEN", None))
         is not None
     ):
+        logger.debug("Trying to send new published request")
         page.first_publish = False
+        page.save()
         webhook_id = os.getenv("APPROVAL_SUCCESS_CHANNEL_WEBHOOK_ID")
         webhook_url = f"https://discord.com/api/webhooks/{webhook_id}/{token}"
         uid = SocialAccount.objects.get(user_id=page.owner.id).uid
-        url = f"{request.scheme}://{request.get_host()}{page.get_url()}"
+        url = get_page_url(request, page)
         data = {
             "content": "> **New Experience Posted :tada::tada:**",
             "embeds": [

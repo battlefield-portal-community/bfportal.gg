@@ -2,6 +2,7 @@ import os
 
 import requests
 from allauth.socialaccount.models import SocialAccount
+from core import get_dashboard_url, get_page_url
 from core.forms import ExperiencePageForm
 from core.models import ExperiencePage, ExperiencesCategory, ExperiencesPage, HomePage
 from core.utils.helper import unique_slug_generator
@@ -14,23 +15,25 @@ from loguru import logger
 from taggit.models import Tag
 
 
-def send_approve_request(page: ExperiencePage, type: str = "new"):
+def send_approve_request(
+    page: ExperiencePage, type: str = "new", request: HttpRequest = None
+):
     """Tries to send an approval request embed to the
 
     discord channel specified by APPROVAL_CHANNEL_WEBHOOK_ID env
     """
-    logger.debug("send_approve_request called")
     if (token := os.getenv("APPROVAL_CHANNEL_WEBHOOK_TOKEN", None)) is not None:
         webhook_id = os.getenv("APPROVAL_CHANNEL_WEBHOOK_ID")
         webhook_url = f"https://discord.com/api/webhooks/{webhook_id}/{token}"
         uid = SocialAccount.objects.get(user_id=page.owner.id).uid
-        data = dict()
+        logger.debug("Trying to send approve request")
+        url = get_page_url(request, page)
         if type == "new":
             data = {
                 "content": "New Experience approve request",
                 "embeds": [
                     {
-                        "url": page.full_url,
+                        "url": url,
                         "title": page.title,
                         "description": page.description[0:200] + ".....",
                         "image": {
@@ -73,7 +76,7 @@ def send_approve_request(page: ExperiencePage, type: str = "new"):
                 "content": "Request to make Changes to a Experience",
                 "embeds": [
                     {
-                        "url": page.full_url,
+                        "url": url,
                         "title": page.title,
                         "fields": [{"name": "By", "value": f"<@{uid}>"}],
                     }
@@ -90,7 +93,7 @@ def send_approve_request(page: ExperiencePage, type: str = "new"):
                     {
                         "type": 2,
                         "style": 5,
-                        "url": page.full_url,
+                        "url": get_dashboard_url(request, page),
                         "label": "Go to Dashboard",
                     }
                 ],
@@ -138,7 +141,7 @@ def submit_experience(request: HttpRequest, home_page: HomePage):
                 new_exp.save_revision(submitted_for_moderation=True, user=request.user)
                 new_exp.first_published_at = timezone.now()
                 new_exp.save()
-                send_approve_request(new_exp, "new")
+                send_approve_request(new_exp, "new", request)
             return render(
                 request, "core/after_submit.html", {"exp_name": new_exp.title}
             )
@@ -172,7 +175,7 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
             experience_page.save_revision(
                 submitted_for_moderation=True, user=request.user, changed=True
             )
-            send_approve_request(experience_page, "edit")
+            send_approve_request(experience_page, "edit", request)
             return render(
                 request,
                 "core/after_submit.html",
