@@ -318,6 +318,8 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         "core.ExperiencesCategory", blank=False, help_text="Choose from the Category"
     )
 
+    first_publish = models.BooleanField(default=True, null=False)
+
     content_panels = (
         Page.content_panels
         + [
