@@ -2,12 +2,9 @@
 {% load wagtailcore_tags static embed_video_tags wagtailimages_tags %}
 {% block content %}
     <div class="flex flex-col text-white gap-y-8 mb-4">
-        <div>
-            <object class="object-cover w-full h-96" data="{{ page.cover_img_url }}" type="image/png">
-                <img class="w-full h-full" src='{% static "images/placeholder.png" %}' alt="Cover Img"/>
-            </object>
+        <div class="w-full h-96">
+            <img class="w-full h-full object-cover" src='{% if debug %}{% static "images/placeholder.png" %}{% else %}{% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{% static "images/placeholder.png" %}{% endif %}{% endif %}' alt="{{ page.slug }}"/>
         </div>
-
         <div class="flex flex-col w-11/12 mx-auto bg-card-bg rounded-xl p-4 gap-y-8  hover:drop-shadow-bf2042-3 transition duration-100 ease-in">
             <div class="text-6xl md:text-7xl lg:text-8xl">{{ page.title|title }}</div>
             <div class="flex flex-row gap-x-2">

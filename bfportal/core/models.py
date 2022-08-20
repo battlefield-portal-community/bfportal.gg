@@ -12,6 +12,7 @@ from django.db.models.functions import Concat
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
+from django.templatetags.static import static
 from embed_video.fields import EmbedVideoField
 from loguru import logger
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -297,7 +298,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
     )
     cover_img_url = models.URLField(
         blank=True,
-        default="",
+        default=static("images/placeholder.png"),
         help_text="Link for your cover Image",
         verbose_name="Cover Image Url",
     )
