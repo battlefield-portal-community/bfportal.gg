@@ -15,7 +15,7 @@
                     <div class="-m-2 drop-shadow-xl h-3/5">
                         <div class="h-72">
                             <div class="rounded-lg w-full h-full">
-                                <img class="w-full h-full" src='{% if debug %}{% static "images/placeholder.png" %}{% else %}{% if post.cover_img_url %}{{ post.cover_img_url }}{% else %}{% static "images/placeholder.png" %}{% endif %}{% endif %}' alt="{{ post.slug }}"/>
+                                <img class="w-full h-full object-cover" src='{% if debug %}{% static "images/placeholder.png" %}{% else %}{% if post.cover_img_url %}{{ post.cover_img_url }}{% else %}{% static "images/placeholder.png" %}{% endif %}{% endif %}' alt="{{ post.slug }}"/>
                             </div>
                         </div>
                         <div class="absolute top-0 left-0 flex flex-row flex-wrap p-2 gap-x-1">
