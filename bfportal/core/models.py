@@ -4,11 +4,14 @@ from allauth.socialaccount.models import SocialAccount
 from core.utils.helper import safe_cast
 from django import forms
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
 from django.db.models import Value as V
 from django.db.models.functions import Concat
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
@@ -447,6 +450,24 @@ def social_user(discord_id: int):
         return usr
     except ObjectDoesNotExist:
         return False
+
+
+class Profile(models.Model):
+    """Class that tracks extra data about user"""
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    favorites = models.ManyToManyField(ExperiencePage)
+
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        """Called when a new user is created"""
+        if created:
+            Profile.objects.create(user=instance)
+
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        """Called when a user data is updated"""
+        instance.profile.save()
 
 
 class ProfilePage(RoutablePageMixin, CustomBasePage):
