@@ -1,4 +1,6 @@
+import operator
 from datetime import datetime
+from functools import reduce
 
 from allauth.socialaccount.models import SocialAccount
 from core.utils.helper import safe_cast
@@ -8,6 +10,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
+from django.db.models import Q
 from django.db.models import Value as V
 from django.db.models.functions import Concat
 from django.db.models.signals import post_save
@@ -37,7 +40,6 @@ from bfportal.settings.base import LOGIN_URL
 def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
     """Applies get param filters to database and returns posts"""
     all_posts = posts
-    logger.debug("Starting filtering Posts")
     if experience := request.GET.get("experience", None):
         logger.debug(f"Experience Name :- {experience}")
         all_posts = all_posts.filter(title__contains=experience)
@@ -73,16 +75,10 @@ def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
 
     if category := request.GET.getlist("category", None):
         category = list(map(str.lower, category))
-        logger.debug(category)
         post: ExperiencePage
-        all_posts = [
-            post
-            for post in all_posts
-            if any(
-                i in category
-                for i in [cat.name.lower() for cat in post.categories.all()]
-            )
-        ]
+        all_posts = all_posts.filter(
+            reduce(operator.or_, (Q(category__name__iexact=cat) for cat in category))
+        )
 
     if tags or category:
         logger.debug(
