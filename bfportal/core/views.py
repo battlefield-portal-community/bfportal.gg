@@ -8,7 +8,7 @@ from core.models import ExperiencePage, ExperiencesCategory, ExperiencesPage, Ho
 from core.utils.helper import unique_slug_generator
 from dal import autocomplete
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
 from loguru import logger
@@ -229,3 +229,25 @@ class TagsAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         """Returns all the tags that match the condition"""
         return filter_startswith(Tag, self.q, max_count=10)
+
+
+@login_required
+def handle_favorite_request(request: HttpRequest, page_id):
+    """favorite/un-favorite"""
+    try:
+        page = ExperiencePage.objects.get(id=page_id)
+        user = request.user
+        user_fav = user.profile.favorites
+        if page not in user_fav.all():
+            user_fav.add(page)
+            page.favorites += 1
+            resp = HttpResponse("favorite", status=201)
+        else:
+            user_fav.remove(page)
+            page.favorites -= 1
+            resp = HttpResponse("un-favorite", status=201)
+        user.save()
+        page.save()
+        return resp
+    except ExperiencePage.DoesNotExist:
+        return HttpResponse("experience does not exits", status=404)
