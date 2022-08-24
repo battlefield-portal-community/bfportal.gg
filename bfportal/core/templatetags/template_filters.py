@@ -68,4 +68,5 @@ def check_cats(cats: SubCategory, cat: str):
 @register.filter("is_liked_by_user")
 def check_liked(post: ExperiencePage, request: HttpRequest) -> bool:
     """Returns True if liked by user"""
-    return post in request.user.profile.liked.all()
+    if request.user.is_authenticated:
+        return post in request.user.profile.liked.all()
