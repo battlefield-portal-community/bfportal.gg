@@ -232,22 +232,20 @@ class TagsAutocomplete(autocomplete.Select2QuerySetView):
 
 
 @login_required
-def handle_favorite_request(request: HttpRequest, page_id):
+def handle_like_request(request: HttpRequest, page_id):
     """favorite/un-favorite"""
     try:
         page = ExperiencePage.objects.get(id=page_id)
         user = request.user
-        user_fav = user.profile.favorites
+        user_fav = user.profile.liked
         if page not in user_fav.all():
             user_fav.add(page)
-            page.favorites += 1
-            resp = HttpResponse("favorite", status=201)
+            page.likes += 1
         else:
             user_fav.remove(page)
-            page.favorites -= 1
-            resp = HttpResponse("un-favorite", status=201)
+            page.likes -= 1
         user.save()
         page.save()
-        return resp
+        return HttpResponse(f"{page.likes}", status=201)
     except ExperiencePage.DoesNotExist:
         return HttpResponse("experience does not exits", status=404)

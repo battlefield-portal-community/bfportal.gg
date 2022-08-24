@@ -1,7 +1,8 @@
 import re
 from urllib.parse import parse_qs, urlparse
 
-from core.models import SubCategory
+from core.models import ExperiencePage, SubCategory
+from django.http import HttpRequest
 from django.template.defaulttags import register
 
 
@@ -62,3 +63,9 @@ def get_exp_code(url: str) -> str:
 def check_cats(cats: SubCategory, cat: str):
     """Returns True if a category is in queryset"""
     return cat in list(map(lambda x: x.name, cats.all()))
+
+
+@register.filter("is_liked_by_user")
+def check_liked(post: ExperiencePage, request: HttpRequest) -> bool:
+    """Returns True if liked by user"""
+    return post in request.user.profile.liked.all()

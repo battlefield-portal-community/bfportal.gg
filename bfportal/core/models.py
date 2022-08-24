@@ -352,9 +352,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
     )
     first_publish = models.BooleanField(default=True, null=False)
 
-    favorites = models.IntegerField(
-        default=0, null=False, help_text="Number of favorites"
-    )
+    likes = models.IntegerField(default=0, null=False, help_text="Number of likes")
 
     content_panels = (
         Page.content_panels
@@ -367,7 +365,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
                     ),
                     FieldPanel("bugged", classname="full"),
                     FieldPanel("description", classname="full"),
-                    FieldPanel("favorites", classname="full"),
+                    FieldPanel("likes", classname="full"),
                     FieldPanel("category", widget=forms.RadioSelect),
                     FieldPanel("sub_categories", widget=forms.CheckboxSelectMultiple),
                 ],
@@ -456,14 +454,16 @@ class Profile(models.Model):
     """Class that tracks extra data about user"""
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    favorites = models.ManyToManyField(ExperiencePage)
+    liked = models.ManyToManyField(ExperiencePage)
 
+    @staticmethod
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         """Called when a new user is created"""
         if created:
             Profile.objects.create(user=instance)
 
+    @staticmethod
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
         """Called when a user data is updated"""

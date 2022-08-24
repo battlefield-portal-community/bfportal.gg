@@ -26,12 +26,14 @@
                                     <p class="align-bottom text-white">Experience Bugged</p>
                                 </div>
                             {% endif %}
-                            <div class="absolute bottom-0 right-0 w-min-14 pl-6 pr-2.5 pt-1.5 text-white text-sm group-hover:bg-bg-default clickable fav-container" style="--rect-url: url('{% static 'svgs/card-fav-rect.svg' %}');">
+                            <div id="like-count-{{ post.id }}" class="absolute bottom-0 right-0 w-min-14 pl-6 pr-2.5 pt-1.5 text-white text-sm group-hover:bg-bg-default clickable fav-container" style="--rect-url: url('{% static 'svgs/card-fav-rect.svg' %}');" onclick="add_to_liked(this)">
                                 <div class="flex flex-row gap-2 font-medium pb-1.5">
-                                    {% if post.favorites > 0 %}
-                                        <p id="fav-count-{{ post.id }}">{{ post.favorites }}</p>
+                                    <p id="fav-count-{{ post.id }}" class="{% if post.likes == 0 %} hidden {% endif %}">{{ post.likes }}</p>
+                                    {% if post|is_liked_by_user:request %}
+                                    <img id="like-svg-{{ post.id }}" class="block" src="{% static 'svgs/card/heart_liked.svg' %}" alt="non">
+                                    {% else %}
+                                    <img id="like-svg-{{ post.id }}" class="block" src="{% static 'svgs/card/heart_not_liked.svg' %}" alt="non">
                                     {% endif %}
-                                    <img src="{% static 'svgs/card/heart_not_liked.svg' %}" alt="non">
                                 </div>
                             </div>
                         </div>
@@ -137,5 +139,29 @@
         window.getSelection().removeAllRanges();// to deselect
         elem.nextElementSibling.textContent = "[Copied!!]";
 
+    }
+    function add_to_liked(elem){
+        const id = elem.id.split('-').pop();
+        fetch(`/api/like/${id}/`).then(
+            function (resp) {
+                return resp.json()
+            }
+        ).then(function (data) {
+            const elem = document.getElementById(`fav-count-${id}`),
+                like_svg = document.getElementById(`like-svg-${id}`)
+            if (elem.textContent && data > elem.textContent) {
+                like_svg.src = "{% static 'svgs/card/heart_liked.svg' %}"
+            } else {
+                like_svg.src = "{% static 'svgs/card/heart_not_liked.svg' %}"
+            }
+            elem.textContent = data
+            if (elem.textContent === "0"){
+                elem.classList.remove("block")
+                elem.classList.add("hidden")
+            } else {
+                elem.classList.add("block")
+                elem.classList.remove("hidden")
+            }
+        })
     }
 </script>

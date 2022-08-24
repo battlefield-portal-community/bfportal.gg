@@ -1,4 +1,4 @@
-from core.views import CategoriesAutocomplete, TagsAutocomplete, handle_favorite_request
+from core.views import CategoriesAutocomplete, TagsAutocomplete, handle_like_request
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
@@ -36,7 +36,7 @@ urlpatterns = [
     path("api/tags/", TagsAutocomplete.as_view(), name="tags-autocomplete"),
     re_path(
         r"^api/like/(\d+)/$",
-        handle_favorite_request,
+        handle_like_request,
         name="add_like_to_experience_page",
     ),
 ]
