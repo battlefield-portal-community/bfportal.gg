@@ -13,6 +13,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.templatetags.static import static
+from django.utils.timezone import timezone
 from embed_video.fields import EmbedVideoField
 from loguru import logger
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -51,6 +52,9 @@ def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
         to_date = datetime.utcnow()  # use date provided else use current time
     else:
         to_date = datetime.fromisoformat(to_date)
+
+    from_date = from_date.replace(tzinfo=timezone.utc)
+    to_date = to_date.replace(tzinfo=timezone.utc)
 
     logger.debug(f"From {from_date} to {to_date}")
     all_posts = all_posts.filter(first_published_at__range=(from_date, to_date))
