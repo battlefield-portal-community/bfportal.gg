@@ -1,4 +1,11 @@
-from core.models import ExperiencesCategory, ExperiencesPage, HomePage, ProfilePage
+from core.models import (
+    ExperiencesCategory,
+    ExperiencesPage,
+    HomePage,
+    Profile,
+    ProfilePage,
+)
+from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 from loguru import logger
 from wagtail.core.models import Page, Site
@@ -37,3 +44,8 @@ class Command(BaseCommand):
                 cat_obj = ExperiencesCategory(name=cat)
                 cat_obj.save()
             logger.info("Adding Experience Categories Successful")
+
+        for user in User.objects.all():
+            if not hasattr(user, "profile"):
+                user.profile = Profile()
+                user.save()

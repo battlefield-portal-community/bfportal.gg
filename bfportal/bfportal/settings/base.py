@@ -132,7 +132,9 @@ DATABASES = {
         "NAME": os.environ.get("DB_NAME", "postgres"),
         "USER": os.environ.get("DB_USERNAME", "postgres"),
         "PASSWORD": os.environ.get("DB_PASSWORD"),
-        "HOST": os.environ.get("POSTGRES_HOST", "db"),  # fall back to docker default
+        "HOST": os.environ.get(
+            "POSTGRES_HOST", "127.0.0.1"
+        ),  # fall back to docker default
         "PORT": "5432",
     }
 }

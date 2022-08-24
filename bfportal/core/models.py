@@ -1,18 +1,25 @@
+import operator
 from datetime import datetime
+from functools import reduce
 
 from allauth.socialaccount.models import SocialAccount
 from core.utils.helper import safe_cast
 from django import forms
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
+from django.db.models import Q
 from django.db.models import Value as V
 from django.db.models.functions import Concat
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.templatetags.static import static
+from django.utils.timezone import timezone
 from embed_video.fields import EmbedVideoField
 from loguru import logger
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -26,8 +33,6 @@ from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.models import register_snippet
-from wagtail_color_panel.edit_handlers import NativeColorPanel
-from wagtail_color_panel.fields import ColorField
 
 from bfportal.settings.base import LOGIN_URL
 
@@ -35,7 +40,6 @@ from bfportal.settings.base import LOGIN_URL
 def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
     """Applies get param filters to database and returns posts"""
     all_posts = posts
-    logger.debug("Starting filtering Posts")
     if experience := request.GET.get("experience", None):
         logger.debug(f"Experience Name :- {experience}")
         all_posts = all_posts.filter(title__contains=experience)
@@ -51,6 +55,9 @@ def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
         to_date = datetime.utcnow()  # use date provided else use current time
     else:
         to_date = datetime.fromisoformat(to_date)
+
+    from_date = from_date.replace(tzinfo=timezone.utc)
+    to_date = to_date.replace(tzinfo=timezone.utc)
 
     logger.debug(f"From {from_date} to {to_date}")
     all_posts = all_posts.filter(first_published_at__range=(from_date, to_date))
@@ -68,16 +75,10 @@ def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
 
     if category := request.GET.getlist("category", None):
         category = list(map(str.lower, category))
-        logger.debug(category)
         post: ExperiencePage
-        all_posts = [
-            post
-            for post in all_posts
-            if any(
-                i in category
-                for i in [cat.name.lower() for cat in post.categories.all()]
-            )
-        ]
+        all_posts = all_posts.filter(
+            reduce(operator.or_, (Q(category__name__iexact=cat) for cat in category))
+        )
 
     if tags or category:
         logger.debug(
@@ -170,10 +171,6 @@ class ExperiencesCategory(models.Model):
     """Class defining properties of experience category tag"""
 
     name = models.CharField(max_length=255)
-    bg_color = ColorField(default="#474c50")
-    bg_hover_color = ColorField(default="#474c50")
-    text_color = ColorField(default="#000000")
-    text_hover_color = ColorField(default="#000000")
     icon = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -184,16 +181,6 @@ class ExperiencesCategory(models.Model):
 
     panels = [
         FieldPanel("name"),
-        MultiFieldPanel(
-            [
-                NativeColorPanel("bg_color"),
-                NativeColorPanel("bg_hover_color"),
-                NativeColorPanel("text_color"),
-                NativeColorPanel("text_hover_color"),
-            ],
-            heading="Colors Info",
-            classname="collapsible",
-        ),
         ImageChooserPanel("icon"),
     ]
 
@@ -201,10 +188,35 @@ class ExperiencesCategory(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = "experiences categories"
+        verbose_name_plural = "Main Categories"
+
+
+class SubCategory(models.Model):
+    """Class defining properties of experience sub categories"""
+
+    name = models.CharField(max_length=255)
+    icon = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
+
+    panels = [
+        FieldPanel("name"),
+        ImageChooserPanel("icon"),
+    ]
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = "Sub Categories"
 
 
 register_snippet(ExperiencesCategory)
+register_snippet(SubCategory)
 
 
 class ExperiencePageTag(TaggedItemBase):
@@ -315,11 +327,28 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         help_text="Max Number of Bots in your experience",
         verbose_name="Number Of Bots",
     )
-    categories = ParentalManyToManyField(
-        "core.ExperiencesCategory", blank=False, help_text="Choose from the Category"
+    # todo: migrate this to main-cats, sub-cats usage
+    category = models.ForeignKey(
+        ExperiencesCategory,
+        blank=False,
+        null=True,
+        on_delete=models.SET_NULL,
+        help_text="Choose Main Category",
+        related_name="+",
+    )
+    sub_categories = ParentalManyToManyField(
+        "core.SubCategory", blank=True, help_text="Choose Sub Category Category"
     )
 
+    bugged = models.BooleanField(
+        default=False,
+        null=False,
+        help_text="Is the experience bugged",
+        verbose_name="Bugged ?",
+    )
     first_publish = models.BooleanField(default=True, null=False)
+
+    likes = models.IntegerField(default=0, null=False, help_text="Number of likes")
 
     content_panels = (
         Page.content_panels
@@ -330,8 +359,11 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
                         "featured",
                         classname="full",
                     ),
+                    FieldPanel("bugged", classname="full"),
                     FieldPanel("description", classname="full"),
-                    FieldPanel("categories", widget=forms.CheckboxSelectMultiple),
+                    FieldPanel("likes", classname="full"),
+                    FieldPanel("category", widget=forms.RadioSelect),
+                    FieldPanel("sub_categories", widget=forms.CheckboxSelectMultiple),
                 ],
                 heading="Basic Info",
                 classname="collapsible",
@@ -412,6 +444,26 @@ def social_user(discord_id: int):
         return usr
     except ObjectDoesNotExist:
         return False
+
+
+class Profile(models.Model):
+    """Class that tracks extra data about user"""
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    liked = models.ManyToManyField(ExperiencePage)
+
+    @staticmethod
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        """Called when a new user is created"""
+        if created:
+            Profile.objects.create(user=instance)
+
+    @staticmethod
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        """Called when a user data is updated"""
+        instance.profile.save()
 
 
 class ProfilePage(RoutablePageMixin, CustomBasePage):
