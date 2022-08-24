@@ -19,6 +19,11 @@ body {
     mask-size: auto 100%;
 }
 
+.bugged{
+    background-image: var(--alert-svg);
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+}
 body::-webkit-scrollbar {
   width: 5px;
 }

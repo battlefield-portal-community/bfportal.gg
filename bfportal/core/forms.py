@@ -20,7 +20,8 @@ class ExperiencePageForm(forms.ModelForm):
         fields = [
             "title",
             "description",
-            "categories",
+            "category",
+            "sub_categories",
             "exp_url",
             "code",
             "tags",
@@ -32,7 +33,8 @@ class ExperiencePageForm(forms.ModelForm):
         error_messages = {"categories": {"required": "Select at least one category"}}
 
     field_order = [
-        "categories",
+        "category",
+        "sub_categories",
         "exp_url",
         "code",
         "title",

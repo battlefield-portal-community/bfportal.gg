@@ -27,8 +27,6 @@ from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.models import register_snippet
-from wagtail_color_panel.edit_handlers import NativeColorPanel
-from wagtail_color_panel.fields import ColorField
 
 from bfportal.settings.base import LOGIN_URL
 
@@ -174,10 +172,6 @@ class ExperiencesCategory(models.Model):
     """Class defining properties of experience category tag"""
 
     name = models.CharField(max_length=255)
-    bg_color = ColorField(default="#474c50")
-    bg_hover_color = ColorField(default="#474c50")
-    text_color = ColorField(default="#000000")
-    text_hover_color = ColorField(default="#000000")
     icon = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -188,16 +182,6 @@ class ExperiencesCategory(models.Model):
 
     panels = [
         FieldPanel("name"),
-        MultiFieldPanel(
-            [
-                NativeColorPanel("bg_color"),
-                NativeColorPanel("bg_hover_color"),
-                NativeColorPanel("text_color"),
-                NativeColorPanel("text_hover_color"),
-            ],
-            heading="Colors Info",
-            classname="collapsible",
-        ),
         ImageChooserPanel("icon"),
     ]
 
@@ -205,10 +189,35 @@ class ExperiencesCategory(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = "experiences categories"
+        verbose_name_plural = "Main Categories"
+
+
+class SubCategory(models.Model):
+    """Class defining properties of experience sub categories"""
+
+    name = models.CharField(max_length=255)
+    icon = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
+
+    panels = [
+        FieldPanel("name"),
+        ImageChooserPanel("icon"),
+    ]
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = "Sub Categories"
 
 
 register_snippet(ExperiencesCategory)
+register_snippet(SubCategory)
 
 
 class ExperiencePageTag(TaggedItemBase):
@@ -319,10 +328,25 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         help_text="Max Number of Bots in your experience",
         verbose_name="Number Of Bots",
     )
-    categories = ParentalManyToManyField(
-        "core.ExperiencesCategory", blank=False, help_text="Choose from the Category"
-    )  # todo: migrate this to main-cats, sub-cats usage
+    # todo: migrate this to main-cats, sub-cats usage
+    category = models.ForeignKey(
+        ExperiencesCategory,
+        blank=False,
+        null=True,
+        on_delete=models.SET_NULL,
+        help_text="Choose Main Category",
+        related_name="+",
+    )
+    sub_categories = ParentalManyToManyField(
+        "core.SubCategory", blank=True, help_text="Choose Sub Category Category"
+    )
 
+    bugged = models.BooleanField(
+        default=False,
+        null=False,
+        help_text="Is the experience bugged",
+        verbose_name="Bugged ?",
+    )
     first_publish = models.BooleanField(default=True, null=False)
 
     content_panels = (
@@ -334,8 +358,10 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
                         "featured",
                         classname="full",
                     ),
+                    FieldPanel("bugged", classname="full"),
                     FieldPanel("description", classname="full"),
-                    FieldPanel("categories", widget=forms.CheckboxSelectMultiple),
+                    FieldPanel("category", widget=forms.RadioSelect),
+                    FieldPanel("sub_categories", widget=forms.CheckboxSelectMultiple),
                 ],
                 heading="Basic Info",
                 classname="collapsible",
@@ -405,13 +431,6 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
     @staticmethod
     def is_experience_page():  # noqa: D102
         return True
-
-    def is_prefab(self):  # todo: migrate this to main-cats, sub-cats usage
-        """Returns True if experience is a prefab"""
-        cats = list(map(lambda x: x.name, self.categories.all()))
-        if "Prefab" in cats:
-            return True
-        return False
 
 
 def social_user(discord_id: int):

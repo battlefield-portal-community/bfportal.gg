@@ -1,6 +1,7 @@
 import re
 from urllib.parse import parse_qs, urlparse
 
+from core.models import SubCategory
 from django.template.defaulttags import register
 
 
@@ -55,3 +56,9 @@ def get_exp_code(url: str) -> str:
     playgroundId=45e436e0-4cf7-11ec-be7b-76c50778a53a
     """
     return parse_qs(urlparse(url).query).get("playgroundId", ["null"])[0]
+
+
+@register.filter("hasCategory")
+def check_cats(cats: SubCategory, cat: str):
+    """Returns True if a category is in queryset"""
+    return cat in list(map(lambda x: x.name, cats.all()))

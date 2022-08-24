@@ -19,6 +19,13 @@
                                 <img class="w-full h-full object-cover" src='{% if debug %}{% static "images/placeholder.png" %}{% else %}{% if post.cover_img_url %}{{ post.cover_img_url }}{% else %}{% static "images/placeholder.png" %}{% endif %}{% endif %}' alt="{{ post.slug }}"/>
                             </div>
                             <!-- fav count -->
+                            {% if post.bugged %}
+                                <div class="absolute bottom-0 inset-x-0 w-full h-20 bugged" style="--alert-svg: url('{% static 'svgs/card/red_alert_bg.svg' %}') "></div>
+                                <div class="absolute bottom-0 flex flex-row gap-x-1 mb-1 ml-1 text-xs">
+                                    <img width="14" height="14" src="{% static 'svgs/card/Alert.svg' %}">
+                                    <p class="align-bottom text-white">Experience Bugged</p>
+                                </div>
+                            {% endif %}
                             <div class="absolute bottom-0 right-0 w-min-14 pl-6 pr-2.5 pt-1.5 text-white text-sm group-hover:bg-bg-default clickable fav-container" style="--rect-url: url('{% static 'svgs/card-fav-rect.svg' %}');">
                                 <div class="flex flex-row gap-2 font-medium pb-1.5">
                                     <p id="fav-count-{{ post.id }}">15</p>
@@ -31,19 +38,20 @@
                     <div class="grid grid-cols-1 grid-flow-row mt-3 h-1/3">
                         <!-- cats -->
                         <div class="flex flex-row flex-wrap gap-x-1 mb-2">
-                            {% for cat in post.categories.all %}
-                            <a href="/experiences/?category={{ cat }}">
-                                <p class="text-bf2042-4 text-xs"> {{ cat }}</p>
+                            <a href="/experiences/?category={{ post.category }}">
+{#                                <img class="inline" src="{% get_static_prefix %}svgs/cats/main/{{ post.category|lower }}.svg">#}
+                                <p class="text-bf2042-4 text-xs inline"> {{ post.category|capfirst }}</p>
                             </a>
-                            {% endfor %}
                         </div>
                         <!-- title -->
                         <a href="{{ post.url }}" class="main-link">
                             <div class="font-semibold text-xl text-white h-9 w-full truncate">
-                                {{ post.title|title }}
                                 {% if post.featured %}
-                                    <img src="{% static 'images/icons/featured.png' %}" class="w-6 inline-block">
+                                    <img src="{% static 'svgs/cats/featured.svg' %}" class="inline">
+                                {% elif post.sub_categories.all|hasCategory:"Jam" %}
+                                    <img src="{% static 'svgs/cats/sub/portal_jam.svg' %}" class="inline">
                                 {% endif %}
+                                {{ post.title|title }}
                             </div>
                         </a>
                         <!-- desc -->
@@ -51,10 +59,11 @@
 
                         <!-- Share code -->
                         <div class="flex flex-col mt-4">
-                        {% if post.is_prefab %}
+                        {% if post.category == "Prefab" %}
                             <div class="bg-bf2042-4 font-bold w-min px-6 py-2.5 mx-auto rounded-lg hover:bg-bf2042-6 transition duration-200 ease-in-out">
                                 <p>Edit</p>
                             </div>
+                            <p class="text-[8px] text-white mx-auto pt-1 font-semibold">{{ post.code }}</p>
                         {% else %}
                         {% with post.code as share_code %}
                             {% if share_code|length %}
@@ -63,7 +72,7 @@
                                 </div>
                             {% endif %}
                             {% if post.exp_url|length %}
-                                <p class="text-[8px] text-white mx-auto pt-1">Editable
+                                <p class="text-[8px] text-white mx-auto pt-1 font-semibold">Editable
                                 <img class="inline" src="{% static 'svgs/card/open_link.svg' %}">
                                 </p>
                             {% endif %}
