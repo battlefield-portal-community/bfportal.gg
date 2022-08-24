@@ -2,16 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-.category_pill {
-    background-color: var(--category_pill_bg_color);
-    color: var(--category_pill_text_color);
-    transition-property: background-color, color;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 200ms;
+@font-face {
+    font-family: "MONTSERRAT";
+    src: local('Montserrat'),
+        url("../fonts/Montserrat/Montserrat-VF.ttf") format("truetype") tech('variation');
 }
-.experience_container:hover .category_pill {
-    background-color: var(--category_pill_bg_hover_color);
-    color: var(--category_pill_text_hover_color);
+body {
+    font-family: MONTSERRAT, sans-serif;
+}
+
+.fav-container {
+    background-color: #262626;
+    -webkit-mask-image: var(--rect-url);
+    mask-image: var(--rect-url);
+    mask-repeat: no-repeat;
+    mask-size: auto 100%;
 }
 
 body::-webkit-scrollbar {

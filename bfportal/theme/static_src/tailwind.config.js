@@ -49,7 +49,7 @@ module.exports = {
                 'bg-default' : '#121212',
                 'bg-light' : '#656565',
                 'default' : '#121212',
-                'card-bg' : '#1c1c1c',
+                'card-bg' : '#262626',
                 'hover-bg-light': '#373b3d',
                 'accent-bg' : '#303030',
                 'discord-dark': "#303434",
@@ -91,7 +91,10 @@ module.exports = {
             backgroundImage: {
                 'bf_stripe_bg' : "url('/static/images/bf_stripe_bg.png')",
                 'repeated-square' : "url('/static/images/repeated-square-dark.png')",
-            }
+            },
+            fontFamily: {
+                montserrat: ["MONTSERRAT", "sans-serif"],
+            },
         }
     },
     plugins: [

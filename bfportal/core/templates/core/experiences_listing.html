@@ -10,57 +10,80 @@
 
     <div class="flex flex-wrap flex-row justify-center gap-x-3 gap-y-5">
         {% for post in posts %}
-            <div class="static experience_container group block h-[30rem] w-96 bg-accent-bg rounded-lg scroll-mt-6 hover:shadow-xl hover:cursor-pointer hover:drop-shadow-bf2042-4 hover:-translate-y-2 transition duration-500 ease-in-out">
+            <div class="grow-0 relative experience_container group block h-[26rem] w-64 bg-card-bg rounded-lg scroll-mt-6 hover:bg-bg-default hover:cursor-pointer hover:-translate-y-2 transition duration-200 ease-in-out">
                 <div class="m-2">
-                    <div class="-m-2 drop-shadow-xl h-3/5">
-                        <div class="h-72">
+                    <!-- cover image -->
+                    <div class="-m-2 h-3/5 relative">
+                        <div class="h-48">
                             <div class="rounded-lg w-full h-full">
                                 <img class="w-full h-full object-cover" src='{% if debug %}{% static "images/placeholder.png" %}{% else %}{% if post.cover_img_url %}{{ post.cover_img_url }}{% else %}{% static "images/placeholder.png" %}{% endif %}{% endif %}' alt="{{ post.slug }}"/>
                             </div>
-                        </div>
-                        <div class="absolute top-0 left-0 flex flex-row flex-wrap p-2 gap-x-1">
-                            {% for cat in post.categories.all %}
-                                <a href="/experiences/?category={{ cat }}">
-                                <p class="category_pill font-semibold oldstyle-nums font-sans border border-transparent rounded-lg px-2 hover:border hover:border-white" style="--category_pill_bg_color: {{ cat.bg_color }}; --category_pill_bg_hover_color: {{ cat.bg_hover_color }}; --category_pill_text_color: {{ cat.text_color }}; --category_pill_text_hover_color: {{ cat.text_hover_color }}">
-                                    {% image cat.icon width-24 class="inline-block" %}
-                                    {{ cat }}
-                                </p>
-                                </a>
-                            {% endfor %}
+                            <!-- fav count -->
+                            <div class="absolute bottom-0 right-0 w-min-14 pl-6 pr-2.5 pt-1.5 text-white text-sm group-hover:bg-bg-default clickable fav-container" style="--rect-url: url('{% static 'svgs/card-fav-rect.svg' %}');">
+                                <div class="flex flex-row gap-2 font-medium pb-1.5">
+                                    <p id="fav-count-{{ post.id }}">15</p>
+                                    <img src="{% static 'svgs/card/heart_not_liked.svg' %}" alt="non">
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 grid-flow-row mt-3 h-1/3 gap-y-2">
+                    <!-- info -->
+                    <div class="grid grid-cols-1 grid-flow-row mt-3 h-1/3">
+                        <!-- cats -->
+                        <div class="flex flex-row flex-wrap gap-x-1 mb-2">
+                            {% for cat in post.categories.all %}
+                            <a href="/experiences/?category={{ cat }}">
+                                <p class="text-bf2042-4 text-xs"> {{ cat }}</p>
+                            </a>
+                            {% endfor %}
+                        </div>
+                        <!-- title -->
                         <a href="{{ post.url }}" class="main-link">
-                            <div class="font-bold font-mono text-3xl text-white h-9 w-full truncate">
+                            <div class="font-semibold text-xl text-white h-9 w-full truncate">
                                 {{ post.title|title }}
                                 {% if post.featured %}
                                     <img src="{% static 'images/icons/featured.png' %}" class="w-6 inline-block">
                                 {% endif %}
                             </div>
                         </a>
-                        <div class="text-gray-400 pb-4 h-12  text-ellipsis hover:shadow-bf2042-4 transition duration-200 ease-in-out overflow-hidden"><p>{{ post.description|truncatewords:15 }}</p></div>
-                        <div class=" flex text-xs gap-x-2 pt-2 h-7 w-full overflow-hidden">
-                            {% for tag in post.tags.all|slice:"0:5" %}
-                                <a href="/experiences/?tag={{ tag }}" class="border bg-discord-light-dark whitespace-nowrap border-2 text-white border-1/2  border-card-bg rounded-lg px-2 py-0 mb-1  group-hover:bg-gray-600 group-hover:border-bf2042-3  hover:border-bf2042-3 hover:drop-shadow-bf2042-3 transition duration-100 ease-in ">
-                                    {{ tag|title }}
-                                </a>
-                            {% endfor %}
+                        <!-- desc -->
+                        <div class="font-medium text-white h-12 w-max-52 text-xs text-ellipsis"><p class="pr-6">{{ post.description|truncatechars:75 }}</p></div>
+
+                        <!-- Share code -->
+                        <div class="flex flex-col mt-4">
+                        {% if post.is_prefab %}
+                            <div class="bg-bf2042-4 font-bold w-min px-6 py-2.5 mx-auto rounded-lg hover:bg-bf2042-6 transition duration-200 ease-in-out">
+                                <p>Edit</p>
+                            </div>
+                        {% else %}
+                        {% with post.code as share_code %}
+                            {% if share_code|length %}
+                                <div class="bg-bf2042-4 font-bold w-min px-6 py-2.5 mx-auto rounded-lg hover:bg-bf2042-6 transition duration-200 ease-in-out clickable" onclick="copyDivToClipboard(this)">
+                                    <p>{{ post.code }}</p>
+                                </div>
+                            {% endif %}
+                            {% if post.exp_url|length %}
+                                <p class="text-[8px] text-white mx-auto pt-1">Editable
+                                <img class="inline" src="{% static 'svgs/card/open_link.svg' %}">
+                                </p>
+                            {% endif %}
+                        {% endwith %}
+                        {% endif %}
 
                         </div>
-                        <div class="flex gap-x-2 text-xs text-white">
-                            Share code
-                            <span class="text-bf2042-4 font-bold hover:text-bf2042-6 transition duration-200 ease-in-out clickable" onclick="copyDivToClipboard(this)">{{ post.code }}</span>
-                            <span class="text-card-bg">[Click on code to copy]</span>
+                        <!-- owner info -->
+                        <div class="absolute flex inset-x-0 bottom-1.5">
+                            <div class="mx-auto text-xs font-medium text-white">
+                                By
+                                {% get_social_account post.owner as social_account %}
+                                {% if social_account %}
+                                    <a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-thin oldstyle-nums text-bf2042-4 hover:text-bf2042-6">{{social_account.extra_data.username}}</a>
+                                {% else %}
+                                    {{post.owner}}
+                                {% endif %}
+                                On {{post.first_published_at}}
+                            </div>
                         </div>
-                        <div class="text-xs font-semibold text-gray-500 mt-1">
-                            By
-                            {% get_social_account post.owner as social_account %}
-                            {% if social_account %}
-                                <a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-thin oldstyle-nums text-bf2042-3 hover:text-bf2042-6">{{social_account.extra_data.username}}</a>
-                            {% else %}
-                                {{post.owner}}
-                            {% endif %}
-                            On {{post.first_published_at}}</div>
                     </div>
                 </div>
 

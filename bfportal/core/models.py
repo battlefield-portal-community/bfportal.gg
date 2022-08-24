@@ -321,7 +321,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
     )
     categories = ParentalManyToManyField(
         "core.ExperiencesCategory", blank=False, help_text="Choose from the Category"
-    )
+    )  # todo: migrate this to main-cats, sub-cats usage
 
     first_publish = models.BooleanField(default=True, null=False)
 
@@ -405,6 +405,13 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
     @staticmethod
     def is_experience_page():  # noqa: D102
         return True
+
+    def is_prefab(self):  # todo: migrate this to main-cats, sub-cats usage
+        """Returns True if experience is a prefab"""
+        cats = list(map(lambda x: x.name, self.categories.all()))
+        if "Prefab" in cats:
+            return True
+        return False
 
 
 def social_user(discord_id: int):
