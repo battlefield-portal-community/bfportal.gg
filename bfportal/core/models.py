@@ -349,6 +349,10 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
     )
     first_publish = models.BooleanField(default=True, null=False)
 
+    favorites = models.IntegerField(
+        default=0, null=False, help_text="Number of favorites"
+    )
+
     content_panels = (
         Page.content_panels
         + [
@@ -360,6 +364,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
                     ),
                     FieldPanel("bugged", classname="full"),
                     FieldPanel("description", classname="full"),
+                    FieldPanel("favorites", classname="full"),
                     FieldPanel("category", widget=forms.RadioSelect),
                     FieldPanel("sub_categories", widget=forms.CheckboxSelectMultiple),
                 ],

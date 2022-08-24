@@ -28,7 +28,9 @@
                             {% endif %}
                             <div class="absolute bottom-0 right-0 w-min-14 pl-6 pr-2.5 pt-1.5 text-white text-sm group-hover:bg-bg-default clickable fav-container" style="--rect-url: url('{% static 'svgs/card-fav-rect.svg' %}');">
                                 <div class="flex flex-row gap-2 font-medium pb-1.5">
-                                    <p id="fav-count-{{ post.id }}">15</p>
+                                    {% if post.favorites > 0 %}
+                                        <p id="fav-count-{{ post.id }}">{{ post.favorites }}</p>
+                                    {% endif %}
                                     <img src="{% static 'svgs/card/heart_not_liked.svg' %}" alt="non">
                                 </div>
                             </div>
