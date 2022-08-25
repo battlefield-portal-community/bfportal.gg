@@ -174,3 +174,4 @@ tests/report/
 *_temp_*
 /bfportal/data/
 /bfportal/static
+/bfportal/theme/static/css/fonts/
