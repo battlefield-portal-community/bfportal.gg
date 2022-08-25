@@ -25,7 +25,6 @@ def send_new_publish_embed(request: HttpRequest, page: ExperiencePage):
     ):
         logger.debug("Trying to send new published request")
         page.first_publish = False
-        page.save()
         webhook_id = os.getenv("APPROVAL_SUCCESS_CHANNEL_WEBHOOK_ID")
         webhook_url = f"https://discord.com/api/webhooks/{webhook_id}/{token}"
         uid = SocialAccount.objects.get(user_id=page.owner.id).uid
@@ -94,8 +93,8 @@ def send_new_publish_embed(request: HttpRequest, page: ExperiencePage):
         result = requests.post(webhook_url, json=data, headers=headers)
         try:
             result.raise_for_status()
+            logger.debug(f"Experience embed for {page.title} sent successfully ")
+            page.save()
         except requests.exceptions.HTTPError as err:
             logger.debug(f"Error {err} while sending new experience for {page.title}")
             print(result.content)
-        else:
-            logger.debug("Experience embed for {page.title} sent successfully ")
