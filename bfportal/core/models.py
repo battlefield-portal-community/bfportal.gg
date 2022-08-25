@@ -18,7 +18,6 @@ from django.dispatch import receiver
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
-from django.templatetags.static import static
 from django.utils.timezone import timezone
 from embed_video.fields import EmbedVideoField
 from loguru import logger
@@ -310,7 +309,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
     )
     cover_img_url = models.URLField(
         blank=True,
-        default=static("images/placeholder.png"),
+        default="",
         help_text="Link for your cover Image",
         verbose_name="Cover Image Url",
     )

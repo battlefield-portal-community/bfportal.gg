@@ -10,6 +10,7 @@ from dal import autocomplete
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
+from django.templatetags.static import static
 from django.utils import timezone
 from loguru import logger
 from taggit.models import Tag
@@ -153,10 +154,11 @@ def submit_experience(request: HttpRequest, home_page: HomePage):
 
     else:
         form = ExperiencePageForm()
-        cover_img_url = ExperiencePage._meta.get_field("cover_img_url")
         form.fields[
             "cover_img_url"
-        ].initial = f"{request.scheme}://{request.get_host()}{cover_img_url.default}"
+        ].initial = (
+            f"{request.scheme}://{request.get_host()}{static('images/placeholder.png')}"
+        )
 
     return render(
         request,
