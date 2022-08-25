@@ -30,7 +30,7 @@ class ExperiencePageForm(forms.ModelForm):
             "cover_img_url",
             "vid_url",
         ]
-        error_messages = {"categories": {"required": "Select at least one category"}}
+        error_messages = {"category": {"required": "Select at least one category"}}
 
     field_order = [
         "category",

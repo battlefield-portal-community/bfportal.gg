@@ -133,11 +133,7 @@ def submit_experience(request: HttpRequest, home_page: HomePage):
             new_exp_page: ExperiencePage = form.save(commit=False)
             new_exp_page.slug = unique_slug_generator(new_exp_page)
             new_exp_page.tags.add(*form.cleaned_data["tags"])
-            selected = form.cleaned_data["categories"]
-            if selected:
-                new_exp_page.categories.clear()
-                for cat in selected:
-                    new_exp_page.categories.add(cat)
+            new_exp_page.category = form.cleaned_data["category"]
             new_exp_page.owner = request.user
             new_exp: ExperiencePage = ExperiencesPage.objects.all()[0].add_child(
                 instance=new_exp_page
@@ -178,11 +174,7 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
     if request.method == "POST":
         form = ExperiencePageForm(request.POST, instance=experience_page)
         if form.is_valid():
-            selected = form.cleaned_data["categories"]
-            if selected:
-                experience_page.categories.clear()
-                for cat in selected:
-                    experience_page.categories.add(cat)
+            experience_page.category = form.cleaned_data["category"]
             experience_page.save_revision(
                 submitted_for_moderation=True, user=request.user, changed=True
             )
