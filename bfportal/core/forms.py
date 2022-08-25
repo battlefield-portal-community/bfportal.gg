@@ -46,13 +46,6 @@ class ExperiencePageForm(forms.ModelForm):
         "vid_url",
     ]
 
-    def clean_category(self):
-        """Called when categories field is being validated"""
-        cats = self.cleaned_data["category"]
-        if len(cats) > 1:
-            raise forms.ValidationError("Select no more than 1.")
-        return self.cleaned_data["category"]
-
     def clean_code(self):
         """Called when code field is being validated"""
         code = self.cleaned_data["code"]

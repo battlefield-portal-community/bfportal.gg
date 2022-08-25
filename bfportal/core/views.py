@@ -138,6 +138,8 @@ def submit_experience(request: HttpRequest, home_page: HomePage):
             new_exp: ExperiencePage = ExperiencesPage.objects.all()[0].add_child(
                 instance=new_exp_page
             )
+            for cats in form.cleaned_data["sub_categories"]:
+                new_exp_page.sub_categories.add(cats)
             if new_exp:
                 new_exp.unpublish()
                 new_exp.save_revision(submitted_for_moderation=True, user=request.user)
@@ -174,7 +176,6 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
     if request.method == "POST":
         form = ExperiencePageForm(request.POST, instance=experience_page)
         if form.is_valid():
-            experience_page.category = form.cleaned_data["category"]
             experience_page.save_revision(
                 submitted_for_moderation=True, user=request.user, changed=True
             )
