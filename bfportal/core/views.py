@@ -153,6 +153,10 @@ def submit_experience(request: HttpRequest, home_page: HomePage):
 
     else:
         form = ExperiencePageForm()
+        cover_img_url = ExperiencePage._meta.get_field("cover_img_url")
+        form.fields[
+            "cover_img_url"
+        ].initial = f"{request.scheme}://{request.get_host()}{cover_img_url.default}"
 
     return render(
         request,
