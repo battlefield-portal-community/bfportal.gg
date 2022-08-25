@@ -2,17 +2,16 @@ import os
 
 import requests
 from allauth.socialaccount.models import SocialAccount
-from core import get_page_url
 from core.models import ExperiencePage
-from django.http import HttpRequest
+from django.contrib.sites.models import Site
 from loguru import logger
-from wagtail import hooks
-
-logger.debug("Registering hooks")
+from wagtail.signals import page_published
 
 
-@hooks.register("after_publish_page")
-def send_new_publish_embed(request: HttpRequest, page: ExperiencePage):
+def send_to_discord(sender, **kwargs):
+    """A signal receiver that accepts signal for ExperiencePage and posts to discord"""
+    page: ExperiencePage
+    page = kwargs["instance"]
     """Tries to send an embed to tell that new experience has been published
 
     discord channel specified by APPROVAL_SUCCESS_CHANNEL_WEBHOOK_ID env
@@ -28,7 +27,8 @@ def send_new_publish_embed(request: HttpRequest, page: ExperiencePage):
         webhook_id = os.getenv("APPROVAL_SUCCESS_CHANNEL_WEBHOOK_ID")
         webhook_url = f"https://discord.com/api/webhooks/{webhook_id}/{token}"
         uid = SocialAccount.objects.get(user_id=page.owner.id).uid
-        url = get_page_url(request, page)
+        domain = Site.objects.get_current().domain
+        url = f"http://{domain}{page.get_url()}"
         data = {
             "content": "> **New Experience Posted :tada::tada:**",
             "embeds": [
@@ -98,3 +98,7 @@ def send_new_publish_embed(request: HttpRequest, page: ExperiencePage):
         except requests.exceptions.HTTPError as err:
             logger.debug(f"Error {err} while sending new experience for {page.title}")
             print(result.content)
+
+
+logger.debug("registering signal receivers")
+page_published.connect(send_to_discord)
