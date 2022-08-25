@@ -15,10 +15,10 @@
                     <!-- cover image -->
                     <div class="-m-2 h-3/5 relative">
                         <div class="h-48">
-                            <div class="rounded-lg w-full h-full">
-                                <img class="w-full h-full object-cover" src='{% if debug %}{% static "images/placeholder.png" %}{% else %}{% if post.cover_img_url %}{{ post.cover_img_url }}{% else %}{% static "images/placeholder.png" %}{% endif %}{% endif %}' alt="{{ post.slug }}"/>
+                            <div class="w-full h-full">
+                                <img class="w-full h-full object-cover rounded-t-lg" src='{% if debug %}{% static "images/placeholder.png" %}{% else %}{% if post.cover_img_url %}{{ post.cover_img_url }}{% else %}{% static "images/placeholder.png" %}{% endif %}{% endif %}' alt="{{ post.slug }}"/>
                             </div>
-                            <!-- fav count -->
+                            <!-- like count -->
                             {% if post.bugged %}
                                 <div class="absolute bottom-0 inset-x-0 w-full h-20 bugged" style="--alert-svg: url('{% static 'svgs/card/red_alert_bg.svg' %}') "></div>
                                 <div class="absolute bottom-0 flex flex-row gap-x-1 mb-1 ml-1 text-xs">
@@ -26,7 +26,7 @@
                                     <p class="align-bottom text-white">Experience Bugged</p>
                                 </div>
                             {% endif %}
-                            <div id="like-count-{{ post.id }}" class="absolute bottom-0 right-0 w-min-14 pl-6 pr-2.5 pt-1.5 text-white text-sm group-hover:bg-bg-default clickable fav-container" style="--rect-url: url('{% static 'svgs/card-fav-rect.svg' %}');" onclick="add_to_liked(this)">
+                            <div id="like-count-{{ post.id }}" class="absolute -bottom-0.5 right-0 w-min-14 pl-6 pr-2.5 pt-1.5 text-white text-sm group-hover:bg-bg-default duration-200 clickable fav-container" style="--rect-url: url('{% static 'svgs/card-fav-rect.svg' %}');" onclick="add_to_liked(this)">
                                 <div class="flex flex-row gap-2 font-medium pb-1.5">
                                     <p id="fav-count-{{ post.id }}" class="{% if post.likes == 0 %} hidden {% endif %}">{{ post.likes }}</p>
                                     {% if post|is_liked_by_user:request %}
