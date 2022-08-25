@@ -4,6 +4,7 @@ from core.models import (
     HomePage,
     Profile,
     ProfilePage,
+    SubCategory,
 )
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
@@ -39,11 +40,18 @@ class Command(BaseCommand):
             logger.info("Adding Sub-Page types Successful")
         if len(ExperiencesCategory.objects.all()) == 0:
             logger.info("Adding Experience Categories")
-            cat_names = ["Prefab", "Jam", "Multiplayer", "Solo"]
+            cat_names = ["Multiplayer", "Solo", "co-op", "Prefab"]
             for cat in cat_names:
                 cat_obj = ExperiencesCategory(name=cat)
                 cat_obj.save()
             logger.info("Adding Experience Categories Successful")
+        if len(SubCategory.objects.all()) == 0:
+            logger.info("Adding Sub Categories")
+            sub_cats = ["Jam", "Competitive"]
+            for cat in sub_cats:
+                cat_obj = SubCategory(name=cat)
+                cat_obj.save()
+            logger.info("Added Default Sub Categories")
 
         for user in User.objects.all():
             if not hasattr(user, "profile"):

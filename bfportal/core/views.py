@@ -10,6 +10,7 @@ from dal import autocomplete
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
+from django.templatetags.static import static
 from django.utils import timezone
 from loguru import logger
 from taggit.models import Tag
@@ -58,8 +59,13 @@ def send_approve_request(
                             {
                                 "name": "Category",
                                 "value": ":white_small_square: "
-                                + "\u200B".join(
-                                    [str(i) for i in page.categories.all()]
+                                + f"\u200B{page.category}",
+                            },
+                            {
+                                "name": "Sub Categories",
+                                "value": ":white_small_square: "
+                                + "".join(
+                                    [f"`{i}` " for i in page.sub_categories.all()]
                                 ),
                             },
                             {
@@ -148,6 +154,11 @@ def submit_experience(request: HttpRequest, home_page: HomePage):
 
     else:
         form = ExperiencePageForm()
+        form.fields[
+            "cover_img_url"
+        ].initial = (
+            f"{request.scheme}://{request.get_host()}{static('images/placeholder.png')}"
+        )
 
     return render(
         request,
