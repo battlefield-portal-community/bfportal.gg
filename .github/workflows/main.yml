@@ -55,3 +55,7 @@ jobs:
           echo VERSION=$VERSION
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
+      - name: Update portainer
+        run: |
+          apt install curl
+          curl -d "update=true" -X POST ${{ secrets.PORTAINER_WEBHOOK_URL }} --fail --silent --show-error
