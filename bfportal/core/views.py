@@ -58,8 +58,13 @@ def send_approve_request(
                             {
                                 "name": "Category",
                                 "value": ":white_small_square: "
-                                + "\u200B".join(
-                                    [str(i) for i in page.categories.all()]
+                                + f"\u200B{page.category}",
+                            },
+                            {
+                                "name": "Sub Categories",
+                                "value": ":white_small_square: "
+                                + "".join(
+                                    [f"`{i}` " for i in page.sub_categories.all()]
                                 ),
                             },
                             {
