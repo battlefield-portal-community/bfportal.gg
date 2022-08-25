@@ -51,8 +51,12 @@ def send_new_publish_embed(request: HttpRequest, page: ExperiencePage):
                         },
                         {
                             "name": "Category",
+                            "value": ":white_small_square: " + f"\u200B{page.category}",
+                        },
+                        {
+                            "name": "Sub Categories",
                             "value": ":white_small_square: "
-                            + "\u200B".join([str(i) for i in page.categories.all()]),
+                            + "".join([f"`{i}` " for i in page.sub_categories.all()]),
                         },
                         {
                             "name": "Tags",
