@@ -27,10 +27,13 @@ RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-r
     zlib1g-dev \
     libwebp-dev \
     software-properties-common \
-    && curl -sL https://deb.nodesource.com/setup_14.x | bash - \
-    && apt-get install -y nodejs --no-install-recommends \
+    npm \
     && rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man \
     && apt-get clean
+
+RUN npm install npm@latest -g && \
+    npm install n -g && \
+    n latest
 # Install the application server.
 RUN pip install "gunicorn==20.0.4"
 
