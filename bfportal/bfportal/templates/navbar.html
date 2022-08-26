@@ -1,71 +1,80 @@
 {% load static wagtailcore_tags socialaccount %}
-<nav id="navBar" class="sticky relative top-0 z-[1] border-b-1/2 border-bf2042-3 bg-card-bg shadow-bf2042-3 flex items-center w-full gap-x-6 px-6 py-4 hover:shadow hover:shadow-bf2042-4 transition-shadow duration-200">
-    <a class="flex basis-auto group text-white flex-nowrap " href="/">
-                <img class="fill-current h-8 w-8 mr-2" width="54" height="54"
-                     src="{% static 'images/bf_portal_logo_bc.png' %}"
+<nav id="navBar" class="sticky relative top-0 z-[1] bg-bg-default flex h-16 items-center w-full gap-x-12 px-8 py-4">
+    <a href="/">
+                <img class="fill-current h-8 w-48 mr-2" width="54" height="54"
+                     src="{% static 'images/icon_portal_library_website.png' %}"
                      alt=""/>
-                <span class="shrink-0 font-semibold text-2xl tracking-tight group-hover:text-bf2042-4 transition duration-200 ease-in-out drop-shadow-[0_0_2.5px_#ffffff] hover:drop-shadow-[0_0_2.5px_#08A696]">BF Portal</span>
     </a>
     <div class="flex flex-grow items-center">
-        <div class="hidden text-base md:flex-grow md:flex content-center">
-            <a href="/experiences/"
-               class="block lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4 transition duration-200 ease-in-out">
-                Library
-            </a>
+        <!-- logo and left side -->
+        <div class="hidden text-base md:flex-grow md:flex md:gap-x-8 content-center">
             <a href="#"
-               class="block lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4 transition duration-200 ease-in-out">
+               class="text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">
                 Docs
             </a>
-            <a href="/experiences/featured"
-               class="block lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4 transition duration-200 ease-in-out">
-                Featured
-            </a>
-            <a href="/submit/"
-               class="inline-block lg:inline-block lg:mt-0 text-teal-200 hover:text-white  rounded-lg mr-4 hover:text-bf2042-6 transition duration-200 ease-in-out">
-                Submit Experience
+            <a href="https://gametools.network/servers?game=bf2042&region=all&platform=pc&limit=10"
+               target="_blank"
+               class="cursor-alias text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">
+                Server Browser
             </a>
             {% if page.is_experience_page and  page.owner == request.user %}
                 <a href="edit/"
-                   class="block lg:inline-block lg:mt-0 text-teal-200 hover:text-bf2042-5 mr-4 transition duration-200 ease-in-out">
+                   class="cursor-alias text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">
                     Edit Experience
                 </a>
             {% endif %}
-            <a href="https://gametools.network/servers?game=bf2042&region=all&platform=pc&limit=10"
+            <a href="https://discord.gg/8un9qY5AvV"
                target="_blank"
-               class="cursor-alias inline-block lg:inline-block lg:mt-0 text-teal-200 hover:text-white  rounded-lg mr-4 hover:text-bf2042-6 transition duration-200 ease-in-out">
-                Server Browser
+               class="cursor-alias text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">
+                Discord
             </a>
+
             {% block extend_navbar %}
 
             {% endblock %}
         </div>
-        <div class="flex flex-grow justify-end">
+        <!-- right side -->
+        <div class="hidden md:flex flex-grow justify-end items-center gap-x-8">
+            <a href="/submit/"
+               class="cursor-alias text-bf2042-4 font-bold hover:text-bf2042-3 transition duration-100 ease-in-out">
+                Submit Experience
+            </a>
+            <!-- when logged-in -->
             {% if request.user.is_authenticated %}
                 {% get_social_accounts user as accounts %}
                 {% if accounts %}
                     {% with account=accounts.discord.0 %}
                         <div id="profileButton"
-                             class="hidden profileButton relative inline-block group px-4 py-1 leading-none border rounded text-bf2042-4 border-hover-bg-light md:block hover:border-transparent hover:text-bf2042-6 hover:bg-hover-bg-light transition duration-200 ease-in-out">
-                            <div class="w-max">
+                             class="profileButton relative group">
+                            <div class="w-7">
                                 {% if account.extra_data.avatar %}
-                                    <img src="{{ account.get_avatar_url }}" class="block rounded-full " width="30" alt="@p"/>
+                                    <img src="{{ account.get_avatar_url }}" class="block rounded-full w-full " alt="@p"/>
                                 {% else %}
-                                    <img src="{% static 'images/default_discord_avatar.png' %}" class="inline rounded-full" width="30" alt="@p"/>
+                                    <img src="{% static 'images/default_discord_avatar.png' %}" class="inline rounded-full w-full" alt="@p"/>
                                 {% endif %}
                             </div>
                             <div id="myDropdown"
-                                 class="dropdown-content flex flex-col text-center text-md gap-y-2 bg-card-bg p-2 -top-2.5 rounded-lg absolute -left-1 text-white invisible">
-                                <a href="/users/{{ account.uid }}">Profile</a>
-                                <a href="/logout" class="text-red-400">Logout</a>
+                                 class="dropdown-content flex flex-col text-center text-md font-medium left-1/2 -translate-x-1/2 w-max rounded-lg absolute text-white invisible"> <!--left-12 -->
+                                <div class="flex flex-row justify-center">
+                                    <div class="w-0 h-0 border-x-8 border-b-8 border-solid border-transparent border-b-card-bg"></div>
+                                </div>
+                                <a class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200" href="/users/{{ account.uid }}">Profile</a>
+                                <a class="text-white text-sm py-1 px-2 rounded-b bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200" href="/logout">Logout</a>
                             </div>
                         </div>
                     {% endwith %}
                 {% endif %}
             {% else %}
+                <!-- not logged-in -->
                 <a href="{% provider_login_url 'discord' process='login' %}"
-                   class="hidden md:inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white  lg:mt-0">Login</a>
+                   class="flex flex-row items-center gap-x-8 text-white  font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">login
+                <img class="p-2.5 py bg-bf2042-4 rounded-full" src="{% static 'svgs/discord_icon.svg' %}" alt="non">
+                </a>
             {% endif %}
-            <div id="menuIcon" class="group flex flex-col gap-y-1 cursor-pointer md:hidden">
+        </div>
+        <!-- mobile nav pane -->
+        <div class="grow md:hidden">
+            <div id="menuIcon" class="group flex flex-col gap-y-1 ml-auto w-min cursor-pointer md:hidden">
                 <div class="w-4 h-0.5 rounded-lg bg-bf2042-4 group-hover:bg-bf2042-6 transition duration-200 ease-in-out"></div>
                 <div class="w-4 h-0.5 rounded-lg bg-bf2042-4 group-hover:bg-bf2042-6 transition duration-200 ease-in-out"></div>
                 <div class="w-4 h-0.5 rounded-lg bg-bf2042-4 group-hover:bg-bf2042-6 transition duration-200 ease-in-out"></div>
@@ -73,43 +82,43 @@
             <div id="nav-bar-pane" class="hidden flex flex-col absolute bg-card-bg top-full right-0 backdrop-brightness-50 items-center md:hidden">
                 <div class="flex flex-col items-end  text-lg ml-4 mr-2 gap-y-2 mt-2">
                     <a href="/experiences/"
-                       class="text-teal-200 hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
+                       class="text-white hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
                         Library
                     </a>
                     <a href="#"
-                       class="text-teal-200 hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px]  border-b-2 border-white">
+                       class="text-white hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px]  border-b-2 border-white">
                         Docs
                     </a>
                     <a href="/experiences/featured"
-                       class="text-teal-200 hover:text-bf2042-5  transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
+                       class="text-white hover:text-bf2042-5  transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
                         Featured
                     </a>
                     <a href="/submit/"
-                       class="lg:mt-0 text-teal-200 hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
+                       class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
                         Submit Experience
                     </a>
                     {% if page.is_experience_page and  page.owner == request.user %}
                         <a href="edit/"
-                           class="text-teal-200 hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
+                           class="text-white hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
                             Edit Experience
                         </a>
                     {% endif %}
                     <a href="https://gametools.network/servers?game=bf2042&region=all&platform=pc&limit=10"
                        target="_blank"
-                       class="cursor-alias lg:mt-0 text-teal-200 hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
+                       class="cursor-alias lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
                         Server Browser
                     </a>
                     {% if request.user.is_authenticated %}
                         {% get_social_accounts user as accounts %}
                         {% if accounts %}
                             {% with account=accounts.discord.0 %}
-                                <a class="lg:mt-0 text-teal-200 hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white" href="/users/{{ account.uid }}">Profile</a>
-                                <a class="lg:mt-0 text-teal-200 hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white" href="/logout/" >Logout</a>
+                                <a class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white" href="/users/{{ account.uid }}">Profile</a>
+                                <a class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white" href="/logout/" >Logout</a>
                             {% endwith %}
                         {% endif %}
                     {% else %}
                         <a href="{% provider_login_url 'discord' process='login' %}"
-                           class="lg:mt-0 text-teal-200 hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">Login</a>
+                           class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">Login</a>
                     {% endif %}
                 </div>
             </div>
@@ -123,12 +132,13 @@
         const drpDown = document.getElementById("myDropdown")
         drpDown.classList.toggle("invisible");
         drpDown.style.opacity = '0%';
-        drpDown.style.left = '0';
+        drpDown.style.top = '0rem';
         anime({
             targets: '#myDropdown',
             opacity: '100%',
-            left: '-5rem',
+            top: '2rem',
             easing: 'easeOutQuint',
+            duration: "200"
         });
 
     }
@@ -143,7 +153,7 @@
             const pane = document.getElementById('myDropdown');
             if (!pane.classList.contains('invisible')) {
                 pane.classList.add('invisible');
-                pane.style.left = '-0.25rem';
+                pane.style.top = '0rem';
             }
         }
     }
