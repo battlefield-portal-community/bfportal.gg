@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% load socialaccount static %}
 {% block title %}
-    {{ user|title }}'s profile
+    {{ requested_user|title }}'s profile
 {% endblock %}
 {% block content %}
-    {% get_social_accounts user as accounts %}
+    {% get_social_accounts requested_user as accounts %}
     <div class="flex w-full flex-col space-y-20 px-4 mt-4">
         <div class="profile flex space-x-5 mx-auto">
             {% if accounts %}
