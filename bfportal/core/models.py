@@ -499,7 +499,7 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
             )
 
             logger.debug(f"filtred {len(all_posts)} for {user_acc}")
-        context["profile_user"] = user_acc
+        context["requested_user"] = user_acc
         context["latest_post"] = all_posts.first()
         context["total_num_posts"] = len(all_posts)
         return context
