@@ -123,7 +123,7 @@ function addItems(root, dataList=null, dataItem=null) {
             input.type = 'checkbox';
             input.id = id;
             input.value = elm;
-            input.className = "rounded border-2 border-bf2042-4 bg-default text-bf2042-4 shadow-none mr-1 focus:ring focus:ring-offset-0 focus:ring-bf2042-4 focus:ring-opacity-0";
+            input.className = "rounded border-0 bg-default text-bf2042-4 shadow-none mr-1 focus:ring focus:ring-offset-0 focus:ring-bf2042-4 focus:ring-opacity-0";
             label.className = "text-sm text-white flex flex-row items-center gap-x-1";
             label.setAttribute('for', input.id);
             label.appendChild(input);
