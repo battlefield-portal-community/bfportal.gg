@@ -6,35 +6,31 @@ defer(function () {
             url = new URL(window.location.href),
             searchParams = new URLSearchParams(url.search);
 
-
+        console.log(searchParams)
         filtersPane.css({
             'top' : `${navBar.innerHeight()}px`,
             // 'left': `-${filtersPane.width()}px`
         });
 
-        ["tags", "cats", "experience", "date", "user"].forEach(elm => {
-            const label = $(`#${elm}InputLabel`),
-                input = $(`#${elm}Input`);
-            const observer = new ResizeObserver(entries =>  {
-                label.height(`${input.height()}px`);
-            });
-            observer.observe(document.getElementById(`${elm}Input`));
-        });
         const filtersContainer = $('#filtersContainer'),
-            hideFiltersButton = $('#hideFilterButton'),
+            hideFiltersButton = $('#toggleFilterButton'),
             mainBtn = $('#mainBtn');
+
         if ([...searchParams.keys()].length <= 1 && (searchParams.keys().next().value === 'page' || !searchParams.keys().next().value)){
             hideFiltersButton.text("Show Filters");
+            populateFilters();
             filtersContainer.hide();
             filtersContainer.removeClass('visible');
             filtersContainer.addClass('invisible');
+
             mainBtn.hide();
 
         } else {
-
             filtersContainer.removeClass('invisible');
             filtersContainer.addClass('visible');
             hideFiltersButton.text("Hide Filter");
+            hideFiltersButton.removeClass("bg-bf2042-4")
+            hideFiltersButton.addClass("bg-bf2042-6")
             filtersContainer.show();
             populateFilters();
             mainBtn.show();
@@ -42,42 +38,43 @@ defer(function () {
 
     });
     function callSearchApi(searchQuery="") {
-        populateGrids("tagsInputHolder", true, searchQuery);
+        populateGrids("tagsContainer", true, searchQuery);
 
     }
     let searchCallTimeout;
-    $('#tagSearchInput').on('input', function(event) {
-        const spinner = $('#tagsSearchSpinner');
-        spinner.removeClass('hidden');
-        if (searchCallTimeout){
-            clearTimeout(searchCallTimeout);
-        }
-        searchCallTimeout = setTimeout(function () {
-            callSearchApi(event.target.value);
-            spinner.addClass('hidden');
-        } , 1000);
+    $('#tagsInput').on('input', function(event) {
+        // const spinner = $('#tagsSearchSpinner');
+        // spinner.removeClass('hidden');
+        // if (searchCallTimeout){
+        //     clearTimeout(searchCallTimeout);
+        // }
+        // searchCallTimeout = setTimeout(function () {
+        //     spinner.addClass('hidden');
+        // } , 1000);
+        console.log(event.target.value)
+        callSearchApi(event.target.value);
     });
     $('#filtersApply').on('click touch', function () {
         let queryParamList = [];
-        ["tagsInputHolder", "catsInput"].forEach(grid => {
+        ["tagsContainer", "categoriesContainer"].forEach(grid => {
             const currGrid = $(`#${grid}`);
             $.each(currGrid.find("input:checkbox:checked"), function (index, elm){
-                if (grid === "tagsInputHolder") {
+                if (grid === "tagsContainer") {
                     queryParamList.push(`tag=${encodeURIComponent($(elm).prop('value'))}`);
                 } else {
                     queryParamList.push(`category=${encodeURIComponent($(elm).prop('value'))}`);
                 }
             });
         });
-        ["experience", "user"].forEach(input => {
+        ["experience", "creator"].forEach(input => {
             const currInput = $(`#${input}NameInput`),
                 val = $(currInput).val();
             if (val) {
                 queryParamList.push(`${input}=${encodeURIComponent(val)}`);
             }
         });
-        ["From", "To"].forEach(date => {
-            const val = $(`#date${date}`).val();
+        ["from", "to"].forEach(date => {
+            const val = $(`#${date}Date`).val();
             if (val) {
                 queryParamList.push(`${date}=${encodeURIComponent(val)}`);
             }
@@ -93,12 +90,13 @@ defer(function () {
 });
 
 function populateFilters(){
+    console.log("Populating Filters")
     "use strict";
     const url = new URL(window.location.href),
     searchParams = new URLSearchParams(url.search);
 
-    populateGrids("tagsInputHolder", false, "");
-    populateGrids("catsInput", false, "");
+    populateGrids("tagsContainer", false, "");
+    populateGrids("categoriesContainer", false, "");
     if (searchParams.has('experience')) {
         $('#experienceNameInput').val(searchParams.get('experience'));
     }
@@ -108,7 +106,7 @@ function populateFilters(){
     if (searchParams.has('From')) {
         $('#dateFrom').val(searchParams.get('From'));
     }
-    if (searchParams.has('From')) {
+    if (searchParams.has('To')) {
         $('#dateTo').val(searchParams.get('To'));
     }
 
@@ -117,15 +115,16 @@ function populateFilters(){
 function addItems(root, dataList=null, dataItem=null) {
     function addItem(elm) {
         let id = elm.replace(/\W/g, '');
-        id = root.attr('id') === "catsInput" ? `cat_${id}` : `tag_${id}`;
+        console.log(id)
+        id = root.attr('id') === "categoriesContainer" ? `cat_${id}` : `tag_${id}`;
         if (!document.getElementById(id)){
             const input = document.createElement('input'),
                 label = document.createElement('label');
             input.type = 'checkbox';
             input.id = id;
             input.value = elm;
-            input.className = "bg-card-bg border-none focus:ring-0";
-            label.className = "text-white min-w-max";
+            input.className = "rounded border-2 border-bf2042-4 bg-default text-bf2042-4 shadow-none mr-1 focus:ring focus:ring-offset-0 focus:ring-bf2042-4 focus:ring-opacity-0";
+            label.className = "text-sm text-white flex flex-row items-center gap-x-1";
             label.setAttribute('for', input.id);
             label.appendChild(input);
             label.innerHTML = `${input.outerHTML}&nbsp;${elm}`;
@@ -139,21 +138,21 @@ function addItems(root, dataList=null, dataItem=null) {
         addItem(dataItem);
     }
     if (dataList) {
-        let tagsInputHolder;
+        let tagsContainer;
         if (root === "tagsInput"){
-            tagsInputHolder = $('tagsInputHolder');
-            tagsInputHolder.hide();
+            tagsContainer = $('tagsContainer');
+            tagsContainer.hide();
         }
         dataList.forEach(elm => {addItem(elm);});
-        tagsInputHolder ? tagsInputHolder.show(100): null;
+        tagsContainer ? tagsContainer.show(100): null;
     }
 }
 
 function populateGrids(root, update, searchQuery=""){
-        fetch(root === "tagsInputHolder" ? `/api/tags/?q=${searchQuery}` : `/api/categories/?q=${searchQuery}` ).then(resp => {
+        fetch(root === "tagsContainer" ? `/api/tags/?q=${searchQuery}` : `/api/categories/?q=${searchQuery}` ).then(resp => {
             resp.json().then(json => {
                 const currInput = $(`#${root}`);
-                const currQuery = root === "tagsInputHolder" ? `tag` : `category`;
+                const currQuery = root === "tagsContainer" ? `tag` : `category`;
                 if (!update){
                     const searchParams = new URLSearchParams(window.location.search);
                     if (searchParams.has(currQuery)) {
@@ -182,7 +181,7 @@ function setFilterLabelHeight(base_name){
 function hideAllFilters() {
     const filtersContainer = $('#filtersContainer'),
         mainBtn = $('#mainBtn'),
-        btn = $('#hideFilterButton');
+        btn = $('#toggleFilterButton');
     filtersContainer.toggle(200);
     mainBtn.toggle();
     if (btn.text() === "Show Filters") {
@@ -190,12 +189,25 @@ function hideAllFilters() {
         populateGrids("catsInput", false, "");
         filtersContainer.removeClass('invisible');
         filtersContainer.addClass('visible');
+        anime({
+            targets: '#toggleFilterButton',
+            backgroundColor: "#FF2C10",
+            easing: 'easeOutQuint',
+            duration: "500"
+        });
         btn.text("Hide Filters");
+
 
     } else {
         filtersContainer.removeClass('visible');
         filtersContainer.addClass('invisible');
         btn.text("Show Filters");
+        anime({
+            targets: '#toggleFilterButton',
+            backgroundColor: '#26FFDF',
+            easing: 'easeOutQuint',
+            duration: "500"
+        });
     }
 
 }
