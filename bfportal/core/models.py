@@ -178,7 +178,7 @@ class HomePage(RoutablePageMixin, CustomBasePage):
         context["posts"] = posts
         return context
 
-    @route(r"^/category/(.+)/$")
+    @route(r"^category/(.+)/$")
     def serve_category_page(self, request, cat):
         """Returns template with post of a category if cat present in db"""
         logger.debug("in")

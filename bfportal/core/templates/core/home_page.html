@@ -17,7 +17,7 @@
             <div class="flex flex-row flex-wrap gap-x-4 gap-y-2 max-w-fit md:grid md:grid-cols-3 md:gap-x-12 md:ml-12">
             {% for category in categories %}
                 {% if category.visible %}
-                    <a href="/{{ category.name }}">
+                    <a href="/category/{{ category.name }}">
                     <div class="flex flex-row text-white gap-x-1 min-w-fit items-center  rounded p-1 hover:bg-card-bg transition duration-200 ease-in-out">
                         <img src="{{ category.icon.url }}" alt="{{ category.name }}-icon">
                         <p>{{ category.name }}</p>
