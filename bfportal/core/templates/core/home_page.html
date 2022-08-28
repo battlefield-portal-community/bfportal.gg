@@ -13,15 +13,17 @@
 {% block content %}
     {% if categories %}
     <div class="flex flex-row mx-4 lg:mx-32 font-medium min-w-fit">
-        <div class="flex flex-col grow">
-            <div class="grid grid-cols-3 gap-x-12 gap-y-2 max-w-fit">
+        <div class="flex flex-col grow items-center md:items-start">
+            <div class="flex flex-row flex-wrap gap-x-4 gap-y-2 max-w-fit md:grid md:grid-cols-3 md:gap-x-12 md:ml-12">
             {% for category in categories %}
-                <a href="/{{ category.name }}">
-                <div class="flex flex-row text-white gap-x-1 min-w-fit items-center  rounded px-1 hover:bg-card-bg transition duration-200 ease-in-out">
-                    <img src="{{ category.icon.url }}" alt="{{ category.name }}-icon">
-                    <p>{{ category.name }}</p>
-                </div>
-                </a>
+                {% if category.visible %}
+                    <a href="/category/{{ category.name }}">
+                    <div class="flex flex-row text-white gap-x-1 min-w-fit items-center  rounded p-1 hover:bg-card-bg transition duration-200 ease-in-out">
+                        <img src="{{ category.icon.url }}" alt="{{ category.name }}-icon">
+                        <p>{{ category.name }}</p>
+                    </div>
+                    </a>
+                {% endif %}
             {% endfor %}
             </div>
         </div>
