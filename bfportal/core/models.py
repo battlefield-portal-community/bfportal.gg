@@ -30,7 +30,6 @@ from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
-from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.models import register_snippet
 from wagtailsvg.edit_handlers import SvgChooserPanel
 from wagtailsvg.models import Svg
@@ -164,6 +163,9 @@ class HomePage(RoutablePageMixin, CustomBasePage):
             ExperiencePage.objects.live().public().order_by("-first_published_at"),
         )
 
+        context["categories"] = list(ExperiencesCategory.objects.all()) + list(
+            SubCategory.objects.all()
+        )
         context["posts"] = posts
         return context
 
@@ -197,7 +199,7 @@ class SubCategory(models.Model):
 
     name = models.CharField(max_length=255)
     icon = models.ForeignKey(
-        "wagtailimages.Image",
+        Svg,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -206,7 +208,7 @@ class SubCategory(models.Model):
 
     panels = [
         FieldPanel("name"),
-        ImageChooserPanel("icon"),
+        SvgChooserPanel("icon"),
     ]
 
     def __str__(self):

@@ -1,9 +1,43 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags static %}
 {% block title %}
     BF Portal Library
 {% endblock %}
 {% block content %}
+    <div class="flex flex-row mx-4 lg:mx-32 font-medium min-w-fit">
+        <div class="flex flex-col grow">
+            <div class="grid grid-cols-3 gap-x-12 gap-y-2 max-w-fit">
+            {% for category in categories %}
+                <a href="/?category={{ category.name }}">
+                <div class="flex flex-row text-white gap-x-1 min-w-fit items-center  rounded px-1 hover:bg-card-bg transition duration-200 ease-in-out">
+                    <img src="{{ category.icon.url }}" alt="{{ category.name }}-icon">
+                    <p>{{ category.name }}</p>
+                </div>
+                </a>
+            {% endfor %}
+            </div>
+        </div>
+        <div class="hidden md:flex flex-col text-white gap-y-2">
+            <a href="/submit/">
+                <div class="flex flex-row text-white gap-x-1 min-w-fit items-center  rounded px-1 hover:bg-card-bg transition duration-200 ease-in-out">
+                    <img src="{% static 'svgs/pages/submit_experience.svg' %}" alt="">
+                    <p class="shrink-0">Submit Experience</p>
+                </div>
+            </a>
+            <a href="/tutorials">
+                <div class="flex flex-row text-white gap-x-1 min-w-fit items-center  rounded px-1 hover:bg-card-bg transition duration-200 ease-in-out">
+                    <img src="{% static 'svgs/pages/help_&_tutorials.svg' %}" alt="">
+                    <p>Help & Tutorials</p>
+                </div>
+            </a>
+            <a href="/events">
+                <div class="flex flex-row text-white gap-x-1 min-w-fit items-center  rounded px-1 hover:bg-card-bg transition duration-200 ease-in-out">
+                    <img src="{% static 'svgs/pages/events.svg' %}" alt="">
+                    <p>Events</p>
+                </div>
+            </a>
+        </div>
+    </div>
     {% include 'core/experiences_listing.html'%}
     {% if not request.user.is_authenticated %}
         <iframe src="https://discord.com/widget?id=870246147455877181&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
