@@ -79,10 +79,18 @@ def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
         all_posts = all_posts.filter(
             reduce(operator.or_, (Q(category__name__iexact=cat) for cat in category))
         )
-
-    if tags or category:
+    if sub_cats := request.GET.getlist("sub_cat", None):
+        sub_cats: [SubCategory, ...]
+        sub_cats = list(map(str.lower, sub_cats))
+        post: ExperiencePage
+        all_posts = all_posts.filter(
+            reduce(
+                operator.or_, (Q(sub_categories__name__iexact=cat) for cat in sub_cats)
+            )
+        )
+    if tags or category or sub_cats:
         logger.debug(
-            f"filtered {len(all_posts)} experiences for tags {tags}, cat [{category}]"
+            f"filtered {len(all_posts)} experiences for tags {tags}, cat [{category}, sub cat {sub_cats}]"
         )
     return all_posts
 
@@ -168,6 +176,30 @@ class HomePage(RoutablePageMixin, CustomBasePage):
         )
         context["posts"] = posts
         return context
+
+    @route(r"^(.+)/$")
+    def serve_category_page(self, request, cat):
+        """Returns template with post of a category if cat present in db"""
+        main_cat, sub_cat = None, None
+
+        if cat_object := ExperiencesCategory.objects.filter(name__iexact=cat).first():
+            main_cat = cat_object
+        elif cat_object := SubCategory.objects.filter(name__iexact=cat).first():
+            sub_cat = cat_object
+        else:
+            return self.render(request=request, template="404.html")
+        request.GET = request.GET.copy()
+        if main_cat:
+            request.GET["category"] = main_cat.name
+        if sub_cat:
+            request.GET["sub_cat"] = sub_cat.name
+        context = super().get_context(request)
+        posts = pagination_wrapper(
+            request,
+            ExperiencePage.objects.live().public().order_by("-first_published_at"),
+        )
+        context["posts"] = posts
+        return TemplateResponse(request, self.get_template(request), context)
 
 
 class ExperiencesCategory(models.Model):

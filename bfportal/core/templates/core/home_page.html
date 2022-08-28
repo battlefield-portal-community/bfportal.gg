@@ -4,11 +4,12 @@
     BF Portal Library
 {% endblock %}
 {% block content %}
+    {% if categories %}
     <div class="flex flex-row mx-4 lg:mx-32 font-medium min-w-fit">
         <div class="flex flex-col grow">
             <div class="grid grid-cols-3 gap-x-12 gap-y-2 max-w-fit">
             {% for category in categories %}
-                <a href="/?category={{ category.name }}">
+                <a href="/{{ category.name }}">
                 <div class="flex flex-row text-white gap-x-1 min-w-fit items-center  rounded px-1 hover:bg-card-bg transition duration-200 ease-in-out">
                     <img src="{{ category.icon.url }}" alt="{{ category.name }}-icon">
                     <p>{{ category.name }}</p>
@@ -38,6 +39,7 @@
             </a>
         </div>
     </div>
+    {% endif %}
     {% include 'core/experiences_listing.html'%}
     {% if not request.user.is_authenticated %}
         <iframe src="https://discord.com/widget?id=870246147455877181&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
