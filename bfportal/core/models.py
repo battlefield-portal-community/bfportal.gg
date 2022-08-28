@@ -189,6 +189,11 @@ class HomePage(RoutablePageMixin, CustomBasePage):
         elif cat_object := SubCategory.objects.filter(name__iexact=cat).first():
             sub_cat = cat_object
         else:
+            child: Page
+            for child in self.get_children():
+                if child.slug == cat:
+                    return child.serve(request)
+
             return self.render(request=request, template="404.html")
         request.GET = request.GET.copy()
         if main_cat:
