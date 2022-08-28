@@ -1,14 +1,16 @@
 {% extends "base.html" %}
 
+{% block extra_content %}{% endblock %}
+
 {% block title %}Page not found{% endblock %}
 
 {% block body_class %}404{% endblock %}
 
 {% block content %}
-    <div class="flex text-white w-full justify-center">
+    <div class="flex text-white w-full justify-center mt-8">
         <div class="w-max">
             <div class="flex flex-col mb-4">
-                <a class="mx-auto w-max  p-2 text-4xl text-red-500 bg-card-bg rounded-xl drop-shadow-hover-bg-light-lg hover:text-bf2042-3 hover:drop-shadow-bf2042-6 transition duration-200 ease-in" href="{{request.META.HTTP_REFERER}}">Go back</a>
+                <a class="mx-auto w-max  p-2 text-4xl text-red-500 bg-card-bg rounded-xl drop-shadow-hover-bg-light-lg hover:text-bf2042-3 hover:drop-shadow-bf2042-6 transition duration-200 ease-in" href="{{request.META.HTTP_REFERER}}" onClick="window.history.back();return false;">Go back</a>
             </div>
             <pre class="text-green-500 hover:text-red-500 transition duration-500 ease-in">
        444444444            000000000                 444444444

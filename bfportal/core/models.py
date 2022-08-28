@@ -30,8 +30,9 @@ from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
-from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.models import register_snippet
+from wagtailsvg.edit_handlers import SvgChooserPanel
+from wagtailsvg.models import Svg
 
 from bfportal.settings.base import LOGIN_URL
 
@@ -41,7 +42,7 @@ def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
     all_posts = posts
     if experience := request.GET.get("experience", None):
         logger.debug(f"Experience Name :- {experience}")
-        all_posts = all_posts.filter(title__contains=experience)
+        all_posts = all_posts.filter(title__icontains=experience)
 
     from_date = request.GET.get("From", None)
     if from_date is None or from_date == "":
@@ -78,10 +79,18 @@ def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
         all_posts = all_posts.filter(
             reduce(operator.or_, (Q(category__name__iexact=cat) for cat in category))
         )
-
-    if tags or category:
+    if sub_cats := request.GET.getlist("sub_cat", None):
+        sub_cats: [SubCategory, ...]
+        sub_cats = list(map(str.lower, sub_cats))
+        post: ExperiencePage
+        all_posts = all_posts.filter(
+            reduce(
+                operator.or_, (Q(sub_categories__name__iexact=cat) for cat in sub_cats)
+            )
+        )
+    if tags or category or sub_cats:
         logger.debug(
-            f"filtered {len(all_posts)} experiences for tags {tags}, cat [{category}]"
+            f"filtered {len(all_posts)} experiences for tags {tags}, cat [{category}, sub cat {sub_cats}]"
         )
     return all_posts
 
@@ -145,6 +154,7 @@ class HomePage(RoutablePageMixin, CustomBasePage):
 
     @route(r"^$")
     def base(self, request):  # noqa: D102
+        logger.debug("base")
         return TemplateResponse(
             request, self.get_template(request), self.get_context(request)
         )
@@ -162,8 +172,42 @@ class HomePage(RoutablePageMixin, CustomBasePage):
             ExperiencePage.objects.live().public().order_by("-first_published_at"),
         )
 
+        context["categories"] = list(ExperiencesCategory.objects.all()) + list(
+            SubCategory.objects.all()
+        )
         context["posts"] = posts
         return context
+
+    @route(r"^(.+)/$")
+    def serve_category_page(self, request, cat):
+        """Returns template with post of a category if cat present in db"""
+        logger.debug("in")
+        main_cat, sub_cat = None, None
+
+        if cat_object := ExperiencesCategory.objects.filter(name__iexact=cat).first():
+            main_cat = cat_object
+        elif cat_object := SubCategory.objects.filter(name__iexact=cat).first():
+            sub_cat = cat_object
+        else:
+            child: Page
+            for child in self.get_children():
+                if child.slug == cat:
+                    return child.serve(request)
+
+            return self.render(request=request, template="404.html")
+        request.GET = request.GET.copy()
+        if main_cat:
+            request.GET["category"] = main_cat.name
+        if sub_cat:
+            request.GET["sub_cat"] = sub_cat.name
+        context = super().get_context(request)
+        posts = pagination_wrapper(
+            request,
+            ExperiencePage.objects.live().public().order_by("-first_published_at"),
+        )
+        context["posts"] = posts
+        context["no_extra_content"] = True
+        return TemplateResponse(request, self.get_template(request), context)
 
 
 class ExperiencesCategory(models.Model):
@@ -171,7 +215,7 @@ class ExperiencesCategory(models.Model):
 
     name = models.CharField(max_length=255)
     icon = models.ForeignKey(
-        "wagtailimages.Image",
+        Svg,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -180,7 +224,7 @@ class ExperiencesCategory(models.Model):
 
     panels = [
         FieldPanel("name"),
-        ImageChooserPanel("icon"),
+        SvgChooserPanel("icon"),
     ]
 
     def __str__(self):
@@ -195,7 +239,7 @@ class SubCategory(models.Model):
 
     name = models.CharField(max_length=255)
     icon = models.ForeignKey(
-        "wagtailimages.Image",
+        Svg,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -204,7 +248,7 @@ class SubCategory(models.Model):
 
     panels = [
         FieldPanel("name"),
-        ImageChooserPanel("icon"),
+        SvgChooserPanel("icon"),
     ]
 
     def __str__(self):
