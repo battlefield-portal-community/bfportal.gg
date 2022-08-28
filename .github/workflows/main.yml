@@ -55,7 +55,14 @@ jobs:
           echo VERSION=$VERSION
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
-      - name: Update portainer
-        run: |
-          sudo apt install curl
-          curl -d "update=true" -X POST ${{ secrets.PORTAINER_WEBHOOK_URL }} --fail --silent --show-error
+
+  update-portainer:
+    needs: production-deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: post to webhook
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: ${{ secrets.PORTAINER_WEBHOOK_URL }}
+          method: 'POST'
+          timeout: 90000
