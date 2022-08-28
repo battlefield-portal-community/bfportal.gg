@@ -41,7 +41,7 @@ def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
     all_posts = posts
     if experience := request.GET.get("experience", None):
         logger.debug(f"Experience Name :- {experience}")
-        all_posts = all_posts.filter(title__contains=experience)
+        all_posts = all_posts.filter(title__icontains=experience)
 
     from_date = request.GET.get("From", None)
     if from_date is None or from_date == "":
