@@ -178,7 +178,7 @@ class HomePage(RoutablePageMixin, CustomBasePage):
         context["posts"] = posts
         return context
 
-    @route(r"^(.+)/$")
+    @route(r"^category/(.+)/$")
     def serve_category_page(self, request, cat):
         """Returns template with post of a category if cat present in db"""
         logger.debug("in")
@@ -189,12 +189,8 @@ class HomePage(RoutablePageMixin, CustomBasePage):
         elif cat_object := SubCategory.objects.filter(name__iexact=cat).first():
             sub_cat = cat_object
         else:
-            child: Page
-            for child in self.get_children():
-                if child.slug == cat:
-                    return child.serve(request)
-
             return self.render(request=request, template="404.html")
+
         request.GET = request.GET.copy()
         if main_cat:
             request.GET["category"] = main_cat.name
@@ -221,11 +217,10 @@ class ExperiencesCategory(models.Model):
         on_delete=models.SET_NULL,
         related_name="+",
     )
-
-    panels = [
-        FieldPanel("name"),
-        SvgChooserPanel("icon"),
-    ]
+    visible = models.BooleanField(
+        help_text="Show Category on home page?", default=True, null=False
+    )
+    panels = [FieldPanel("name"), SvgChooserPanel("icon"), FieldPanel("visible")]
 
     def __str__(self):
         return self.name
@@ -245,11 +240,10 @@ class SubCategory(models.Model):
         on_delete=models.SET_NULL,
         related_name="+",
     )
-
-    panels = [
-        FieldPanel("name"),
-        SvgChooserPanel("icon"),
-    ]
+    visible = models.BooleanField(
+        help_text="Show Category on home page?", default=True, null=False
+    )
+    panels = [FieldPanel("name"), SvgChooserPanel("icon"), FieldPanel("visible")]
 
     def __str__(self):
         return self.name
