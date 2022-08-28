@@ -32,6 +32,8 @@ from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.models import register_snippet
+from wagtailsvg.edit_handlers import SvgChooserPanel
+from wagtailsvg.models import Svg
 
 from bfportal.settings.base import LOGIN_URL
 
@@ -171,7 +173,7 @@ class ExperiencesCategory(models.Model):
 
     name = models.CharField(max_length=255)
     icon = models.ForeignKey(
-        "wagtailimages.Image",
+        Svg,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -180,7 +182,7 @@ class ExperiencesCategory(models.Model):
 
     panels = [
         FieldPanel("name"),
-        ImageChooserPanel("icon"),
+        SvgChooserPanel("icon"),
     ]
 
     def __str__(self):
