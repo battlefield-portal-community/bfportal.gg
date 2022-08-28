@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags static %}
+
+{% block extra_content %}
+    {% if not no_extra_content %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
 {% block title %}
     BF Portal Library
 {% endblock %}

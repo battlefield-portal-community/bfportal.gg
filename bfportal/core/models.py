@@ -154,6 +154,7 @@ class HomePage(RoutablePageMixin, CustomBasePage):
 
     @route(r"^$")
     def base(self, request):  # noqa: D102
+        logger.debug("base")
         return TemplateResponse(
             request, self.get_template(request), self.get_context(request)
         )
@@ -180,6 +181,7 @@ class HomePage(RoutablePageMixin, CustomBasePage):
     @route(r"^(.+)/$")
     def serve_category_page(self, request, cat):
         """Returns template with post of a category if cat present in db"""
+        logger.debug("in")
         main_cat, sub_cat = None, None
 
         if cat_object := ExperiencesCategory.objects.filter(name__iexact=cat).first():
@@ -199,6 +201,7 @@ class HomePage(RoutablePageMixin, CustomBasePage):
             ExperiencePage.objects.live().public().order_by("-first_published_at"),
         )
         context["posts"] = posts
+        context["no_extra_content"] = True
         return TemplateResponse(request, self.get_template(request), context)
 
 
