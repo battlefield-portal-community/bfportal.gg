@@ -217,11 +217,10 @@ class ExperiencesCategory(models.Model):
         on_delete=models.SET_NULL,
         related_name="+",
     )
-
-    panels = [
-        FieldPanel("name"),
-        SvgChooserPanel("icon"),
-    ]
+    visible = models.BooleanField(
+        help_text="Show Category on home page?", default=True, null=False
+    )
+    panels = [FieldPanel("name"), SvgChooserPanel("icon"), FieldPanel("visible")]
 
     def __str__(self):
         return self.name
@@ -241,11 +240,10 @@ class SubCategory(models.Model):
         on_delete=models.SET_NULL,
         related_name="+",
     )
-
-    panels = [
-        FieldPanel("name"),
-        SvgChooserPanel("icon"),
-    ]
+    visible = models.BooleanField(
+        help_text="Show Category on home page?", default=True, null=False
+    )
+    panels = [FieldPanel("name"), SvgChooserPanel("icon"), FieldPanel("visible")]
 
     def __str__(self):
         return self.name
