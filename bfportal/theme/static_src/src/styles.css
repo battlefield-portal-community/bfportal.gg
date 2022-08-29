@@ -65,3 +65,13 @@ body::-webkit-scrollbar-thumb:hover {
 .expSubmitTable {
     border-spacing: 0 1em;
 }
+
+@media (min-width: 768px) {
+    .catsHolder {
+        margin-left: 3rem;
+        display: grid;
+        row-gap: 0;
+        column-gap: 5px;
+        grid-template-columns: repeat(3, minmax(138px, max-content));
+    }
+}
