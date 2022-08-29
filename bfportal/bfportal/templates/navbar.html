@@ -3,7 +3,7 @@
 {% if is_super_user %}
 <div class="sticky top-0 w-full z-[1] h-10 bg-bf2042-4 font-bold text-center py-2 "><p class="text-bf2042-1">LOGGED IN AS SUPERUSER :- {{ request.user|upper }}</p></div>
 {% endif %}
-<nav id="navBar" class="sticky relative top-{% if is_super_user %}[2.5rem]{% else %}0{% endif %} z-[1] bg-bg-default flex h-16 items-center w-full gap-x-12 px-8 py-4">
+<nav id="navBar" class="sticky relative {%if is_super_user %} top-[2.5rem] {% else %} top-0 {% endif %} z-[1] bg-bg-default flex h-16 items-center w-full gap-x-12 px-8 py-4">
     <a href="/">
                 <img class="fill-current h-8 w-48 mr-2" width="54" height="54"
                      src="{% static 'images/icon_portal_library_website.png' %}"
