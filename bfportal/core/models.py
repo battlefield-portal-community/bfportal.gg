@@ -313,6 +313,12 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         help_text="Is this experience a featured experience",
         verbose_name="Set Featured",
     )
+    trending = models.BooleanField(
+        default=False,
+        null=False,
+        help_text="Is this experience trending?",
+        verbose_name="Set Trending",
+    )
     description = models.TextField(
         default="",
         help_text="Description of Your experience",
@@ -394,6 +400,10 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
                 [
                     FieldPanel(
                         "featured",
+                        classname="full",
+                    ),
+                    FieldPanel(
+                        "trending",
                         classname="full",
                     ),
                     FieldPanel("bugged", classname="full"),
