@@ -2,11 +2,7 @@
 import os
 import sys
 
-from dotenv import load_dotenv
 from loguru import logger
-
-load_dotenv()
-
 
 if __name__ == "__main__":
     logger.remove()
