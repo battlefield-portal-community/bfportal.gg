@@ -10,7 +10,7 @@
         {% endif %}
     {% endif %}
 
-    <div class="flex flex-wrap {% if trending_section %}overflow-y-hidden h-[26.5rem] pt-2{% endif %} flex-row justify-center gap-x-3 gap-y-5">
+    <div class="flex flex-wrap {% if trending_section %}overflow-y-hidden h-[26.5rem] pt-2 justify-items-start ml-[3.125rem]{% else %} justify-center {% endif %} flex-row gap-x-3 gap-y-5">
         {% for post in posts %}
             <div class="grow-0 relative experience_container group block h-[26rem] w-64 bg-card-bg rounded-lg scroll-mt-6 hover:bg-bg-default hover:cursor-pointer hover:-translate-y-2 transition duration-200 ease-in-out">
                 <div class="m-2">
