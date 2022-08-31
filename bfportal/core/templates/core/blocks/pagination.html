@@ -1,6 +1,6 @@
 {% load static %}
-<div class="relative group my-10 flex flex-col max-w-fit py-1 px-2 bg-hover-bg-light rounded-lg hover:shadow-bf2042-4 transition duration-200 ease-in-out" >
-    <div class="-z-10 absolute top-0 left-0 -z-1 bg-hover-bg-light rounded-lg w-full h-full group-hover:drop-shadow-bf2042-4 transition duration-300 ease-in-out"></div>
+<div class="relative group my-10 flex flex-col max-w-fit py-1 px-2 bg-hover-bg-light rounded-lg" >
+    <div class="-z-10 absolute top-0 left-0 -z-1 bg-hover-bg-light rounded-lg w-full h-full"></div>
     {% if posts.paginator.num_pages > 1 %}
         {% pagination_suffix request.GET.urlencode as suffix %}
         <div class="pagination text-white flex flex-row text-lg mx-auto">

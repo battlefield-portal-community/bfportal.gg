@@ -1,14 +1,16 @@
 {% load static wagtailimages_tags %}
 <div class="w-11/12 mx-auto grid grid-cols-1 justify-items-center gap-y-4">
 
-    {% include 'core/blocks/filters.html' %}
-    {% if posts.paginator.num_pages > 20 %}
-        {% if posts.paginator.num_pages > 1 %}
-            {% include 'core/blocks/pagination.html' %}
+    {% if not disable_filters_and_pagination %}
+        {% include 'core/blocks/filters.html' %}
+        {% if posts.paginator.num_pages > 20 %}
+            {% if posts.paginator.num_pages > 1 %}
+                {% include 'core/blocks/pagination.html' %}
+            {% endif %}
         {% endif %}
     {% endif %}
 
-    <div class="flex flex-wrap flex-row justify-center gap-x-3 gap-y-5">
+    <div class="flex flex-wrap {% if trending_section %}overflow-y-hidden h-[26.5rem] pt-2{% endif %} flex-row justify-center gap-x-3 gap-y-5">
         {% for post in posts %}
             <div class="grow-0 relative experience_container group block h-[26rem] w-64 bg-card-bg rounded-lg scroll-mt-6 hover:bg-bg-default hover:cursor-pointer hover:-translate-y-2 transition duration-200 ease-in-out">
                 <div class="m-2">
@@ -103,65 +105,69 @@
             </div>
         {% endfor %}
     </div>
-    {% if posts.paginator.num_pages > 1 %}
-        {% include 'core/blocks/pagination.html' %}
+    {% if not disable_filters_and_pagination %}
+        {% if posts.paginator.num_pages > 1 %}
+            {% include 'core/blocks/pagination.html' %}
+        {% endif %}
     {% endif %}
 </div>
 
-<script>
-    const cards = document.querySelectorAll(".experience_container");
-    [...cards].forEach(card => {
-            const mainLink = card.querySelector(".main-link");
-            const clickableElements = Array.from(card.querySelectorAll("a, .clickable"));
-            //we are using 'a' here for simplicity but ideally you should put a class like 'clickable' on every clickable element inside card(a, button) and use that in query selector
+{% if not no_js %}
+    <script>
+        const cards = document.querySelectorAll(".experience_container");
+        [...cards].forEach(card => {
+                const mainLink = card.querySelector(".main-link");
+                const clickableElements = Array.from(card.querySelectorAll("a, .clickable"));
+                //we are using 'a' here for simplicity but ideally you should put a class like 'clickable' on every clickable element inside card(a, button) and use that in query selector
 
-            clickableElements.forEach((ele) =>
-                ele.addEventListener("click", (e) => e.stopPropagation())
-            );
+                clickableElements.forEach((ele) =>
+                    ele.addEventListener("click", (e) => e.stopPropagation())
+                );
 
-            function handleClick(event) {
-                const noTextSelected = !window.getSelection().toString();
+                function handleClick(event) {
+                    const noTextSelected = !window.getSelection().toString();
 
-                if (noTextSelected) {
-                    mainLink.click();
+                    if (noTextSelected) {
+                        mainLink.click();
+                    }
                 }
-            }
-            card.addEventListener("click", handleClick);
-    });
-</script>
-<script>
-    function copyDivToClipboard(elem) {
-        let range = document.createRange();
-        range.selectNode(elem);
-        window.getSelection().removeAllRanges(); // clear current selection
-        window.getSelection().addRange(range); // to select text
-        document.execCommand("copy");
-        window.getSelection().removeAllRanges();// to deselect
-        elem.nextElementSibling.textContent = "[Copied!!]";
+                card.addEventListener("click", handleClick);
+        });
+    </script>
+    <script>
+        function copyDivToClipboard(elem) {
+            let range = document.createRange();
+            range.selectNode(elem);
+            window.getSelection().removeAllRanges(); // clear current selection
+            window.getSelection().addRange(range); // to select text
+            document.execCommand("copy");
+            window.getSelection().removeAllRanges();// to deselect
+            elem.nextElementSibling.textContent = "[Copied!!]";
 
-    }
-    function add_to_liked(elem){
-        const id = elem.id.split('-').pop();
-        fetch(`/api/like/${id}/`).then(
-            function (resp) {
-                return resp.json()
-            }
-        ).then(function (data) {
-            const elem = document.getElementById(`fav-count-${id}`),
-                like_svg = document.getElementById(`like-svg-${id}`)
-            if (elem.textContent && data > elem.textContent) {
-                like_svg.src = "{% static 'svgs/card/heart_liked.svg' %}"
-            } else {
-                like_svg.src = "{% static 'svgs/card/heart_not_liked.svg' %}"
-            }
-            elem.textContent = data
-            if (elem.textContent === "0"){
-                elem.classList.remove("block")
-                elem.classList.add("hidden")
-            } else {
-                elem.classList.add("block")
-                elem.classList.remove("hidden")
-            }
-        })
-    }
-</script>
+        }
+        function add_to_liked(elem){
+            const id = elem.id.split('-').pop();
+            fetch(`/api/like/${id}/`).then(
+                function (resp) {
+                    return resp.json()
+                }
+            ).then(function (data) {
+                const elem = document.getElementById(`fav-count-${id}`),
+                    like_svg = document.getElementById(`like-svg-${id}`)
+                if (elem.textContent && data > elem.textContent) {
+                    like_svg.src = "{% static 'svgs/card/heart_liked.svg' %}"
+                } else {
+                    like_svg.src = "{% static 'svgs/card/heart_not_liked.svg' %}"
+                }
+                elem.textContent = data
+                if (elem.textContent === "0"){
+                    elem.classList.remove("block")
+                    elem.classList.add("hidden")
+                } else {
+                    elem.classList.add("block")
+                    elem.classList.remove("hidden")
+                }
+            })
+        }
+    </script>
+{% endif %}
