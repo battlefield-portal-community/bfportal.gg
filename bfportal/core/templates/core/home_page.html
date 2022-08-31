@@ -11,6 +11,7 @@
     BF Portal Library
 {% endblock %}
 {% block content %}
+
     {% if categories %}
     <div class="flex flex-row mx-4 lg:mx-32 font-medium min-w-fit">
         <div class="flex flex-col grow items-center md:items-start">
@@ -49,7 +50,19 @@
         </div>
     </div>
     {% endif %}
+
+
+    {% if trending_posts %}
+    <div class="flex flex-row mx-4 gap-x-1 lg:mx-32 text-lg font-bold text-white">
+        <img src="{% static "svgs/pages/trending.svg" %}" alt="" width="16" height="16">
+        <p>Trending</p>
+
+    </div>
+    {% include 'core/experiences_listing.html' with posts=trending_posts no_js=True disable_filters_and_pagination=True trending_section=True %}
+    {% endif %}
+
     {% include 'core/experiences_listing.html'%}
+
     {% if not request.user.is_authenticated %}
         <iframe src="https://discord.com/widget?id=870246147455877181&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
     {% endif %}

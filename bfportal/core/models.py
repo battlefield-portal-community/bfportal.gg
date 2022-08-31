@@ -156,7 +156,9 @@ class HomePage(RoutablePageMixin, CustomBasePage):
     def base(self, request):  # noqa: D102
         logger.debug("base")
         return TemplateResponse(
-            request, self.get_template(request), self.get_context(request)
+            request,
+            self.get_template(request),
+            self.get_context(request, filter_trending=True),
         )
 
     @route(r"^submit/$")
@@ -166,6 +168,7 @@ class HomePage(RoutablePageMixin, CustomBasePage):
         return submit_experience(request, self)
 
     def get_context(self, request, *args, **kwargs):  # noqa: D102
+        filter_trending = kwargs.pop("filter_trending", False)
         context = super().get_context(request, *args, **kwargs)
         posts = pagination_wrapper(
             request,
@@ -176,6 +179,13 @@ class HomePage(RoutablePageMixin, CustomBasePage):
             SubCategory.objects.all()
         )
         context["posts"] = posts
+        if filter_trending:
+            context["trending_posts"] = (
+                ExperiencePage.objects.filter(trending=True)
+                .live()
+                .public()
+                .order_by("-first_published_at")
+            )
         return context
 
     @route(r"^category/(.+)/$")
