@@ -1,5 +1,5 @@
 {% load static wagtailimages_tags %}
-<div class="w-11/12 mx-auto grid grid-cols-1 justify-items-center gap-y-4">
+<div class="w-11/12 mx-auto grid grid-cols-1 {% if trending_section %} justify-items-start {% else %} justify-items-center {% endif %} gap-y-4">
 
     {% if not disable_filters_and_pagination %}
         {% include 'core/blocks/filters.html' %}
