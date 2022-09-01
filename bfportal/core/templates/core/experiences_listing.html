@@ -28,13 +28,13 @@
                                     <p class="align-bottom text-white">Experience Bugged</p>
                                 </div>
                             {% endif %}
-                            <div id="like-count-{{ post.id }}" class="absolute -bottom-0.5 right-0 w-min-14 pl-6 pr-2.5 pt-1.5 text-white text-sm group-hover:bg-bg-default duration-200 clickable fav-container" style="--rect-url: url('{% static 'svgs/card-fav-rect.svg' %}');" onclick="add_to_liked(this)">
+                            <div like_count_container="{{ post.id }}" class="absolute -bottom-0.5 right-0 w-min-14 pl-6 pr-2.5 pt-1.5 text-white text-sm group-hover:bg-bg-default duration-200 clickable fav-container" style="--rect-url: url('{% static 'svgs/card-fav-rect.svg' %}');" onclick="add_to_liked(this)">
                                 <div class="flex flex-row gap-2 font-medium pb-1.5">
-                                    <p id="fav-count-{{ post.id }}" class="{% if post.likes == 0 %} hidden {% endif %}">{{ post.likes }}</p>
+                                    <p fav_count_container="{{ post.id }}" class="{% if post.likes == 0 %} hidden {% endif %}">{{ post.likes }}</p>
                                     {% if post|is_liked_by_user:request %}
-                                    <img id="like-svg-{{ post.id }}" class="block" src="{% static 'svgs/card/heart_liked.svg' %}" alt="non">
+                                    <img like_svg="{{ post.id }}" class="block" src="{% static 'svgs/card/heart_liked.svg' %}" alt="non">
                                     {% else %}
-                                    <img id="like-svg-{{ post.id }}" class="block" src="{% static 'svgs/card/heart_not_liked.svg' %}" alt="non">
+                                    <img like_svg="{{ post.id }}" class="block" src="{% static 'svgs/card/heart_not_liked.svg' %}" alt="non">
                                     {% endif %}
                                 </div>
                             </div>
@@ -146,27 +146,31 @@
 
         }
         function add_to_liked(elem){
-            const id = elem.id.split('-').pop();
+            elem.like_count_container = "";
+            const id = elem.getAttribute("like_count_container");
             fetch(`/api/like/${id}/`).then(
                 function (resp) {
                     return resp.json()
                 }
             ).then(function (data) {
-                const elem = document.getElementById(`fav-count-${id}`),
-                    like_svg = document.getElementById(`like-svg-${id}`)
-                if (elem.textContent && data > elem.textContent) {
-                    like_svg.src = "{% static 'svgs/card/heart_liked.svg' %}"
-                } else {
-                    like_svg.src = "{% static 'svgs/card/heart_not_liked.svg' %}"
-                }
-                elem.textContent = data
-                if (elem.textContent === "0"){
-                    elem.classList.remove("block")
-                    elem.classList.add("hidden")
-                } else {
-                    elem.classList.add("block")
-                    elem.classList.remove("hidden")
-                }
+                const fav_containers = document.querySelectorAll(`[fav_count_container='${id}']`),
+                    like_svgs = [...document.querySelectorAll(`[like_svg='${id}']`)]
+                fav_containers.forEach(function (elem, index) {
+                    const like_svg = like_svgs[index]
+                    if (elem.textContent && data > elem.textContent){
+                        like_svg.src = "{% static 'svgs/card/heart_liked.svg' %}"
+                    } else {
+                        like_svg.src = "{% static 'svgs/card/heart_not_liked.svg' %}"
+                    }
+                    elem.textContent = data
+                    if (elem.textContent === "0"){
+                        elem.classList.remove("block")
+                        elem.classList.add("hidden")
+                    } else {
+                        elem.classList.add("block")
+                        elem.classList.remove("hidden")
+                    }
+                })
             })
         }
     </script>
