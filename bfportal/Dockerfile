@@ -34,7 +34,7 @@ RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-r
     && rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man \
     && apt-get clean
 
-RUN npm install npm@latest -g && \
+RUN npm install npm@8.18.0 -g && \
     npm install n -g && \
     n 18.8.0
 
