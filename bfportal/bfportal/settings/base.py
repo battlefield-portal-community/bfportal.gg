@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     "wagtailsvg",
     "wagtail.contrib.modeladmin",
     "generic_chooser",
+    "wagtailautocomplete",
 ]
 
 SITE_ID = 1

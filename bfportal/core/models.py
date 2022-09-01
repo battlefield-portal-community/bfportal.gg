@@ -31,6 +31,7 @@ from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.models import register_snippet
+from wagtailautocomplete.edit_handlers import AutocompletePanel
 from wagtailsvg.edit_handlers import SvgChooserPanel
 from wagtailsvg.models import Svg
 
@@ -416,6 +417,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
                         "trending",
                         classname="full",
                     ),
+                    AutocompletePanel("owner", target_model="core.Profile"),
                     FieldPanel("bugged", classname="full"),
                     FieldPanel("description", classname="full"),
                     FieldPanel("likes", classname="full"),
@@ -508,6 +510,19 @@ class Profile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     liked = models.ManyToManyField(ExperiencePage)
+    autocomplete_search_field = "user__username"
+
+    def autocomplete_label(self):
+        """Called by Wagtail auto complete to get label for an account"""
+        if not self.user.is_superuser:
+            discord_data = self.user.socialaccount_set.extra().first().extra_data
+            logger.debug(discord_data)
+            if len(discord_data.get("username", "")):
+                return f"{discord_data['username']}#{discord_data['discriminator']} : {discord_data['id']}"
+            else:
+                return str(self.user)
+        else:
+            return str(self.user)
 
     @staticmethod
     @receiver(post_save, sender=User)
