@@ -40,6 +40,7 @@ RUN wget -q https://github.com/Schniz/fnm/releases/latest/download/fnm-linux.zip
     && mv fnm /usr/local/bin/
 
 RUN fnm install v18.8.0
+run fnm use
 
 # Install the application server.
 RUN pip install "gunicorn==20.0.4"
