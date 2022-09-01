@@ -48,7 +48,7 @@ class Command(BaseCommand):
                 page = ExperiencePage(
                     title=t,
                     slug=slugify(t),
-                    owner=owner,
+                    owner=choice(owner),
                     description=factory.paragraph(nb_sentences=50),
                     code="".join(choices(string.ascii_lowercase + string.digits, k=6)),
                     no_bots=randint(0, 100),
