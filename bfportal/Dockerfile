@@ -21,6 +21,7 @@ ENV PYTHONUNBUFFERED=1 \
 RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-recommends \
     build-essential \
     curl \
+    wget \
     libpq-dev \
     libmariadbclient-dev \
     libjpeg62-turbo-dev \
@@ -32,7 +33,11 @@ RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-r
     && rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man \
     && apt-get clean
 
-RUN curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
+RUN wget -q https://github.com/Schniz/fnm/releases/latest/download/fnm-linux.zip \
+    && unzip -j fnm-linux.zip \
+    && chmod +x fnm \
+    && mv fnm /usr/local/bin/
+
 RUN fnm install v18.8.0
 
 # Install the application server.
