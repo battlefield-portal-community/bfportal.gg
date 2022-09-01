@@ -30,7 +30,9 @@ class Command(BaseCommand):
         if options["generate"]:
             factory = Faker()
             cats = ExperiencesCategory.objects.all()
-            owner = get_user_model().objects.all()[1]
+            owner = [
+                user for user in get_user_model().objects.all() if not user.is_superuser
+            ]
             tags = [factory.word() for i in range(20)]
             experiences_page = ExperiencesPage.objects.first()
             page_count = options.get("no_of_pages", [0])[0]
@@ -57,8 +59,7 @@ class Command(BaseCommand):
                     first_published_at=datetime.datetime.now(datetime.timezone.utc),
                 )
                 cat = choice(cats)
-                page.categories.clear()
-                page.categories.add(cat),
+                page.category = cat
                 page.tags.add(*choices(tags, k=10)),
                 experiences_page.add_child(instance=page)
                 experiences_page.save()

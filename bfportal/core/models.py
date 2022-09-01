@@ -516,7 +516,6 @@ class Profile(models.Model):
         """Called by Wagtail auto complete to get label for an account"""
         if not self.user.is_superuser:
             discord_data = self.user.socialaccount_set.extra().first().extra_data
-            logger.debug(discord_data)
             if len(discord_data.get("username", "")):
                 return f"{discord_data['username']}#{discord_data['discriminator']} : {discord_data['id']}"
             else:
