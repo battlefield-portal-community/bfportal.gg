@@ -579,6 +579,7 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
         context["requested_user"] = user_acc
         context["latest_post"] = all_posts.first()
         context["total_num_posts"] = len(all_posts)
+        context["earned_likes"] = all_posts.aggregate(models.Sum("likes"))["likes__sum"]
         return context
 
     @route(r"^$")
