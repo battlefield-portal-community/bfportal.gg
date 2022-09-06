@@ -98,7 +98,7 @@ def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
 
 def pagination_wrapper(request: HttpRequest, posts: models.query.QuerySet) -> Paginator:
     """Returns paginated result for a query"""
-    paginator = Paginator(apply_filters(request, posts), request.GET.get("n", 10))
+    paginator = Paginator(apply_filters(request, posts), request.GET.get("n", 12))
     curr_page = safe_cast(request.GET.get("page", None), int, 1)
     try:
         # If the page exists and the ?page=x is an int
