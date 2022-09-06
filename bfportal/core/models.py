@@ -381,7 +381,6 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         help_text="Max Number of Bots in your experience",
         verbose_name="Number Of Bots",
     )
-    # todo: migrate this to main-cats, sub-cats usage
     category = models.ForeignKey(
         ExperiencesCategory,
         blank=False,
@@ -404,6 +403,10 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
 
     likes = models.IntegerField(default=0, null=False, help_text="Number of likes")
 
+    creators = ParentalManyToManyField(
+        "auth.User", blank=True, help_text="choose creators"
+    )
+
     content_panels = (
         Page.content_panels
         + [
@@ -423,6 +426,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
                     FieldPanel("likes", classname="full"),
                     FieldPanel("category", widget=forms.RadioSelect),
                     FieldPanel("sub_categories", widget=forms.CheckboxSelectMultiple),
+                    AutocompletePanel("creators", target_model="core.Profile"),
                 ],
                 heading="Basic Info",
                 classname="collapsible",
