@@ -70,3 +70,9 @@ def check_liked(post: ExperiencePage, request: HttpRequest) -> bool:
     """Returns True if liked by user"""
     if request.user.is_authenticated:
         return post in request.user.profile.liked.all()
+
+
+@register.filter("check_permission")
+def check_permission(user, permission):
+    """Returns True if user has the 'permission'"""
+    return user.has_perm(permission)

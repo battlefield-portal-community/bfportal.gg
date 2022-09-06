@@ -6,7 +6,7 @@
 {% block content %}
     {% get_social_accounts requested_user as accounts %}
     <div class="flex w-full flex-col space-y-20 px-4 mt-4">
-        <div class="profile flex space-x-5 mx-auto">
+        <div class="profile flex space-x-5 mx-auto items-center">
             {% if accounts %}
                 {% with account=accounts.discord.0 %}
                     <div class="profile_banner flex flex-col justify-center items-center text-sm px-2  py-4 gap-y-2  rounded-lg text-bf2042-4">
@@ -17,16 +17,25 @@
                             <img src="{% static 'images/default_discord_avatar.png' %}" class="block rounded-full mx-auto" alt="@p"/>
                         {% endif %}
                         </div>
-                        <div class="flex flex-row text-white font-bold">
-                            <div>
+                        <div class="flex flex-col text-white font-bold gap-y-2">
+                            <div class="text-center">
                                {{ account.extra_data.username }}<p class="inline text-gray-400">#{{ account.extra_data.discriminator }}</p>
                             </div>
+                            {% if requested_user.is_superuser %}
+                            <div>
+                               <p class="text-center text-red-600">Administrator</p>
+                            </div>
+                            {% elif requested_user|check_permission:"wagtailadmin.access_admin" %}
+                            <div>
+                               <p class="text-center text-red-400">Moderator</p>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
-                    <div class="user_info grid grid-cols-3 pr-4 text-white text-xs gap-x-2">
+                    <div class="user_info grid grid-cols-3 pr-4 text-white text-xs gap-x-3 gap-y-6">
                         <div class="flex flex-col gap-y-2">
                             <p class="font-semibold font-semibold">Account Create on</p>
-                            <p>{{ user.date_joined|date:"d M Y"}}</p>
+                            <p class="text-bf2042-4">{{ user.date_joined|date:"d M Y"}}</p>
                         </div>
                         <div class="flex flex-col gap-y-2">
                             <p class="font-semibold font-semibold">Number of Experiences</p>
