@@ -1,10 +1,10 @@
 {% load static wagtailimages_tags %}
-<div class="w-11/12 mx-auto grid grid-cols-1 {% if trending_section %} justify-items-start {% else %} justify-items-center {% endif %} gap-y-4">
+<div class="w-11/12 mx-auto grid grid-cols-1 justify-items-center {% if trending_section %} md:justify-items-start {% endif %} gap-y-4">
 
     {% if not disable_filters_and_pagination %}
         {% include 'core/blocks/filters.html' %}
     {% endif %}
-    <div class="flex flex-wrap {% if trending_section %}overflow-y-hidden h-[26.5rem] pt-2 ml-[3.125rem]{% else %}experience_container{% endif %} justify-items-start flex-row gap-x-3 gap-y-5">
+    <div class="flex flex-wrap justify-center {% if trending_section %}overflow-y-hidden h-[26.5rem] pt-2  md:ml-[3.125rem]{% else %}experience_container{% endif %} justify-items-start flex-row gap-x-3 gap-y-5">
         {% for post in posts %}
             <div class="grow-0 relative experience_card {% if not trending_section %}experience{% endif %} group block h-[26rem] w-64 bg-card-bg rounded-lg scroll-mt-6 hover:bg-bg-default hover:cursor-pointer hover:-translate-y-2 transition duration-200 ease-in-out">
                 <div class="m-2">
@@ -81,16 +81,29 @@
 
                         </div>
                         <!-- owner info -->
-                        <div class="absolute flex inset-x-0 bottom-1.5">
-                            <div class="mx-auto text-xs font-medium text-white">
+                        <div class="absolute inset-x-0 bottom-1.5 ">
+                            <div class="flex mx-auto text-xs font-medium text-white justify-center gap-x-1">
                                 By
                                 {% get_social_account post.owner as social_account %}
                                 {% if social_account %}
-                                    <a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-thin oldstyle-nums text-bf2042-4 hover:text-bf2042-6">{{social_account.extra_data.username}}</a>
+                                    <div class="flex flex-row max-w-[3.5rem] overflow-x-clip">
+                                        <a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-medium oldstyle-nums text-bf2042-4 hover:text-bf2042-6">{{social_account.extra_data.username}}</a>
+                                    </div>
                                 {% else %}
                                     {{post.owner}}
                                 {% endif %}
+                                {% if post.creators.count == 0  %}
                                 On {{post.first_published_at}}
+                                {% else %}
+                                    <div class="flex flex-row overflow-x-clip">
+                                    {% for creator in post.creators.all %}
+                                        {% get_social_account creator as social_account %}
+                                        {% if social_account %}
+                                             ,<a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-medium oldstyle-nums text-bf2042-4 hover:text-bf2042-6 shrink-0">{{social_account.extra_data.username}}</a>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
