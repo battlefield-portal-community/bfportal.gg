@@ -65,4 +65,4 @@ jobs:
         with:
           url: ${{ secrets.PORTAINER_WEBHOOK_URL }}
           method: 'POST'
-          timeout: 90000
+          timeout: 180000
