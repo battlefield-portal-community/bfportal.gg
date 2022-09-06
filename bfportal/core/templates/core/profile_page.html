@@ -12,9 +12,9 @@
                     <div class="profile_banner flex flex-col justify-center items-center text-sm px-2  py-4 space-y-2  rounded-lg text-bf2042-4 bg-card-bg hover:drop-shadow-bf2042-4 transition duration-200 ease-in-out ">
                         <div class="w-28">
                         {% if account.extra_data.avatar %}
-                            <img src="{{ account.get_avatar_url }}" class="block rounded-full " alt="@p"/>
+                            <img src="{{ account.get_avatar_url }}" class="block rounded-full mx-auto" alt="@p"/>
                         {% else %}
-                            <img src="{% static 'images/default_discord_avatar.png' %}" class="block rounded-full " alt="@p"/>
+                            <img src="{% static 'images/default_discord_avatar.png' %}" class="block rounded-full mx-auto" alt="@p"/>
                         {% endif %}
                         </div>
                         <div class="flex flex-row  text-bf2042-4">
