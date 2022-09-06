@@ -1,4 +1,5 @@
 import operator
+import os
 from datetime import datetime
 from functools import reduce
 
@@ -580,6 +581,7 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
         context["latest_post"] = all_posts.first()
         context["total_num_posts"] = len(all_posts)
         context["earned_likes"] = all_posts.aggregate(models.Sum("likes"))["likes__sum"]
+        context["owners"] = os.getenv("OWNERS", "").split(",")
         return context
 
     @route(r"^$")

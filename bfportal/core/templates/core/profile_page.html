@@ -21,14 +21,20 @@
                             <div class="text-center">
                                {{ account.extra_data.username }}<p class="inline text-gray-400">#{{ account.extra_data.discriminator }}</p>
                             </div>
-                            {% if requested_user.is_superuser %}
-                            <div>
-                               <p class="text-center text-red-600">Administrator</p>
-                            </div>
-                            {% elif requested_user|check_permission:"wagtailadmin.access_admin" %}
-                            <div>
-                               <p class="text-center text-red-400">Moderator</p>
-                            </div>
+                            {% if account.extra_data.id in owners %}
+                                <div>
+                                   <p class="text-center text-bf2042-5">Owner</p>
+                                </div>
+                            {% else %}
+                                {% if requested_user.is_superuser %}
+                                <div>
+                                   <p class="text-center text-red-600">Administrator</p>
+                                </div>
+                                {% elif requested_user|check_permission:"wagtailadmin.access_admin" %}
+                                <div>
+                                   <p class="text-center text-red-400">Moderator</p>
+                                </div>
+                                {% endif %}
                             {% endif %}
                         </div>
                     </div>
