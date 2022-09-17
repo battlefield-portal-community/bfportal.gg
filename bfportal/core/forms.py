@@ -13,7 +13,6 @@ class ExperiencePageForm(forms.ModelForm):
     #     help_text="Choose a Category for your experience",
     #     required=False
     # )
-
     class Meta:
         model = ExperiencePage
         exclude = ["featured"]
@@ -34,7 +33,6 @@ class ExperiencePageForm(forms.ModelForm):
 
     field_order = [
         "category",
-        "sub_categories",
         "exp_url",
         "code",
         "title",
@@ -42,6 +40,7 @@ class ExperiencePageForm(forms.ModelForm):
         "tags",
         "no_players",
         "no_bots",
+        "sub_categories",
         "cover_img_url",
         "vid_url",
     ]

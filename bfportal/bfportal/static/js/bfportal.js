@@ -5,11 +5,10 @@ $(document).ready(function() {
     });
     $('#cat-checkboxes input[type="checkbox"]').on('change', function () {
         $('input[type="checkbox"]').not(this).prop('checked', false);
-        const selected_label = ($.trim(this.closest('label').textContent));
-        const required_asterisk = $('<p class="inline-block text-red-500">*</p>');
-        const cat = $('#id_categoriesReason').closest('tr');
-        let inp;
-        let otherInp;
+        const selected_label = ($.trim(this.closest('label').textContent)),
+            required_asterisk = $('<p class="inline-block text-red-500">*</p>');
+        let inp, otherInp;
+
         if (selected_label !== "Prefab") {
             inp = $('#id_code');
             otherInp = $('#id_exp_url');
@@ -17,20 +16,17 @@ $(document).ready(function() {
             inp = $('#id_exp_url');
             otherInp = $('#id_code');
         }
-        const req = $(`#${inp.prop('id')}Reason`);
-        const otherReq =  $(`#${otherInp.prop('id')}Reason`);
+        const req = $(`#${inp.prop('id')}Reason`),
+            otherReq =  $(`#${otherInp.prop('id')}Reason`);
+
         if (req.siblings().length <= 2) {
             required_asterisk.insertBefore(req);
         }
         if (otherReq.siblings().length > 2) {
             otherReq.prev().remove();
         }
-
         otherInp.prop("required", false);
         inp.prop("required", true);
-        // cat.after(inp.closest('tr'));
-
-
     });
 
     function toTitleCase(str) {
