@@ -69,6 +69,15 @@
                                                 {% endif %}
                                             </div>
                                         </div>
+                                        {% if field.html_name == "exp_url" %}
+                                        <div class="text-[10px] font-medium text-white">
+                                            <span class="opacity-[0.5]">Sharing the experience URL with us allows you to store your logic in Json format and recover it at any time using</span>
+                                            <a href="https://github.com/LennardF1989/BF2042-Portal-Extensions" target="_blank" class="text-bf2042-4 opacity-[0.5]">this</a>
+                                            <span class="opacity-[0.5]">Chrome extension. By checking</span> <span class="opacity-80">“allow editing”</span>
+                                            <span class="opacity-[0.5]">you’re sharing your experience URL publicly on bfportal.gg and therefore allow everyone to duplicate your experience. Sharing URL is mandatory for prefabs. If you need more info go to our
+                                            <a href="https://github.com/LennardF1989/BF2042-Portal-Extensions" target="_blank" class="text-bf2042-4">Discord</a>.</span>
+                                        </div>
+                                        {% endif %}
                                         <!-- content -->
                                         <div>
                                             {% if field.html_name == "category" %}
@@ -95,7 +104,7 @@
                                                                     <label class="flex flex-row items-center gap-x-2 text-sm font-medium">
                                                                         <input type="checkbox"
                                                                                class="bg-card-bg border-0 checked:bg-bf2042-4 text-bf2042-4 rounded checkbox-check focus:ring-0 focus:ring-offset-0 focus:ring-offset-bg-default"
-                                                                               name="categories" value="{{ choice.0 }}"
+                                                                               name="sub_categories" value="{{ choice.0 }}"
                                                                                style="--check-svg-url: url('{% static 'svgs/check.svg' %}')"
                                                                                {% if choice.0  in form.category.value %}checked="checked"{% endif %}/>
                                                                         {{ choice.1 }}
@@ -106,9 +115,19 @@
                                                     </ul>
                                                 </div>
                                             {% else %}
-                                                {% render_field field class="w-full bg-card-bg h-9 text-white px-2 rounded border-0 hover:bg-[#1f1f1f] focus:ring-1 focus:ring-bf2042-4 disabled:bg-[#1f1f1f] placeholder:font-medium placeholder:text-sm" placeholder=field.label|title %}
+                                                {% render_field field class="w-full bg-card-bg h-9 text-white px-2 rounded border-0 hover:bg-[#1f1f1f] focus:ring-1 focus:ring-bf2042-4 disabled:bg-[#1f1f1f] placeholder:font-medium placeholder:text-sm" placeholder=field.label|title autocomplete="off" %}
                                             {% endif %}
                                         </div>
+                                        {% if field.html_name == "exp_url" %}
+                                            <label class="ml-auto text-white text-xs font-medium">
+                                                <input
+                                                        type="checkbox"
+                                                        class="bg-card-bg border-0 checked:bg-bf2042-4 text-bf2042-4 rounded checkbox-check focus:ring-0 focus:ring-offset-0 focus:ring-offset-bg-default"
+                                                        style="--check-svg-url: url('{% static 'svgs/check.svg' %}')"
+                                                >
+                                                Allow Editing
+                                            </label>
+                                        {% endif %}
                                     </div>
                                 </td>
                             </tr>
