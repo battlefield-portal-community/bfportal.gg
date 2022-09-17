@@ -19,6 +19,11 @@ body {
     mask-size: auto 100%;
 }
 
+.checkbox-check:checked {
+    background-image: var(--check-svg-url);
+}
+
+
 .bugged{
     background-image: var(--alert-svg);
     background-repeat: no-repeat;

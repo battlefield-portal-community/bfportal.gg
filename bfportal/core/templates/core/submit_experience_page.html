@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags widget_tweaks %}
+{% load wagtailcore_tags widget_tweaks static%}
 
 {% block content %}
     <div class="w-9/12 mx-auto mb-8">
@@ -47,7 +47,7 @@
                                     <div id="form-fields-container" class="flex flex-col gap-y-4">
                                         <!-- label and tooltip -->
                                         <div>
-                                            <div class="inline-block text-bf2042-3">
+                                            <div class="inline-block font-bold text-white text-sm">
                                                 {{ field.label }}
                                                 {% if field.field.required %}
                                                     <p class="inline-block text-red-500">*</p>
@@ -72,14 +72,14 @@
                                         <!-- content -->
                                         <div>
                                             {% if field.html_name == "category" %}
-                                                <div class="flex flex-col">
-                                                    <ul id="cat-checkboxes" class="inline bg-default">
+                                                <div class="flex flex-col gap-y-3">
+                                                    <ul id="cat-checkboxes" class="flex flex-row gap-x-4">
                                                         {% for choice in form.category.field.choices %}
                                                             {% if choice.0 %}
                                                                 <li class="inline text-white bg-default mt-0 px-0.5">
-                                                                    <label>
+                                                                    <label class="flex flex-row items-center gap-x-2 text-sm font-medium">
                                                                         <input type="radio"
-                                                                               class="bg-card-bg border-0 checked:bg-bf2042-4 text-bf2042-4 checked:bg-none focus:ring-bf2042-4 focus:ring-offset-card-bg"
+                                                                               class="bg-card-bg border-0 checked:bg-bf2042-4 text-bf2042-4 checked:bg-none focus:ring-bf2042-4 focus:ring-1 focus:ring-offset-1 focus:ring-offset-card-bg"
                                                                                name="categories" value="{{ choice.0 }}"
                                                                                {% if choice.0  in form.category.value %}checked="checked"{% endif %}/>
                                                                         {{ choice.1 }}
@@ -88,14 +88,15 @@
                                                             {% endif %}
                                                         {% endfor %}
                                                     </ul>
-                                                    <ul id="sub-cat-checkboxes" class="inline bg-default">
+                                                    <ul id="sub-cat-checkboxes" class="flex flex-row gap-x-2">
                                                         {% for choice in form.sub_categories.field.choices %}
                                                             {% if choice.0 %}
                                                                 <li class="inline text-white bg-default mt-0 px-0.5">
-                                                                    <label>
+                                                                    <label class="flex flex-row items-center gap-x-2 text-sm font-medium">
                                                                         <input type="checkbox"
-                                                                               class="form-checkbox appearance-none border border-red-300 rounded-sm bg-default checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 bg-no-repeat bg-center bg-contain mr-2 cursor-pointer"
+                                                                               class="bg-card-bg border-0 checked:bg-bf2042-4 text-bf2042-4 rounded checkbox-check focus:ring-0 focus:ring-offset-0 focus:ring-offset-bg-default"
                                                                                name="categories" value="{{ choice.0 }}"
+                                                                               style="--check-svg-url: url('{% static 'svgs/check.svg' %}')"
                                                                                {% if choice.0  in form.category.value %}checked="checked"{% endif %}/>
                                                                         {{ choice.1 }}
                                                                     </label>
