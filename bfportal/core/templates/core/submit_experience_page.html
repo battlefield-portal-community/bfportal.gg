@@ -34,13 +34,13 @@
                     {% for field in form %}
                         {% if field.html_name != "sub_categories" %}
                             {% if forloop.counter0 == 3 %}
-                                <tr>
-                                    <td class="text-center">
-                                        <div class="mx-auto w-fit text-bf2042-4 hover:text-bf2042-1 bg-bf2042-1 rounded-lg px-2 py-1 hover:bg-bf2042-4 transition duration-300 ease-in-out">
-                                            <button id="autoFillBtn" class="font-bold" type="button">Autofill</button>
-                                        </div>
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td class="text-center">
+                                    <div class="mx-auto w-fit text-bf2042-1 bg-bf2042-4 rounded px-4 py-1 hover:bg-bf2042-5 transition duration-200 ease-in-out">
+                                        <button id="autoFillBtn" class="font-bold" type="button">Auto Fill</button>
+                                    </div>
+                                </td>
+                            </tr>
                             {% endif %}
                             <tr>
                                 <td>
@@ -106,7 +106,7 @@
                                                     </ul>
                                                 </div>
                                             {% else %}
-                                                {% render_field field class="inline-block w-full  bg-default resize-y h-14 text-white mt-0 px-0.5 rounded rounded-lg border-0 border-b-2 border-gray-200 hover:bg-[#1f1f1f]  focus:ring-0 focus:bg-discord-dark  focus:border-bf2042-4 disabled:bg-[#1f1f1f]" %}
+                                                {% render_field field class="w-full bg-card-bg h-9 text-white px-2 rounded border-0 hover:bg-[#1f1f1f] focus:ring-1 focus:ring-bf2042-4 disabled:bg-[#1f1f1f] placeholder:font-medium placeholder:text-sm" placeholder=field.label|title %}
                                             {% endif %}
                                         </div>
                                     </div>
@@ -116,10 +116,12 @@
                     {% endfor %}
                 </table>
                 <br>
+                <div class="flex flex-row items-center">
                 <button type="submit"
-                        class="text-bf2042-4 font-bold hover:text-bf2042-1 bg-bf2042-1 rounded-lg px-2 py-1 hover:bg-bf2042-4 transition duration-300 ease-in-out">
+                        class="mx-auto w-fit text-bf2042-1 bg-bf2042-4 rounded px-4 py-1 font-bold hover:bg-bf2042-6 transition duration-200 ease-in-out">
                     Submit Experience
                 </button>
+                </div>
             </form>
             {#            {% if is_edit %}#}
             {#                <form action="../delete/" method="post">#}
