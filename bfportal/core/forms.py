@@ -1,5 +1,6 @@
 from urllib.parse import parse_qs, urlsplit
 
+from ajax_select.fields import AutoCompleteSelectMultipleField
 from core.models import ExperiencePage
 from django import forms
 from loguru import logger
@@ -13,6 +14,13 @@ class ExperiencePageForm(forms.ModelForm):
     #     help_text="Choose a Category for your experience",
     #     required=False
     # )
+    creators = AutoCompleteSelectMultipleField(
+        "DiscordUsers",
+        required=False,
+        help_text="Add additional creators",
+        widget_options={"attrs": {"required": False}},
+    )
+
     class Meta:
         model = ExperiencePage
         exclude = ["featured"]
@@ -37,6 +45,7 @@ class ExperiencePageForm(forms.ModelForm):
         "code",
         "title",
         "description",
+        "creators",
         "tags",
         "no_players",
         "no_bots",

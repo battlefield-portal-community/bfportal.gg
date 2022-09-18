@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     "wagtail.contrib.modeladmin",
     "generic_chooser",
     "wagtailautocomplete",
+    "ajax_select",
 ]
 
 SITE_ID = 1

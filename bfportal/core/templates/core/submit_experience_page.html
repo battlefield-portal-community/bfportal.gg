@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags widget_tweaks static%}
-
 {% block content %}
+    {{ form.media }}
     <div class="w-9/12 mx-auto mb-8">
         <div class="flex flex-col gap-y-2">
             <form action="." method="POST">
