@@ -49,12 +49,12 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-    {# Global stylesheets #}
-    {% tailwind_css %}
-
     {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
     {% endblock %}
+
+    {# Global stylesheets #}
+    {% tailwind_css %}
     <script type="text/javascript" src="{% static 'js/preload.js' %}"></script>
 </head>
 

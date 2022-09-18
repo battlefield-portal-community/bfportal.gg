@@ -19,6 +19,7 @@ class ExperiencePageForm(forms.ModelForm):
         required=False,
         help_text="Add additional creators",
         widget_options={"attrs": {"required": False}},
+        plugin_options={"position": {"my": "left top+10", "at": "left bottom"}},
     )
 
     class Meta:

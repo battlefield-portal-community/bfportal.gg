@@ -5,8 +5,9 @@
 @font-face {
     font-family: "MONTSERRAT";
     src: local('Montserrat'),
-        url("../fonts/Montserrat/Montserrat-VF.ttf") format("truetype") tech('variation');
+    url("../fonts/Montserrat/Montserrat-VF.ttf") format("truetype") tech('variation');
 }
+
 body {
     font-family: MONTSERRAT, sans-serif;
 }
@@ -24,49 +25,53 @@ body {
 }
 
 
-.bugged{
+.bugged {
     background-image: var(--alert-svg);
     background-repeat: no-repeat;
     background-size: 100% auto;
 }
+
 body::-webkit-scrollbar {
-  width: 5px;
+    width: 5px;
 }
 
 /* Track */
 body::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px #0a0a0a;
-  border-radius: 5px;
+    box-shadow: inset 0 0 5px #0a0a0a;
+    border-radius: 5px;
 }
 
 /* Handle */
 body::-webkit-scrollbar-thumb {
-  background: #26ffe0;
-  border-radius: 5px;
+    background: #26ffe0;
+    border-radius: 5px;
 }
 
 /* Handle on hover */
 body::-webkit-scrollbar-thumb:hover {
-  background: #ff0000;
+    background: #ff0000;
 }
 
 .scrollable::-webkit-scrollbar {
     width: 6px;
 }
+
 /* Handle */
 .scrollable::-webkit-scrollbar-thumb {
     background: #011C26;
     border-radius: 0.5rem;
 }
+
 .scrollable::-webkit-scrollbar-track {
     background: #303030;
     border-radius: 0.5rem;
 }
 
 .scrollable {
-  scrollbar-width: thin;    /* "auto" or "thin" */
-  scrollbar-color: #011C26 #303030;   /* scroll thumb and track */
+    scrollbar-width: thin; /* "auto" or "thin" */
+    scrollbar-color: #011C26 #303030; /* scroll thumb and track */
 }
+
 .expSubmitTable {
     border-spacing: 0 1em;
 }
@@ -79,4 +84,25 @@ body::-webkit-scrollbar-thumb:hover {
         column-gap: 5px;
         grid-template-columns: repeat(3, minmax(138px, max-content));
     }
+}
+
+.ui-widget.ui-widget-content {
+    background-color: theme('colors.card-bg');
+    color: white;
+    border: 0;
+    display: block !important;
+}
+
+.ui-menu-item {
+    color: white;
+}
+
+.ui-menu-item-wrapper span {
+    color: white;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+    background: theme("colors.hover-bg-light");
+    border: 0;
+
 }

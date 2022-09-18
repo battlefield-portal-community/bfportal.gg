@@ -21,10 +21,18 @@ class DiscordUsersLookup(LookupChannel):
         """Controls how a selected user looks on the submit exp page"""
         if social_account := obj.socialaccount_set.first():
             extra_data = social_account.extra_data
+            return "<span class='text-white'>%s</span>" % extra_data["username"]
+        return "<span class='text-white'>%s</span>" % obj.username
+
+    def format_match(self, obj):
+        """Controls how an item is displayed in the autocomplete menu"""
+        if social_account := obj.socialaccount_set.first():
+            extra_data = social_account.extra_data
             return (
-                "<span class='tag'>%s</span>"
+                "<span>%s</span>"
                 % f"{extra_data['username']}#{extra_data['discriminator']} : {extra_data['id']}"
             )
+        return "<span>%s</span>" % obj.username
 
     def check_auth(self, request: HttpRequest):
         """Allow anyone that is logged in to submit exp"""
