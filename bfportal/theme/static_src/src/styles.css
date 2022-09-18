@@ -90,7 +90,7 @@ body::-webkit-scrollbar-thumb:hover {
     background-color: theme('colors.card-bg');
     color: white;
     border: 0;
-    display: block !important;
+    /*display: block !important;*/
 }
 
 .ui-menu-item {
@@ -105,4 +105,17 @@ body::-webkit-scrollbar-thumb:hover {
     background: theme("colors.hover-bg-light");
     border: 0;
 
+}
+
+#id_creators_on_deck div {
+    margin: 0;
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    background-color: #36393f;
+    padding: 3px 7px 3px 7px;
+    border-radius: 0.25rem;
+}
+#id_creators_on_deck div .ui-icon-trash{
+    display: none;
 }

@@ -19,10 +19,11 @@ class DiscordUsersLookup(LookupChannel):
 
     def format_item_display(self, obj: User):
         """Controls how a selected user looks on the submit exp page"""
+        user_name = obj.username
         if social_account := obj.socialaccount_set.first():
-            extra_data = social_account.extra_data
-            return "<span class='text-white'>%s</span>" % extra_data["username"]
-        return "<span class='text-white'>%s</span>" % obj.username
+            user_name = social_account.extra_data["username"]
+
+        return f"<span class='text-white w-max text-sm font-medium'>@{user_name}</span>"
 
     def format_match(self, obj):
         """Controls how an item is displayed in the autocomplete menu"""
