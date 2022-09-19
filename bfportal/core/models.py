@@ -408,6 +408,8 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         "auth.User", blank=True, help_text="choose creators"
     )
 
+    allow_editing = models.BooleanField(default=False, null=False)
+
     content_panels = (
         Page.content_panels
         + [
@@ -428,6 +430,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
                     FieldPanel("category", widget=forms.RadioSelect),
                     FieldPanel("sub_categories", widget=forms.CheckboxSelectMultiple),
                     AutocompletePanel("creators", target_model="core.Profile"),
+                    FieldPanel("allow_editing"),
                 ],
                 heading="Basic Info",
                 classname="collapsible",

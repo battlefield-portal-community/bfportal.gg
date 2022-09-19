@@ -38,7 +38,7 @@
                 {% endif %}
                 <table class="expSubmitTable border-separate w-full">
                     {% for field in form %}
-                        {% if field.html_name != "sub_categories" %}
+                        {% if field.html_name not in form.ignore %}
                             {% if forloop.counter0 == 3 %}
                                 <tr>
                                     <td class="text-center">
@@ -131,9 +131,11 @@
                                         {% if field.html_name == "exp_url" %}
                                             <label class="ml-auto text-white text-xs font-medium">
                                                 <input
+                                                        name="allow_editing"
                                                         type="checkbox"
                                                         class="bg-card-bg border-0 checked:bg-bf2042-4 text-bf2042-4 rounded checkbox-check focus:ring-0 focus:ring-offset-0 focus:ring-offset-bg-default"
                                                         style="--check-svg-url: url('{% static 'svgs/check.svg' %}')"
+                                                        {% if form.initial.allow_editing %}checked{% endif %}
                                                 >
                                                 Allow Editing
                                             </label>

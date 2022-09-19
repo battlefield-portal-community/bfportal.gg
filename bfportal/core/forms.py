@@ -9,6 +9,10 @@ from loguru import logger
 class ExperiencePageForm(forms.ModelForm):
     """ModelForm for making an input form to submit a new experience"""
 
+    def __init__(self, *args, **kwargs):
+        super(ExperiencePageForm, self).__init__(*args, **kwargs)
+        self.ignore = ["sub_categories", "allow_editing"]
+
     creators = AutoCompleteSelectMultipleField(
         "DiscordUsers",
         required=False,
@@ -40,6 +44,7 @@ class ExperiencePageForm(forms.ModelForm):
             "vid_url",
             "creators",
             "tags",
+            "allow_editing",
         ]
         error_messages = {"category": {"required": "Select at least one category"}}
 

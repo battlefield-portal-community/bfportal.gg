@@ -184,6 +184,7 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
         form = ExperiencePageForm(request.POST, instance=experience_page)
         if form.is_valid():
 
+            logger.debug(form.cleaned_data)
             experience_page.creators.clear()
             experience_page.tags.clear()
 
