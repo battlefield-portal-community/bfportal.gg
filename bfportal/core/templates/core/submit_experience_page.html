@@ -38,6 +38,7 @@
                 {% endif %}
                 <table class="expSubmitTable border-separate w-full">
                     {% for field in form %}
+{#                        <div class="text-white">{{ field.html_name }}</div>#}
                         {% if field.html_name not in form.ignore %}
                             {% if forloop.counter0 == 3 %}
                                 <tr>
@@ -52,9 +53,13 @@
                                 <td>
                                     <div id="form-fields-container" class="flex flex-col gap-y-4">
                                         <!-- label and tooltip -->
-                                        <div>
-                                            <div class="inline-block font-bold text-white text-sm">
-                                                {{ field.label }}
+                                        <div class="flex flex-row items-center">
+                                            <div class="flex flex-row font-bold text-white text-sm items-center gap-x-2">
+                                                {% with svg_icon_path='svgs/submit/'|add:field.html_name|add:".svg" %}
+                                                    <img src="{% static svg_icon_path %}" width="16" height="16">
+                                                {% endwith %}
+
+                                                <p class="min-w-fit">{{ field.label }}</p>
                                                 {% if field.field.required %}
                                                     <p class="inline-block text-red-500">*</p>
                                                 {% endif %}

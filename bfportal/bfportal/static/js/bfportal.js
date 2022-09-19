@@ -6,7 +6,7 @@ $(document).ready(function() {
     $('#cat-checkboxes input[type="radio"]').on('change', function () {
         $('input[type="radio"]').not(this).prop('checked', false);
         const selected_label = $.trim(this.closest('label').textContent),
-            required_asterisk = $('<p class="inline-block text-red-500">*</p>');
+            required_asterisk = $('<p class="inline-block text-red-500 ml-2">*</p>');
         let inp, otherInp;
         if (selected_label !== "Prefab") {
             inp = $('#id_code');
