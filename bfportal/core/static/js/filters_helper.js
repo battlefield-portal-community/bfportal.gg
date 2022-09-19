@@ -1,4 +1,4 @@
-defer(function () {
+defer(function filter_helper_defer() {
     "use strict";
     $(document).ready(function () {
         const filtersPane = $('#filtersPane'),

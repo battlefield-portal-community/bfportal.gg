@@ -7,6 +7,7 @@ from core.forms import ExperiencePageForm
 from core.models import ExperiencePage, ExperiencesCategory, ExperiencesPage, HomePage
 from core.utils.helper import unique_slug_generator
 from dal import autocomplete
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
@@ -106,7 +107,6 @@ def send_approve_request(
             }
         ]
 
-        print(data)
         headers = {"Content-Type": "application/json"}
         result = requests.post(webhook_url, json=data, headers=headers)
         try:
@@ -132,20 +132,27 @@ def submit_experience(request: HttpRequest, home_page: HomePage):
             logger.debug(f"Saving new exp {form.cleaned_data}")
             new_exp_page: ExperiencePage = form.save(commit=False)
             new_exp_page.slug = unique_slug_generator(new_exp_page)
-            new_exp_page.tags.add(*form.cleaned_data["tags"])
-            new_exp_page.category = form.cleaned_data["category"]
             new_exp_page.owner = request.user
             new_exp: ExperiencePage = ExperiencesPage.objects.all()[0].add_child(
                 instance=new_exp_page
             )
-            for cats in form.cleaned_data["sub_categories"]:
-                new_exp_page.sub_categories.add(cats)
+            user_model = get_user_model()
+            for pk in form.cleaned_data["creators"]:
+                new_exp.creators.add(user_model.objects.get(pk=pk))
+
+            for pk in form.cleaned_data["tags"]:
+                new_exp.tags.add(Tag.objects.get(pk=pk))
+
+            for sub_cat in form.cleaned_data["sub_categories"]:
+                new_exp.sub_categories.add(sub_cat)
+
             if new_exp:
                 new_exp.unpublish()
                 new_exp.save_revision(submitted_for_moderation=True, user=request.user)
                 new_exp.first_published_at = timezone.now()
                 new_exp.save()
                 send_approve_request(new_exp, "new", request)
+
             return render(
                 request, "core/after_submit.html", {"exp_name": new_exp.title}
             )
@@ -176,6 +183,19 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
     if request.method == "POST":
         form = ExperiencePageForm(request.POST, instance=experience_page)
         if form.is_valid():
+
+            logger.debug(form.cleaned_data)
+            experience_page.creators.clear()
+            experience_page.tags.clear()
+
+            user_model = get_user_model()
+            for pk in form.cleaned_data["creators"]:
+                experience_page.creators.add(user_model.objects.get(pk=pk))
+            for pk in form.cleaned_data["tags"]:
+                experience_page.tags.add(Tag.objects.get(pk=pk))
+
+            # logger.debug(form.cleaned_data['tags'])
+
             experience_page.save_revision(
                 submitted_for_moderation=True, user=request.user, changed=True
             )
@@ -192,10 +212,18 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
                 {"form": form, "is_edit": True},
             )
     else:
+        form = ExperiencePageForm(
+            initial={
+                "sub_categories": [
+                    cat.pk for cat in experience_page.sub_categories.all()
+                ],
+            },
+            instance=experience_page,
+        )
         return render(
             request,
             "core/submit_experience_page.html",
-            {"form": ExperiencePageForm(instance=experience_page), "is_edit": True},
+            {"form": form, "is_edit": True},
         )
 
 

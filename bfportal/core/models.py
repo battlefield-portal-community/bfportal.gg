@@ -232,7 +232,17 @@ class ExperiencesCategory(models.Model):
     visible = models.BooleanField(
         help_text="Show Category on home page?", default=True, null=False
     )
-    panels = [FieldPanel("name"), SvgChooserPanel("icon"), FieldPanel("visible")]
+    selectable_on_form = models.BooleanField(
+        help_text="Should this Category be selectable in submit form",
+        default=True,
+        null=False,
+    )
+    panels = [
+        FieldPanel("name"),
+        SvgChooserPanel("icon"),
+        FieldPanel("visible"),
+        FieldPanel("selectable_on_form"),
+    ]
 
     def __str__(self):
         return self.name
@@ -255,7 +265,17 @@ class SubCategory(models.Model):
     visible = models.BooleanField(
         help_text="Show Category on home page?", default=True, null=False
     )
-    panels = [FieldPanel("name"), SvgChooserPanel("icon"), FieldPanel("visible")]
+    selectable_on_form = models.BooleanField(
+        help_text="Should this Category be selectable in submit form",
+        default=True,
+        null=False,
+    )
+    panels = [
+        FieldPanel("name"),
+        SvgChooserPanel("icon"),
+        FieldPanel("visible"),
+        FieldPanel("selectable_on_form"),
+    ]
 
     def __str__(self):
         return self.name
@@ -408,6 +428,8 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         "auth.User", blank=True, help_text="choose creators"
     )
 
+    allow_editing = models.BooleanField(default=False, null=False)
+
     content_panels = (
         Page.content_panels
         + [
@@ -428,6 +450,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
                     FieldPanel("category", widget=forms.RadioSelect),
                     FieldPanel("sub_categories", widget=forms.CheckboxSelectMultiple),
                     AutocompletePanel("creators", target_model="core.Profile"),
+                    FieldPanel("allow_editing"),
                 ],
                 heading="Basic Info",
                 classname="collapsible",

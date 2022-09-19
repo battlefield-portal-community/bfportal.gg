@@ -1,6 +1,7 @@
 from urllib.parse import parse_qs, urlsplit
 
-from core.models import ExperiencePage
+from ajax_select.fields import AutoCompleteSelectMultipleField
+from core.models import ExperiencePage, ExperiencesCategory, SubCategory
 from django import forms
 from loguru import logger
 
@@ -8,11 +9,30 @@ from loguru import logger
 class ExperiencePageForm(forms.ModelForm):
     """ModelForm for making an input form to submit a new experience"""
 
-    # categories = forms.ModelMultipleChoiceField(
-    #     queryset=ExperiencesCategory.objects.all(),
-    #     help_text="Choose a Category for your experience",
-    #     required=False
-    # )
+    def __init__(self, *args, **kwargs):
+        super(ExperiencePageForm, self).__init__(*args, **kwargs)
+        self.ignore = ["sub_categories", "allow_editing"]
+        self.fields["category"].queryset = ExperiencesCategory.objects.filter(
+            selectable_on_form=True
+        )
+        self.fields["sub_categories"].queryset = SubCategory.objects.filter(
+            selectable_on_form=True
+        )
+
+    creators = AutoCompleteSelectMultipleField(
+        "DiscordUsers",
+        required=False,
+        help_text="Add additional creators",
+        widget_options={"attrs": {"required": False}},
+        plugin_options={"position": {"my": "left top+10", "at": "left bottom"}},
+    )
+    tags = AutoCompleteSelectMultipleField(
+        "tags",
+        required=False,
+        help_text="Add tags to your experience",
+        widget_options={"attrs": {"required": False}},
+        plugin_options={"position": {"my": "left top+10", "at": "left bottom"}},
+    )
 
     class Meta:
         model = ExperiencePage
@@ -24,24 +44,27 @@ class ExperiencePageForm(forms.ModelForm):
             "sub_categories",
             "exp_url",
             "code",
-            "tags",
             "no_players",
             "no_bots",
             "cover_img_url",
             "vid_url",
+            "creators",
+            "tags",
+            "allow_editing",
         ]
         error_messages = {"category": {"required": "Select at least one category"}}
 
     field_order = [
         "category",
-        "sub_categories",
         "exp_url",
         "code",
         "title",
         "description",
+        "creators",
         "tags",
         "no_players",
         "no_bots",
+        "sub_categories",
         "cover_img_url",
         "vid_url",
     ]
