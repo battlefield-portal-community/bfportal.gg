@@ -50,7 +50,7 @@ class TagsLookup(LookupChannel):
 
     def get_query(self, q, request):
         """Returns all tags that contains `q` in their name"""
-        return self.model.objects.filter(name__icontains=q)[:5]
+        return self.model.objects.filter(name__istartswith=q)[:5]
 
     def format_item_display(self, obj: Tag):
         """Controls how a selected tag looks on the submit exp page"""
