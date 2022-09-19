@@ -232,7 +232,17 @@ class ExperiencesCategory(models.Model):
     visible = models.BooleanField(
         help_text="Show Category on home page?", default=True, null=False
     )
-    panels = [FieldPanel("name"), SvgChooserPanel("icon"), FieldPanel("visible")]
+    selectable_on_form = models.BooleanField(
+        help_text="Should this Category be selectable in submit form",
+        default=True,
+        null=False,
+    )
+    panels = [
+        FieldPanel("name"),
+        SvgChooserPanel("icon"),
+        FieldPanel("visible"),
+        FieldPanel("selectable_on_form"),
+    ]
 
     def __str__(self):
         return self.name
@@ -255,7 +265,17 @@ class SubCategory(models.Model):
     visible = models.BooleanField(
         help_text="Show Category on home page?", default=True, null=False
     )
-    panels = [FieldPanel("name"), SvgChooserPanel("icon"), FieldPanel("visible")]
+    selectable_on_form = models.BooleanField(
+        help_text="Should this Category be selectable in submit form",
+        default=True,
+        null=False,
+    )
+    panels = [
+        FieldPanel("name"),
+        SvgChooserPanel("icon"),
+        FieldPanel("visible"),
+        FieldPanel("selectable_on_form"),
+    ]
 
     def __str__(self):
         return self.name
