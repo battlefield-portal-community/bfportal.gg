@@ -3,12 +3,11 @@ $(document).ready(function() {
     $("body").on('click touch', function (event) {
         animateNavBarPane(true);
     });
-    $('#cat-checkboxes input[type="checkbox"]').on('change', function () {
-        $('input[type="checkbox"]').not(this).prop('checked', false);
-        const selected_label = ($.trim(this.closest('label').textContent)),
+    $('#cat-checkboxes input[type="radio"]').on('change', function () {
+        $('input[type="radio"]').not(this).prop('checked', false);
+        const selected_label = $.trim(this.closest('label').textContent),
             required_asterisk = $('<p class="inline-block text-red-500">*</p>');
         let inp, otherInp;
-
         if (selected_label !== "Prefab") {
             inp = $('#id_code');
             otherInp = $('#id_exp_url');
