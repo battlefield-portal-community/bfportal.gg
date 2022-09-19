@@ -7,7 +7,7 @@
 
 {% block content %}
     <script src="{% static 'js/autocomplete_helper.js' %}"></script>
-    <div class="w-9/12 mx-auto mb-8">
+    <div class="w-9/12 mx-auto mb-8 mt-8">
         <div class="flex flex-col gap-y-2">
             <form action="." method="POST" id="submitExpPage">
                 {% csrf_token %}
@@ -68,15 +68,11 @@
                                                class="reasonP inline-block text-bf2042-2 mr-2"></p>
                                             <div class="inline-block">
                                                 {% if field.help_text %}
-                                                    <label
-                                                            class="
-                                                        rounded-full
-                                                        px-2 bg-black w-min text-bf2042-3
-                                                        hover:text-blue-700 hover:cursor-help hover:bg-bf2042-5
-                                                        transition duration-200 ease-in-out "
-                                                            data-bs-toggle="tooltip" title="{{ field.help_text|safe }}">
-                                                        ?
-                                                    </label>
+                                                    <img class="tooltip_btn" src="{% static 'svgs/tooltip.svg' %}" aria-describedby="tooltip" for="{{ field.auto_id }}_tooltip"/>
+                                                    <div id="{{ field.auto_id }}_tooltip" class="tooltip text-xs font-medium text-white bg-card-bg px-2 py-1 rounded" role="tooltip">
+                                                        <div id="{{ field.auto_id }}_arrow" class="tooltip-arrow" data-popper-arrow></div>
+                                                        <p>{{ field.help_text }}</p>
+                                                    </div>
                                                 {% endif %}
                                             </div>
                                         </div>

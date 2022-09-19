@@ -25,12 +25,14 @@
 
         <meta property="og:description" content="{{ page.description }}"/>
         <meta name="description" content="{{ page.description }}"/>
-        <meta property="og:image" content="{% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/placeholder.png' %}{% endif %}"/>
+        <meta property="og:image" content="
+                {% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/placeholder.png' %}{% endif %}"/>
 
         <!-- Twitter Meta Tags -->
 
         <meta name="twitter:description" content="{{ page.description }}">
-        <meta name="twitter:image" content="{% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/placeholder.png' %}{% endif %}">
+        <meta name="twitter:image" content="
+                {% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/placeholder.png' %}{% endif %}">
 
     {% else %}
         <meta name="twitter:description"
@@ -67,37 +69,68 @@
 <div id="main" class="main-content flex flex-col flex-grow gap-y-12 overflow-x-hidden">
 
     {% block extra_content %}
-    {% include_block page.extra_content %}
+        {% include_block page.extra_content %}
     {% endblock %}
     {% block content %}{% endblock %}
 </div>
 
-    {% block footer %}
-        {% include 'footer.html' %}
-    {% endblock %}
-    {# Global javascript #}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"
-            integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="{% static 'js/jquery.min.js' %}"
-            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
-    <script src="{% static 'js/jquery.waypoints.js' %}"></script>
-    <script src="{% static 'js/infinite.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/bfportal.js' %}"></script>
-    <script type="text/javascript">
-        var tooltipTriggerList = [].slice.call(
-            document.querySelectorAll('[data-bs-toggle="tooltip"]')
-        );
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new Tooltip(tooltipTriggerEl);
+{% block footer %}
+    {% include 'footer.html' %}
+{% endblock %}
+{# Global javascript #}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"
+        integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{% static 'js/jquery.min.js' %}"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
+<script src="{% static 'js/jquery.waypoints.js' %}"></script>
+<script src="{% static 'js/infinite.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bfportal.js' %}"></script>
+<script type="text/javascript">
+    const showEvents = ['mouseenter', 'focus'];
+    const hideEvents = ['mouseleave', 'blur'];
+    let tooltip_btns = document.getElementsByClassName("tooltip_btn");
+
+    [...tooltip_btns].forEach(function (elm) {
+        const tooltip = document.getElementById(`${elm.getAttribute('for')}`);
+
+        const popperInstance = Popper.createPopper(
+            elm, tooltip, {
+                placement: 'top',
+                modifiers: [
+                    {
+                        name: 'offset',
+                        options: {
+                            offset: [0, 8],
+                        },
+                    },
+                ]
+            })
+        function show() {
+          tooltip.setAttribute('data-show', '');
+          popperInstance.update();
+        }
+        function hide() {
+          tooltip.removeAttribute('data-show');
+        }
+
+        showEvents.forEach((event) => {
+          elm.addEventListener(event, show);
         });
-    </script>
-    {% block extra_js %}
-        {# Override this in templates to add extra javascript #}
-    {% endblock %}
+
+        hideEvents.forEach((event) => {
+          elm.addEventListener(event, hide);
+        });
+    })
+
+
+</script>
+{% block extra_js %}
+    {# Override this in templates to add extra javascript #}
+{% endblock %}
 </div>
 </body>
 </html>
