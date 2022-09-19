@@ -4,7 +4,14 @@ defer(function initAutoCompleteHelper() {
 
         autocompleteContainers.forEach(function (container) {
             const input = $(`#id_${container}_text`),
-                inputContainer = $(`#${container}InputContainer`);
+                inputContainer = $(`#${container}InputContainer`),
+                deck = $(`#id_${container}_on_deck`);
+            if(deck.children().length){
+                if(!deck.hasClass("ml-2")) deck.addClass("ml-2")
+                deck.children().each(function () {
+                    $(this).css('display', 'flex')
+                })
+            }
             input.focus(function () {
                 inputContainer.addClass("border-1/2 border-bf2042-4")
             })

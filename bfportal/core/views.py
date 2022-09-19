@@ -199,7 +199,7 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
             initial={
                 "sub_categories": [
                     cat.pk for cat in experience_page.sub_categories.all()
-                ]
+                ],
             },
             instance=experience_page,
         )

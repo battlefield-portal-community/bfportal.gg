@@ -6,7 +6,6 @@
     <input type="hidden" class="bg-card-bg text-white" name="{{ name }}" id="{{ html_id }}" value="{{ current_ids }}"
            data-ajax-select="autocompleteselectmultiple" data-plugin-options="{{ data_plugin_options }}"/>
 </div>
-
 {% block extra_script %}
     <script type="application/javascript"> bindTriggers("{{ html_id }}") </script>
 {% endblock %}

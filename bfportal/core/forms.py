@@ -38,6 +38,8 @@ class ExperiencePageForm(forms.ModelForm):
             "no_bots",
             "cover_img_url",
             "vid_url",
+            "creators",
+            "tags",
         ]
         error_messages = {"category": {"required": "Select at least one category"}}
 

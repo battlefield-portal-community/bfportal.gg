@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags widget_tweaks static%}
+{% load wagtailcore_tags widget_tweaks static %}
 
 {% block extra_css %}
     {{ form.media }}
@@ -40,13 +40,13 @@
                     {% for field in form %}
                         {% if field.html_name != "sub_categories" %}
                             {% if forloop.counter0 == 3 %}
-                            <tr>
-                                <td class="text-center">
-                                    <div class="mx-auto w-fit text-bf2042-1 bg-bf2042-4 rounded px-4 py-1 hover:bg-bf2042-5 transition duration-200 ease-in-out">
-                                        <button id="autoFillBtn" class="font-bold" type="button">Auto Fill</button>
-                                    </div>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td class="text-center">
+                                        <div class="mx-auto w-fit text-bf2042-1 bg-bf2042-4 rounded px-4 py-1 hover:bg-bf2042-5 transition duration-200 ease-in-out">
+                                            <button id="autoFillBtn" class="font-bold" type="button">Auto Fill</button>
+                                        </div>
+                                    </td>
+                                </tr>
                             {% endif %}
                             <tr>
                                 <td>
@@ -76,13 +76,16 @@
                                             </div>
                                         </div>
                                         {% if field.html_name == "exp_url" %}
-                                        <div class="text-[10px] font-medium text-white">
-                                            <span class="opacity-[0.5]">Sharing the experience URL with us allows you to store your logic in Json format and recover it at any time using</span>
-                                            <a href="https://github.com/LennardF1989/BF2042-Portal-Extensions" target="_blank" class="text-bf2042-4 opacity-[0.5]">this</a>
-                                            <span class="opacity-[0.5]">Chrome extension. By checking</span> <span class="opacity-80">“allow editing”</span>
-                                            <span class="opacity-[0.5]">you’re sharing your experience URL publicly on bfportal.gg and therefore allow everyone to duplicate your experience. Sharing URL is mandatory for prefabs. If you need more info go to our
-                                            <a href="https://github.com/LennardF1989/BF2042-Portal-Extensions" target="_blank" class="text-bf2042-4">Discord</a>.</span>
-                                        </div>
+                                            <div class="text-[10px] font-medium text-white">
+                                                <span class="opacity-[0.5]">Sharing the experience URL with us allows you to store your logic in Json format and recover it at any time using</span>
+                                                <a href="https://github.com/LennardF1989/BF2042-Portal-Extensions"
+                                                   target="_blank" class="text-bf2042-4 opacity-[0.5]">this</a>
+                                                <span class="opacity-[0.5]">Chrome extension. By checking</span> <span
+                                                    class="opacity-80">“allow editing”</span>
+                                                <span class="opacity-[0.5]">you’re sharing your experience URL publicly on bfportal.gg and therefore allow everyone to duplicate your experience. Sharing URL is mandatory for prefabs. If you need more info go to our
+                                            <a href="https://github.com/LennardF1989/BF2042-Portal-Extensions"
+                                               target="_blank" class="text-bf2042-4">Discord</a>.</span>
+                                            </div>
                                         {% endif %}
                                         <!-- content -->
                                         <div>
@@ -110,7 +113,8 @@
                                                                     <label class="flex flex-row items-center gap-x-2 text-sm font-medium">
                                                                         <input type="checkbox"
                                                                                class="bg-card-bg border-0 checked:bg-bf2042-4 text-bf2042-4 rounded checkbox-check focus:ring-0 focus:ring-offset-0 focus:ring-offset-bg-default"
-                                                                               name="sub_categories" value="{{ choice.0 }}"
+                                                                               name="sub_categories"
+                                                                               value="{{ choice.0 }}"
                                                                                style="--check-svg-url: url('{% static 'svgs/check.svg' %}')"
                                                                                {% if choice.0 in form.initial.sub_categories %}checked{% endif %}/>
                                                                         {{ choice.1 }}
@@ -142,10 +146,10 @@
                 </table>
                 <br>
                 <div class="flex flex-row items-center">
-                <button type="submit"
-                        class="mx-auto w-fit text-bf2042-1 bg-bf2042-4 rounded px-4 py-1 font-bold hover:bg-bf2042-6 transition duration-200 ease-in-out">
-                    Submit Experience
-                </button>
+                    <button type="submit"
+                            class="mx-auto w-fit text-bf2042-1 bg-bf2042-4 rounded px-4 py-1 font-bold hover:bg-bf2042-6 transition duration-200 ease-in-out">
+                        Submit Experience
+                    </button>
                 </div>
             </form>
             {#            {% if is_edit %}#}
