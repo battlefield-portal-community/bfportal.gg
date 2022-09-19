@@ -107,7 +107,7 @@ body::-webkit-scrollbar-thumb:hover {
 
 }
 
-#id_creators_on_deck div {
+#id_creators_on_deck div, #id_tags_on_deck div {
     margin: 0;
     display: none;
     flex-direction: row;
@@ -116,6 +116,6 @@ body::-webkit-scrollbar-thumb:hover {
     padding: 3px 7px 3px 7px;
     border-radius: 0.25rem;
 }
-#id_creators_on_deck div .ui-icon-trash{
+#id_creators_on_deck div .ui-icon-trash, #id_tags_on_deck div .ui-icon-trash{
     display: none;
 }

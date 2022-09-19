@@ -21,6 +21,13 @@ class ExperiencePageForm(forms.ModelForm):
         widget_options={"attrs": {"required": False}},
         plugin_options={"position": {"my": "left top+10", "at": "left bottom"}},
     )
+    tags = AutoCompleteSelectMultipleField(
+        "tags",
+        required=False,
+        help_text="Add tags to your experience",
+        widget_options={"attrs": {"required": False}},
+        plugin_options={"position": {"my": "left top+10", "at": "left bottom"}},
+    )
 
     class Meta:
         model = ExperiencePage
@@ -32,7 +39,6 @@ class ExperiencePageForm(forms.ModelForm):
             "sub_categories",
             "exp_url",
             "code",
-            "tags",
             "no_players",
             "no_bots",
             "cover_img_url",
