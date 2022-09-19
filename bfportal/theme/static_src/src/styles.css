@@ -119,3 +119,45 @@ body::-webkit-scrollbar-thumb:hover {
 #id_creators_on_deck div .ui-icon-trash, #id_tags_on_deck div .ui-icon-trash{
     display: none;
 }
+.tooltip {
+    display: none;
+}
+
+.tooltip[data-show] {
+  display: block;
+}
+
+
+.tooltip-arrow,
+.tooltip-arrow::before {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: inherit;
+}
+
+.tooltip-arrow {
+  visibility: hidden;
+}
+
+.tooltip-arrow::before {
+  visibility: visible;
+  content: '';
+  transform: rotate(45deg);
+}
+
+.tooltip[data-popper-placement^='top'] > .tooltip-arrow {
+  bottom: -4px;
+}
+
+.tooltip[data-popper-placement^='bottom'] > .tooltip-arrow {
+  top: -4px;
+}
+
+.tooltip[data-popper-placement^='left'] > .tooltip-arrow {
+  right: -4px;
+}
+
+.tooltip[data-popper-placement^='right'] > .tooltip-arrow {
+  left: -4px;
+}
