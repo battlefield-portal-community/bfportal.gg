@@ -1,7 +1,7 @@
 from urllib.parse import parse_qs, urlsplit
 
 from ajax_select.fields import AutoCompleteSelectMultipleField
-from core.models import ExperiencePage, SubCategory
+from core.models import ExperiencePage, ExperiencesCategory, SubCategory
 from django import forms
 from loguru import logger
 
@@ -12,6 +12,9 @@ class ExperiencePageForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ExperiencePageForm, self).__init__(*args, **kwargs)
         self.ignore = ["sub_categories", "allow_editing"]
+        self.fields["category"].queryset = ExperiencesCategory.objects.filter(
+            selectable_on_form=True
+        )
         self.fields["sub_categories"].queryset = SubCategory.objects.filter(
             selectable_on_form=True
         )
