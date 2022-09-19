@@ -128,11 +128,14 @@ def submit_experience(request: HttpRequest, home_page: HomePage):
     """
     if request.method == "POST":
         form = ExperiencePageForm(request.POST)
+        logger.debug(form.data)
         if form.is_valid():
             logger.debug(f"Saving new exp {form.cleaned_data}")
             new_exp_page: ExperiencePage = form.save(commit=False)
             new_exp_page.slug = unique_slug_generator(new_exp_page)
-            new_exp_page.tags.add(*form.cleaned_data["tags"])
+            new_exp_page.tags.add(
+                *[Tag.objects.get(pk=int(i)) for i in form.cleaned_data["tags"]]
+            )
             new_exp_page.category = form.cleaned_data["category"]
             new_exp_page.owner = request.user
             new_exp: ExperiencePage = ExperiencesPage.objects.all()[0].add_child(
@@ -192,10 +195,19 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
                 {"form": form, "is_edit": True},
             )
     else:
+        form = ExperiencePageForm(
+            initial={
+                "sub_categories": [
+                    cat.pk for cat in experience_page.sub_categories.all()
+                ]
+            },
+            instance=experience_page,
+        )
+        logger.debug(form.initial)
         return render(
             request,
             "core/submit_experience_page.html",
-            {"form": ExperiencePageForm(instance=experience_page), "is_edit": True},
+            {"form": form, "is_edit": True},
         )
 
 

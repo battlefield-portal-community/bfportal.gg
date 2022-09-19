@@ -76,3 +76,9 @@ def check_liked(post: ExperiencePage, request: HttpRequest) -> bool:
 def check_permission(user, permission):
     """Returns True if user has the 'permission'"""
     return user.has_perm(permission)
+
+
+@register.filter
+def classname(obj):
+    """Returns obj type"""
+    return type(obj)

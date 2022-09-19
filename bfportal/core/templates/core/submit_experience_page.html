@@ -9,8 +9,9 @@
     <script src="{% static 'js/autocomplete_helper.js' %}"></script>
     <div class="w-9/12 mx-auto mb-8">
         <div class="flex flex-col gap-y-2">
-            <form action="." method="POST">
+            <form action="." method="POST" id="submitExpPage">
                 {% csrf_token %}
+                <div class="text-white">{{ form.initial }}</div>
                 {% if form.errors %}
                     <ul class="user-msg error text-center border border-red-300 rounded-lg mb-8">
                         {% for field in form %}
@@ -94,8 +95,8 @@
                                                                     <label class="flex flex-row items-center gap-x-2 text-sm font-medium">
                                                                         <input type="radio"
                                                                                class="bg-card-bg border-0 checked:bg-bf2042-4 text-bf2042-4 checked:bg-none focus:ring-bf2042-4 focus:ring-1 focus:ring-offset-1 focus:ring-offset-card-bg"
-                                                                               name="categories" value="{{ choice.0 }}"
-                                                                               {% if choice.0  in form.category.value %}checked="checked"{% endif %}/>
+                                                                               name="category" value="{{ choice.0 }}"
+                                                                               {% if choice.0  == form.category.initial %}checked=""{% endif %}/>
                                                                         {{ choice.1 }}
                                                                     </label>
                                                                 </li>
@@ -111,7 +112,7 @@
                                                                                class="bg-card-bg border-0 checked:bg-bf2042-4 text-bf2042-4 rounded checkbox-check focus:ring-0 focus:ring-offset-0 focus:ring-offset-bg-default"
                                                                                name="sub_categories" value="{{ choice.0 }}"
                                                                                style="--check-svg-url: url('{% static 'svgs/check.svg' %}')"
-                                                                               {% if choice.0  in form.category.value %}checked="checked"{% endif %}/>
+                                                                               {% if choice.0 in form.initial.sub_categories %}checked{% endif %}/>
                                                                         {{ choice.1 }}
                                                                     </label>
                                                                 </li>

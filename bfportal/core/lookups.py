@@ -12,11 +12,13 @@ class DiscordUsersLookup(LookupChannel):
 
     model: User = get_user_model()
 
-    def get_query(self, q, request):
+    def get_query(self, q, request: HttpRequest):
         """Returns all users that contains `q` in their username"""
-        return self.model.objects.filter(username__icontains=q).order_by("username")[
-            :10
-        ]
+        return (
+            self.model.objects.filter(username__icontains=q)
+            .exclude(username__exact=request.user.username)
+            .order_by("username")[:10]
+        )
 
     def format_item_display(self, obj: User):
         """Controls how a selected user looks on the submit exp page"""
