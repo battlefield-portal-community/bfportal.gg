@@ -1,3 +1,19 @@
+function bindTriggers(html_id){
+    const deck = $(`#${html_id}_on_deck`);
+    deck.bind('added', function () {
+        deck.children().last().show({
+            duration: 100,
+            start: function () {
+                deck.children().last().css('display', 'flex')
+            }
+        })
+        if(!deck.hasClass("ml-2")) deck.addClass("ml-2")
+    })
+    deck.bind('killed', function () {
+        if(!deck.children().length) deck.removeClass("ml-2")
+    })
+}
+
 defer(function initAutoCompleteHelper() {
     $(document).ready(function () {
         const autocompleteContainers = ["tags", "creators"]
@@ -18,25 +34,10 @@ defer(function initAutoCompleteHelper() {
             input.focusout(function () {
                 inputContainer.removeClass("border-1/2 border-bf2042-4")
             })
+            bindTriggers(`id_${container}`)
         })
     })
 })
-
-function bindTriggers(html_id){
-    const deck = $(`#${html_id}_on_deck`);
-    deck.bind('added', function () {
-        deck.children().last().show({
-            duration: 100,
-            start: function () {
-                deck.children().last().css('display', 'flex')
-            }
-        })
-        if(!deck.hasClass("ml-2")) deck.addClass("ml-2")
-    })
-    deck.bind('killed', function () {
-        if(!deck.children().length) deck.removeClass("ml-2")
-    })
-}
 
 function handleKeyDown(elm, event) {
     if (!elm.value && event.keyCode === 8) {
