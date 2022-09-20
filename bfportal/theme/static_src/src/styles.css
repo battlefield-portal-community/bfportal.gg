@@ -86,7 +86,7 @@ body::-webkit-scrollbar-thumb:hover {
     }
 }
 
-.ui-widget.ui-widget-content {
+ul.ui-widget.ui-widget-content {
     background-color: theme('colors.card-bg');
     color: white;
     border: 0;
@@ -97,11 +97,11 @@ body::-webkit-scrollbar-thumb:hover {
     color: white;
 }
 
-.ui-menu-item-wrapper span {
+a.ui-menu-item-wrapper span {
     color: white;
 }
 
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+a.ui-menu-item-wrapper.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
     background: theme("colors.hover-bg-light");
     border: 0;
 
