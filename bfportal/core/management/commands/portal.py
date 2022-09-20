@@ -1,7 +1,4 @@
-import json
-
-import requests
-from core.models import AvailableTags
+from core.helper import save_tags_from_gt_api
 from django.core.management import BaseCommand
 
 
@@ -14,18 +11,9 @@ class Command(BaseCommand):
         parser.add_argument(
             "--get_tags",
             action="store_true",
-            help="Gets all tags from game tools",
+            help="Gets all tags from game tools and saves to db",
         )
 
     def handle(self, *args, **options):  # noqa: D102
         if options.get("get_tags", None):
-            all_tags_json = requests.get(
-                "https://api.gametools.network/bf2042/availabletags/?lang=en-us"
-            ).json()["availableTags"]
-            tags = [
-                tag_dict["metadata"]["translations"][0]["localizedText"]
-                for tag_dict in all_tags_json
-            ]
-            AvailableTags.objects.all().delete()
-            new_obj = AvailableTags(tags=json.dumps(tags))
-            new_obj.save()
+            save_tags_from_gt_api()

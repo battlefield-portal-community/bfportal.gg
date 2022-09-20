@@ -3,6 +3,7 @@ import string
 from random import choice, choices, randint
 from uuid import uuid4
 
+from core.helper import get_tags_from_gt_api
 from core.models import ExperiencePage, ExperiencesCategory, ExperiencesPage
 from django.contrib.auth import get_user_model
 from django.core.management import BaseCommand
@@ -51,7 +52,7 @@ class Command(BaseCommand):
             owner = [
                 user for user in get_user_model().objects.all() if not user.is_superuser
             ]
-            tags = [factory.word() for i in range(20)]
+            tags = get_tags_from_gt_api()
             experiences_page = ExperiencesPage.objects.first()
             page_count = options.get("no_of_pages", [0])[0]
             logger.critical("delete all Experience Pages [y/n] ")
