@@ -1,3 +1,5 @@
+// https://portal.battlefield.com/experience/package/era?playgroundId=d23be170-33aa-11ed-98f8-9d6912d338ca
+
 $(document).ready(function() {
     "use strict";
     $("body").on('click touch', function (event) {
@@ -55,9 +57,7 @@ $(document).ready(function() {
             GTApiResponse.playgroundName = String;
             GTApiResponse.playgroundDescription = String;
             if (!GTApiResponse.hasOwnProperty('errors')) {
-                GTApiResponse.tag.forEach(elm => {
-
-                });
+                GTApiResponse.tag.forEach(elm => {addTagToDeck(elm['metadata']['translations'][0]['localizedText'])});
 
 
                 GTApiResponse = GTApiResponse.validatedPlayground;
