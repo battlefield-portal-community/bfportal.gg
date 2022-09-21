@@ -60,6 +60,37 @@
 
     {% tailwind_css %}
     <script type="text/javascript" src="{% static 'js/preload.js' %}"></script>
+    <script type="text/javascript">
+    /* When the user clicks on the button,
+    toggle between hiding and showing the dropdown content */
+    function toggleDropdown(id) {
+        const drpDown = document.getElementById(id)
+        drpDown.classList.toggle("invisible");
+        drpDown.style.opacity = '0%';
+        drpDown.style.top = '0rem';
+        anime({
+            targets: `#${id}`,
+            opacity: '100%',
+            top: '2rem',
+            easing: 'easeOutQuint',
+            duration: "200"
+        });
+
+    }
+
+    function addDropDownPair(buttonID, menuID) {
+        document.getElementById(buttonID).addEventListener('click', function () {
+            toggleDropdown(menuID)
+        })
+        document.getElementById(menuID).addEventListener('click', function (event) {
+            event.stopPropagation();
+        });
+        // Close the dropdown if the user clicks outside it
+        window.addEventListener('click',function (event) {
+            if (!event.target.closest(`#${buttonID}`)) document.getElementById(menuID).classList.add('invisible');
+        })
+    }
+    </script>
 </head>
 
 <body class="bg-bg-default min-h-screen m-0  relative flex flex-col {% block body_class %}{% endblock %}">

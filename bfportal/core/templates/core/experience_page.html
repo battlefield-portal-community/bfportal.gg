@@ -5,25 +5,47 @@
     <div class="flex flex-col text-white gap-y-8 mb-4">
         <div class="w-full h-80 max-h-80 relative">
             <img class="w-full h-full object-cover"
-                 src='{% if debug %}{% static "images/placeholder.png" %}{% else %}{% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{% static "images/placeholder.png" %}{% endif %}{% endif %}'
+                 src='
+                         {% if debug %}{% static "images/placeholder.png" %}{% else %}{% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{% static "images/placeholder.png" %}{% endif %}{% endif %}'
                  alt="{{ page.slug }}"
             />
-            <div like_count_container="{{ page.id }}" class="absolute bottom-0 right-0 w-min-14 pl-8 pr-2.5 pt-1.5 fav-container" style="--rect-url: url('{% static 'svgs/card-fav-rect.svg' %}'); background-color: #121212" onclick="add_to_liked(this)">
+            <div like_count_container="{{ page.id }}"
+                 class="absolute bottom-0 right-0 w-min-14 pl-8 pr-2.5 pt-1.5 fav-container"
+                 style="--rect-url: url('{% static 'svgs/card-fav-rect.svg' %}'); background-color: #121212"
+                 onclick="add_to_liked(this)">
                 <div class="flex flex-row gap-2 font-medium pb-1.5 text-3xl">
-                    <p fav_count_container="{{ page.id }}" class="{% if page.likes == 0 %} hidden {% endif %}">{{ page.likes }}</p>
+                    <p fav_count_container="{{ page.id }}"
+                       class="{% if page.likes == 0 %} hidden {% endif %}">{{ page.likes }}</p>
                     <img like_svg="{{ page.id }}"
                          width="32" height="32"
-                         src="{% if page|is_liked_by_user:request %}{% static 'svgs/card/heart_liked.svg' %}{% else %}{% static 'svgs/card/heart_not_liked.svg' %}{% endif %}"
+                         src="
+                                 {% if page|is_liked_by_user:request %}{% static 'svgs/card/heart_liked.svg' %}{% else %}{% static 'svgs/card/heart_not_liked.svg' %}{% endif %}"
                          alt=""
                     />
                 </div>
             </div>
-{#            <div class="absolute w-full h-full top-0 bugged" style="--alert-svg: url('{% static 'svgs/card/red_alert_bg.svg' %}')"></div>#}
+            {#            <div class="absolute w-full h-full top-0 bugged" style="--alert-svg: url('{% static 'svgs/card/red_alert_bg.svg' %}')"></div>#}
         </div>
         <div class="flex flex-col w-11/12 mx-auto rounded-xl p-4 gap-y-8">
             <!-- page title -->
             <div class="flex flex-row gap-x-4 items-center flex-wrap gap-y-2 relative w-full">
-                <div class="absolute top-1/2 -translate-y-1/2 right-0 text-sm font-bold">Report</div>
+                <div id="reportButton" class="absolute top-1/2 -translate-y-1/2 right-0 text-sm font-bold cursor-pointer">
+                    <p>Report</p>
+                    <div id="reportButtonDropdown"
+                         class="dropdown-content flex flex-col text-center text-md font-medium right-0 w-max rounded-lg absolute text-white invisible"
+                    > <!--left-12 -->
+                        <div class="flex flex-row justify-end pr-0.5">
+                            <div class="w-0 h-0 border-x-8 border-b-8 border-solid border-transparent border-b-card-bg"></div>
+                        </div>
+                        <div class="flex flex-col bg-card-bg rounded">
+                        <a class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200" href="">Experience Bugged</a>
+                        <a class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200" href="">Experience Not Available</a>
+                        <a class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200" href="">XP Farm</a>
+                        </div>
+                    </div>
+                </div>
+                <script>addDropDownPair("reportButton", "reportButtonDropdown")</script>
+
                 <div class="text-4xl font-bold">{{ page.title|title }}</div>
                 {% if page.bugged %}
                     <div class="text-xs text-[#FF0000] flex flex-row flex-wrap items-center gap-x-1">
@@ -142,7 +164,9 @@
                     </svg>
                 </div>
                 <div id="mapsRotation" class="flex flex-wrap gap-2 relative">
-                    <div id="maps_on_error" class="hidden text-sm font-bold text-[#FF0000]">Error Fetching Maps... Check Experience Code or URL</div>
+                    <div id="maps_on_error" class="hidden text-sm font-bold text-[#FF0000]">Error Fetching Maps... Check
+                        Experience Code or URL
+                    </div>
                     {#                        <div class="h-40 w-[21.563rem] rounded-lg relative">#}
                     {#                            <img class="object-cover w-full h-full rounded-lg" src="https://portal.battlefield.com/1916651/assets/images/maps/Map_Art_BF2042_IRR_S.jpg" alt="test">#}
                     {#                            <div class="absolute bg-gradient-to-t from-black w-full h-full inset-x-0 bottom-0 rounded-b-lg p-2 flex">#}
@@ -170,13 +194,15 @@
     <script type="text/javascript">
         let mapsShown = false;
         const showMapButton = $('#showMapsRotation');
-        function toggleMapButtonLabel(){
+
+        function toggleMapButtonLabel() {
             if (showMapButton.text() === "Show Maps Rotation") {
                 showMapButton.text("Hide Maps Rotation");
             } else {
                 showMapButton.text("Show Maps Rotation");
             }
         }
+
         showMapButton.on('click touch', function () {
             const val = $(this).text(),
                 mapRotation = $('#mapsRotation');
@@ -258,8 +284,7 @@
                             mapsShown = true;
                             tagsSpinner.hide();
                             mapRotation.scrollIntoView();
-                        }
-                        else {
+                        } else {
                             tagsSpinner.hide()
                             error_div.css('display', 'block')
                         }

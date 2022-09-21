@@ -132,38 +132,3 @@ $(document).ready(function() {
 
     addDropDownPair("profileButton", "accountNavBarDropdown")
 });
-/* When the user clicks on the button,
-toggle between hiding and showing the dropdown content */
-function toggleDropdown(id) {
-    const drpDown = document.getElementById(id)
-    drpDown.classList.toggle("invisible");
-    drpDown.style.opacity = '0%';
-    drpDown.style.top = '0rem';
-    anime({
-        targets: `#${id}`,
-        opacity: '100%',
-        top: '2rem',
-        easing: 'easeOutQuint',
-        duration: "200"
-    });
-
-}
-
-function addDropDownPair(buttonID, menuID) {
-    document.getElementById(buttonID).addEventListener('click', function () {
-        toggleDropdown(menuID)
-    })
-    document.getElementById(menuID).addEventListener('click', function (event) {
-        event.stopPropagation();
-    });
-    // Close the dropdown if the user clicks outside it
-    window.onclick = function (event) {
-        if (!event.target.closest(`#${buttonID}`)) {
-            const pane = document.getElementById(menuID);
-            if (!pane.classList.contains('invisible')) {
-                pane.classList.add('invisible');
-                pane.style.top = '0rem';
-            }
-        }
-    }
-}
