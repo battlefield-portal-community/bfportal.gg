@@ -4,37 +4,51 @@
 {% block content %}
     <div class="flex flex-col text-white gap-y-8 mb-4">
         <div class="w-full h-80 max-h-80 relative">
-            <img class="w-full h-full object-cover" src='
-                    {% if debug %}{% static "images/placeholder.png" %}{% else %}{% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{% static "images/placeholder.png" %}{% endif %}{% endif %}'
-                 alt="{{ page.slug }}"/>
-            <div class="absolute w-full h-full top-0 bugged" style="--alert-svg: url('{% static 'svgs/card/red_alert_bg.svg' %}')"></div>
+            <img class="w-full h-full object-cover"
+                 src='{% if debug %}{% static "images/placeholder.png" %}{% else %}{% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{% static "images/placeholder.png" %}{% endif %}{% endif %}'
+                 alt="{{ page.slug }}"
+            />
+            <div like_count_container="{{ page.id }}" class="absolute bottom-0 right-0 w-min-14 pl-8 pr-2.5 pt-1.5 fav-container" style="--rect-url: url('{% static 'svgs/card-fav-rect.svg' %}'); background-color: #121212" onclick="add_to_liked(this)">
+                <div class="flex flex-row gap-2 font-medium pb-1.5 text-3xl">
+                    <p fav_count_container="{{ page.id }}" class="{% if page.likes == 0 %} hidden {% endif %}">{{ page.likes }}</p>
+                    <img like_svg="{{ page.id }}"
+                         width="32" height="32"
+                         src="{% if page|is_liked_by_user:request %}{% static 'svgs/card/heart_liked.svg' %}{% else %}{% static 'svgs/card/heart_not_liked.svg' %}{% endif %}"
+                         alt=""
+                    />
+                </div>
+            </div>
+{#            <div class="absolute w-full h-full top-0 bugged" style="--alert-svg: url('{% static 'svgs/card/red_alert_bg.svg' %}')"></div>#}
         </div>
         <div class="flex flex-col w-11/12 mx-auto rounded-xl p-4 gap-y-8">
             <!-- page title -->
-            <div class="flex flex-row gap-x-4 items-center">
+            <div class="flex flex-row gap-x-4 items-center flex-wrap gap-y-2 relative w-full">
+                <div class="absolute top-1/2 -translate-y-1/2 right-0 text-sm font-bold">Report</div>
                 <div class="text-4xl font-bold">{{ page.title|title }}</div>
                 {% if page.bugged %}
-                    <div class="text-xs text-[#FF0000] flex flex-row items-center gap-x-1">
+                    <div class="text-xs text-[#FF0000] flex flex-row flex-wrap items-center gap-x-1">
                         <img class="red-svg" src="{% static 'svgs/card/Alert.svg' %}" alt="">
                         <p class="self-end">Experience bugged</p>
                     </div>
                 {% endif %}
-                {% if page.owner == request.user %}
-                    <a href="./edit" target="_blank">
-                        <div class="flex flex-row gap-x-1 bg-white px-4 py-1 rounded font-bold text-bf2042-1 hover:bg-bf2042-6 transition duration-200">
-                            <img class="black-svg" src="{% static 'svgs/edit.svg' %}" alt="" width="17">
-                            Edit Page
-                        </div>
-                    </a>
-                {% endif %}
-                {% if request.user|check_permission:"wagtailadmin.access_admin" %}
-                    <a href="/admin/pages/{{ page.pk }}/edit/" target="_blank">
-                        <div class="flex flex-row gap-x-1 bg-white px-4 py-1 rounded font-bold text-bf2042-1 hover:bg-bf2042-6 transition duration-200">
-                            <img class="black-svg" src="{% static 'svgs/edit.svg' %}" alt="" width="17">
-                            Edit in Admin
-                        </div>
-                    </a>
-                {% endif %}
+                <div class="flex flex-row gap-x-1">
+                    {% if page.owner == request.user %}
+                        <a href="./edit" target="_blank">
+                            <div class="text-xs min-w-fit md:text-sm flex flex-row flex-wrap items-center justify-center gap-x-1 bg-white px-4 py-1 rounded font-bold text-bf2042-1 hover:bg-bf2042-6 transition duration-200">
+                                <img class="black-svg" src="{% static 'svgs/edit.svg' %}" alt="" width="17">
+                                <p>Edit Page</p>
+                            </div>
+                        </a>
+                    {% endif %}
+                    {% if request.user|check_permission:"wagtailadmin.access_admin" %}
+                        <a href="/admin/pages/{{ page.pk }}/edit/" target="_blank">
+                            <div class="text-xs min-w-fit md:text-sm flex flex-row flex-wrap items-center justify-center gap-x-1 bg-white px-4 py-1 rounded font-bold text-bf2042-1 hover:bg-bf2042-6 transition duration-200">
+                                <img class="black-svg" src="{% static 'svgs/edit.svg' %}" alt="" width="17">
+                                <p>Edit in Admin</p>
+                            </div>
+                        </a>
+                    {% endif %}
+                </div>
 
             </div>
             <!-- cats -->

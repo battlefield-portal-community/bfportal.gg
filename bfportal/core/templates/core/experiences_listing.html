@@ -189,33 +189,5 @@
             elem.nextElementSibling.textContent = "[Copied!!]";
 
         }
-        function add_to_liked(elem){
-            elem.like_count_container = "";
-            const id = elem.getAttribute("like_count_container");
-            fetch(`/api/like/${id}/`).then(
-                function (resp) {
-                    return resp.json()
-                }
-            ).then(function (data) {
-                const fav_containers = document.querySelectorAll(`[fav_count_container='${id}']`),
-                    like_svgs = [...document.querySelectorAll(`[like_svg='${id}']`)]
-                fav_containers.forEach(function (elem, index) {
-                    const like_svg = like_svgs[index]
-                    if (elem.textContent && data > elem.textContent){
-                        like_svg.src = "{% static 'svgs/card/heart_liked.svg' %}"
-                    } else {
-                        like_svg.src = "{% static 'svgs/card/heart_not_liked.svg' %}"
-                    }
-                    elem.textContent = data
-                    if (elem.textContent === "0"){
-                        elem.classList.remove("block")
-                        elem.classList.add("hidden")
-                    } else {
-                        elem.classList.add("block")
-                        elem.classList.remove("hidden")
-                    }
-                })
-            })
-        }
     </script>
 {% endif %}
