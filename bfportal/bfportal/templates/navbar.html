@@ -57,7 +57,7 @@
                                     <img src="{% static 'images/default_discord_avatar.png' %}" class="inline rounded-full w-full" alt="@p"/>
                                 {% endif %}
                             </div>
-                            <div id="myDropdown"
+                            <div id="accountNavBarDropdown"
                                  class="dropdown-content flex flex-col text-center text-md font-medium left-1/2 -translate-x-1/2 w-max rounded-lg absolute text-white invisible"> <!--left-12 -->
                                 <div class="flex flex-row justify-center">
                                     <div class="w-0 h-0 border-x-8 border-b-8 border-solid border-transparent border-b-card-bg"></div>
@@ -132,8 +132,8 @@
 <script>
     /* When the user clicks on the button,
     toggle between hiding and showing the dropdown content */
-    function toggleDropdown() {
-        const drpDown = document.getElementById("myDropdown")
+    function toggleDropdown(id) {
+        const drpDown = document.getElementById(id)
         drpDown.classList.toggle("invisible");
         drpDown.style.opacity = '0%';
         drpDown.style.top = '0rem';
@@ -147,14 +147,16 @@
 
     }
 
-    document.getElementById('profileButton').addEventListener('click', toggleDropdown)
-    document.getElementById("myDropdown").addEventListener('click', function (event) {
+    document.getElementById('profileButton').addEventListener('click', function () {
+        toggleDropdown('accountNavBarDropdown')
+    })
+    document.getElementById("accountNavBarDropdown").addEventListener('click', function (event) {
         event.stopPropagation();
     });
     // Close the dropdown if the user clicks outside of it
     window.onclick = function (event) {
         if (!event.target.closest('#profileButton')) {
-            const pane = document.getElementById('myDropdown');
+            const pane = document.getElementById('accountNavBarDropdown');
             if (!pane.classList.contains('invisible')) {
                 pane.classList.add('invisible');
                 pane.style.top = '0rem';

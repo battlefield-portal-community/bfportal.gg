@@ -6,7 +6,7 @@ defer(function filter_helper_defer() {
             url = new URL(window.location.href),
             searchParams = new URLSearchParams(url.search);
 
-        console.log(searchParams)
+        // console.log(searchParams)
         filtersPane.css({
             'top' : `${navBar.innerHeight()}px`,
             // 'left': `-${filtersPane.width()}px`
@@ -80,7 +80,7 @@ defer(function filter_helper_defer() {
             }
         });
         // window.history.replaceState({}, '', `${location.pathname}?${queryParamList.join("&")}`);
-        console.log(`?${queryParamList.join("&")}`);
+        // console.log(`?${queryParamList.join("&")}`);
         document.location = `?${queryParamList.join("&")}`;
 
     });
@@ -115,7 +115,6 @@ function populateFilters(){
 function addItems(root, dataList=null, dataItem=null) {
     function addItem(elm) {
         let id = elm.replace(/\W/g, '');
-        console.log(id)
         id = root.attr('id') === "categoriesContainer" ? `cat_${id}` : `tag_${id}`;
         if (!document.getElementById(id)){
             const input = document.createElement('input'),

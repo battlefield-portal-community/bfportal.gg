@@ -133,28 +133,30 @@
 {% if not no_js %}
     <script>
         defer(function experience_listing_defer(){
-            new Waypoint.Infinite({
-                element: $(".experience_container")[0],
-                items:  ".experience",
-                more: ".more_button",
-                onBeforePageLoad: function () {
-                    $("#more_loading_spinner").show()
-                },
-                onAfterPageLoad: function () {
-                    $("#more_loading_spinner").hide()
-                    const url = new URL(window.location);
-                    let page_str = url.searchParams.get("page"),
-                        page = 0;
-                    if(page_str === null || page_str === "NaN"){
-                        page = 1
-                    } else {
-                        page = parseInt(page_str) + 1
+            $(window).on('load', function() {
+                new Waypoint.Infinite({
+                    element: $(".experience_container")[0],
+                    items:  ".experience",
+                    more: ".more_button",
+                    onBeforePageLoad: function () {
+                        $("#more_loading_spinner").show()
+                    },
+                    onAfterPageLoad: function () {
+                        $("#more_loading_spinner").hide()
+                        const url = new URL(window.location);
+                        let page_str = url.searchParams.get("page"),
+                            page = 0;
+                        if(page_str === null || page_str === "NaN"){
+                            page = 1
+                        } else {
+                            page = parseInt(page_str) + 1
+                        }
+                        url.searchParams.set("page", `${page}`)
+                        window.history.pushState("", "", url.search);
                     }
-                    url.searchParams.set("page", `${page}`)
-                    window.history.pushState("", "", url.search);
-                }
-            })
-            // todo: find a way to load items when scrolling up
+                })
+                // todo: find a way to load items when scrolling up
+            });
         })
     </script>
     <script>
