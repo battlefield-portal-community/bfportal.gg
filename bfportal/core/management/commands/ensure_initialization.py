@@ -1,3 +1,4 @@
+from core.helper import save_tags_from_gt_api
 from core.models import (
     ExperiencesCategory,
     ExperiencesPage,
@@ -57,3 +58,5 @@ class Command(BaseCommand):
             if not hasattr(user, "profile"):
                 user.profile = Profile()
                 user.save()
+
+        save_tags_from_gt_api()

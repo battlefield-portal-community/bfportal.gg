@@ -1,3 +1,5 @@
+// https://portal.battlefield.com/experience/package/era?playgroundId=d23be170-33aa-11ed-98f8-9d6912d338ca
+
 $(document).ready(function() {
     "use strict";
     $("body").on('click touch', function (event) {
@@ -55,17 +57,12 @@ $(document).ready(function() {
             GTApiResponse.playgroundName = String;
             GTApiResponse.playgroundDescription = String;
             if (!GTApiResponse.hasOwnProperty('errors')) {
-                let tags = "";
-                GTApiResponse.tag.forEach(elm => tags = tags.concat(elm.metadata.translations[0].localizedText, ","));
+                GTApiResponse.tag.forEach(elm => {addTagToDeck(elm['metadata']['translations'][0]['localizedText'])});
+
+
                 GTApiResponse = GTApiResponse.validatedPlayground;
                 document.getElementById("id_title").value = toTitleCase(GTApiResponse.playgroundName);
                 document.getElementById("id_description").value = GTApiResponse.playgroundDescription;
-                const tagElm = document.getElementById("id_tags");
-                tagElm.value = tags;
-                if (tags.length > 1) {
-                    tagElm.readOnly = true;
-                    document.getElementById(tagElm.id + "Reason").textContent = "[Auto Completed as Exp Url is Provided]";
-                }
                 document.getElementById("id_no_players").value = GTApiResponse.mapRotation.maps[0].gameSize;
                 {
                     document.getElementById("id_no_bots").value = GTApiResponse.mapRotation.maps[0].gameSize;
