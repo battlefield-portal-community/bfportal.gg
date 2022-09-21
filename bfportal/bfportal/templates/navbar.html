@@ -129,39 +129,4 @@
         </div>
     </div>
 </nav>
-<script>
-    /* When the user clicks on the button,
-    toggle between hiding and showing the dropdown content */
-    function toggleDropdown(id) {
-        const drpDown = document.getElementById(id)
-        drpDown.classList.toggle("invisible");
-        drpDown.style.opacity = '0%';
-        drpDown.style.top = '0rem';
-        anime({
-            targets: '#myDropdown',
-            opacity: '100%',
-            top: '2rem',
-            easing: 'easeOutQuint',
-            duration: "200"
-        });
-
-    }
-
-    document.getElementById('profileButton').addEventListener('click', function () {
-        toggleDropdown('accountNavBarDropdown')
-    })
-    document.getElementById("accountNavBarDropdown").addEventListener('click', function (event) {
-        event.stopPropagation();
-    });
-    // Close the dropdown if the user clicks outside of it
-    window.onclick = function (event) {
-        if (!event.target.closest('#profileButton')) {
-            const pane = document.getElementById('accountNavBarDropdown');
-            if (!pane.classList.contains('invisible')) {
-                pane.classList.add('invisible');
-                pane.style.top = '0rem';
-            }
-        }
-    }
-</script>
 {% endwith %}
