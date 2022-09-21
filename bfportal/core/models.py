@@ -446,7 +446,6 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
                     AutocompletePanel("owner", target_model="core.Profile"),
                     FieldPanel("bugged", classname="full"),
                     FieldPanel("description", classname="full"),
-                    FieldPanel("likes", classname="full"),
                     FieldPanel("category", widget=forms.RadioSelect),
                     FieldPanel("sub_categories", widget=forms.CheckboxSelectMultiple),
                     AutocompletePanel("creators", target_model="core.Profile"),

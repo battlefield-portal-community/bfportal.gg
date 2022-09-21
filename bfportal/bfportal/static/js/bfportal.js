@@ -129,4 +129,6 @@ $(document).ready(function() {
     $('#expUrlSpan').on('click touch', function () {
         navigator.clipboard.writeText($(this).attr('expurl'));
     });
+
+    addDropDownPair("profileButton", "accountNavBarDropdown")
 });

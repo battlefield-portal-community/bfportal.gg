@@ -161,3 +161,10 @@ a.ui-menu-item-wrapper.ui-state-active, .ui-widget-content .ui-state-active, .ui
 .tooltip[data-popper-placement^='right'] > .tooltip-arrow {
   left: -4px;
 }
+
+.black-svg {
+    filter: brightness(0) saturate(100%);
+}
+.red-svg {
+    filter: brightness(0) saturate(100%) invert(15%) sepia(76%) saturate(5742%) hue-rotate(360deg) brightness(90%) contrast(128%);
+}

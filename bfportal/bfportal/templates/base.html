@@ -26,12 +26,14 @@
         <meta property="og:description" content="{{ page.description }}"/>
         <meta name="description" content="{{ page.description }}"/>
         <meta property="og:image" content="
+
                 {% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/placeholder.png' %}{% endif %}"/>
 
         <!-- Twitter Meta Tags -->
 
         <meta name="twitter:description" content="{{ page.description }}">
         <meta name="twitter:image" content="
+
                 {% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/placeholder.png' %}{% endif %}">
 
     {% else %}
@@ -58,6 +60,37 @@
 
     {% tailwind_css %}
     <script type="text/javascript" src="{% static 'js/preload.js' %}"></script>
+    <script type="text/javascript">
+    /* When the user clicks on the button,
+    toggle between hiding and showing the dropdown content */
+    function toggleDropdown(id) {
+        const drpDown = document.getElementById(id)
+        drpDown.classList.toggle("invisible");
+        drpDown.style.opacity = '0%';
+        drpDown.style.top = '0rem';
+        anime({
+            targets: `#${id}`,
+            opacity: '100%',
+            top: '2rem',
+            easing: 'easeOutQuint',
+            duration: "200"
+        });
+
+    }
+
+    function addDropDownPair(buttonID, menuID) {
+        document.getElementById(buttonID).addEventListener('click', function () {
+            toggleDropdown(menuID)
+        })
+        document.getElementById(menuID).addEventListener('click', function (event) {
+            event.stopPropagation();
+        });
+        // Close the dropdown if the user clicks outside it
+        window.addEventListener('click',function (event) {
+            if (!event.target.closest(`#${buttonID}`)) document.getElementById(menuID).classList.add('invisible');
+        })
+    }
+    </script>
 </head>
 
 <body class="bg-bg-default min-h-screen m-0  relative flex flex-col {% block body_class %}{% endblock %}">
@@ -77,11 +110,11 @@
     {% include 'footer.html' %}
 {% endblock %}
 {# Global javascript #}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"
-        integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="{% static 'js/jquery.min.js' %}"
         integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"
+        integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://unpkg.com/@popperjs/core@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
@@ -108,23 +141,52 @@
                     },
                 ]
             })
+
         function show() {
-          tooltip.setAttribute('data-show', '');
-          popperInstance.update();
+            tooltip.setAttribute('data-show', '');
+            popperInstance.update();
         }
+
         function hide() {
-          tooltip.removeAttribute('data-show');
+            tooltip.removeAttribute('data-show');
         }
 
         showEvents.forEach((event) => {
-          elm.addEventListener(event, show);
+            elm.addEventListener(event, show);
         });
 
         hideEvents.forEach((event) => {
-          elm.addEventListener(event, hide);
+            elm.addEventListener(event, hide);
         });
     })
 
+    function add_to_liked(elem) {
+        const id = elem.getAttribute("like_count_container");
+        fetch(`/api/like/${id}/`).then(
+            function (resp) {
+                return resp.json()
+            }
+        ).then(function (data) {
+            const fav_containers = document.querySelectorAll(`[fav_count_container='${id}']`),
+                like_svgs = [...document.querySelectorAll(`[like_svg='${id}']`)]
+            fav_containers.forEach(function (elem, index) {
+                const like_svg = like_svgs[index]
+                if (elem.textContent && data > elem.textContent) {
+                    like_svg.src = "{% static 'svgs/card/heart_liked.svg' %}"
+                } else {
+                    like_svg.src = "{% static 'svgs/card/heart_not_liked.svg' %}"
+                }
+                elem.textContent = data
+                if (elem.textContent === "0") {
+                    elem.classList.remove("block")
+                    elem.classList.add("hidden")
+                } else {
+                    elem.classList.add("block")
+                    elem.classList.remove("hidden")
+                }
+            })
+        })
+    }
 
 </script>
 {% block extra_js %}
