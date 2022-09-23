@@ -388,6 +388,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         default="",
         help_text="Link for your cover Image",
         verbose_name="Cover Image Url",
+        max_length=1000,
     )
 
     no_players = models.PositiveIntegerField(
