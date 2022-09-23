@@ -1,6 +1,5 @@
 from django.http import HttpRequest
 from django.utils.html import format_html
-from loguru import logger
 from wagtail import hooks
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
@@ -60,7 +59,7 @@ class ExperiencePageAdmin(ModelAdmin):
 @hooks.register("construct_main_menu")
 def only_show_experiences_pages_item(request: HttpRequest, menu_items):
     """Returns only the Experience Pages menu items for a non superuser"""
-    logger.debug([item.name for item in menu_items])
+    # logger.debug([item.name for item in menu_items])
     if request.user.is_superuser:
         return menu_items
     elif request.user.groups.filter(name="Moderators").exists():
