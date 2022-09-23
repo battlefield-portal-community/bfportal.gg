@@ -50,6 +50,12 @@ class Command(BaseCommand):
         for json_row in json_db:
 
             row = DBRow(**json_row)
+            if row.type == "Prefabs":
+                row.type = "Prefab"
+            elif row.type == "Coop":
+                row.type = "co-op"
+            elif row.type == "Competitive":
+                row.type = "Multiplayer"
             try:
                 page = ExperiencePage(
                     title=row.experience_name,
