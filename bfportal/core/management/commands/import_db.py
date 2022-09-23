@@ -56,7 +56,7 @@ class Command(BaseCommand):
                     featured=row.featured,
                     trending=row.trending,
                     description=row.description,
-                    code=row.experience_code if len(row.experience_code) < 6 else "",
+                    code=row.experience_code if len(row.experience_code) == 6 else "",
                     exp_url=row.experience_edit_url,
                     vid_url=row.video_link,
                     cover_img_url=row.image_link,
