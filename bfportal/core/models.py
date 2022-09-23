@@ -7,7 +7,7 @@ from allauth.socialaccount.models import SocialAccount
 from core.utils.helper import safe_cast
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
@@ -552,9 +552,11 @@ class Profile(models.Model):
 
     @staticmethod
     @receiver(post_save, sender=User)
-    def create_user_profile(sender, instance, created, **kwargs):
+    def create_user_profile(sender, instance: User, created, **kwargs):
         """Called when a new user is created"""
         if created:
+            if (group := Group.objects.filter(name="self edit")).exists():
+                instance.groups.add(group[0])
             Profile.objects.create(user=instance)
 
     @staticmethod
