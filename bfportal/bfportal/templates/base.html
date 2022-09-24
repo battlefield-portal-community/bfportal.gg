@@ -102,6 +102,11 @@
 
     {% block extra_content %}
         {% include_block page.extra_content %}
+        <script type="text/javascript">
+            [...document.getElementsByClassName("extra_content")].forEach(function (element) {
+                if (!element.children.length) element.style.display = "none"
+            })
+        </script>
     {% endblock %}
     {% block content %}{% endblock %}
 </div>

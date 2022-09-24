@@ -6,7 +6,7 @@
             <div class="text-6xl">{{ block.value }}</div>
         {% elif block.block_type == "cover_image" %}
             {% image block.value original as img %}
-            <div class="min-h-80 -mx-[4.16%] mt-12"><img class="object-cover" src="{{ img.url }}" alt="{{ img.alt }}"></div>
+            <div class="min-h-80 -mx-[4.16%]"><img class="object-cover" src="{{ img.url }}" alt="{{ img.alt }}"></div>
         {% else %}
             <div>
                 {{ block }}
