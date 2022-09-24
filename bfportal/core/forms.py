@@ -1,5 +1,6 @@
 from urllib.parse import parse_qs, urlsplit
 
+import requests
 from ajax_select.fields import AutoCompleteSelectMultipleField
 from core.models import ExperiencePage, ExperiencesCategory, SubCategory
 from django import forms
@@ -102,3 +103,14 @@ class ExperiencePageForm(forms.ModelForm):
                     "must contain Playground ID", code="no_playground_id"
                 )
         return url
+
+    def clean_cover_img_url(self):
+        """Raises ValidationError if image link does not return content-type: 'image/*' like header"""
+        header_resp = requests.head(
+            self.cleaned_data["cover_img_url"], allow_redirects=True
+        )
+        if not header_resp.headers["content-type"].startswith("image"):
+            raise forms.ValidationError(
+                "Image url is invalid, make sure it is a direct link to the image"
+            )
+        return self.cleaned_data["cover_img_url"]
