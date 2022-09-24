@@ -2,6 +2,7 @@ import re
 from urllib.parse import parse_qs, urlparse
 
 from core.models import ExperiencePage, SubCategory
+from django.contrib.auth.models import User
 from django.http import HttpRequest
 from django.template.defaulttags import register
 
@@ -76,6 +77,12 @@ def check_liked(post: ExperiencePage, request: HttpRequest) -> bool:
 def check_permission(user, permission):
     """Returns True if user has the 'permission'"""
     return user.has_perm(permission)
+
+
+@register.filter("check_group")
+def check_group(user: User, group):
+    """Returns True if user has the 'permission'"""
+    return user.groups.filter(name__iexact=group)
 
 
 @register.filter

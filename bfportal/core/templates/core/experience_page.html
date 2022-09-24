@@ -62,7 +62,7 @@
                             </div>
                         </a>
                     {% endif %}
-                    {% if request.user|check_permission:"wagtailadmin.access_admin" %}
+                    {% if request.user|check_group:"Moderators" %}
                         <a href="/admin/pages/{{ page.pk }}/edit/" target="_blank">
                             <div class="text-xs min-w-fit md:text-sm flex flex-row flex-wrap items-center justify-center gap-x-1 bg-white px-4 py-1 rounded font-bold text-bf2042-1 hover:bg-bf2042-6 transition duration-200">
                                 <img class="black-svg" src="{% static 'svgs/edit.svg' %}" alt="" width="17">
