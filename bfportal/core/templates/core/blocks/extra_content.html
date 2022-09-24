@@ -1,6 +1,6 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
-<div class="w-11/12 mx-auto flex flex-col gap-y-2  -mt-12 extra_content text-white">
+<div class="w-11/12 mx-auto flex flex-col gap-y-2 extra_content text-white">
     {% for block in value %}
         {% if block.block_type == "heading"%}
             <div class="text-6xl">{{ block.value }}</div>

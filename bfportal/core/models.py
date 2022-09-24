@@ -121,6 +121,7 @@ class ExtraContent(blocks.StreamBlock):
     heading = blocks.CharBlock(form_classname="full title")
     cover_image = ImageChooserBlock()
     text = blocks.RichTextBlock()
+    raw_html = blocks.RawHTMLBlock()
 
     class Meta:
         template = "core/blocks/extra_content.html"
