@@ -19,6 +19,7 @@ class ExperiencePageForm(forms.ModelForm):
         self.fields["sub_categories"].queryset = SubCategory.objects.filter(
             selectable_on_form=True
         )
+        self.fields["cover_img_url"].required = True
 
     creators = AutoCompleteSelectMultipleField(
         "DiscordUsers",
@@ -106,11 +107,10 @@ class ExperiencePageForm(forms.ModelForm):
 
     def clean_cover_img_url(self):
         """Raises ValidationError if image link does not return content-type: 'image/*' like header"""
-        header_resp = requests.head(
-            self.cleaned_data["cover_img_url"], allow_redirects=True
-        )
-        if not header_resp.headers["content-type"].startswith("image"):
-            raise forms.ValidationError(
-                "Image url is invalid, make sure it is a direct link to the image"
-            )
-        return self.cleaned_data["cover_img_url"]
+        if len(url := self.cleaned_data["cover_img_url"]):
+            header_resp = requests.head(url, allow_redirects=True)
+            if not header_resp.headers["content-type"].startswith("image"):
+                raise forms.ValidationError(
+                    "Image url is invalid, make sure it is a direct link to the image"
+                )
+            return self.cleaned_data["cover_img_url"]
