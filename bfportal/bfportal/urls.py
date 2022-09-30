@@ -44,6 +44,7 @@ urlpatterns = [
         name="add_like_to_experience_page",
     ),
     url(r"^ajax_select/", include(ajax_select_urls)),
+    path("markdownx/", include("markdownx.urls")),
 ]
 
 

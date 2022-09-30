@@ -78,6 +78,14 @@ defer(function initAutoCompleteHelper() {
             })
             bindTriggers(`id_${container}`)
         })
+        const markdownContainer = $('#markdown_container'),
+            input = $("#id_description");
+        input.focus(function () {
+            markdownContainer.addClass("border-1/2 border-bf2042-4")
+        })
+        input.focusout(function () {
+            markdownContainer.removeClass("border-1/2 border-bf2042-4")
+        })
     })
 })
 

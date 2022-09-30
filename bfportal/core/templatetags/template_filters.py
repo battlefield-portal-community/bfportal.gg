@@ -1,10 +1,17 @@
 import re
 from urllib.parse import parse_qs, urlparse
 
+from core.helper import markdownify
 from core.models import ExperiencePage, SubCategory
 from django.contrib.auth.models import User
 from django.http import HttpRequest
 from django.template.defaulttags import register
+
+
+@register.filter
+def show_markdown(text):
+    """Returns HTML from Markdown text"""
+    return markdownify(text)
 
 
 @register.filter

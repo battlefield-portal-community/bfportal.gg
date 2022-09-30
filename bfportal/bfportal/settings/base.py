@@ -17,7 +17,6 @@ import platform
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -67,6 +66,7 @@ INSTALLED_APPS = [
     "generic_chooser",
     "wagtailautocomplete",
     "ajax_select",
+    "markdownx",
 ]
 
 SITE_ID = 1
@@ -125,9 +125,7 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-
 WSGI_APPLICATION = "bfportal.wsgi.application"
-
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -163,7 +161,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -176,7 +173,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -200,7 +196,6 @@ STATIC_URL = "/static/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
-
 
 # Wagtail settings
 
@@ -226,3 +221,38 @@ INTERNAL_IPS = [
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 DEBUG_PROPAGATE_EXCEPTIONS = True
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = os.getenv("ALLAUTH_PROTOCOL", "https")
+MARKDOWNX_MARKDOWNIFY_FUNCTION = "core.helper.markdownify"
+
+# markdownify
+MARKDOWNIFY_WHITELIST_TAGS = [
+    "a",
+    "abbr",
+    "acronym",
+    "b",
+    "blockquote",
+    "em",
+    "i",
+    "li",
+    "ol",
+    "p",
+    "strong",
+    "ul",
+    "pre",
+    "code",
+    *[f"h{i}" for i in range(1, 7)],
+]
+MARKDOWNIFY_WHITELIST_PROTOCOLS = [
+    "http",
+    "https",
+]
+MARKDOWNIFY_LINKIFY_PARSE_EMAIL = True
+MARKDOWNIFY_LINKIFY_SKIP_TAGS = [
+    "pre",
+    "code",
+]
+MARKDOWNIFY_WHITELIST_ATTRS = [
+    "href",
+    "src",
+    "alt",
+    "class",
+]

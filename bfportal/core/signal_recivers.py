@@ -26,7 +26,13 @@ def send_to_discord(sender, **kwargs):
         page.first_publish = False
         webhook_id = os.getenv("APPROVAL_SUCCESS_CHANNEL_WEBHOOK_ID")
         webhook_url = f"https://discord.com/api/webhooks/{webhook_id}/{token}"
-        uid = SocialAccount.objects.get(user_id=page.owner.id).uid
+        uid = -1
+        admin_add = False
+        try:
+            uid = SocialAccount.objects.get(user_id=page.owner.id).uid
+        except SocialAccount.DoesNotExist:
+            admin_add = True
+
         domain = Site.objects.get_current().domain
         url = f"http://{domain}{page.get_url()}"
         data = {
@@ -42,7 +48,11 @@ def send_to_discord(sender, **kwargs):
                         else "https://super-static-assets.s3.amazonaws.com/19d9fbc6-6292-4be8-ac70-5a186b556054%2Fimages%2Fb6495922-b4c7-4002-9c3d-56bfaa5b98b5.jpg"  # noqa: E501
                     },
                     "fields": [
-                        {"name": "Author", "value": f"<@{uid}>", "inline": True},
+                        {
+                            "name": "Author",
+                            "value": f"<@{uid}>" if not admin_add else "**admin**",
+                            "inline": True,
+                        },
                         {
                             "name": "Submitted on",
                             "value": f"<t:{int(page.first_published_at.timestamp())}>",

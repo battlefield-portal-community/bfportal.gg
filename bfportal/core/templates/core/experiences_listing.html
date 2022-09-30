@@ -62,7 +62,7 @@
                             </div>
                         </a>
                         <!-- desc -->
-                        <div class="font-medium text-white h-12 w-max-52 text-xs text-ellipsis"><p class="pr-6">{{ post.description|truncatechars:75 }}</p></div>
+                        <div class="font-medium text-white h-12 w-max-52 text-xs text-ellipsis overflow-hidden"><p class="pr-6">{{ post.description|truncatechars:75|show_markdown|safe }}</p></div>
 
                         <!-- Share code -->
                         <div class="flex flex-col mt-4 clickable">

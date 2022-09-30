@@ -7,6 +7,7 @@ async-timeout==4.0.2
 attrs==21.4.0
 beautifulsoup4==4.9.3
 binaryornot==0.4.4
+bleach==5.0.1
 bpyutils==0.2.0
 certifi==2021.10.8
 cffi==1.15.0
@@ -29,6 +30,7 @@ django-embed-video==1.4.1
 django-extensions==3.1.5
 django-filter==21.1
 django-livereload-server==0.4
+django-markdownx==3.0.1
 django-modelcluster==6.0
 django-permissionedforms==0.1
 django-taggit==3.0.0
@@ -49,6 +51,7 @@ Jinja2==3.0.3
 jinja2-time==0.2.0
 l18n==2021.3
 loguru==0.6.0
+Markdown==3.3.4
 MarkupSafe==2.0.1
 multidict==6.0.2
 nodeenv==1.7.0
@@ -78,6 +81,7 @@ sqlparse==0.4.2
 tablib==3.2.0
 telepath==0.2
 text-unidecode==1.3
+tinycss2==1.1.1
 toml==0.10.2
 tornado==6.1
 tzdata==2021.5
