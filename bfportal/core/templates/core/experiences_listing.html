@@ -1,3 +1,4 @@
+{% load template_filters %}
 {% load static wagtailimages_tags %}
 <div class="w-11/12 mx-auto grid grid-cols-1 justify-items-center {% if trending_section %} md:justify-items-start {% endif %} gap-y-4">
 
@@ -58,16 +59,24 @@
                         <div class="font-medium text-white h-12 w-max-52 text-xs text-ellipsis"><p class="pr-6">{{ post.description|truncatechars:75 }}</p></div>
 
                         <!-- Share code -->
-                        <div class="flex flex-col mt-4">
-                        {% if post.category == "Prefab" %}
-                            <div class="bg-bf2042-4 font-bold w-min px-6 py-2.5 mx-auto rounded-lg hover:bg-bf2042-6 transition duration-200 ease-in-out">
-                                <p>Edit</p>
+                        <div class="flex flex-col mt-4 clickable">
+                        {% if post.category|lower == "prefab" %}
+                            <div
+                                    class="bg-bf2042-4 font-bold max-w-fit px-6 py-2.5 mx-auto rounded-lg hover:bg-bf2042-6 transition duration-200 ease-in-out"
+                                    copy-data="{{ post.exp_url }}"
+                                    onclick="copyDivToClipboard(this)"
+                                    copy-state="normal"
+                            >
+                                <p class="flex flex-row gap-x-1"><img src="{% static 'svgs/pages/prefab.svg' %}" alt=" " class="brightness-0 saturate-100 w-min"/>Copy</p>
                             </div>
-                            <p class="text-[8px] text-white mx-auto pt-1 font-semibold">{{ post.code }}</p>
                         {% else %}
-                        {% with post.code as share_code %}
-                            {% if share_code|length %}
-                                <div class="bg-bf2042-4 font-bold w-min px-6 py-2.5 mx-auto rounded-lg hover:bg-bf2042-3 transition duration-200 ease-in-out clickable" onclick="copyDivToClipboard(this)">
+                            {% if post.code|length %}
+                                <div
+                                        class="bg-bf2042-4 font-bold w-min px-6 py-2.5 mx-auto rounded-lg hover:bg-bf2042-3 transition duration-200 ease-in-out clickable"
+                                        copy-data="{{ post.code|upper }}"
+                                        onclick="copyDivToClipboard(this)"
+                                        copy-state="normal"
+                                >
                                     <p>{{ post.code|upper }}</p>
                                 </div>
                             {% endif %}
@@ -76,7 +85,6 @@
                                 <img class="inline" src="{% static 'svgs/card/open_link.svg' %}">
                                 </p>
                             {% endif %}
-                        {% endwith %}
                         {% endif %}
 
                         </div>
@@ -158,13 +166,12 @@
                 // todo: find a way to load items when scrolling up
             });
         })
-    </script>
-    <script>
+
         const cards = document.querySelectorAll(".experience_card");
         [...cards].forEach(card => {
                 const mainLink = card.querySelector(".main-link");
                 const clickableElements = Array.from(card.querySelectorAll("a, .clickable"));
-                //we are using 'a' here for simplicity but ideally you should put a class like 'clickable' on every clickable element inside card(a, button) and use that in query selector
+                //we are using 'a' here for simplicity, but ideally you should put a class like 'clickable' on every clickable element inside card(a, button) and use that in query selector
 
                 clickableElements.forEach((ele) =>
                     ele.addEventListener("click", (e) => e.stopPropagation())
@@ -179,17 +186,31 @@
                 }
                 card.addEventListener("click", handleClick);
         });
-    </script>
-    <script>
-        function copyDivToClipboard(elem) {
-            let range = document.createRange();
-            range.selectNode(elem);
-            window.getSelection().removeAllRanges(); // clear current selection
-            window.getSelection().addRange(range); // to select text
-            document.execCommand("copy");
-            window.getSelection().removeAllRanges();// to deselect
-            elem.nextElementSibling.textContent = "[Copied!!]";
 
+        async function copyDivToClipboard(elem) {
+            const container_div = $(elem);
+            if (container_div.attr('copy-state') === "normal"){ // only run when the inner html is set correctly
+                const old_html = container_div.html(),
+                    state_class = "bg-bf2042-5 hover:bg-bf2042-5";
+
+                container_div.attr('copy-state', "copy");
+                await navigator.clipboard.writeText(container_div.attr('copy-data')).then(
+                    () =>{
+                        container_div.addClass(state_class);
+                        container_div.text("Copied")
+                        setTimeout(function ()  {
+                            container_div.fadeOut(200, function () {
+                                container_div.html(old_html).fadeIn(1000);
+                                container_div.attr('copy-state', "normal")
+                            })
+                            container_div.removeClass(state_class);
+                        }, 1000);
+                    }, () => {
+                        console.log("Copy Failed");
+                        container_div.attr('copy-state', "normal")
+                    }
+                )
+            }
         }
     </script>
 {% endif %}
