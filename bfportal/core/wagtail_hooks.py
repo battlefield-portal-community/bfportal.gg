@@ -12,7 +12,8 @@ class ExperiencePageAdmin(ModelAdmin):
     model = ExperiencePage
     menu_order = 1
     list_display = ("title", "get_owner", "live", "last_updated_at")
-    search_fields = ("title",)
+    list_filter = ("trending", "bugged", "category", "sub_categories", "tags")
+    search_fields = ("title", "code")
 
     def get_owner(self, page: ExperiencePage):
         """Returns html formatted string containing avatar and username."""
@@ -52,8 +53,13 @@ class ExperiencePageAdmin(ModelAdmin):
             request.user.is_superuser
             or request.user.groups.filter(name="Moderators").exists()
         ):
-            return qs
-        return qs.filter(owner=request.user)
+            return qs.live().public().order_by("-first_published_at")
+        return (
+            qs.filter(owner=request.user)
+            .live()
+            .public()
+            .order_by("-first_published_at")
+        )
 
 
 @hooks.register("construct_main_menu")
