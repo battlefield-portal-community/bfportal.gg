@@ -125,7 +125,13 @@
                                                     </ul>
                                                 </div>
                                             {% else %}
-                                                {% render_field field class="w-full bg-card-bg h-9 text-white px-2 rounded border-0 hover:bg-[#1f1f1f] focus:ring-1 focus:ring-bf2042-4 disabled:bg-[#1f1f1f] placeholder:font-medium placeholder:text-sm" placeholder=field.label|title autocomplete="off" %}
+                                                {% if field.html_name != "description" %}
+                                                    {% render_field field class="w-full bg-card-bg h-9 text-white px-2 rounded border-0 hover:bg-[#1f1f1f] focus:ring-1 focus:ring-bf2042-4 disabled:bg-[#1f1f1f] placeholder:font-medium placeholder:text-sm" placeholder=field.label|title autocomplete="off" %}
+                                                {% else %}
+                                                    {% render_field field class="w-1/2 min-h-fit bg-card-bg text-white px-2 rounded border-0 hover:bg-[#1f1f1f] focus:ring-0 disabled:bg-[#1f1f1f] placeholder:font-medium placeholder:text-sm" placeholder=field.label|title autocomplete="off" %}
+                                                {% endif %}
+
+
                                             {% endif %}
                                         </div>
                                         {% if field.html_name == "exp_url" %}

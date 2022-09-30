@@ -26,7 +26,13 @@ def send_approve_request(
     if (token := os.getenv("APPROVAL_CHANNEL_WEBHOOK_TOKEN", None)) is not None:
         webhook_id = os.getenv("APPROVAL_CHANNEL_WEBHOOK_ID")
         webhook_url = f"https://discord.com/api/webhooks/{webhook_id}/{token}"
-        uid = SocialAccount.objects.get(user_id=page.owner.id).uid
+        admin_add = False
+        uid = -1
+        try:
+            uid = SocialAccount.objects.get(user_id=page.owner.id).uid
+        except SocialAccount.DoesNotExist:
+            admin_add = True
+
         logger.debug("Trying to send approve request")
         url = get_page_url(request, page)
         if type == "new":
@@ -43,7 +49,11 @@ def send_approve_request(
                             else "https://super-static-assets.s3.amazonaws.com/19d9fbc6-6292-4be8-ac70-5a186b556054%2Fimages%2Fb6495922-b4c7-4002-9c3d-56bfaa5b98b5.jpg"  # noqa: E501
                         },
                         "fields": [
-                            {"name": "Author", "value": f"<@{uid}>", "inline": True},
+                            {
+                                "name": "Author",
+                                "value": f"<@{uid}>" if not admin_add else "**admin**",
+                                "inline": True,
+                            },
                             {
                                 "name": "Submitted on",
                                 "value": f"<t:{int(page.first_published_at.timestamp())}>",
@@ -84,7 +94,12 @@ def send_approve_request(
                     {
                         "url": url,
                         "title": page.title,
-                        "fields": [{"name": "By", "value": f"<@{uid}>"}],
+                        "fields": [
+                            {
+                                "name": "By",
+                                "value": f"<@{uid}>" if not admin_add else "**admin**",
+                            }
+                        ],
                     }
                 ],
             }
@@ -211,6 +226,7 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
                 "sub_categories": [
                     cat.pk for cat in experience_page.sub_categories.all()
                 ],
+                "description": experience_page.description,
             },
             instance=experience_page,
         )
@@ -221,7 +237,7 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
         )
 
 
-# to sort tags based on how many time its used
+# to sort tags based on how many times its used
 # >>> a = ExperiencePageTag.objects.values_list('tag_id').annotate(tag_count=Count('tag_id')).order_by('-tag_count')
 # >>> [Tag.objects.get(id=i[0]) for i in a]
 

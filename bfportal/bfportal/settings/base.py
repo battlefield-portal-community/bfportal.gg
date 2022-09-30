@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     "generic_chooser",
     "wagtailautocomplete",
     "ajax_select",
+    "markdownx",
 ]
 
 SITE_ID = 1

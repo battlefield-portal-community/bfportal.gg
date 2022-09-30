@@ -22,6 +22,7 @@ from django.template.response import TemplateResponse
 from django.utils.timezone import timezone
 from embed_video.fields import EmbedVideoField
 from loguru import logger
+from markdownx.models import MarkdownxField
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.models import ParentalKey, ParentalManyToManyField
 from taggit.models import TaggedItemBase
@@ -352,7 +353,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         help_text="Is this experience trending?",
         verbose_name="Set Trending",
     )
-    description = models.TextField(
+    description = MarkdownxField(
         default="",
         help_text="Description of Your experience",
         verbose_name="Description",
