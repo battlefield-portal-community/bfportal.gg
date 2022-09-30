@@ -8,6 +8,7 @@
                  src='
                          {% if debug %}{% static "images/placeholder.png" %}{% else %}{% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{% static "images/placeholder.png" %}{% endif %}{% endif %}'
                  alt="{{ page.slug }}"
+                 onerror='if(this.src !== "{% static "images/placeholder.png" %}") this.src="{% static "images/placeholder.png"%}";'
             />
             <div like_count_container="{{ page.id }}"
                  class="absolute bottom-0 right-0 w-min-14 pl-8 pr-2.5 pt-1.5 fav-container"

@@ -13,7 +13,13 @@
                     <div class="-m-2 h-3/5 relative">
                         <div class="h-48">
                             <div class="w-full h-full">
-                                <img class="w-full h-full object-cover rounded-t-lg" src='{% if debug %}{% static "images/placeholder.png" %}{% else %}{% if post.cover_img_url %}{{ post.cover_img_url }}{% else %}{% static "images/placeholder.png" %}{% endif %}{% endif %}' alt="{{ post.slug }}"/>
+                                <img
+                                        loading="lazy"
+                                        class="w-full h-full object-cover rounded-t-lg"
+                                        src='{% if debug %}{% static "images/placeholder.png" %}{% else %}{% if post.cover_img_url %}{{ post.cover_img_url }}{% else %}{% static "images/placeholder.png" %}{% endif %}{% endif %}'
+                                        alt="{{ post.slug }}"
+                                        onerror='if(this.src !== "{% static "images/placeholder.png" %}") this.src="{% static "images/placeholder.png"%}";'
+                                />
                             </div>
                             <!-- like count -->
                             {% if post.bugged %}
