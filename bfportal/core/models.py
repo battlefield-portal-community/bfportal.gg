@@ -64,10 +64,16 @@ def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
 
     logger.debug(f"From {from_date} to {to_date}")
     all_posts = all_posts.filter(first_published_at__range=(from_date, to_date))
-    if username := request.GET.get("user", ""):
+    if username := request.GET.get("creator", ""):
         if username != "":
             all_posts = all_posts.annotate(
-                discord_username=Concat("owner__first_name", V(" "), "owner__last_name")
+                discord_username=Concat(
+                    "owner__username",
+                    V(" "),
+                    "owner__first_name",
+                    V(" "),
+                    "owner__last_name",
+                )
             )
             logger.debug(f"username is {username}")
             all_posts = all_posts.filter(discord_username__icontains=username)
@@ -590,7 +596,7 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
         all_posts = (
             ExperiencePage.objects.live()
             .public()
-            .filter(owner=user_acc)
+            .filter(Q(owner=user_acc) | Q(creators=user_acc))
             .order_by("-first_published_at")
         )
 
