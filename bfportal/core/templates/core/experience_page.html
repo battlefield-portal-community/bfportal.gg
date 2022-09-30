@@ -79,7 +79,7 @@
                 <div class="text-bf2042-4 text-sm"><p>{{ page.category }}</p></div>
             </a>
             <!-- desc -->
-            <div class="text-white text-sm font-medium">{{ page.description }}</div>
+            <div class="text-white text-sm font-medium prose prose-invert min-w-fit">{{ page.description|show_markdown|safe }}</div>
             <!-- tags -->
             <div class="flex flex-row flex-wrap	gap-x-2 gap-y-1">
                 {% for tag in page.tags.all %}

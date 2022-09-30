@@ -58,7 +58,12 @@
                                                     <img src="{% static svg_icon_path %}" width="16" height="16">
                                                 {% endwith %}
 
-                                                <p class="min-w-fit">{{ field.label }}</p>
+                                                <p class="min-w-fit">
+                                                    {{ field.label }}
+                                                    {% if field.html_name == "description"%}
+                                                    <span class="text-xs text-hover-bg-light">[ Markdown Support Available ]</span>
+                                                    {% endif %}
+                                                </p>
                                                 {% if field.field.required %}
                                                     <p class="inline-block text-red-500">*</p>
                                                 {% endif %}
