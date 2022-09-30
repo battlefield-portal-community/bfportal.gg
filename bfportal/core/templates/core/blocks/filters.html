@@ -1,7 +1,7 @@
 {% load static %}
 <div class="grid grid-cols-1 w-full items-center">
     <div class="flex justify-center">
-        <button id="toggleFilterButton" type="button" class="bg-bf2042-4 rounded p-2 text-default-bg font-bold" onclick="hideAllFilters()">Show Filters</button>
+        <button id="toggleFilterButton" type="button" class="bg-bf2042-4 rounded p-2 text-default-bg font-bold hover:!bg-bf2042-3 transition duration-200 ease-in-out" onclick="hideAllFilters()">Show Filters</button>
     </div>
     <div class="grid grid-cols-1 gap-y-4 max-w-fit justify-self-center bg-card-bg rounded-lg mt-4">
         {% with label_class="flex flex-col gap-y-2.5 font-bold text-white" text_input_class="bg-default rounded ring-0 border-0 focus:ring-0 placeholder:font-light" %}

@@ -192,7 +192,10 @@ function hideAllFilters() {
             targets: '#toggleFilterButton',
             backgroundColor: "#FF2C10",
             easing: 'easeOutQuint',
-            duration: "500"
+            duration: "500",
+            begin: function () {
+                btn.addClass("hover:!bg-[#6d160e]");
+            }
         });
         btn.text("Hide Filters");
 
@@ -205,7 +208,10 @@ function hideAllFilters() {
             targets: '#toggleFilterButton',
             backgroundColor: '#26FFDF',
             easing: 'easeOutQuint',
-            duration: "500"
+            duration: "500",
+            begin: function () {
+                btn.removeClass("hover:!bg-[#6d160e]");
+            }
         });
     }
 
