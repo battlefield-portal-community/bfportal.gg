@@ -8,15 +8,15 @@
 {% block content %}
     <div class="absolute table text-white h-[90%] w-full left-0 top-0">
         <div class="table-cell align-middle">
-                <div class="flex flex-col mx-auto w-max bg-card-bg p-4 rounded-xl divider divide-y divide-bf2042-3 drop-shadow-hover-bg-light-lg transition hover:drop-shadow-bf2042-3-lg duration-300 ease-in-out">
-                <div class="text-xl pt-4">
-                    {% trans "Are you sure you want to sign out?" %}
+                <div class="flex flex-col mx-auto w-max bg-card-bg p-4 rounded-xl">
+                <div class="text-xl font-medium pt-4">
+                    {% trans "Are you sure you want to log out?" %}
                     <form class="pt-8 text-center" method="post" action="{% url 'account_logout' %}">
                         {% csrf_token %}
                         {% if redirect_field_value %}
                             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
                         {% endif %}
-                        <button class="p-4 bg-hover-bg-light rounded-xl hover:drop-shadow-bf2042-6 transition duration-100 ease-in-out" type="submit">{% trans 'Sign Out' %}</button>
+                        <button class="p-4 text-bf2042-1 font-bold bg-bf2042-4 rounded-lg hover:bg-bf2042-6 transition duration-200 ease-in-out" type="submit">{% trans 'Log out' %}</button>
                     </form>
                 </div>
             </div>
