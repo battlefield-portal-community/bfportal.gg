@@ -55,9 +55,7 @@ if settings.DEBUG:
     # auto reload on static or template edit
     urlpatterns.append(path("__reload__/", include("django_browser_reload.urls")))
     # A temp url to serve templates directly
-    urlpatterns.append(
-        path("temp/", TemplateView.as_view(template_name="core/after_submit.html"))
-    )
+    urlpatterns.append(path("temp/", TemplateView.as_view(template_name="404.html")))
     # Serve static and media files from development server
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

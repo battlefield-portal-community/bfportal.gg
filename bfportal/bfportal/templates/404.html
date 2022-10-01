@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% load static %}
 {% block extra_content %}{% endblock %}
 
 {% block title %}Page not found{% endblock %}
@@ -7,41 +8,13 @@
 {% block body_class %}404{% endblock %}
 
 {% block content %}
-    <div class="flex text-white w-full justify-center mt-8">
-        <div class="w-max">
-            <div class="flex flex-col mb-4">
-                <a class="mx-auto w-max  p-2 text-4xl text-red-500 bg-card-bg rounded-xl drop-shadow-hover-bg-light-lg hover:text-bf2042-3 hover:drop-shadow-bf2042-6 transition duration-200 ease-in" href="{{request.META.HTTP_REFERER}}" onClick="window.history.back();return false;">Go back</a>
-            </div>
-            <pre class="text-green-500 hover:text-red-500 transition duration-500 ease-in">
-       444444444            000000000                 444444444
-      4::::::::4          00:::::::::00              4::::::::4
-     4:::::::::4        00:::::::::::::00           4:::::::::4
-    4::::44::::4       0:::::::000:::::::0         4::::44::::4
-   4::::4 4::::4       0::::::0   0::::::0        4::::4 4::::4
-  4::::4  4::::4       0:::::0     0:::::0       4::::4  4::::4
- 4::::4   4::::4       0:::::0     0:::::0      4::::4   4::::4
-4::::444444::::444     0:::::0 000 0:::::0     4::::444444::::444
-4::::::::::::::::4     0:::::0 000 0:::::0     4::::::::::::::::4
-4444444444:::::444     0:::::0     0:::::0     4444444444:::::444
-          4::::4       0:::::0     0:::::0               4::::4
-          4::::4       0::::::0   0::::::0               4::::4
-          4::::4       0:::::::000:::::::0               4::::4
-        44::::::44      00:::::::::::::00              44::::::44
-        4::::::::4        00:::::::::00                4::::::::4
-        4444444444          000000000                  4444444444
-            </pre>
-            <pre class="text-green-500">
-         ,adPPYba, 8b,dPPYba, 8b,dPPYba,  ,adPPYba,  8b,dPPYba,
-        a8P_____88 88P'   "Y8 88P'   "Y8 a8"     "8a 88P'   "Y8
-        8PP""""""" 88         88         8b       d8 88
-        "8b,   ,aa 88         88         "8a,   ,a8" 88
-         `"Ybbd8"' 88         88          `"YbbdP"'  88
-            </pre>
-
-            <div class="flex flex-col text-center text-red-500 gap-y-4">
-                <div class="text-6xl">Page not found</div>
-                <div class="text-4xl">Sorry, this page could not be found.</div>
-            </div>
+    <div class="flex flex-col w-3/4 m-auto gap-y-8 items-center">
+        <img src="{% static "images/404.png" %}" alt=" ">
+        <div class="flex flex-row content-end gap-x-2 font-extrabold text-white">
+            <div class="self-end">Don’t be sad, this is just how it works out sometimes...</div>
+            <img class="pb-[6px]" width="50" src="{% static 'images/angel.png' %}" alt=" ">
         </div>
+        <input type="button" class="bg-bf2042-4 text-bf2042-1 font-bold hover:bg-bf2042-6 hover:cursor-pointer px-4 py-2 rounded transition duration-200 ease-in-out" value="Go Back" onclick="window.history.go(-1); return false;" />
+
     </div>
 {% endblock %}
