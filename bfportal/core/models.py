@@ -27,7 +27,7 @@ from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.models import ParentalKey, ParentalManyToManyField
 from taggit.models import TaggedItemBase
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, StreamFieldPanel
-from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from wagtail.contrib.routable_page.models import RoutablePageMixin, path, route
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
@@ -198,18 +198,24 @@ class HomePage(RoutablePageMixin, CustomBasePage):
             )
         return context
 
-    @route(r"^category/(.+)/$")
-    def serve_category_page(self, request, cat):
+    @path("category/<slug:cat>/")
+    def serve_category_page(self, request, cat: str):
         """Returns template with post of a category if cat present in db"""
-        logger.debug("in")
         main_cat, sub_cat = None, None
+        main_cat: ExperiencesCategory | None
+        sub_cat: SubCategory | None
 
+        cat = cat.replace("_", " ")
+        cat_object: ExperiencesCategory | SubCategory | None
         if cat_object := ExperiencesCategory.objects.filter(name__iexact=cat).first():
             main_cat = cat_object
         elif cat_object := SubCategory.objects.filter(name__iexact=cat).first():
             sub_cat = cat_object
         else:
             return self.render(request=request, template="404.html")
+
+        if cat_object.not_ready:
+            return self.render(request=request, template="coming_soon.html")
 
         request.GET = request.GET.copy()
         if main_cat:
@@ -245,11 +251,17 @@ class ExperiencesCategory(models.Model):
         default=True,
         null=False,
     )
+    not_ready = models.BooleanField(
+        default=False,
+        help_text="If set, Shows Coming soon page for this category",
+        null=False,
+    )
     panels = [
         FieldPanel("name"),
         SvgChooserPanel("icon"),
         FieldPanel("visible"),
         FieldPanel("selectable_on_form"),
+        FieldPanel("not_ready"),
     ]
 
     def __str__(self):
@@ -278,11 +290,17 @@ class SubCategory(models.Model):
         default=True,
         null=False,
     )
+    not_ready = models.BooleanField(
+        default=False,
+        help_text="If set, Shows Coming soon page for this category",
+        null=False,
+    )
     panels = [
         FieldPanel("name"),
         SvgChooserPanel("icon"),
         FieldPanel("visible"),
         FieldPanel("selectable_on_form"),
+        FieldPanel("not_ready"),
     ]
 
     def __str__(self):

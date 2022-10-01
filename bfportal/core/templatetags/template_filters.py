@@ -96,3 +96,17 @@ def check_group(user: User, group):
 def classname(obj):
     """Returns obj type"""
     return type(obj)
+
+
+@register.filter
+def replace(value, arg):
+    """
+    Replacing filter
+
+    Use `{{ "aaa"|replace:"a|b" }}`
+    """
+    if len(arg.split("|")) != 2:
+        return value
+
+    what, to = arg.split("|")
+    return value.replace(what, to)
