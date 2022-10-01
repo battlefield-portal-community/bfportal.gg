@@ -152,9 +152,7 @@
             <div id="mapsRotationContainer" class="flex flex-wrap flex-col gap-y-4 select-none">
                 <div>
                     <button id="showMapsRotation"
-                            class="bg-bf2042-4 text-bf2042-1 font-bold px-2 py-1 rounded hover:bg-bf2042-6 transition duration-200">
-                        Show Map Rotation
-                    </button>
+                            class="bg-bf2042-4 text-bf2042-1 font-bold px-2 py-1 rounded hover:bg-bf2042-6 transition duration-200">Show Maps Rotation</button>
                     <svg id="tagsSearchSpinner"
                          class="hidden inline-block w-8 h-8 mr-2 text-bf2042-6 animate-spin fill-bf2042-4"
                          viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -164,7 +162,7 @@
                               fill="currentFill"/>
                     </svg>
                 </div>
-                <div id="mapsRotation" class="flex flex-wrap gap-2 relative">
+                <div id="mapsRotation" class="flex flex-wrap gap-2 relative hidden">
                     <div id="maps_on_error" class="hidden text-sm font-bold text-[#FF0000]">Error Fetching Maps... Check
                         Experience Code or URL
                     </div>
@@ -194,32 +192,27 @@
 {% block extra_js %}
     <script type="text/javascript">
         let mapsShown = false;
-        const showMapButton = $('#showMapsRotation');
-
-        function toggleMapButtonLabel() {
-            if (showMapButton.text() === "Show Maps Rotation") {
-                showMapButton.text("Hide Maps Rotation");
-            } else {
-                showMapButton.text("Show Maps Rotation");
-            }
-        }
+        const showMapButton = $('#showMapsRotation'),
+            tagsSpinner = $('#tagsSearchSpinner');
 
         showMapButton.on('click touch', function () {
             const val = $(this).text(),
                 mapRotation = $('#mapsRotation');
+
             if (val === "Show Maps Rotation") {
-                $(this).text("Hide Maps Rotation");
+                console.log('called')
+                populateMapsRotation();
+                tagsSpinner.hide();
                 mapRotation.show(200);
+                $(this).text("Hide Maps Rotation");
             } else {
                 $(this).text("Show Maps Rotation");
                 mapRotation.hide(200);
             }
-            populateMapsRotation();
         });
 
         function populateMapsRotation() {
-            const mapRotation = document.getElementById('mapsRotation'),
-                tagsSpinner = $('#tagsSearchSpinner');
+            const mapRotation = document.getElementById('mapsRotation');
             if (!mapsShown) {
                 tagsSpinner.show();
                 const playgroundId = {% if page.exp_url %}"{{ page.exp_url | expCode }}"{% else %}null{% endif %},
@@ -237,7 +230,6 @@
                         if (!resp_json.hasOwnProperty('errors')) {
                             error_div.css('display', 'none')
                             let maps = resp_json['validatedPlayground']['mapRotation']['maps'];
-                            console.log(maps);
                             maps.forEach(function (map) {
                                 const root = document.createElement('div'),
                                     img = document.createElement('img'),
@@ -283,8 +275,6 @@
                                 mapRotation.appendChild(root);
                             })
                             mapsShown = true;
-                            tagsSpinner.hide();
-                            mapRotation.scrollIntoView();
                         } else {
                             tagsSpinner.hide()
                             error_div.css('display', 'block')
