@@ -101,6 +101,13 @@ def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
         logger.debug(
             f"filtered {len(all_posts)} experiences for tags {tags}, cat [{category}, sub cat {sub_cats}]"
         )
+    if sort := request.GET.get("sort", None):
+        match sort:
+            case "like":
+                all_posts = all_posts.order_by("-likes")
+            case "latest":
+                pass
+
     return all_posts
 
 

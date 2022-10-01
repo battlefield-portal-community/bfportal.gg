@@ -79,6 +79,7 @@ defer(function filter_helper_defer() {
                 queryParamList.push(`${date}=${encodeURIComponent(val)}`);
             }
         });
+        queryParamList.push(`sort=${$('#sort_by').val()}`)
         // window.history.replaceState({}, '', `${location.pathname}?${queryParamList.join("&")}`);
         // console.log(`?${queryParamList.join("&")}`);
         document.location = `?${queryParamList.join("&")}`;
@@ -108,6 +109,9 @@ function populateFilters(){
     }
     if (searchParams.has('To')) {
         $('#dateTo').val(searchParams.get('To'));
+    }
+    if (searchParams.has('sort')){
+        $('#sort_by').val(searchParams.get('sort'));
     }
 
 }
