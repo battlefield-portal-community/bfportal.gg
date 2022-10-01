@@ -147,7 +147,7 @@
 {% if not no_js %}
     <script>
         defer(function experience_listing_defer(){
-            $(window).on('load', function() {
+            $(document).ready(function() {
                 new Waypoint.Infinite({
                     element: $(".experience_container")[0],
                     items:  ".experience",
