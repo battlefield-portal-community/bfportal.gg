@@ -198,6 +198,12 @@ class HomePage(RoutablePageMixin, CustomBasePage):
             )
         return context
 
+    @path("events/")
+    @path("tutorials/")
+    def serve_coming_soon(self, request):
+        """Returns coming soon page as these are not yet ready."""
+        return self.render(request=request, template="coming_soon.html")
+
     @path("category/<slug:cat>/")
     def serve_category_page(self, request, cat: str):
         """Returns template with post of a category if cat present in db"""
