@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load template_filters %}
 {% load socialaccount static %}
 {% block title %}
     {{ requested_user|title }}'s profile
@@ -30,7 +31,7 @@
                                 <div>
                                    <p class="text-center text-red-600">Administrator</p>
                                 </div>
-                                {% elif requested_user|check_permission:"wagtailadmin.access_admin" %}
+                                {% elif requested_user|check_group:"Moderators" %}
                                 <div>
                                    <p class="text-center text-red-400">Moderator</p>
                                 </div>
