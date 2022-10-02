@@ -198,6 +198,7 @@ function hideAllFilters() {
             easing: 'easeOutQuint',
             duration: "500",
             begin: function () {
+                btn.removeClass("hover:!bg-bf2042-3");
                 btn.addClass("hover:!bg-[#6d160e]");
             }
         });
@@ -215,6 +216,7 @@ function hideAllFilters() {
             duration: "500",
             begin: function () {
                 btn.removeClass("hover:!bg-[#6d160e]");
+                btn.addClass("hover:!bg-bf2042-3");
             }
         });
     }
