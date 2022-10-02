@@ -204,6 +204,8 @@
                 populateMapsRotation();
                 tagsSpinner.hide();
                 mapRotation.show(200);
+                mapRotation.css('display', 'flex')
+                mapRotation.css('flex-direction', 'row')
                 $(this).text("Hide Maps Rotation");
             } else {
                 $(this).text("Show Maps Rotation");
