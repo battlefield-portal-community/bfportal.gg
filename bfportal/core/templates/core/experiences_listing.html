@@ -58,7 +58,7 @@
                                 {% elif post.sub_categories.all|hasCategory:"Jam" %}
                                     <img src="{% static 'svgs/cats/sub/portal_jam.svg' %}" class="inline">
                                 {% endif %}
-                                {{ post.title|title }}
+                                {{ post.title }}
                             </div>
                         </a>
                         <!-- desc -->
