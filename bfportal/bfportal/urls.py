@@ -1,7 +1,6 @@
 from ajax_select import urls as ajax_select_urls
 from core.views import CategoriesAutocomplete, TagsAutocomplete, handle_like_request
 from django.conf import settings
-from django.conf.urls import url
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.generic import RedirectView, TemplateView
@@ -43,7 +42,7 @@ urlpatterns = [
         handle_like_request,
         name="add_like_to_experience_page",
     ),
-    url(r"^ajax_select/", include(ajax_select_urls)),
+    re_path(r"^ajax_select/", include(ajax_select_urls)),
     path("markdownx/", include("markdownx.urls")),
 ]
 

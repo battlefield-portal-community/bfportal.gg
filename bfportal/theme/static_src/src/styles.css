@@ -76,9 +76,12 @@ body::-webkit-scrollbar-thumb:hover {
     border-spacing: 0 1em;
 }
 
+.catsHolder {
+    margin-left: -9px;
+}
+
 @media (min-width: 768px) {
     .catsHolder {
-        margin-left: 3rem;
         display: grid;
         row-gap: 0;
         column-gap: 5px;
