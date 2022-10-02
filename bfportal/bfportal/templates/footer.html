@@ -1,4 +1,16 @@
 {% load static %}
-<div class="footer mt-auto flex flex-col w-full bg-card-bg justify-center align-middle text-center drop-shadow-lg py-2 mt-4">
-    <div><p class="font-semibold flex flex-row gap-x-1 items-center justify-center text-gray-500">Made with <img src="{% static 'svgs/card/heart_liked.svg' %}"> at <a href="https://discord.gg/caacPSxVre" class="hover:text-bf2042-4">Battlefield Portal Community</a></p></div>
+<div class="footer mt-auto flex cursor-default flex-col w-full bg-card-bg justify-center align-middle text-center drop-shadow-lg py-2 mt-4">
+    <div><p class="font-semibold flex flex-row gap-x-1 items-center justify-center text-gray-500">Made with <img src="{% static 'svgs/card/heart_liked.svg' %}" alt="" onmouseenter="handle_hover_for_footer_heart(this)"> at <a href="https://discord.gg/caacPSxVre" class="hover:text-bf2042-4">Battlefield Portal Community</a></p></div>
 </div>
+<script>
+    function randomIntFromInterval(min, max) { // min and max included
+        return Math.floor(Math.random() * (max - min + 1) + min)
+    }
+    function handle_hover_for_footer_heart(elm) {
+        let res = new Solver(
+            new Color(randomIntFromInterval(0,255),randomIntFromInterval(0,255),randomIntFromInterval(0,255))
+        ).solve()
+        elm.style = res.filter
+
+    }
+</script>
