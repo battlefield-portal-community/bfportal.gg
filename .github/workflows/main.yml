@@ -31,25 +31,18 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Sets env vars for main
-        run: |
-          echo "IMAGE_NAME=development" >> $GITHUB_ENV
-        if: ${{github.GITHUB_REF_NAME == "main" }}
-
-      - name: Sets env vars for production
-        run: |
-          echo "IMAGE_NAME=production" >> $GITHUB_ENV
-        if: ${{github.GITHUB_REF_NAME == "production" }}
+      - run: npm ci
+      - uses: nelonoel/branch-name@v1.0.1
 
       - name: Build image
-        run: docker build . --file Dockerfile --tag ${{env.IMAGE_NAME}}
+        run: docker build . --file Dockerfile --tag $BRANCH_NAME
 
       - name: Log into registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
       - name: Push image
         run: |
-          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/${{env.IMAGE_NAME}}
+          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$BRANCH_NAME
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           # Strip git ref prefix from version
@@ -60,7 +53,7 @@ jobs:
           [ "$VERSION" == "main" || "$VERSION" == "production" ] && VERSION=latest
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
-          docker tag ${{env.IMAGE_NAME}} $IMAGE_ID:$VERSION
+          docker tag $BRANCH_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
 
 #   update-portainer:
