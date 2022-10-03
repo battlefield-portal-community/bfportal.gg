@@ -590,8 +590,15 @@ class Profile(models.Model):
     """Class that tracks extra data about user"""
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    liked = models.ManyToManyField(ExperiencePage)
+    liked = models.ManyToManyField(ExperiencePage, blank=True)
+    hide_username = models.BooleanField(
+        default=False,
+        null=False,
+        help_text="If set to true hides the username on the website",
+    )
     autocomplete_search_field = "user__username"
+
+    panels = [FieldPanel("hide_username")]
 
     def autocomplete_label(self):
         """Called by Wagtail auto complete to get label for an account"""
