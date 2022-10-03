@@ -200,8 +200,11 @@
             elm.appendChild(span)
             function increaseCount() {
                 span.innerHTML = `&nbsp;&nbsp;${currCount} members online`
-                if (totalCount >= currCount) currCount += countStep
-                setTimeout(increaseCount, duration)
+                if (totalCount >= currCount) {
+                    currCount += countStep
+                    setTimeout(increaseCount, duration)
+                }
+
             }
             increaseCount()
 
