@@ -102,6 +102,13 @@
             })
         </script>
     {% endblock %}
+    {% if not no_cat_description  and cat_description %}
+        <div class="text-white flex w-11/12 mx-auto">
+            <div class="text-white text-sm font-medium prose prose-invert min-w-fit mt-10">
+            {{ cat_description|show_markdown|safe }}
+            </div>
+        </div>
+    {% endif %}
     {% block content %}{% endblock %}
 </div>
 

@@ -240,6 +240,7 @@ class HomePage(RoutablePageMixin, CustomBasePage):
             request,
             ExperiencePage.objects.live().public().order_by("-first_published_at"),
         )
+        context["cat_description"] = cat_object.description
         context["posts"] = posts
         context["no_extra_content"] = True
         return TemplateResponse(request, self.get_template(request), context)
@@ -269,8 +270,15 @@ class ExperiencesCategory(models.Model):
         help_text="If set, Shows Coming soon page for this category",
         null=False,
     )
+    description = MarkdownxField(
+        blank=True,
+        null=False,
+        help_text="description of this category that is shown on /category/",
+    )
+
     panels = [
         FieldPanel("name"),
+        FieldPanel("description"),
         SvgChooserPanel("icon"),
         FieldPanel("visible"),
         FieldPanel("selectable_on_form"),
@@ -308,8 +316,14 @@ class SubCategory(models.Model):
         help_text="If set, Shows Coming soon page for this category",
         null=False,
     )
+    description = MarkdownxField(
+        blank=True,
+        null=False,
+        help_text="description of this category that is shown on /category/",
+    )
     panels = [
         FieldPanel("name"),
+        FieldPanel("description"),
         SvgChooserPanel("icon"),
         FieldPanel("visible"),
         FieldPanel("selectable_on_form"),
