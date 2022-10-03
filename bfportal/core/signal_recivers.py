@@ -35,8 +35,15 @@ def send_to_discord(sender, **kwargs):
 
         domain = Site.objects.get_current().domain
         url = f"http://{domain}{page.get_url()}"
+        creators = [f"<@{uid}>" if not admin_add else "**admin**"]
+        for creator in page.creators.all():
+            try:
+                uid = SocialAccount.objects.get(user_id=creator).uid
+                creators.append(f",<@{uid}>")
+            except SocialAccount.DoesNotExist:
+                creators.append("admin")
         data = {
-            "content": "> **New Experience Posted :tada::tada:**",
+            "content": f"> **New Experience By {creators[0]} :tada::tada:**",
             "embeds": [
                 {
                     "url": url,
@@ -49,8 +56,8 @@ def send_to_discord(sender, **kwargs):
                     },
                     "fields": [
                         {
-                            "name": "Author",
-                            "value": f"<@{uid}>" if not admin_add else "**admin**",
+                            "name": "Creators",
+                            "value": ",".join(creators),
                             "inline": True,
                         },
                         {
