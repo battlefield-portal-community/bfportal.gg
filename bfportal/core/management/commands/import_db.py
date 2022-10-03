@@ -43,7 +43,7 @@ class Command(BaseCommand):
     help = "Imports data from db.csv"
 
     def add_arguments(self, parser):  # noqa: D102
-        parser.add_argument("link_to_json", metavar="link", type=str, nargs="+")
+        parser.add_argument("--link_to_json", metavar="link", type=str, nargs="+")
 
     def handle(self, *args, **options):  # noqa: D102
         db_json_file = Path(__file__).parent / "db.json"
@@ -60,8 +60,10 @@ class Command(BaseCommand):
             elif row.type == "Competitive":
                 row.type = "Multiplayer"
             try:
-                if not ExperiencePage.objects.filter(
-                    title__iexact=row.experience_name
+                if not (
+                    exp_query := ExperiencePage.objects.filter(
+                        title__iexact=row.experience_name
+                    )
                 ).exists():
                     page = ExperiencePage(
                         title=row.experience_name,
@@ -100,7 +102,12 @@ class Command(BaseCommand):
                     exps_page.add_child(instance=page)
                     exps_page.save()
                 else:
-                    logger.debug(f"{row.experience_name} exists... skipping...")
+                    if (
+                        len(row.experience_edit_url)
+                        and not (exp_page := exp_query[0]).exp_url
+                    ):
+                        exp_page.exp_url = row.experience_edit_url
+                        logger.debug(f"fix playground url for {exp_page}")
             except django.core.exceptions.ValidationError as e:
                 logger.critical(f"failed on {dataclasses.asdict(row)}")
                 logger.critical(e)
