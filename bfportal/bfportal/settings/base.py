@@ -139,7 +139,7 @@ DATABASES = {
         "HOST": os.environ.get(
             "POSTGRES_HOST", "127.0.0.1"
         ),  # fall back to docker default
-        "PORT": "5432",
+        "PORT": os.environ.get("DB_PORT", "5432"),
     }
 }
 
