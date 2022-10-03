@@ -179,6 +179,10 @@ def submit_experience(request: HttpRequest, home_page: HomePage):
         "core/submit_experience_page.html",
         {
             "form": form,
+            "page": {
+                "title": "Submit Experience",
+                "description": "Submit your Experience on https://bfportal.gg/",
+            },
         },
     )
 
@@ -218,7 +222,14 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
             return render(
                 request,
                 "core/submit_experience_page.html",
-                {"form": form, "is_edit": True},
+                {
+                    "form": form,
+                    "is_edit": True,
+                    "page": {
+                        "title": f"Edit Experience {experience_page.title}",
+                        "description": "",
+                    },
+                },
             )
     else:
         form = ExperiencePageForm(
@@ -233,7 +244,14 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
         return render(
             request,
             "core/submit_experience_page.html",
-            {"form": form, "is_edit": True},
+            {
+                "form": form,
+                "is_edit": True,
+                "page": {
+                    "title": f"Edit Experience {experience_page.title}",
+                    "description": "",
+                },
+            },
         )
 
 

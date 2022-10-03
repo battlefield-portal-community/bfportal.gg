@@ -2,10 +2,11 @@ import re
 from urllib.parse import parse_qs, urlparse
 
 from core.helper import markdownify
-from core.models import ExperiencePage, SubCategory
+from core.models import ExperiencePage, HomePage, SubCategory
 from django.contrib.auth.models import User
 from django.http import HttpRequest
 from django.template.defaulttags import register
+from django.templatetags.static import static
 
 
 @register.filter
@@ -110,3 +111,24 @@ def replace(value, arg):
 
     what, to = arg.split("|")
     return value.replace(what, to)
+
+
+@register.filter
+def get_opg_image_url(
+    request: HttpRequest, page: ExperiencePage | HomePage | None = None
+) -> str:
+    """Returns image url for ogp meta tag"""
+    url_prefix = f"{request.scheme}://{request.META.get('HTTP_HOST', '')}"
+    if page:
+        if isinstance(page, ExperiencePage) and page.cover_img_url:
+            return page.cover_img_url
+
+        if block := HomePage.objects.first().extra_content.first_block_by_name(
+            "cover_image"
+        ):
+            return url_prefix + block.value.get_rendition("original").url
+
+    if result := static("images/placeholder.png"):
+        return url_prefix + result
+
+    return ""

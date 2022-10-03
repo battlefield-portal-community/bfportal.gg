@@ -1,4 +1,5 @@
-{% load static wagtailcore_tags wagtailuserbar account socialaccount tailwind_tags %}
+{% load template_filters %}
+{% load static wagtailcore_tags wagtailimages_tags account socialaccount tailwind_tags %}
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
@@ -7,52 +8,38 @@
         {% block title %}
             {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
         {% endblock %}
-        {% block title_suffix %}
-            {% wagtail_site as current_site %}
-            {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
-        {% endblock %}
     </title>
     <link rel="icon" type="image/x-icon" href={% static "images/fav.gif" %}>
     <meta property="og:title" content="{{ page.title|title }}"/>
     <meta property="og:type" content="website">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta property="twitter:domain" content="vmi659995.contaboserver.net">
+    <meta property="twitter:domain" content="bfportal.gg">
     <meta property="twitter:url" content="{{ request.build_absolute_uri }}">
     <meta name="twitter:title" content="{{ page.title|title }}">
-
-    {% if page.is_experience_page %}
-
-        <meta property="og:description" content="{{ page.description }}"/>
-        <meta name="description" content="{{ page.description }}"/>
-        <meta property="og:image" content="
-
-                {% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/placeholder.png' %}{% endif %}"/>
-
-        <!-- Twitter Meta Tags -->
-
-        <meta name="twitter:description" content="{{ page.description }}">
-        <meta name="twitter:image" content="
-
-                {% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/placeholder.png' %}{% endif %}">
-
+    {% if request.user.is_authenticated and page %}
+        {% if page.is_experience_page %}
+            <meta property="og:description" content="{{ page.description }}"/>
+            <meta name="description" content="{{ page.description }}"/>
+            <meta property="og:image" content="{{ request|get_opg_image_url:page }}"/>
+            <!-- Twitter Meta Tags -->
+            <meta name="twitter:description" content="{{ page.description }}">
+            <meta name="twitter:image" content="{{ request|get_opg_image_url:page }}">
+        {% else %}
+            <meta name="twitter:description" content="{% if page.description %}{{ page.description }}{% else %}{{ page.title }}{% endif %}">
+            <meta name="twitter:image" content="{{ request|get_opg_image_url:page }}">
+            <meta name="description" content="{% if page.description %}{{ page.description }}{% else %}{{ page.title }}{% endif %}"/>
+            <meta property="og:description" content="{% if page.description %}{{ page.description }}{% else %}{{ page.title }}{% endif %}"/>
+            <meta property="og:image" content= "{{ request|get_opg_image_url:page }}"/>
+        {% endif %}
     {% else %}
-        <meta name="twitter:description"
-              content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}">
-        <meta name="twitter:image"
-              content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/bf_portal_logo_bc.png' %}">
-
-        <meta name="description"
-              content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}"/>
-        <meta property="og:description"
-              content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}"/>
-        <meta property="og:image"
-              content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/bf_portal_logo_bc.png' %}"/>
+            <meta name="twitter:description" content="Battlefield Portal Library">
+            <meta name="twitter:image" content="{{ request|get_opg_image_url }}">
+            <meta name="description" content="Share & Find experiences made on portal.battlefield.com"/>
+            <meta property="og:description" content="Share & Find experiences made on portal.battlefield.com"/>
+            <meta property="og:image" content= "{{ request|get_opg_image_url }}"/>
     {% endif %}
-
-
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-
     {% block preload_media %}{% endblock %}
     {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
