@@ -34,12 +34,12 @@ jobs:
       - name: Sets env vars for main
         run: |
           echo "IMAGE_NAME=development" >> $GITHUB_ENV
-        if: GITHUB_REF_NAME == main
+        if: ${{env.GITHUB_REF_NAME}} == main
 
       - name: Sets env vars for production
         run: |
           echo "IMAGE_NAME=production" >> $GITHUB_ENV
-        if: GITHUB_REF_NAME == production
+        if: ${{env.GITHUB_REF_NAME}} == production
 
       - name: Build image
         run: docker build . --file Dockerfile --tag ${{env.IMAGE_NAME}}
