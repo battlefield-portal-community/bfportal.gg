@@ -204,17 +204,16 @@
         resp => {resp.json().then(json => {
             const elm = document.getElementById('discord-nav'),
                 span = document.createElement('span'),
+                totalCount = parseInt(json['presence_count']),
                 duration = 5,
-                countStep = Math.trunc((parseInt(json['presence_count']) / duration)/50);
+                countStep = Math.trunc((totalCount / duration)/50);
 
             let currCount = 0
             span.className = "text-xs text-hover-bg-light"
             elm.appendChild(span)
             function increaseCount() {
                 span.innerHTML = `&nbsp;&nbsp;${currCount} members online`
-                if (parseInt(json['presence_count']) >= currCount){
-                    currCount += countStep
-                }
+                if (totalCount >= currCount) currCount += countStep
                 setTimeout(increaseCount, duration)
             }
             increaseCount()
