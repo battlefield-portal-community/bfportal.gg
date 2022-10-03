@@ -200,11 +200,18 @@
             })
         })
     }
-
+    fetch('https://discord.com/api/guilds/870246147455877181/widget.json').then(
+        resp => {resp.json().then(json => {
+            const elm = document.getElementById('discord-nav')
+            const span = document.createElement('span')
+            span.className = "text-xs text-hover-bg-light"
+            span.innerHTML = `&nbsp;&nbsp;${json['presence_count']} members online`
+            elm.appendChild(span)
+        })}
+    )
 </script>
 {% block extra_js %}
     {# Override this in templates to add extra javascript #}
 {% endblock %}
-</div>
 </body>
 </html>
