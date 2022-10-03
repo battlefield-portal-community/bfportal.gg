@@ -44,13 +44,13 @@ jobs:
           docker tag $BRANCH_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
 
-#   update-portainer:
-#     needs: production-deploy
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: post to webhook
-#         uses: fjogeleit/http-request-action@v1
-#         with:
-#           url: ${{ secrets.PORTAINER_WEBHOOK_URL }}
-#           method: 'POST'
-#           timeout: 180000
+  update-portainer:
+    needs: production-deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: post to webhook
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: ${{ secrets.PORTAINER_WEBHOOK_URL }}
+          method: 'POST'
+          timeout: 180000
