@@ -202,17 +202,20 @@
     }
     fetch('https://discord.com/api/guilds/870246147455877181/widget.json').then(
         resp => {resp.json().then(json => {
-            const elm = document.getElementById('discord-nav')
-            const span = document.createElement('span')
+            const elm = document.getElementById('discord-nav'),
+                span = document.createElement('span'),
+                duration = 5,
+                countStep = Math.trunc((parseInt(json['presence_count']) / duration)/50);
+
             let currCount = 0
             span.className = "text-xs text-hover-bg-light"
             elm.appendChild(span)
             function increaseCount() {
                 span.innerHTML = `&nbsp;&nbsp;${currCount} members online`
                 if (parseInt(json['presence_count']) >= currCount){
-                    currCount += 10
+                    currCount += countStep
                 }
-                setTimeout(increaseCount, 20)
+                setTimeout(increaseCount, duration)
             }
             increaseCount()
 
