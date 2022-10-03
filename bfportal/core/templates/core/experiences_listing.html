@@ -95,26 +95,29 @@
 
                         </div>
                         <!-- owner info -->
-                        <div class="absolute inset-x-0 bottom-1.5 ">
-                            <div class="flex mx-auto text-xs font-medium text-white justify-center gap-x-1">
+                        <div class="absolute inset-x-0 bottom-1.5 overflow-x-clip">
+                            <div class="flex mx-auto text-xs font-medium text-white justify-center gap-x-1 whitespace-nowrap">
                                 By
                                 {% get_social_account post.owner as social_account %}
                                 {% if social_account %}
-                                    <div class="flex flex-row max-w-[3.5rem] overflow-x-clip">
-                                        <a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-medium oldstyle-nums text-bf2042-4 hover:text-bf2042-6">{{social_account.extra_data.username}}</a>
+                                    <div class="flex flex-row max-w-[90px] overflow-clip">
+                                        <a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-medium oldstyle-nums text-bf2042-4 hover:text-bf2042-6 overflow-clip">{{social_account.extra_data.username}} asasassssss</a>
                                     </div>
                                 {% else %}
-                                    {{post.owner}}
+                                    <p>{{post.owner}}</p>
                                 {% endif %}
                                 {% if post.creators.count == 0  %}
                                 On {{post.first_published_at}}
                                 {% else %}
-                                    <div class="flex flex-row overflow-x-clip">
+                                    <div class="flex flex-row  shrink-0 gap-x-1">
                                     {% for creator in post.creators.all %}
                                         {% get_social_account creator as social_account %}
                                         {% if social_account %}
-                                             ,<a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-medium oldstyle-nums text-bf2042-4 hover:text-bf2042-6 shrink-0">{{social_account.extra_data.username}}</a>
+                                             <p>, </p><a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-medium oldstyle-nums text-bf2042-4 hover:text-bf2042-6 shrink-0">{{social_account.extra_data.username}}</a>
+                                        {% else %}
+                                            , {{ creator }}
                                         {% endif %}
+
                                     {% endfor %}
                                     </div>
                                 {% endif %}
