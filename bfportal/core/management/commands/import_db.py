@@ -98,6 +98,7 @@ class Command(BaseCommand):
                             row.last_edited_time, "%B %d %Y %I %S %p"
                         ).replace(tzinfo=timezone.utc)
                     page.tags.add(*row.tags)
+                    page.first_publish = False
                     exps_page = ExperiencesPage.objects.first()
                     exps_page.add_child(instance=page)
                     exps_page.save()
