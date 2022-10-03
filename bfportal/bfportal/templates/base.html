@@ -171,7 +171,13 @@
         const id = elem.getAttribute("like_count_container");
         fetch(`/api/like/${id}/`).then(
             function (resp) {
-                return resp.json()
+                console.log(resp.url)
+                if(resp.redirected){
+                    document.location = `${resp.url.split("=")[0]}=${document.location.pathname}`
+                } else {
+                    return resp.json()
+                }
+
             }
         ).then(function (data) {
             const fav_containers = document.querySelectorAll(`[fav_count_container='${id}']`),
