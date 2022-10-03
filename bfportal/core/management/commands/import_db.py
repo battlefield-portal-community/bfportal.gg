@@ -107,6 +107,7 @@ class Command(BaseCommand):
                         and not (exp_page := exp_query[0]).exp_url
                     ):
                         exp_page.exp_url = row.experience_edit_url
+                        exp_page.save()
                         logger.debug(f"fix playground url for {exp_page}")
             except django.core.exceptions.ValidationError as e:
                 logger.critical(f"failed on {dataclasses.asdict(row)}")
