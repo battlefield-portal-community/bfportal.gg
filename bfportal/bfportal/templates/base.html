@@ -4,7 +4,8 @@
 <html class="no-js" lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>{% block title %}{% if page.meta_title %}{{ page.meta_title }}{% else %}{{ page.title }}{% endif %}{% endblock %}</title>
+    <title>{% block title %}{% if page.meta_title %}{{ page.meta_title }}{% else %}{{ page.title }}
+    {% endif %}{% endblock %}</title>
     <link rel="icon" type="image/x-icon" href={% static "images/fav.gif" %}>
     {% if not disable_preview_embed %}
         <meta property="og:title"
@@ -210,26 +211,30 @@
     fetch('https://discord.com/api/guilds/870246147455877181/widget.json').then(
         resp => {
             resp.json().then(json => {
-                const elm = document.getElementById('discord-nav'),
-                    span = document.createElement('span'),
-                    totalCount = parseInt(json['presence_count']),
-                    duration = 5,
-                    countStep = Math.trunc((totalCount / duration) / 50);
+                const totalCount = parseInt(json['presence_count']),
+                    span = document.createElement('span');
 
-                let currCount = 0
                 span.className = "text-xs text-bg-light"
-                elm.appendChild(span)
+                document.getElementById('discord-nav').appendChild(span)
 
-                function increaseCount() {
-                    span.innerHTML = `&nbsp;&nbsp;${currCount} members online`
-                    if (totalCount >= currCount) {
-                        currCount += countStep
-                        setTimeout(increaseCount, duration)
+                if (document.location.pathname === '/') {
+                        const duration = 5,
+                        countStep = Math.trunc((totalCount / duration) / 50);
+
+                    let currCount = 0
+
+                    function increaseCount() {
+                        span.innerHTML = `&nbsp;&nbsp;${currCount} members online`
+                        if (totalCount >= currCount) {
+                            currCount += countStep
+                            setTimeout(increaseCount, duration)
+                        }
                     }
+                    increaseCount()
+                } else {
+                    span.innerHTML = `&nbsp;&nbsp;${totalCount} members online`
 
                 }
-
-                increaseCount()
 
             })
         }
