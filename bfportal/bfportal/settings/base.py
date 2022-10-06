@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "wagtail.admin",
     "wagtail.core",
     "wagtail.contrib.routable_page",
+    "wagtail.api.v2",
     "wagtail_color_panel",
     "modelcluster",
     "taggit",

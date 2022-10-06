@@ -17,14 +17,13 @@ class ExperiencePageAdmin(ModelAdmin):
 
     def get_owner(self, page: ExperiencePage):
         """Returns html formatted string containing avatar and username."""
-        if social_account := page.owner.socialaccount_set.first():
-            extra_data = social_account.extra_data
-            if extra_data["avatar"]:
-                src = f"https://cdn.discordapp.com/avatars/{extra_data['id']}/{extra_data['avatar']}.png"
-            else:
-                src = ""
-        else:
-            src = ""
+        src = ""
+        if socialaccount_set := page.owner.socialaccount_set:
+            if social_account := socialaccount_set.first():
+                extra_data = social_account.extra_data
+                if extra_data["avatar"]:
+                    src = f"https://cdn.discordapp.com/avatars/{extra_data['id']}/{extra_data['avatar']}.png"
+
         return format_html(
             """
             <div style="display:flex;align-items:center;column-gap:5px" >
