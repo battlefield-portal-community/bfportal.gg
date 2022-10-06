@@ -101,7 +101,7 @@
                                 {% get_social_account post.owner as social_account %}
                                 {% if social_account %}
                                     <div class="flex flex-row max-w-[90px] overflow-clip">
-                                        <a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-medium oldstyle-nums text-bf2042-4 hover:text-bf2042-6 overflow-clip">{{social_account.extra_data.username}} asasassssss</a>
+                                        <a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-medium oldstyle-nums text-bf2042-4 hover:text-bf2042-6 overflow-clip">{{social_account.extra_data.username}}</a>
                                     </div>
                                 {% else %}
                                     <p>{{post.owner}}</p>
