@@ -225,10 +225,7 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
                 {
                     "form": form,
                     "is_edit": True,
-                    "page": {
-                        "title": f"Edit Experience {experience_page.title}",
-                        "description": "",
-                    },
+                    "disable_preview_embed": True,
                 },
             )
     else:
@@ -247,10 +244,7 @@ def edit_experience(request: HttpRequest, experience_page: ExperiencePage):
             {
                 "form": form,
                 "is_edit": True,
-                "page": {
-                    "title": f"Edit Experience {experience_page.title}",
-                    "description": "",
-                },
+                "disable_preview_embed": True,
             },
         )
 

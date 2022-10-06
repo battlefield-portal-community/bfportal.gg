@@ -123,12 +123,7 @@ def get_opg_image_url(
         if isinstance(page, ExperiencePage) and page.cover_img_url:
             return page.cover_img_url
 
-        if block := HomePage.objects.first().extra_content.first_block_by_name(
-            "cover_image"
-        ):
-            return url_prefix + block.value.get_rendition("original").url
-
-    if result := static("images/placeholder.png"):
+    if result := static("images/default_meta.png"):
         return url_prefix + result
 
     return ""

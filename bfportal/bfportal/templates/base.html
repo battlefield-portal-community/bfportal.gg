@@ -4,41 +4,47 @@
 <html class="no-js" lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>
-        {% block title %}
-            {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
-        {% endblock %}
-    </title>
+    <title>{% block title %}{% if page.meta_title %}{{ page.meta_title }}{% else %}{{ page.title }}{% endif %}{% endblock %}</title>
     <link rel="icon" type="image/x-icon" href={% static "images/fav.gif" %}>
-    <meta property="og:title" content="{{ page.title|title }}"/>
-    <meta property="og:type" content="website">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta property="twitter:domain" content="bfportal.gg">
-    <meta property="twitter:url" content="{{ request.build_absolute_uri }}">
-    <meta name="twitter:title" content="{{ page.title|title }}">
-    {% if page %}
-        {% if page.is_experience_page %}
-            <meta property="og:description" content="{{ page.description }}"/>
-            <meta name="description" content="{{ page.description }}"/>
-            <meta property="og:image" content="{{ request|get_opg_image_url:page }}"/>
-            <!-- Twitter Meta Tags -->
-            <meta name="twitter:description" content="{{ page.description }}">
-            <meta name="twitter:image" content="{{ request|get_opg_image_url:page }}">
-        {% else %}
-            <meta name="twitter:description" content="{% if page.description %}{{ page.description }}{% else %}{{ page.title }}{% endif %}">
-            <meta name="twitter:image" content="{{ request|get_opg_image_url:page }}">
-            <meta name="description" content="{% if page.description %}{{ page.description }}{% else %}{{ page.title }}{% endif %}"/>
-            <meta property="og:description" content="{% if page.description %}{{ page.description }}{% else %}{{ page.title }}{% endif %}"/>
-            <meta property="og:image" content= "{{ request|get_opg_image_url:page }}"/>
-        {% endif %}
-    {% else %}
+    {% if not disable_preview_embed %}
+        <meta property="og:title"
+              content="{% if page.meta_title %}{{ page.meta_title }}{% else %}{{ page.title }}{% endif %}"/>
+        <meta property="og:type" content="website">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta property="twitter:domain" content="bfportal.gg">
+        <meta property="twitter:url" content="{{ request.build_absolute_uri }}">
+        <meta name="twitter:title"
+              content="{% if page.meta_title %}{{ page.meta_title }}{% else %}{{ page.title }}{% endif %}">
+        {% if page %}
+            {% if page.meta_description %}
+                {% with page.meta_description as description %}
+                    <meta property="og:description" content="{{ description }}"/>
+                    <meta name="description" content="{{ description }}"/>
+                    <meta property="og:description" content="{{ description }}"/>
+                {% endwith %}
+            {% endif %}
+            {% if page.meta_image %}
+                {% with page.meta_image as image_url %}
+                    <meta property="og:image" content="{{ image_url }}"/>
+                    <meta name="twitter:image" content="{{ image_url }}">
+                {% endwith %}
+            {% else %}
+                {% if page.is_experience_page %}
+                    {% with page.description as description %}
+                        <meta property="og:description" content="{{ description }}"/>
+                        <meta name="description" content="{{ description }}"/>
+                        <meta property="og:description" content="{{ description }}"/>
+                    {% endwith %}
+                    <meta property="og:image" content="{{ page.cover_img_url }}"/>
+                    <meta property="twitter:image" content="{{ page.cover_img_url }}"/>
+                {% endif %}{% endif %}{% else %}
             <meta name="twitter:description" content="Battlefield Portal Library">
             <meta name="twitter:image" content="{{ request|get_opg_image_url }}">
             <meta name="description" content="Share & Find experiences made on portal.battlefield.com"/>
             <meta property="og:description" content="Share & Find experiences made on portal.battlefield.com"/>
-            <meta property="og:image" content= "{{ request|get_opg_image_url }}"/>
-    {% endif %}
+            <meta property="og:image" content="{{ request|get_opg_image_url }}"/>
+        {% endif %}{% endif %}
+
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     {% block preload_media %}{% endblock %}
     {% block extra_css %}
@@ -48,42 +54,42 @@
     {% tailwind_css %}
     <script type="text/javascript" src="{% static 'js/preload.js' %}"></script>
     <script type="text/javascript">
-    /* When the user clicks on the button,
-    toggle between hiding and showing the dropdown content */
-    function toggleDropdown(id) {
-        const drpDown = document.getElementById(id)
-        drpDown.classList.toggle("invisible");
-        drpDown.style.opacity = '0%';
-        drpDown.style.top = '0rem';
-        anime({
-            targets: `#${id}`,
-            opacity: '100%',
-            top: '2rem',
-            easing: 'easeOutQuint',
-            duration: "200"
-        });
-
-    }
-
-    function addDropDownPair(buttonID, menuID) {
-        const button = document.getElementById(buttonID),
-            menu = document.getElementById(menuID);
-
-        if(button) {
-            button.addEventListener('click', function () {
-                toggleDropdown(menuID)
-            })
-
-            menu.addEventListener('click', function (event) {
-                event.stopPropagation();
+        /* When the user clicks on the button,
+        toggle between hiding and showing the dropdown content */
+        function toggleDropdown(id) {
+            const drpDown = document.getElementById(id)
+            drpDown.classList.toggle("invisible");
+            drpDown.style.opacity = '0%';
+            drpDown.style.top = '0rem';
+            anime({
+                targets: `#${id}`,
+                opacity: '100%',
+                top: '2rem',
+                easing: 'easeOutQuint',
+                duration: "200"
             });
 
-            // Close the dropdown if the user clicks outside it
-            window.addEventListener('click',function (event) {
-                if (!event.target.closest(`#${buttonID}`)) document.getElementById(menuID).classList.add('invisible');
-            })
         }
-    }
+
+        function addDropDownPair(buttonID, menuID) {
+            const button = document.getElementById(buttonID),
+                menu = document.getElementById(menuID);
+
+            if (button) {
+                button.addEventListener('click', function () {
+                    toggleDropdown(menuID)
+                })
+
+                menu.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                });
+
+                // Close the dropdown if the user clicks outside it
+                window.addEventListener('click', function (event) {
+                    if (!event.target.closest(`#${buttonID}`)) document.getElementById(menuID).classList.add('invisible');
+                })
+            }
+        }
     </script>
 </head>
 
@@ -105,7 +111,7 @@
     {% if not no_cat_description  and cat_description %}
         <div class="text-white flex w-11/12 mx-auto">
             <div class="text-white text-sm font-medium prose prose-invert min-w-fit mt-10">
-            {{ cat_description|show_markdown|safe }}
+                {{ cat_description|show_markdown|safe }}
             </div>
         </div>
     {% endif %}
@@ -172,7 +178,7 @@
         fetch(`/api/like/${id}/`).then(
             function (resp) {
                 console.log(resp.url)
-                if(resp.redirected){
+                if (resp.redirected) {
                     document.location = `${resp.url.split("=")[0]}=${document.location.pathname}`
                 } else {
                     return resp.json()
@@ -200,28 +206,33 @@
             })
         })
     }
-    fetch('https://discord.com/api/guilds/870246147455877181/widget.json').then(
-        resp => {resp.json().then(json => {
-            const elm = document.getElementById('discord-nav'),
-                span = document.createElement('span'),
-                totalCount = parseInt(json['presence_count']),
-                duration = 5,
-                countStep = Math.trunc((totalCount / duration)/50);
 
-            let currCount = 0
-            span.className = "text-xs text-bg-light"
-            elm.appendChild(span)
-            function increaseCount() {
-                span.innerHTML = `&nbsp;&nbsp;${currCount} members online`
-                if (totalCount >= currCount) {
-                    currCount += countStep
-                    setTimeout(increaseCount, duration)
+    fetch('https://discord.com/api/guilds/870246147455877181/widget.json').then(
+        resp => {
+            resp.json().then(json => {
+                const elm = document.getElementById('discord-nav'),
+                    span = document.createElement('span'),
+                    totalCount = parseInt(json['presence_count']),
+                    duration = 5,
+                    countStep = Math.trunc((totalCount / duration) / 50);
+
+                let currCount = 0
+                span.className = "text-xs text-bg-light"
+                elm.appendChild(span)
+
+                function increaseCount() {
+                    span.innerHTML = `&nbsp;&nbsp;${currCount} members online`
+                    if (totalCount >= currCount) {
+                        currCount += countStep
+                        setTimeout(increaseCount, duration)
+                    }
+
                 }
 
-            }
-            increaseCount()
+                increaseCount()
 
-        })}
+            })
+        }
     )
 </script>
 {% block extra_js %}
