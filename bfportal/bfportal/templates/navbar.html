@@ -37,8 +37,8 @@
 
             {% endblock %}
         </div>
-        <!-- right side -->
-        <div class="hidden md:flex flex-grow justify-end items-center gap-x-8">
+        {% if not no_login %}
+            <div class="hidden md:flex flex-grow justify-end items-center gap-x-8">
             <a href="/submit/"
                class="cursor-pointer text-bf2042-4 font-bold hover:text-bf2042-3 transition duration-100 ease-in-out">
                 Submit Experience
@@ -76,6 +76,8 @@
                 </a>
             {% endif %}
         </div>
+        {% endif %}
+        <!-- right side -->
         <!-- mobile nav pane -->
         <div class="grow md:hidden">
             <div id="menuIcon" class="group flex flex-col gap-y-1 ml-auto w-min cursor-pointer md:hidden">
@@ -97,10 +99,12 @@
                        class="text-white hover:text-bf2042-5  transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
                         Featured
                     </a>
-                    <a href="/submit/"
-                       class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
-                        Submit Experience
-                    </a>
+                    {% if not no_login %}
+                        <a href="/submit/"
+                           class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
+                            Submit Experience
+                        </a>
+                    {% endif %}
                     {% if page.is_experience_page and  page.owner == request.user %}
                         <a href="edit/"
                            class="text-white hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
@@ -112,17 +116,19 @@
                        class="cursor-alias lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
                         Server Browser
                     </a>
-                    {% if request.user.is_authenticated %}
-                        {% get_social_accounts user as accounts %}
-                        {% if accounts %}
-                            {% with account=accounts.discord.0 %}
-                                <a class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white" href="/users/{{ account.uid }}">Profile</a>
-                                <a class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white" href="/logout/" >Logout</a>
-                            {% endwith %}
+                    {% if not no_login %}
+                        {% if request.user.is_authenticated %}
+                            {% get_social_accounts user as accounts %}
+                            {% if accounts %}
+                                {% with account=accounts.discord.0 %}
+                                    <a class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white" href="/users/{{ account.uid }}">Profile</a>
+                                    <a class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white" href="/logout/" >Logout</a>
+                                {% endwith %}
+                            {% endif %}
+                        {% else %}
+                            <a href="{% provider_login_url 'discord' process='login' %}"
+                               class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">Login</a>
                         {% endif %}
-                    {% else %}
-                        <a href="{% provider_login_url 'discord' process='login' %}"
-                           class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">Login</a>
                     {% endif %}
                 </div>
             </div>

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block extra_content %}
+{% endblock %}
+{% load static %}
+{% block content %}
+{% block header %}{% endblock %}
+{% include nav_tmpl|default:'navbar.html' with no_login=True %}
+<div class="flex flex-col m-auto w-3/4 items-center gap-y-8">
+    <img src="{% static 'images/spinner.gif' %}" alt=" " width="100">
+    <p class="text-white text-xl font-extrabold flex flex-col text-center">
+        <span>Website is Updating</span>
+        <span>Please Wait</span>
+    </p>
+</div>
+<div>::CLOUDFLARE_ERROR_500S_BOX::</div>
+{% endblock %}
