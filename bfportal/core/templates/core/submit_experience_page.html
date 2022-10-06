@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="w-9/12 mx-auto mb-8 mt-8">
+    <div class="w-9/12 mx-auto mb-8 mt-8" xmlns="http://www.w3.org/1999/html">
         <div class="flex flex-col gap-y-2">
             <form action="." method="POST" id="submitExpPage">
                 {% csrf_token %}
@@ -90,6 +90,13 @@
                                                 <span class="opacity-[0.5]">you’re sharing your experience URL publicly on bfportal.gg and therefore allow everyone to duplicate your experience. Sharing URL is mandatory for prefabs. If you need more info go to our
                                             <a href="https://github.com/LennardF1989/BF2042-Portal-Extensions"
                                                target="_blank" class="text-bf2042-4">Discord</a>.</span>
+                                            </div>
+                                        {% elif field.html_name == "cover_img_url" %}
+                                            <div class="text-[10px] font-medium text-white opacity-[0.5]">
+                                                Download the
+                                                <span class="text-bf2042-4 font-bold">template image PSD, BF font</span>
+                                                <span>and read our little </span>
+                                                <b>guide</b> on how to use it on our <a href="https://bfportal.gg/join" target="_blank" class="text-bf2042-4 font-bold">Discord</a>. Best resolution is : 1920x755
                                             </div>
                                         {% endif %}
                                         <!-- content -->
