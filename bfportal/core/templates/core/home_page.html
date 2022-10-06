@@ -8,9 +8,6 @@
     {% endif %}
 {% endblock %}
 
-{% block title %}
-    BF Portal Library
-{% endblock %}
 {% block content %}
 
     {% if categories %}
@@ -64,8 +61,5 @@
 
     {% include 'core/experiences_listing.html'%}
 
-    {% if not request.user.is_authenticated %}
-        <iframe src="https://discord.com/widget?id=870246147455877181&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
-    {% endif %}
 
 {% endblock %}

@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 from functools import reduce
 
+import requests
 from allauth.socialaccount.models import SocialAccount
 from core.utils.helper import safe_cast
 from django import forms
@@ -144,6 +145,19 @@ class ExtraContent(blocks.StreamBlock):
         help_text = "Custom Content for a page"
 
 
+def validate_image_link(link: str):
+    """Checks if the url is a direct url to an image"""
+    try:
+        header_resp = requests.head(link, allow_redirects=True)
+        if not header_resp.headers["content-type"].startswith("image"):
+            raise forms.ValidationError(
+                "Image url is invalid, make sure it is a direct link to the image"
+            )
+        return link
+    except requests.ConnectionError:
+        raise forms.ValidationError("Unable to access image")
+
+
 class CustomBasePage(Page):
     """Base class for all pages in the app
 
@@ -151,15 +165,141 @@ class CustomBasePage(Page):
     """
 
     extra_content = StreamField(ExtraContent(), blank=True)
+    meta_title = models.CharField(
+        blank=True,
+        null=True,
+        help_text="If set this title is displayed in embeds",
+        max_length=255,
+    )
+    meta_description = models.TextField(
+        blank=True,
+        null=True,
+        help_text="If set this description is displayed in embeds",
+    )
+    meta_image = models.URLField(
+        blank=True,
+        null=True,
+        help_text="If set this image is displayed in embeds. Recommend size 1200x630px",
+        validators=[validate_image_link],
+    )
+
     content_panels = Page.content_panels + [
         StreamFieldPanel(
             "extra_content",
             classname="collapsible",
         )
     ]
+    promote_panels = [
+        MultiFieldPanel(
+            [
+                FieldPanel("meta_title"),
+                FieldPanel("meta_description"),
+                FieldPanel("meta_image"),
+            ],
+            classname="collapsible",
+            heading="Preview Embed Override",
+        )
+    ] + Page.promote_panels
 
     class Meta:
         abstract = True
+
+
+class BaseCategory(models.Model):
+    """Class defining properties of BaseCategory"""
+
+    name = models.CharField(max_length=255)
+    icon = models.ForeignKey(
+        Svg,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
+    visible = models.BooleanField(
+        help_text="Show Category on home page?", default=True, null=False
+    )
+    selectable_on_form = models.BooleanField(
+        help_text="Should this Category be selectable in submit form",
+        default=True,
+        null=False,
+    )
+    not_ready = models.BooleanField(
+        default=False,
+        help_text="If set, Shows Coming soon page for this category",
+        null=False,
+    )
+    description = MarkdownxField(
+        blank=True,
+        null=False,
+        help_text="description of this category that is shown on /category/",
+    )
+
+    meta_title = models.CharField(
+        blank=True,
+        null=True,
+        help_text="If set this title is displayed in embeds",
+        max_length=255,
+    )
+    meta_description = models.TextField(
+        blank=True,
+        null=True,
+        help_text="If set this description is displayed in embeds",
+    )
+    meta_image = models.URLField(
+        blank=True,
+        null=True,
+        help_text="If set this image is displayed in embeds. Recommend size 1200x630px",
+        validators=[validate_image_link],
+    )
+
+    panels = [
+        MultiFieldPanel(
+            [
+                FieldPanel("name"),
+                FieldPanel("description"),
+                SvgChooserPanel("icon"),
+                FieldPanel("visible"),
+                FieldPanel("selectable_on_form"),
+                FieldPanel("not_ready"),
+            ],
+            classname="collapsed",
+            heading="Category info",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel("meta_title"),
+                FieldPanel("meta_description"),
+                FieldPanel("meta_image"),
+            ],
+            classname="collapsed",
+            heading="Preview Embed Override",
+        ),
+    ]
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        abstract = True
+
+
+class ExperiencesCategory(BaseCategory):
+    """Class defining properties of experience category tag"""
+
+    class Meta:
+        verbose_name_plural = "Main Categories"
+
+
+class SubCategory(BaseCategory):
+    """Class defining properties of experience sub categories"""
+
+    class Meta:
+        verbose_name_plural = "Sub Categories"
+
+
+register_snippet(ExperiencesCategory)
+register_snippet(SubCategory)
 
 
 class HomePage(RoutablePageMixin, CustomBasePage):
@@ -240,91 +380,19 @@ class HomePage(RoutablePageMixin, CustomBasePage):
             request,
             ExperiencePage.objects.live().public().order_by("-first_published_at"),
         )
+        context["cat_description"] = cat_object.description
+        if (
+            cat_object.meta_title
+            or cat_object.meta_description
+            or cat_object.meta_image
+        ):
+            if not cat_object.meta_title:
+                cat_object.name = cat_object.meta_title
+                cat_object.save()
+            context["page"] = cat_object
         context["posts"] = posts
         context["no_extra_content"] = True
         return TemplateResponse(request, self.get_template(request), context)
-
-
-class ExperiencesCategory(models.Model):
-    """Class defining properties of experience category tag"""
-
-    name = models.CharField(max_length=255)
-    icon = models.ForeignKey(
-        Svg,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-    )
-    visible = models.BooleanField(
-        help_text="Show Category on home page?", default=True, null=False
-    )
-    selectable_on_form = models.BooleanField(
-        help_text="Should this Category be selectable in submit form",
-        default=True,
-        null=False,
-    )
-    not_ready = models.BooleanField(
-        default=False,
-        help_text="If set, Shows Coming soon page for this category",
-        null=False,
-    )
-    panels = [
-        FieldPanel("name"),
-        SvgChooserPanel("icon"),
-        FieldPanel("visible"),
-        FieldPanel("selectable_on_form"),
-        FieldPanel("not_ready"),
-    ]
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name_plural = "Main Categories"
-
-
-class SubCategory(models.Model):
-    """Class defining properties of experience sub categories"""
-
-    name = models.CharField(max_length=255)
-    icon = models.ForeignKey(
-        Svg,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-    )
-    visible = models.BooleanField(
-        help_text="Show Category on home page?", default=True, null=False
-    )
-    selectable_on_form = models.BooleanField(
-        help_text="Should this Category be selectable in submit form",
-        default=True,
-        null=False,
-    )
-    not_ready = models.BooleanField(
-        default=False,
-        help_text="If set, Shows Coming soon page for this category",
-        null=False,
-    )
-    panels = [
-        FieldPanel("name"),
-        SvgChooserPanel("icon"),
-        FieldPanel("visible"),
-        FieldPanel("selectable_on_form"),
-        FieldPanel("not_ready"),
-    ]
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name_plural = "Sub Categories"
-
-
-register_snippet(ExperiencesCategory)
-register_snippet(SubCategory)
 
 
 class ExperiencePageTag(TaggedItemBase):
@@ -576,8 +644,15 @@ class Profile(models.Model):
     """Class that tracks extra data about user"""
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    liked = models.ManyToManyField(ExperiencePage)
+    liked = models.ManyToManyField(ExperiencePage, blank=True)
+    hide_username = models.BooleanField(
+        default=False,
+        null=False,
+        help_text="If set to true hides the username on the website",
+    )
     autocomplete_search_field = "user__username"
+
+    panels = [FieldPanel("hide_username")]
 
     def autocomplete_label(self):
         """Called by Wagtail auto complete to get label for an account"""

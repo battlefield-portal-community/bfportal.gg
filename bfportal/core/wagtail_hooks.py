@@ -3,7 +3,7 @@ from django.utils.html import format_html
 from wagtail import hooks
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
-from .models import ExperiencePage
+from .models import ExperiencePage, Profile
 
 
 class ExperiencePageAdmin(ModelAdmin):
@@ -62,18 +62,39 @@ class ExperiencePageAdmin(ModelAdmin):
         )
 
 
+class ProfileAdmin(ModelAdmin):
+    """Controls how 'Profile' menu items works and looks"""
+
+    model = Profile
+    menu_order = 2
+    list_display = ("username",)
+    search_fields = ("user__username",)
+
+    def username(self, profile: Profile):  # noqa: D102
+        return profile.user.username
+
+    def get_queryset(self, request: HttpRequest):  # noqa: D102
+        if request.user.is_superuser or request.user.groups.filter(
+            name__istartswith="mod"
+        ):
+            return Profile.objects.all()
+        else:
+            return request.user.profile
+
+
 @hooks.register("construct_main_menu")
 def only_show_experiences_pages_item(request: HttpRequest, menu_items):
     """Returns only the Experience Pages menu items for a non superuser"""
-    # logger.debug([item.name for item in menu_items])
+    from loguru import logger
+
+    logger.debug([item.name for item in menu_items])
     if request.user.is_superuser:
         return menu_items
     elif request.user.groups.filter(name="Moderators").exists():
-        menu_items[:] = [item for item in menu_items if item.name != "explorer"]
+        return [item for item in menu_items if item.name != "explorer"]
     else:
-        menu_items[:] = [item for item in menu_items if item.name == "experience-pages"]
-
-    return menu_items
+        return [item for item in menu_items if item.name in ["experience-pages"]]
 
 
+modeladmin_register(ProfileAdmin)
 modeladmin_register(ExperiencePageAdmin)
