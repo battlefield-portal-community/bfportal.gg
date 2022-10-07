@@ -37,8 +37,7 @@
             <!-- page title -->
             <div class="flex flex-row gap-x-4 items-center flex-wrap gap-y-2 relative w-full">
                 <div id="reportButton"
-                     class="absolute top-1/2 -translate-y-1/2 right-0 text-sm font-bold cursor-pointer"
-                     style="display: none">
+                     class="absolute bottom-0 lg:top-1/2 lg:-translate-y-1/2 right-0 text-sm font-bold cursor-pointer">
                     <p>Report</p>
                     <div id="reportButtonDropdown"
                          class="dropdown-content flex flex-col text-center text-md font-medium right-0 w-max rounded-lg absolute text-white invisible"
@@ -139,17 +138,21 @@
             <!-- owners and update info -->
             <div class="flex flex-row gap-1 flex-wrap">
                 <div class="text-white text-xs flex flex-row items-center gap-x-1">
-                    <p class="text-bg-light">Created by</p>
-                    {% with page.owner.socialaccount_set.all.0 as owner %}
-                        <a href="/users/{{ owner.uid }}" class="flex flex-row gap-x-1 items-center">
-                            <img class="rounded-full" width="15" height="15"
-                                 src="{% if owner.extra_data.avatar %} {{ owner.get_avatar_url }} {% else %} {% static 'images/default_discord_avatar.png' %}{% endif %}"
-                                 alt="pfp">
-                            <p class="text-bf2042-4">{{ owner.extra_data.username }}</p>
-                        </a>
-                    {% endwith %}
+                    {% if not page.owner.profile.hide_username %}
+                        <p class="text-bg-light">Created by</p>
+                        {% with page.owner.socialaccount_set.all.0 as owner %}
+                            <a href="/users/{{ owner.uid }}" class="flex flex-row gap-x-1 items-center">
+                                <img class="rounded-full" width="15" height="15"
+                                     src="{% if owner.extra_data.avatar %} {{ owner.get_avatar_url }} {% else %} {% static 'images/default_discord_avatar.png' %}{% endif %}"
+                                     alt="pfp">
+                                <p class="text-bf2042-4">{{ owner.extra_data.username }}</p>
+                            </a>
+                        {% endwith %}
+                    {% else %}
+                        <p class="text-bg-light">Created</p>
+                    {% endif %}
                     {% for creator in page.creators.all %}
-                        {% if creator.socialaccount_set.all|length %}
+                        {% if not creator.profile.hide_username and creator.socialaccount_set.all|length %}
                             {% with creator.socialaccount_set.all.0 as account %}
                                 <a href="/users/{{ account.uid }}" class="flex flex-row gap-x-1 items-center">
                                     ,<img class="rounded-full" width="15" height="15"
