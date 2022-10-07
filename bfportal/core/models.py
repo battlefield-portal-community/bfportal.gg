@@ -186,7 +186,7 @@ class CustomBasePage(Page):
     content_panels = Page.content_panels + [
         StreamFieldPanel(
             "extra_content",
-            classname="collapsible",
+            classname="collapsed",
         )
     ]
     promote_panels = [
@@ -528,6 +528,39 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         help_text="Is the experience bugged",
         verbose_name="Bugged ?",
     )
+    bugged_report = ParentalManyToManyField(
+        "core.Profile",
+        blank=True,
+        help_text="People who have reported this exp is bugged",
+        related_name="bugged_report",
+    )
+
+    broken = models.BooleanField(
+        default=False,
+        null=False,
+        help_text="Is the experience broken",
+        verbose_name="Broken ?",
+    )
+    broken_report = ParentalManyToManyField(
+        "core.Profile",
+        blank=True,
+        help_text="People who have reported this is exp broken",
+        related_name="broken_report",
+    )
+
+    xp_farm = models.BooleanField(
+        default=False,
+        null=False,
+        help_text="Is the experience an xp farm",
+        verbose_name="Broken ?",
+    )
+    xp_farm_report = ParentalManyToManyField(
+        "core.Profile",
+        blank=True,
+        help_text="People who have reported this is exp an xp farm",
+        related_name="xp_farm_report",
+    )
+
     first_publish = models.BooleanField(default=True, null=False)
 
     likes = models.IntegerField(default=0, null=False, help_text="Number of likes")
@@ -551,24 +584,23 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
                         "trending",
                         classname="full",
                     ),
+                    FieldPanel("allow_editing"),
                     AutocompletePanel("owner", target_model="core.Profile"),
-                    FieldPanel("bugged", classname="full"),
                     FieldPanel("description", classname="full"),
                     FieldPanel("category", widget=forms.RadioSelect),
                     FieldPanel("sub_categories", widget=forms.CheckboxSelectMultiple),
                     AutocompletePanel("creators", target_model="core.Profile"),
-                    FieldPanel("allow_editing"),
                 ],
-                heading="Basic Info",
-                classname="collapsible",
+                heading="Title, Description, Categories, Creators",
+                classname="collapsed",
             ),
             MultiFieldPanel(
                 [
                     FieldPanel("code", classname="full"),
                     FieldPanel("exp_url", classname="full"),
                 ],
-                heading="Sharing Info",
-                classname="collapsible",
+                heading="Experience Url and Code",
+                classname="collapsed",
             ),
             MultiFieldPanel(
                 [
@@ -576,17 +608,32 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
                     FieldPanel("cover_img_url", classname="full"),
                     FieldPanel("vid_url", classname="full"),
                 ],
-                heading="Extra Info",
-                classname="collapsible",
+                heading="Tags, cover img, vid",
+                classname="collapsed",
             ),
             MultiFieldPanel(
                 [
                     FieldPanel("no_players", classname="full"),
                     FieldPanel("no_bots", classname="full"),
                 ],
-                heading="Settings info",
-                classname="collapsible",
+                heading="Players, Bots",
+                classname="collapsed",
             ),
+            *[
+                MultiFieldPanel(
+                    [
+                        FieldPanel(field, classname="full"),
+                        AutocompletePanel(
+                            f"{field}_report",
+                            target_model="core.Profile",
+                            classname="full",
+                        ),
+                    ],
+                    heading=f"{field.replace('_', ' ').capitalize()} info",
+                    classname="collapsed",
+                )
+                for field in ["bugged", "broken", "xp_farm"]
+            ],
         ]
         + [CustomBasePage.content_panels[-1]]
     )
