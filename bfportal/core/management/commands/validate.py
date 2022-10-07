@@ -6,6 +6,7 @@ from urllib.parse import parse_qs, urlsplit  # noqa:  E402
 import aiohttp
 import requests  # noqa:  E402
 from asgiref.sync import sync_to_async
+from core.helper import GT_BASE_URL
 from core.models import ExperiencePage  # noqa:  E402
 from django.core.management import BaseCommand  # noqa:  E402
 from loguru import logger
@@ -64,18 +65,16 @@ class Command(BaseCommand):
             experiences = ExperiencePage.objects.live().public()
             mapping: dict[ExperiencePage, str] = dict()
             for experience in experiences:
-                base_url = "https://api.gametools.network/bf2042/playground/?{}&blockydata=false&lang=en-us"
+                query_string = ""
                 if experience.exp_url:
                     parsed_url = urlsplit(experience.exp_url)
                     query_dict = parse_qs(parsed_url.query)
                     if playgroundId := query_dict.get("playgroundId", None):
-                        mapping[experience] = base_url.format(
-                            f"playgroundid={playgroundId[0]}"
-                        )
+                        query_string = f"playgroundid={playgroundId[0]}"
                 elif experience.code:
-                    mapping[experience] = base_url.format(
-                        f"experiencecode={experience.code}"
-                    )
+                    query_string = f"experiencecode={experience.code}"
+
+                mapping[experience] = GT_BASE_URL.format(query_string)
 
             loop = asyncio.new_event_loop()
             t = Thread(target=start_background_loop, args=(loop,), daemon=True)

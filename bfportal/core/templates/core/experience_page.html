@@ -263,7 +263,7 @@
                 }
 
                 setTimeout(tagsSpinner, 5000)
-                fetch(`https://api.gametools.network/bf2042/playground/?${queryParam}`).then(resp => resp.json().then(resp_json => {
+                fetch(`https://api.gametools.network/bf2042/playground/?${queryParam}&return_ownername=false&blockydata=false&lang=en-us`).then(resp => resp.json().then(resp_json => {
                     const error_div = $('#maps_on_error');
                     if (!resp_json.hasOwnProperty('errors')) {
                         error_div.css('display', 'none')

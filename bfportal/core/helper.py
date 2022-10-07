@@ -9,6 +9,8 @@ from django.utils.safestring import mark_safe
 from loguru import logger
 from taggit.models import Tag
 
+GT_BASE_URL = "https://api.gametools.network/bf2042/playground/?{}&blockydata=false&lang=en-us&return_ownername=false"
+
 
 def markdownify(text):
     """Called by MarkdownX to get markdown -> html"""
