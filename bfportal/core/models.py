@@ -552,7 +552,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         default=False,
         null=False,
         help_text="Is the experience an xp farm",
-        verbose_name="Broken ?",
+        verbose_name="XP farm ?",
     )
     xp_farm_report = ParentalManyToManyField(
         "auth.User",
@@ -576,14 +576,17 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         + [
             MultiFieldPanel(
                 [
-                    FieldPanel(
-                        "featured",
-                        classname="full",
-                    ),
-                    FieldPanel(
-                        "trending",
-                        classname="full",
-                    ),
+                    FieldPanel("featured", classname="full", permission="superuser"),
+                    FieldPanel("trending", classname="full", permission="superuser"),
+                    *[
+                        FieldPanel(field, classname="full", permission="superuser")
+                        for field in ["bugged", "broken", "xp_farm"]
+                    ],
+                ],
+                heading="Admin only",
+            ),
+            MultiFieldPanel(
+                [
                     FieldPanel("allow_editing"),
                     AutocompletePanel("owner", target_model="core.Profile"),
                     FieldPanel("description", classname="full"),
@@ -622,7 +625,6 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
             *[
                 MultiFieldPanel(
                     [
-                        FieldPanel(field, classname="full"),
                         AutocompletePanel(
                             f"{field}_report",
                             target_model="core.Profile",
