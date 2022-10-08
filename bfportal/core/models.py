@@ -529,7 +529,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         verbose_name="Bugged ?",
     )
     bugged_report = ParentalManyToManyField(
-        "core.Profile",
+        "auth.User",
         blank=True,
         help_text="People who have reported this exp is bugged",
         related_name="bugged_report",
@@ -542,7 +542,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         verbose_name="Broken ?",
     )
     broken_report = ParentalManyToManyField(
-        "core.Profile",
+        "auth.User",
         blank=True,
         help_text="People who have reported this is exp broken",
         related_name="broken_report",
@@ -555,7 +555,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         verbose_name="Broken ?",
     )
     xp_farm_report = ParentalManyToManyField(
-        "core.Profile",
+        "auth.User",
         blank=True,
         help_text="People who have reported this is exp an xp farm",
         related_name="xp_farm_report",

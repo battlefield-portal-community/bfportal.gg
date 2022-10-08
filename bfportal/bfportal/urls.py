@@ -1,6 +1,11 @@
 from ajax_select import urls as ajax_select_urls
 from core.api import api_router
-from core.views import CategoriesAutocomplete, TagsAutocomplete, handle_like_request
+from core.views import (
+    CategoriesAutocomplete,
+    TagsAutocomplete,
+    handle_like_request,
+    report_experience,
+)
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
@@ -38,6 +43,7 @@ urlpatterns = [
         name="category-autocomplete",
     ),
     path("api/tags/", TagsAutocomplete.as_view(), name="tags-autocomplete"),
+    re_path(r"^api/report/(\d+)/$", report_experience, name="report-experience"),
     re_path(
         r"^api/like/(\d+)/$",
         handle_like_request,

@@ -336,6 +336,22 @@
 
             })
         })
+    function report(report_type) {
+
+        const csrftoken = getCookie('csrftoken');
+        if(csrftoken){
+            fetch(`/api/report/${report_type}/?id={{ page.id }}`,{
+                method: 'post',
+                mode: "cors",
+                cache: "no-cache",
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                }
+            }).then(resp => {
+                console.log(resp.status)
+            })
+        }
+    }
     </script>
     {#https://api.gametools.network/bf2042/playground/?playgroundid=45e436e0-4cf7-11ec-be7b-76c50778a53a#}
     {##}
