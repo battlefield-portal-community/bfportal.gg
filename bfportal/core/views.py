@@ -314,14 +314,12 @@ def handle_like_request(request: HttpRequest, page_id):
         user = request.user
         user_fav = user.profile.liked
         if page not in user_fav.all():
-            user_fav.add(page)
-            page.likes += 1
+            user.profile.add_liked_page(page)
         else:
-            user_fav.remove(page)
-            page.likes -= 1
+            user.profile.remove_liked_page(page)
         user.save()
         page.save()
-        return HttpResponse(f"{page.likes}", status=201)
+        return HttpResponse(f"{page.liked_by.all().count()}", status=201)
     except ExperiencePage.DoesNotExist:
         return HttpResponse("experience does not exits", status=404)
 

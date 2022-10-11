@@ -152,7 +152,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
 
     first_publish = models.BooleanField(default=True, null=False)
 
-    likes = models.IntegerField(default=0, null=False, help_text="Number of likes")
+    liked_by = models.ManyToManyField("core.Profile", blank=True)
 
     creators = ParentalManyToManyField(
         "auth.User", blank=True, help_text="choose creators"

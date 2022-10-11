@@ -58,6 +58,22 @@ class Profile(models.Model):
         else:
             return str(self.user)
 
+    def add_liked_page(self, experience_page: ExperiencePage):
+        """Adds a ExperiencePage to `self.liked`, and adds self to `ExperiencePage.liked_by`
+
+        Does not call the `save` function.
+        """
+        self.liked.add(experience_page)
+        experience_page.liked_by.add(self)
+
+    def remove_liked_page(self, experience_page: ExperiencePage):
+        """Removes a `ExperiencePage` from `self.liked`, and removes self from page's `liked_by`
+
+        Does not call the `save` function.
+        """
+        self.liked.remove(experience_page)
+        experience_page.liked_by.remove(self)
+
     @staticmethod
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance: User, created, **kwargs):
