@@ -1,3 +1,4 @@
+import enum
 import os
 
 import requests
@@ -14,6 +15,26 @@ from django.shortcuts import render
 from django.utils import timezone
 from loguru import logger
 from taggit.models import Tag
+
+
+class EnumMeta(enum.EnumMeta):
+    """Meta Class that enables `in` operator for Enums"""
+
+    def __contains__(cls, item):
+        try:
+            cls(item)
+        except ValueError:
+            return False
+        else:
+            return True
+
+
+class ReportTypes(enum.Enum, metaclass=EnumMeta):
+    """All types of report that can be done for an exp"""
+
+    BUGGED = 0
+    BROKEN = 1
+    XP_FARM = 2
 
 
 def send_approve_request(
@@ -293,13 +314,53 @@ def handle_like_request(request: HttpRequest, page_id):
         user = request.user
         user_fav = user.profile.liked
         if page not in user_fav.all():
-            user_fav.add(page)
-            page.likes += 1
+            user.profile.add_liked_page(page)
         else:
-            user_fav.remove(page)
-            page.likes -= 1
+            user.profile.remove_liked_page(page)
         user.save()
         page.save()
-        return HttpResponse(f"{page.likes}", status=201)
+        return HttpResponse(f"{page.liked_by.all().count()}", status=201)
     except ExperiencePage.DoesNotExist:
         return HttpResponse("experience does not exits", status=404)
+
+
+@login_required
+def report_experience(request: HttpRequest, report_type: int):
+    """View that handles reporting of EXP"""
+    if request.method == "POST":
+        try:
+            report_type = ReportTypes(int(report_type))
+            if report_type in ReportTypes:
+                if page_id := request.GET.get("id", None):
+                    try:
+                        exp_page = ExperiencePage.objects.get(id=int(page_id))
+                    except ExperiencePage.DoesNotExist:
+                        logger.debug(f"Wrong page id {page_id}")
+                        return HttpResponse(status=400)
+                    match report_type:
+                        case ReportTypes.BUGGED:
+                            exp_page.bugged_report.add(request.user)
+                        case ReportTypes.BROKEN:
+                            exp_page.broken_report.add(request.user)
+                        case ReportTypes.XP_FARM:
+                            exp_page.xp_farm_report.add(request.user)
+                    exp_page.save()
+                    return HttpResponse(status=200)
+                else:
+                    logger.debug(f"Wrong page id {page_id}")
+                    return HttpResponse(status=400)
+            else:
+                raise ValueError()
+        except ValueError:
+            logger.debug(f"{report_type} not valid report type")
+            return HttpResponse(status=404)
+    else:
+        return HttpResponse(404)
+
+
+def events_view(request: HttpRequest):
+    """Handles /events page"""
+    return render(
+        request,
+        "502.html",
+    )

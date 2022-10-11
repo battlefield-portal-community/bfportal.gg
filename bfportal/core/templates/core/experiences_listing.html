@@ -29,9 +29,10 @@
                                     <p class="align-bottom text-white">Experience Bugged</p>
                                 </div>
                             {% endif %}
+                            {% with post.liked_by.all.count as like_count %}
                             <div like_count_container="{{ post.id }}" class="absolute -bottom-0.5 right-0 w-min-14 pl-6 pr-2.5 pt-1.5 text-white text-sm group-hover:bg-bg-default duration-200 clickable fav-container" style="--rect-url: url('{% static 'svgs/card-fav-rect.svg' %}');" onclick="add_to_liked(this)">
                                 <div class="flex flex-row gap-2 font-medium pb-1.5">
-                                    <p fav_count_container="{{ post.id }}" class="{% if post.likes == 0 %} hidden {% endif %}">{{ post.likes }}</p>
+                                    <p fav_count_container="{{ post.id }}" class="{% if like_count == 0 %} hidden {% endif %}">{{ like_count }}</p>
                                     {% if post|is_liked_by_user:request %}
                                     <img like_svg="{{ post.id }}" class="block" src="{% static 'svgs/card/heart_liked.svg' %}" alt="non">
                                     {% else %}
@@ -39,6 +40,7 @@
                                     {% endif %}
                                 </div>
                             </div>
+                            {% endwith %}
                         </div>
                     </div>
                     <!-- info -->
@@ -97,27 +99,31 @@
                         <!-- owner info -->
                         <div class="absolute inset-x-0 bottom-1.5 overflow-x-clip">
                             <div class="flex mx-auto text-xs font-medium text-white justify-center gap-x-1 whitespace-nowrap">
-                                By
-                                {% get_social_account post.owner as social_account %}
-                                {% if social_account %}
-                                    <div class="flex flex-row max-w-[90px] overflow-clip">
-                                        <a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-medium oldstyle-nums text-bf2042-4 hover:text-bf2042-6 overflow-clip">{{social_account.extra_data.username}}</a>
-                                    </div>
-                                {% else %}
-                                    <p>{{post.owner}}</p>
+                                {% if not post.owner.profile.hide_username %}
+                                    By
+                                    {% get_social_account post.owner as social_account %}
+                                    {% if social_account %}
+                                        <div class="flex flex-row max-w-[90px] overflow-clip">
+                                            <a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-medium oldstyle-nums text-bf2042-4 hover:text-bf2042-6 overflow-clip">{{social_account.extra_data.username}}</a>
+                                        </div>
+                                    {% else %}
+                                        <p>{{post.owner}}</p>
+                                    {% endif %}
                                 {% endif %}
                                 {% if post.creators.count == 0  %}
                                 On {{post.first_published_at}}
                                 {% else %}
                                     <div class="flex flex-row  shrink-0 gap-x-1">
                                     {% for creator in post.creators.all %}
-                                        {% get_social_account creator as social_account %}
-                                        {% if social_account %}
-                                             <p>, </p><a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-medium oldstyle-nums text-bf2042-4 hover:text-bf2042-6 shrink-0">{{social_account.extra_data.username}}</a>
-                                        {% else %}
-                                            , {{ creator }}
+                                        {% if not creator.profile.hide_username %}
+                                            {% if not post.owner.profile.hide_username %}<p>,</p>{% endif %}
+                                            {% get_social_account creator as social_account %}
+                                            {% if social_account %}
+                                                <a href="/users/{{ social_account.extra_data|get_item:'id' }}" class="font-medium oldstyle-nums text-bf2042-4 hover:text-bf2042-6 shrink-0">{{social_account.extra_data.username}}</a>
+                                            {% else %}
+                                                {{ creator }}
+                                            {% endif %}
                                         {% endif %}
-
                                     {% endfor %}
                                     </div>
                                 {% endif %}

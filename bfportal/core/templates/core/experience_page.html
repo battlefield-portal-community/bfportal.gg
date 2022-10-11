@@ -6,31 +6,36 @@
         <div class="w-full h-80 max-h-80 relative">
             <img class="w-full h-full object-cover"
                  src='
+
+
+
                          {% if debug %}{% static "images/placeholder.png" %}{% else %}{% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{% static "images/placeholder.png" %}{% endif %}{% endif %}'
                  alt="{{ page.slug }}"
-                 onerror='if(this.src !== "{% static "images/placeholder.png" %}") this.src="{% static "images/placeholder.png"%}";'
+                 onerror='if(this.src !== "{% static "images/placeholder.png" %}") this.src="{% static "images/placeholder.png" %}";'
             />
+            {% with page.liked_by.all.count as like_count %}
             <div like_count_container="{{ page.id }}"
                  class="absolute bottom-0 right-0 w-min-14 pl-8 pr-2.5 pt-1.5 fav-container"
                  style="--rect-url: url('{% static 'svgs/card-fav-rect.svg' %}'); background-color: #121212"
                  onclick="add_to_liked(this)">
                 <div class="flex flex-row gap-2 font-medium pb-1.5 text-3xl">
                     <p fav_count_container="{{ page.id }}"
-                       class="{% if page.likes == 0 %} hidden {% endif %}">{{ page.likes }}</p>
+                       class="{% if like_count == 0 %} hidden {% endif %}">{{ like_count }}</p>
                     <img like_svg="{{ page.id }}"
                          width="32" height="32"
-                         src="
-                                 {% if page|is_liked_by_user:request %}{% static 'svgs/card/heart_liked.svg' %}{% else %}{% static 'svgs/card/heart_not_liked.svg' %}{% endif %}"
+                         src="{% if page|is_liked_by_user:request %}{% static 'svgs/card/heart_liked.svg' %}{% else %}{% static 'svgs/card/heart_not_liked.svg' %}{% endif %}"
                          alt=""
                     />
                 </div>
             </div>
+            {% endwith %}
             {#            <div class="absolute w-full h-full top-0 bugged" style="--alert-svg: url('{% static 'svgs/card/red_alert_bg.svg' %}')"></div>#}
         </div>
         <div class="flex flex-col w-11/12 mx-auto rounded-xl p-4 gap-y-8">
             <!-- page title -->
             <div class="flex flex-row gap-x-4 items-center flex-wrap gap-y-2 relative w-full">
-                <div id="reportButton" class="absolute top-1/2 -translate-y-1/2 right-0 text-sm font-bold cursor-pointer" style="display: none">
+                <div id="reportButton"
+                     class="absolute bottom-0 lg:top-1/2 lg:-translate-y-1/2 right-0 text-sm font-bold cursor-pointer hidden">
                     <p>Report</p>
                     <div id="reportButtonDropdown"
                          class="dropdown-content flex flex-col text-center text-md font-medium right-0 w-max rounded-lg absolute text-white invisible"
@@ -39,13 +44,17 @@
                             <div class="w-0 h-0 border-x-8 border-b-8 border-solid border-transparent border-b-card-bg"></div>
                         </div>
                         <div class="flex flex-col bg-card-bg rounded">
-                        <a class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200" href="">Experience Bugged</a>
-                        <a class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200" href="">Experience Not Available</a>
-                        <a class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200" href="">XP Farm</a>
+                            <a class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200"
+                               href="">Experience Bugged</a>
+                            <a class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200"
+                               href="">Experience Not Available</a>
+                            <a class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200"
+                               href="">XP Farm</a>
                         </div>
                     </div>
+
+                    <script>addDropDownPair("reportButton", "reportButtonDropdown")</script>
                 </div>
-                <script>addDropDownPair("reportButton", "reportButtonDropdown")</script>
 
                 <div class="text-4xl font-bold">{{ page.title }}</div>
                 {% if page.bugged %}
@@ -81,11 +90,34 @@
             <!-- desc -->
             <div class="text-white text-sm font-medium prose prose-invert min-w-fit">{{ page.description|show_markdown|safe }}</div>
             <!-- tags -->
-            <div class="flex flex-row flex-wrap	gap-x-2 gap-y-1">
-                {% for tag in page.tags.all %}
-                    <a href="/experiences/?tag={{ tag }}"
-                       class="bg-discord-light-dark text-white text-xs font-medium rounded-lg px-2 py-1 hover:bg-card-bg transition duration-100 ease-in ">{{ tag|title }}</a>
-                {% endfor %}
+            <div class="flex flex-row flex-wrap	gap-x-2 gap-y-1 items-center">
+                <div>
+                    <svg class="tagsSearchSpinner inline-block w-8 h-8 mr-2 text-bf2042-6 animate-spin fill-bf2042-4" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"></path>
+                        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"></path>
+                    </svg>
+                    <div id="xpFull"
+                         class="hidden text-bf2042-4 text-sm flex items-center text-xs font-bold gap-x-0.5 select-none">
+                        <div class="rounded-full border-1/2 border-bf2042-4  p-0.5 ">
+                            XP
+                        </div>
+                        FULL
+                    </div>
+                    <div id="xpRestricted"
+                         class="hidden text-[#FFCD1E] text-sm flex flex-row items-center text-xs font-bold gap-x-0.5 select-none">
+                        <div class="rounded-full border-1/2 border-[#FFCD1E]  p-0.5 w-min">
+                            XP
+                        </div>
+                        Restricted
+                    </div>
+                </div>
+                {% if page.tags.all %}
+                    <img class="self-end pb-1" src="{% static 'svgs/filter/tag.svg' %}" alt=" ">
+                    {% for tag in page.tags.all %}
+                        <a href="/experiences/?tag={{ tag }}"
+                           class="bg-discord-light-dark text-white text-xs font-medium rounded-lg px-2 py-1 hover:bg-card-bg transition duration-100 ease-in ">{{ tag|title }}</a>
+                    {% endfor %}
+                {% endif %}
             </div>
             <!-- share code and url -->
             <div class="flex flex-row flex-wrap gap-x-4 gap-y-1">
@@ -105,17 +137,21 @@
             <!-- owners and update info -->
             <div class="flex flex-row gap-1 flex-wrap">
                 <div class="text-white text-xs flex flex-row items-center gap-x-1">
-                    <p class="text-bg-light">Created by</p>
-                    {% with page.owner.socialaccount_set.all.0 as owner %}
-                        <a href="/users/{{ owner.uid }}" class="flex flex-row gap-x-1 items-center">
-                            <img class="rounded-full" width="15" height="15"
-                                 src="{% if owner.extra_data.avatar %} {{ owner.get_avatar_url }} {% else %} {% static 'images/default_discord_avatar.png' %}{% endif %}"
-                                 alt="pfp">
-                            <p class="text-bf2042-4">{{ owner.extra_data.username }}</p>
-                        </a>
-                    {% endwith %}
+                    {% if not page.owner.profile.hide_username %}
+                        <p class="text-bg-light">Created by</p>
+                        {% with page.owner.socialaccount_set.all.0 as owner %}
+                            <a href="/users/{{ owner.uid }}" class="flex flex-row gap-x-1 items-center">
+                                <img class="rounded-full" width="15" height="15"
+                                     src="{% if owner.extra_data.avatar %} {{ owner.get_avatar_url }} {% else %} {% static 'images/default_discord_avatar.png' %}{% endif %}"
+                                     alt="pfp">
+                                <p class="text-bf2042-4">{{ owner.extra_data.username }}</p>
+                            </a>
+                        {% endwith %}
+                    {% else %}
+                        <p class="text-bg-light">Created</p>
+                    {% endif %}
                     {% for creator in page.creators.all %}
-                        {% if creator.socialaccount_set.all|length %}
+                        {% if not creator.profile.hide_username and creator.socialaccount_set.all|length %}
                             {% with creator.socialaccount_set.all.0 as account %}
                                 <a href="/users/{{ account.uid }}" class="flex flex-row gap-x-1 items-center">
                                     ,<img class="rounded-full" width="15" height="15"
@@ -152,14 +188,13 @@
             <div id="mapsRotationContainer" class="flex flex-wrap flex-col gap-y-4 select-none">
                 <div>
                     <button id="showMapsRotation"
-                            class="bg-bf2042-4 text-bf2042-1 font-bold px-2 py-1 rounded hover:bg-bf2042-6 transition duration-200">Show Maps Rotation</button>
-                    <svg id="tagsSearchSpinner"
-                         class="hidden inline-block w-8 h-8 mr-2 text-bf2042-6 animate-spin fill-bf2042-4"
-                         viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                              fill="currentColor"/>
-                        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                              fill="currentFill"/>
+                            class="bg-bf2042-4 text-bf2042-1 font-bold px-2 py-1 rounded hover:bg-bf2042-6 transition duration-200"
+                            shown=false>
+                        Show Maps Rotation
+                    </button>
+                    <svg class="tagsSearchSpinner inline-block w-8 h-8 mr-2 text-bf2042-6 animate-spin fill-bf2042-4" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"></path>
+                        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"></path>
                     </svg>
                 </div>
                 <div id="mapsRotation" class="flex flex-wrap gap-2 relative hidden">
@@ -193,31 +228,33 @@
     <script type="text/javascript">
         let mapsShown = false;
         const showMapButton = $('#showMapsRotation'),
-            tagsSpinner = $('#tagsSearchSpinner');
+            tagsSpinner = $('.tagsSearchSpinner'),
+            mapRotation = $('#mapsRotation')
 
+
+        function show(element) {
+            $(element).show(200).css('display', 'flex').css('flex-direction', 'row')
+        }
+        function hideSnipper() {
+            tagsSpinner.each(function (){
+                $(this).hide()
+            })
+        }
         showMapButton.on('click touch', function () {
-            const val = $(this).text(),
-                mapRotation = $('#mapsRotation');
-
-            if (val === "Show Maps Rotation") {
-                console.log('called')
-                populateMapsRotation();
-                tagsSpinner.hide();
-                mapRotation.show(200);
-                mapRotation.css('display', 'flex')
-                mapRotation.css('flex-direction', 'row')
+            const $this = $(this);
+            if ($this.attr('shown') === "false") {
+                show(mapRotation)
                 $(this).text("Hide Maps Rotation");
+                $this.attr('shown', true);
             } else {
                 $(this).text("Show Maps Rotation");
                 mapRotation.hide(200);
+                $this.attr('shown', false);
             }
-        });
-
-        function populateMapsRotation() {
-            const mapRotation = document.getElementById('mapsRotation');
-            if (!mapsShown) {
-                tagsSpinner.show();
-                const playgroundId = {% if page.exp_url %}"{{ page.exp_url | expCode }}"{% else %}null{% endif %},
+        })
+        $(window).on("load", function () {
+            $(function () {
+                const playgroundId = {% if page.exp_url %}"{{ page.exp_url|expCode }}"{% else %}null{% endif %},
                 expCode = {% if page.code %}"{{ page.code }}"{% else %}null{% endif %};
 
                 let queryParam;
@@ -226,67 +263,94 @@
                 } else if (expCode) {
                     queryParam = `experiencecode=${expCode}`
                 }
-                if (queryParam) {
-                    fetch(`https://api.gametools.network/bf2042/playground/?${queryParam}`).then(resp => resp.json().then(resp_json => {
-                        const error_div = $('#maps_on_error');
-                        if (!resp_json.hasOwnProperty('errors')) {
-                            error_div.css('display', 'none')
-                            let maps = resp_json['validatedPlayground']['mapRotation']['maps'];
-                            maps.forEach(function (map) {
-                                const root = document.createElement('div'),
-                                    img = document.createElement('img'),
-                                    infoContainer = document.createElement('div'),
-                                    info = document.createElement('div'),
-                                    mapName = document.createElement('div');
-                                root.className = "h-40 w-[21.563rem] rounded-lg relative";
-                                img.className = "object-cover w-full h-full rounded-lg";
-                                infoContainer.className = "absolute bg-gradient-to-t from-black w-full h-full inset-x-0 bottom-0 rounded-b-lg p-2 flex"
-                                info.className = "flex flex-col font-bold text-base self-end";
-                                mapName.className = "max-w-full h-6 truncate";
-                                let mapSize;
-                                if ("location" in map) {
-                                    mapSize = document.createElement('div');
-                                    const span = document.createElement('span'),
-                                        location = map['location'];
-                                    mapSize.className = "max-w-full";
-                                    if (location === "ModBuilderCustom2") {
-                                        span.textContent = "Large";
-                                    } else if (location === "ModBuilderCustom1") {
-                                        span.textContent = "Normal";
-                                    } else {
-                                        span.textContent = "Small";
-                                    }
-                                    mapSize.textContent = "Map Size "
-                                    mapSize.appendChild(span);
+
+                setTimeout(tagsSpinner, 5000)
+                fetch(`https://api.gametools.network/bf2042/playground/?${queryParam}&return_ownername=false&blockydata=false&lang=en-us`).then(resp => resp.json().then(resp_json => {
+                    const error_div = $('#maps_on_error');
+                    if (!resp_json.hasOwnProperty('errors')) {
+                        error_div.css('display', 'none')
+                        let maps, progression;
+                        if (resp_json.hasOwnProperty('originalPlayground') && resp_json['originalPlayground'])
+                            maps = resp_json['originalPlayground']['mapRotation']['maps'];
+                        if (resp_json.hasOwnProperty('progressionMode') && resp_json['progressionMode'])
+                            progression = resp_json['progressionMode']['value'];
+
+                        if (maps && !mapsShown) maps.forEach(function (map) {
+                            const root = document.createElement('div'),
+                                img = document.createElement('img'),
+                                infoContainer = document.createElement('div'),
+                                info = document.createElement('div'),
+                                mapName = document.createElement('div');
+                            root.className = "h-40 w-[21.563rem] rounded-lg relative";
+                            img.className = "object-cover w-full h-full rounded-lg";
+                            infoContainer.className = "absolute bg-gradient-to-t from-black w-full h-full inset-x-0 bottom-0 rounded-b-lg p-2 flex"
+                            info.className = "flex flex-col font-bold text-base self-end";
+                            mapName.className = "max-w-full h-6 truncate";
+                            let mapSize;
+                            if ("location" in map) {
+                                mapSize = document.createElement('div');
+                                const span = document.createElement('span'),
+                                    location = map['location'];
+                                mapSize.className = "max-w-full";
+                                if (location === "ModBuilderCustom2") {
+                                    span.textContent = "Large";
+                                } else if (location === "ModBuilderCustom1") {
+                                    span.textContent = "Normal";
+                                } else {
+                                    span.textContent = "Small";
                                 }
-                                let gameMode;
-                                if ("mode" in map && map['mode'] !== "custom") {
-                                    gameMode = document.createElement('div');
-                                    gameMode.className = "absolute top-0 left-0 bg-card-bg ml-2 mt-2 px-2 rounded text-xs font-bold";
-                                    $('#gameMode').text(map['mode']);
-                                }
-                                img.src = map['image'];
-                                mapName.textContent = map['mapname'];
-                                info.appendChild(mapName)
-                                if (mapSize) {
-                                    info.appendChild(mapSize);
-                                }
-                                infoContainer.appendChild(info);
-                                root.appendChild(img);
-                                root.appendChild(infoContainer);
-                                mapRotation.appendChild(root);
+                                mapSize.textContent = "Map Size "
+                                mapSize.appendChild(span);
+                            }
+                            let gameMode;
+                            if ("mode" in map && map['mode'] !== "custom") {
+                                gameMode = document.createElement('div');
+                                gameMode.className = "absolute top-0 left-0 bg-card-bg ml-2 mt-2 px-2 rounded text-xs font-bold";
+                                $('#gameMode').text(map['mode']);
+                            }
+                            img.src = map['image'];
+                            mapName.textContent = map['mapname'];
+                            info.appendChild(mapName)
+                            if (mapSize) {
+                                info.appendChild(mapSize);
+                            }
+                            infoContainer.appendChild(info);
+                            root.appendChild(img);
+                            root.appendChild(infoContainer);
+                            mapRotation.append(root);
+                            tagsSpinner.each(function (){
+                                $(this).hide()
                             })
-                            mapsShown = true;
-                        } else {
-                            tagsSpinner.hide()
-                            error_div.css('display', 'block')
+                        })
+                        if (progression) {
+                            if (progression === "portal-default") show($('#xpFull'))
+                            else show($('#xpRestricted'))
                         }
+                        mapsShown = true;
+                    } else {
+                        tagsSpinner.hide()
+                        error_div.css('display', 'block')
+                    }
+                }))
 
-                    }))
+            })
+        })
+    function report(report_type) {
 
+        const csrftoken = getCookie('csrftoken');
+        if(csrftoken){
+            fetch(`/api/report/${report_type}/?id={{ page.id }}`,{
+                method: 'post',
+                mode: "cors",
+                cache: "no-cache",
+                headers: {
+                    'X-CSRFToken': csrftoken,
                 }
-            }
+            }).then(resp => {
+                console.log(resp.status)
+            })
         }
+    }
     </script>
     {#https://api.gametools.network/bf2042/playground/?playgroundid=45e436e0-4cf7-11ec-be7b-76c50778a53a#}
     {##}

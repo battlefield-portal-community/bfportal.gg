@@ -3,7 +3,7 @@ from django.utils.html import format_html
 from wagtail import hooks
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
-from .models import ExperiencePage, Profile
+from .models import DiscordScheduledEvent, ExperiencePage, Profile
 
 
 class ExperiencePageAdmin(ModelAdmin):
@@ -81,12 +81,23 @@ class ProfileAdmin(ModelAdmin):
             return request.user.profile
 
 
+class DiscordScheduledEventsAdminPage(ModelAdmin):
+    """Class that controls how the DiscordScheduledEvents show up in admin"""
+
+    model = DiscordScheduledEvent
+    menu_order = 3
+
+    list_display = ("title",)
+    list_filter = ("server_id",)
+    search_fields = ("title", "server_id", "event_id")
+
+
 @hooks.register("construct_main_menu")
 def only_show_experiences_pages_item(request: HttpRequest, menu_items):
     """Returns only the Experience Pages menu items for a non superuser"""
-    from loguru import logger
-
-    logger.debug([item.name for item in menu_items])
+    # from loguru import logger
+    #
+    # logger.debug([item.name for item in menu_items])
     if request.user.is_superuser:
         return menu_items
     elif request.user.groups.filter(name="Moderators").exists():
@@ -97,3 +108,4 @@ def only_show_experiences_pages_item(request: HttpRequest, menu_items):
 
 modeladmin_register(ProfileAdmin)
 modeladmin_register(ExperiencePageAdmin)
+modeladmin_register(DiscordScheduledEventsAdminPage)

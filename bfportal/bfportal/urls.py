@@ -1,6 +1,12 @@
 from ajax_select import urls as ajax_select_urls
 from core.api import api_router
-from core.views import CategoriesAutocomplete, TagsAutocomplete, handle_like_request
+from core.views import (
+    CategoriesAutocomplete,
+    TagsAutocomplete,
+    events_view,
+    handle_like_request,
+    report_experience,
+)
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
@@ -38,6 +44,7 @@ urlpatterns = [
         name="category-autocomplete",
     ),
     path("api/tags/", TagsAutocomplete.as_view(), name="tags-autocomplete"),
+    re_path(r"^api/report/(\d+)/$", report_experience, name="report-experience"),
     re_path(
         r"^api/like/(\d+)/$",
         handle_like_request,
@@ -46,6 +53,7 @@ urlpatterns = [
     path("api/", api_router.urls),
     re_path(r"^ajax_select/", include(ajax_select_urls)),
     path("markdownx/", include("markdownx.urls")),
+    path("events/", events_view, name="events-view"),
 ]
 
 
@@ -56,9 +64,7 @@ if settings.DEBUG:
     # auto reload on static or template edit
     urlpatterns.append(path("__reload__/", include("django_browser_reload.urls")))
     # A temp url to serve templates directly
-    urlpatterns.append(
-        path("temp/", TemplateView.as_view(template_name="coming_soon.html"))
-    )
+    urlpatterns.append(path("test/", TemplateView.as_view(template_name="502.html")))
     # Serve static and media files from development server
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
