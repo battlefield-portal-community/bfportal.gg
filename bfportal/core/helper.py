@@ -4,12 +4,26 @@ import bleach
 import markdown
 import requests
 from bleach.css_sanitizer import ALLOWED_CSS_PROPERTIES  # noqa: F401
+from django import forms
 from django.conf import settings
 from django.utils.safestring import mark_safe
 from loguru import logger
 from taggit.models import Tag
 
 GT_BASE_URL = "https://api.gametools.network/bf2042/playground/?{}&blockydata=false&lang=en-us&return_ownername=false"
+
+
+def validate_image_link(link: str):
+    """Checks if the url is a direct url to an image"""
+    try:
+        header_resp = requests.head(link, allow_redirects=True)
+        if not header_resp.headers["content-type"].startswith("image"):
+            raise forms.ValidationError(
+                "Image url is invalid, make sure it is a direct link to the image"
+            )
+        return link
+    except requests.ConnectionError:
+        raise forms.ValidationError("Unable to access image")
 
 
 def markdownify(text):

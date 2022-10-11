@@ -84,9 +84,9 @@ class ProfileAdmin(ModelAdmin):
 @hooks.register("construct_main_menu")
 def only_show_experiences_pages_item(request: HttpRequest, menu_items):
     """Returns only the Experience Pages menu items for a non superuser"""
-    from loguru import logger
-
-    logger.debug([item.name for item in menu_items])
+    # from loguru import logger
+    #
+    # logger.debug([item.name for item in menu_items])
     if request.user.is_superuser:
         return menu_items
     elif request.user.groups.filter(name="Moderators").exists():
