@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from core.utils.helper import safe_cast
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.db.models import Value as V
 from django.db.models.functions import Concat
 from django.http import HttpRequest
@@ -81,7 +81,9 @@ def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
     if sort := request.GET.get("sort", None):
         match sort:
             case "like":
-                all_posts = all_posts.order_by("-likes")
+                all_posts = all_posts.annotate(likes=Count("liked_by")).order_by(
+                    "-likes"
+                )
             case "latest":
                 pass
 
