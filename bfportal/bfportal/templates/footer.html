@@ -1,33 +1,39 @@
 {% load static %}
 <div class="footer {% if request.path != "/" %}sticky bottom-0{% endif %} mt-auto flex cursor-default flex-col w-full bg-card-bg justify-center align-middle text-center drop-shadow-lg py-2 mt-4">
     <div>
-        <div class="flex flex-row gap-x-1 items-center justify-center text-white">
-            <div class="flex flex-row gap-x-2 items-center">
+        <div class="flex flex-row flex-wrap gap-x-1 gap-y-1 items-center justify-center text-white  text-sm">
+            {% with 14 as icon_width %}
+
+            <a class="flex flex-row gap-x-1 items-center" href="https://bfportal.gg/join" target="_blank">
                 Made with
-                <img src="{% static 'svgs/card/heart_liked.svg' %}" alt="" onmouseenter="handle_hover_for_footer_heart(this)">
+                <img src="{% static 'svgs/card/heart_liked.svg' %}" alt="" onmouseenter="handle_hover_for_footer_heart(this)" width="{{ icon_width }}">
                 at
-                <a href="https://bfportal.gg/join" target="_blank" class="text-bf2042-4 font-bold hover:text-bf2042-6 transition duration-200 ease-in-out">Battlefield Portal Community.</a>
-            </div>
-            <div class="flex flex-row gap-x-1 items-center">
-            Support us on
-            <a class="text-bf2042-4 font-bold hover:text-bf2042-6 transition duration-200 ease-in-out" href="https://www.patreon.com/battlefield_portal_community" target="_blank">
-                <img src="{% static 'svgs/patreon.svg' %}" alt="" onmouseenter="handle_hover_for_footer_heart(this)">
+                <span class="text-bf2042-4 font-bold hover:text-bf2042-6 transition duration-200 ease-in-out">Battlefield Portal Community.</span>
             </a>
-            </div>
-            <div class="flex flex-row gap-x-1 items-center">
+
+
+            <a class="hidden md:flex flex-row gap-x-1 items-center" href="https://www.patreon.com/battlefield_portal_community" target="_blank">
+                Support us on
+            <span class="text-bf2042-4 font-bold hover:text-bf2042-6 transition duration-200 ease-in-out">
+                <img src="{% static 'svgs/patreon.svg' %}" alt="" onmouseenter="handle_hover_for_footer_heart(this)" width="{{ icon_width }}">
+            </span>
+            </a>
+
+
+            <a class="hidden md:flex flex-row gap-x-1 items-center" href="https://twitter.com/BF2042_Portal/" target="_blank">
             Follow us on
-            <a class="text-bf2042-4 font-bold hover:text-bf2042-6 transition duration-200 ease-in-out" href="https://twitter.com/BF2042_Portal/" target="_blank">
-                <img src="{% static 'svgs/twitter.svg' %}" alt="" onmouseenter="handle_hover_for_footer_heart(this)">
+            <span class="text-bf2042-4 font-bold hover:text-bf2042-6 transition duration-200 ease-in-out">
+                <img src="{% static 'svgs/twitter.svg' %}" alt="" onmouseenter="handle_hover_for_footer_heart(this)" width="{{ icon_width }}">
+            </span>
             </a>
-            </div>
-            <div class="flex flex-row gap-x-1 items-center">
+
+            <a class="hidden md:flex flex-row gap-x-1 items-center" href="https://github.com/battlefield-portal-community" target="_blank">
             Codebase at
-            <a class="text-bf2042-4 font-bold hover:text-bf2042-6 transition duration-200 ease-in-out" href="https://github.com/battlefield-portal-community" target="_blank">
-                <img src="{% static 'svgs/gh.svg' %}" alt="" onmouseenter="handle_hover_for_footer_heart(this)">
+            <span class="text-bf2042-4 font-bold hover:text-bf2042-6 transition duration-200 ease-in-out">
+                <img src="{% static 'svgs/gh.svg' %}" alt="" onmouseenter="handle_hover_for_footer_heart(this)" width="{{ icon_width }}">
+            </span>
             </a>
-            </div>
-
-
+            {% endwith %}
         </div>
     </div>
 </div>
