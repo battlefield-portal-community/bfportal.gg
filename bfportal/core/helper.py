@@ -1,3 +1,4 @@
+import os
 from functools import partial
 
 import bleach
@@ -11,6 +12,20 @@ from loguru import logger
 from taggit.models import Tag
 
 GT_BASE_URL = "https://api.gametools.network/bf2042/playground/?{}&blockydata=false&lang=en-us&return_ownername=false"
+
+
+def get_scheduled_events(event_id: str, server_id: str = "870246147455877181") -> dict:
+    """Tries to retrieve Scheduled events via discord API"""
+    if DISCORD_TOKEN := os.getenv("DISCORD_BOT_TOKEN", None):
+        headers = {
+            "Authorization": f"Bot {DISCORD_TOKEN}",
+            "content-type": "application/json",
+        }
+        resp = requests.get(
+            f"https://discord.com/api/v10/guilds/{server_id}/scheduled-events",
+            headers=headers,
+        )
+        return resp.json()
 
 
 def validate_image_link(link: str):
