@@ -88,7 +88,8 @@ class DiscordScheduledEventsAdminPage(ModelAdmin):
     menu_order = 3
 
     list_display = ("title",)
-    search_fields = ("title",)
+    list_filter = ("server_id",)
+    search_fields = ("title", "server_id", "event_id")
 
 
 @hooks.register("construct_main_menu")
