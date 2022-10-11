@@ -37,7 +37,7 @@
             <!-- page title -->
             <div class="flex flex-row gap-x-4 items-center flex-wrap gap-y-2 relative w-full">
                 <div id="reportButton"
-                     class="absolute bottom-0 lg:top-1/2 lg:-translate-y-1/2 right-0 text-sm font-bold cursor-pointer">
+                     class="absolute bottom-0 lg:top-1/2 lg:-translate-y-1/2 right-0 text-sm font-bold cursor-pointer hidden">
                     <p>Report</p>
                     <div id="reportButtonDropdown"
                          class="dropdown-content flex flex-col text-center text-md font-medium right-0 w-max rounded-lg absolute text-white invisible"
@@ -54,8 +54,9 @@
                                href="">XP Farm</a>
                         </div>
                     </div>
+
+                    <script>addDropDownPair("reportButton", "reportButtonDropdown")</script>
                 </div>
-                <script>addDropDownPair("reportButton", "reportButtonDropdown")</script>
 
                 <div class="text-4xl font-bold">{{ page.title }}</div>
                 {% if page.bugged %}
