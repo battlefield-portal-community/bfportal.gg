@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.http import HttpRequest, HttpResponse
@@ -128,7 +128,7 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
         context["requested_user"] = user_acc
         context["latest_post"] = all_posts.first()
         context["total_num_posts"] = len(all_posts)
-        context["earned_likes"] = all_posts.aggregate(models.Sum("likes"))["likes__sum"]
+        context["earned_likes"] = sum(all_posts.aggregate(Count("liked_by")).values())
         context["owners"] = os.getenv("OWNERS", "").split(",")
         return context
 
