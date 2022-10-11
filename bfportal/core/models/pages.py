@@ -131,7 +131,6 @@ class HomePage(RoutablePageMixin, CustomBasePage):
             )
         return context
 
-    @path("events/")
     @path("tutorials/")
     def serve_coming_soon(self, request):
         """Returns coming soon page as these are not yet ready."""
@@ -180,3 +179,38 @@ class HomePage(RoutablePageMixin, CustomBasePage):
         context["posts"] = posts
         context["no_extra_content"] = True
         return TemplateResponse(request, self.get_template(request), context)
+
+
+class DiscordScheduledEvent(models.Model):
+    """Model representing a discord event"""
+
+    title = models.CharField(
+        blank=False,
+        null=True,
+        help_text="Name of the event (only for admin panel)",
+        max_length=255,
+    )
+    server_id = models.CharField(
+        default="870246147455877181",
+        blank=False,
+        null=True,
+        max_length=50,
+        help_text="ID of the server in which event is taking place [default: bfportal.gg discord server's id]",
+    )
+    event_id = models.CharField(
+        blank=False,
+        null=True,
+        max_length=50,
+        help_text="ID of the event to show on website",
+    )
+
+    panels = [
+        MultiFieldPanel(
+            [
+                FieldPanel("title", classname="full"),
+                FieldPanel("event_id", classname="full"),
+                FieldPanel("server_id", classname="full"),
+            ],
+            classname="collapsable",
+        )
+    ]

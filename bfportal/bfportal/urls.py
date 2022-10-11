@@ -3,6 +3,7 @@ from core.api import api_router
 from core.views import (
     CategoriesAutocomplete,
     TagsAutocomplete,
+    events_view,
     handle_like_request,
     report_experience,
 )
@@ -52,6 +53,7 @@ urlpatterns = [
     path("api/", api_router.urls),
     re_path(r"^ajax_select/", include(ajax_select_urls)),
     path("markdownx/", include("markdownx.urls")),
+    path("events/", events_view, name="events-view"),
 ]
 
 

@@ -358,3 +358,11 @@ def report_experience(request: HttpRequest, report_type: int):
             return HttpResponse(status=404)
     else:
         return HttpResponse(404)
+
+
+def events_view(request: HttpRequest):
+    """Handles /events page"""
+    return render(
+        request,
+        "502.html",
+    )
