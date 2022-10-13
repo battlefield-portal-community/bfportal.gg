@@ -71,6 +71,12 @@ class ExperiencePageForm(forms.ModelForm):
         "vid_url",
     ]
 
+    def clean_category(self):
+        """Called when category field is being validated"""
+        if self.cleaned_data.get("category", None) is None:
+            raise forms.ValidationError("Must provide at least one category")
+        return self.cleaned_data["category"]
+
     def clean_code(self):
         """Called when code field is being validated"""
         code = self.cleaned_data["code"]
