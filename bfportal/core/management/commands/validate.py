@@ -17,15 +17,15 @@ async def fetch(session, page: ExperiencePage, url: str):
     async with session.get(url) as response:
         if response.status == 404:
             logger.debug(f"{page} is bugged....")
-            page.bugged = True
+            page.broken = True
         else:
             json: dict = await response.json()
             if json.get("originalPlayground", False):
-                if page.bugged:
+                if page.broken:
                     logger.debug(f"{page} was bugged now fixed....")
-                page.bugged = False
+                page.broken = False
             else:
-                page.bugged = True
+                page.broken = True
 
         await sync_to_async(page.save, thread_sensitive=True)()
 
