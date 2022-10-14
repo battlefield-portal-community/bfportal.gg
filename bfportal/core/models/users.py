@@ -150,6 +150,22 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
         else:
             return HttpResponse("Nope", status=404)
 
+    @route(r"^(\w+)/$", name="username")
+    def named_profile_page_view(self, request: HttpRequest, username):
+        """Handles the requests for users that have a named profile"""
+        if username == "admin":
+            return TemplateResponse(
+                request,
+                self.get_template(request),
+                self.get_context(
+                    request,
+                    list_experiences=True,
+                    user=User.objects.filter(is_superuser=True).first(),
+                ),
+            )
+        else:
+            return TemplateResponse(request, "404.html")
+
     @route(r"(\d{18})/experiences/$", name="discord_id")
     def user_experiences(self, request, discord_id):
         """Servers a list of experiences by a user"""
