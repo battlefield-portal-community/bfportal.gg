@@ -1,6 +1,5 @@
 {% load static %}
-<div class="footer {% if request.path != "/" %}sticky bottom-0{% endif %} mt-auto flex cursor-default flex-col w-full bg-card-bg justify-center align-middle text-center drop-shadow-lg py-2 mt-4">
-    <div>
+<div class="footer {% if request.path != "/" %}sticky bottom-0{% endif %} mt-auto flex cursor-default flex-col w-full bg-card-bg justify-center align-middle text-center drop-shadow-lg py-2">
         <div class="flex flex-row flex-wrap gap-x-1 gap-y-1 items-center justify-center text-white  text-sm">
             {% with 14 as icon_width %}
 
@@ -35,7 +34,6 @@
             </a>
             {% endwith %}
         </div>
-    </div>
 </div>
 <script>
     function randomIntFromInterval(min, max) { // min and max included
