@@ -66,10 +66,18 @@
                 </div>
 
                 <div class="text-4xl font-bold">{{ page.title }}</div>
-                {% if page.bugged %}
+                {% if page.bugged or page.broken or page.xp_farm %}
                     <div class="text-xs text-[#FF0000] flex flex-row flex-wrap items-center gap-x-1">
                         <img class="red-svg" src="{% static 'svgs/card/Alert.svg' %}" alt="">
-                        <p class="self-end">Experience bugged</p>
+                        <p class="self-end">
+                            {% if page.bugged %}
+                                Experience Bugged
+                            {% elif page.broken %}
+                                Experience Broken
+                            {% elif pagt.xp_farm %}
+                                XP Farm
+                            {% endif %}
+                        </p>
                     </div>
                 {% endif %}
                 <div class="flex flex-row gap-x-1">

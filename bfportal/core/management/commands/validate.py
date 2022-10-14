@@ -16,13 +16,13 @@ async def fetch(session, page: ExperiencePage, url: str):
     """Checks GT api if an experience is valid or not"""
     async with session.get(url) as response:
         if response.status == 404:
-            logger.debug(f"{page} is bugged....")
+            logger.debug(f"{page} is broken....")
             page.broken = True
         else:
             json: dict = await response.json()
             if json.get("originalPlayground", False):
                 if page.broken:
-                    logger.debug(f"{page} was bugged now fixed....")
+                    logger.debug(f"{page} was broken now fixed....")
                 page.broken = False
             else:
                 page.broken = True
