@@ -35,21 +35,30 @@
             <!-- page title -->
             <div class="flex flex-row gap-x-4 items-center flex-wrap gap-y-2 relative w-full">
                 <div id="reportButton"
-                     class="absolute bottom-0 lg:top-1/2 lg:-translate-y-1/2 right-0 text-sm font-bold cursor-pointer hidden">
-                    <p>Report</p>
+                     class="absolute bottom-0 lg:top-1/2 lg:-translate-y-1/2 right-0 text-sm font-bold cursor-pointer">
+                    <p class="select-none">Report</p>
                     <div id="reportButtonDropdown"
                          class="dropdown-content flex flex-col text-center text-md font-medium right-0 w-max rounded-lg absolute text-white invisible"
                     > <!--left-12 -->
+                        <!-- arrow pointing to report button -->
                         <div class="flex flex-row justify-end pr-0.5">
                             <div class="w-0 h-0 border-x-8 border-b-8 border-solid border-transparent border-b-card-bg"></div>
                         </div>
-                        <div class="flex flex-col bg-card-bg rounded">
-                            <a class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200"
-                               href="">Experience Bugged</a>
-                            <a class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200"
-                               href="">Experience Not Available</a>
-                            <a class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200"
-                               href="">XP Farm</a>
+
+                        <div class="flex flex-col bg-card-bg rounded relative">
+                            <span class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200"
+                               onclick="report(0)">Experience Bugged</span>
+                            <span class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200"
+                               onclick="report(1)">Experience Not Available</span>
+                            <span class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200"
+                               onclick="report(2)">XP Farm</span>
+                            <span id="reportSuccessfulItem" class="hidden text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200"></span>
+                            <div id="reportMenuHider" class="w-full h-full absolute bg-card-bg opacity-95 hidden">
+                                <svg id="reportSpinner" class="absolute w-8 h-8 absolute m-auto inset-0 text-bf2042-6 animate-spin fill-bf2042-4" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"></path>
+                                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"></path>
+                                </svg>
+                            </div>
                         </div>
                     </div>
 
@@ -337,7 +346,11 @@
         })
     function report(report_type) {
 
-        const csrftoken = getCookie('csrftoken');
+        const csrftoken = getCookie('csrftoken'),
+            menuHider = $('#reportMenuHider'),
+            reportSuccessfulItem = $('#reportSuccessfulItem');
+
+        menuHider.show();
         if(csrftoken){
             fetch(`/api/report/${report_type}/?id={{ page.id }}`,{
                 method: 'post',
@@ -347,7 +360,15 @@
                     'X-CSRFToken': csrftoken,
                 }
             }).then(resp => {
-                console.log(resp.status)
+                menuHider.fadeOut(200)
+                //menuHider.hide(200);
+                reportSuccessfulItem.text('Reported Successfully')
+                reportSuccessfulItem.show(200);
+                console.log(`Report type ${report_type} successful for {{ page.title }}`)
+
+                setTimeout(function () {
+                    reportSuccessfulItem.hide(200);
+                }, 1000)
             })
         }
     }
