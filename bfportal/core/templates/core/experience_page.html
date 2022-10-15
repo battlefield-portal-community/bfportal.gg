@@ -68,7 +68,8 @@
                                 <span class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200"
                                       onclick="report(2)">XP Farm</span>
                                 <span id="reportSuccessfulItem"
-                                      class="hidden text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200"></span>
+                                      class="hidden text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200"
+                                      data-logged-in="{{ request.user.is_authenticated }}"></span>
                                 <div id="reportMenuHider" class="w-full h-full absolute bg-card-bg opacity-95 hidden">
                                     <svg id="reportSpinner"
                                          class="absolute w-8 h-8 absolute m-auto inset-0 text-bf2042-6 animate-spin fill-bf2042-4"
@@ -397,27 +398,40 @@
                 menuHider = $('#reportMenuHider'),
                 reportSuccessfulItem = $('#reportSuccessfulItem');
 
-            menuHider.show();
             if (csrftoken) {
+                menuHider.fadeIn();
                 fetch(`/api/report/${report_type}/?id={{ page.id }}`, {
                     method: 'post',
                     mode: "cors",
                     cache: "no-cache",
                     headers: {
                         'X-CSRFToken': csrftoken,
-                    }
+                    },
+                    redirect: "error"
                 }).then(resp => {
-                    menuHider.fadeOut(200)
-                    //menuHider.hide(200);
-                    reportSuccessfulItem.text('Reported Successfully')
-                    reportSuccessfulItem.show(200);
-                    console.log(`Report type ${report_type} successful for {{ page.title }}`)
+                    menuHider.fadeOut()
+                    if(resp.status === 200){
+                        //menuHider.hide(200);
+                        reportSuccessfulItem.text('Reported Successfully')
+                        reportSuccessfulItem.show('slide', {direction: "up"}, 200);
+                        console.log(`Report type ${report_type} successful for {{ page.title }}`)
+                    } else {
+                        throw Error("Not logged in")
+                    }
 
-                    setTimeout(function () {
-                        reportSuccessfulItem.hide(200);
-                    }, 1000)
+                }).catch((error) => {
+                    menuHider.fadeOut();
+                    reportSuccessfulItem.text("Please Log in..")
+                    reportSuccessfulItem.show('slide', {direction: "up"}, 200);
                 })
+            } else {
+                reportSuccessfulItem.text("Please Log in..")
+                reportSuccessfulItem.show('slide', {direction: "up"}, 200);
             }
+
+            setTimeout(function () {
+                reportSuccessfulItem.hide('slide', {direction: "up"}, 200);
+            }, 1000)
         }
     </script>
     {#https://api.gametools.network/bf2042/playground/?playgroundid=45e436e0-4cf7-11ec-be7b-76c50778a53a#}
