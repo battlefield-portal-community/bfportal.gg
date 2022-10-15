@@ -97,6 +97,7 @@
 </head>
 
 <body class="bg-bg-default min-h-screen m-0  relative flex flex-col {% block body_class %}{% endblock %}">
+<div id="popUpBackground" class="fixed w-screen h-screen bg-default/[.95] z-[1] hidden" onclick="hidePopUps()"></div>
 {% block header %}
     {% include nav_tmpl|default:'navbar.html' %}
 {% endblock %}
@@ -242,6 +243,48 @@
             })
         }
     )
+    async function copyDivToClipboard(elem) {
+        const container_div = $(elem);
+        if (container_div.attr('data-copy-state') === "normal"){ // only run when the inner html is set correctly
+            const old_html = container_div.html(),
+                state_class = "bg-bf2042-5 hover:bg-bf2042-5";
+
+            container_div.attr('data-copy-state', "copy");
+            await navigator.clipboard.writeText(container_div.attr('data-copy')).then(
+                () =>{
+                    container_div.addClass(state_class);
+                    container_div.text("Copied")
+                    setTimeout(function ()  {
+                        container_div.fadeOut(200, function () {
+                            container_div.html(old_html).fadeIn(1000);
+                            container_div.attr('data-copy-state', "normal")
+                        })
+                        container_div.removeClass(state_class);
+                    }, 1000);
+                }, () => {
+                    console.log("Copy Failed");
+                    container_div.attr('data-copy-state', "normal")
+                }
+            )
+        }
+    }
+    document.addEventListener('keydown', function(e) {
+        if(e.key === "Escape"){
+          hidePopUps();
+        }
+    });
+    function hidePopUps() {
+        $('#popUpBackground, .popup').fadeOut(100)
+    }
+    function showPopUp(id) {
+        const popup = $(document.getElementById(id))
+        if (popup) {
+            $(`#popUpBackground`).fadeIn(100);
+            popup.fadeIn();
+            popup.css('display', 'flex');
+        }
+    }
+
 </script>
 {% block extra_js %}
     {# Override this in templates to add extra javascript #}

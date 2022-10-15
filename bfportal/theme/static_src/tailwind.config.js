@@ -51,6 +51,7 @@ module.exports = {
                 'bg-light' : '#656565',
                 'default' : '#121212',
                 'card-bg' : '#262626',
+                'card-bg-dark': '#1C1C1C',
                 'hover-bg-light': '#373b3d',
                 'accent-bg' : '#303030',
                 'discord-dark': "#303434",
