@@ -86,7 +86,7 @@
                                 {% with "w-full flex flex-row gap-x-1 justify-end text-white text-sm py-1 px-2 bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200 first:rounded-t" as reportItemClass %}
                                     {% if page.owner == request.user %}
                                     <span class="{{ reportItemClass }}"
-                                          onclick="report(-1)">Experience Ok</span>
+                                          onclick="report(4)">Experience Ok</span>
                                     {% endif %}
                                     <span class="{{ reportItemClass }}"
                                           onclick="report(0)">
@@ -429,9 +429,9 @@
                 menuHider = $('#reportMenuHider'),
                 reportSuccessfulItem = $('#reportSuccessfulItem');
 
-            function handleAfterFadeOut(successful) {
+            function handleAfterFadeOut(successful, reportSuccessfulItemText) {
                 if (successful) {
-                    reportSuccessfulItem.text('Reported Successfully')
+                    reportSuccessfulItem.text(reportSuccessfulItemText)
                     reportSuccessfulItem.removeClass("bg-bf2042-6")
                     reportSuccessfulItem.show('slide', {direction: "up"}, 200);
                     console.log(`Report type ${report_type} successful for {{ page.title }}`)
@@ -442,7 +442,16 @@
                 }
 
                 setTimeout(function () {
-                    reportSuccessfulItem.hide('slide', {direction: "up"}, 200);
+                    reportSuccessfulItem.hide(
+                        'slide',
+                        {direction: "up"},
+                        200
+                        {% if page.owner == request.user %}
+                            ,function () {
+                            location.reload()
+                        }
+                        {% endif %}
+                    );
                 }, 1000)
             }
 
@@ -460,7 +469,9 @@
                     menuHider.fadeOut(
                         function () {
                             if (resp.status === 200) {
-                                handleAfterFadeOut(true)
+                                resp.text().then(function (text) {
+                                    handleAfterFadeOut(true, text)
+                                })
                             } else {
                                 throw Error("Not logged in")
                             }
