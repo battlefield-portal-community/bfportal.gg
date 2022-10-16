@@ -22,7 +22,7 @@ from .helper import pagination_wrapper
 from .pages import CustomBasePage
 
 
-def social_user(discord_id: int):
+def social_user(discord_id: int) -> User | bool:
     """Returns a User object for a discord id"""
     try:
         usr = get_user_model().objects.get(
@@ -162,4 +162,33 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
                 self.get_context(request=request, list_experiences=True, user=user),
             )
         else:
-            return HttpResponse("User not Found", status=404)
+            return TemplateResponse(request, "404.html", status=404)
+
+    @route(r"(\d{18})/liked/$", name="discord_id")
+    def user_liked_experiences(self, request, discord_id):
+        """Servers a list of experiences by a user"""
+        user = social_user(discord_id=discord_id)
+        if user:
+            return TemplateResponse(
+                request,
+                "core/experiences_page.html",
+                {"posts": user.profile.liked.all()},
+            )
+        else:
+            return TemplateResponse(request, "404.html", status=404)
+
+    @route(r"^(\w+)/$", name="username")
+    def named_profile_page_view(self, request: HttpRequest, username):
+        """Handles the requests for users that have a named profile"""
+        if username == "admin":
+            return TemplateResponse(
+                request,
+                self.get_template(request),
+                self.get_context(
+                    request,
+                    list_experiences=True,
+                    user=User.objects.filter(is_superuser=True).first(),
+                ),
+            )
+        else:
+            return TemplateResponse(request, "404.html", status=404)

@@ -22,11 +22,19 @@
                                 />
                             </div>
                             <!-- like count -->
-                            {% if post.bugged %}
+                            {% if post.bugged or post.broken or post.xp_farm %}
                                 <div class="absolute bottom-0 inset-x-0 w-full h-20 bugged" style="--alert-svg: url('{% static 'svgs/card/red_alert_bg.svg' %}') "></div>
                                 <div class="absolute bottom-0 flex flex-row gap-x-1 mb-1 ml-1 text-xs">
-                                    <img width="14" height="14" src="{% static 'svgs/card/Alert.svg' %}">
-                                    <p class="align-bottom text-white">Experience Bugged</p>
+                                    <img width="14" height="14" alt="" src="{% static 'svgs/card/Alert.svg' %}">
+                                    <p class="align-bottom text-white">
+                                        {% if post.bugged %}
+                                            Experience Bugged
+                                        {% elif post.broken %}
+                                            Experience Broken
+                                        {% elif post.xp_farm %}
+                                            XP Farm
+                                        {% endif %}
+                                    </p>
                                 </div>
                             {% endif %}
                             {% with post.liked_by.all.count as like_count %}
@@ -71,9 +79,9 @@
                         {% if post.category|lower == "prefab" %}
                             <div
                                     class="bg-bf2042-4 font-bold max-w-fit px-6 py-2.5 mx-auto rounded-lg hover:bg-bf2042-3 transition duration-200 ease-in-out"
-                                    copy-data="{{ post.exp_url }}"
+                                    data-copy="{{ post.exp_url }}"
                                     onclick="copyDivToClipboard(this)"
-                                    copy-state="normal"
+                                    data-copy-state="normal"
                             >
                                 <p class="flex flex-row gap-x-1"><img src="{% static 'svgs/pages/prefab.svg' %}" alt=" " class="brightness-0 saturate-100 w-min"/>Copy</p>
                             </div>
@@ -81,9 +89,9 @@
                             {% if post.code|length %}
                                 <div
                                         class="bg-bf2042-4 font-bold w-min px-6 py-2.5 mx-auto rounded-lg hover:bg-bf2042-3 transition duration-200 ease-in-out clickable"
-                                        copy-data="{{ post.code|upper }}"
+                                        data-copy="{{ post.code|upper }}"
                                         onclick="copyDivToClipboard(this)"
-                                        copy-state="normal"
+                                        data-copy-state="normal"
                                 >
                                     <p>{{ post.code|upper }}</p>
                                 </div>
@@ -201,31 +209,5 @@
                 }
                 card.addEventListener("click", handleClick);
         });
-
-        async function copyDivToClipboard(elem) {
-            const container_div = $(elem);
-            if (container_div.attr('copy-state') === "normal"){ // only run when the inner html is set correctly
-                const old_html = container_div.html(),
-                    state_class = "bg-bf2042-5 hover:bg-bf2042-5";
-
-                container_div.attr('copy-state', "copy");
-                await navigator.clipboard.writeText(container_div.attr('copy-data')).then(
-                    () =>{
-                        container_div.addClass(state_class);
-                        container_div.text("Copied")
-                        setTimeout(function ()  {
-                            container_div.fadeOut(200, function () {
-                                container_div.html(old_html).fadeIn(1000);
-                                container_div.attr('copy-state', "normal")
-                            })
-                            container_div.removeClass(state_class);
-                        }, 1000);
-                    }, () => {
-                        console.log("Copy Failed");
-                        container_div.attr('copy-state', "normal")
-                    }
-                )
-            }
-        }
     </script>
 {% endif %}

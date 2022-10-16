@@ -11,8 +11,24 @@ class ExperiencePageAdmin(ModelAdmin):
 
     model = ExperiencePage
     menu_order = 1
-    list_display = ("title", "get_owner", "live", "last_updated_at")
-    list_filter = ("trending", "bugged", "category", "sub_categories", "tags")
+    list_display = (
+        "title",
+        "get_owner",
+        "live",
+        "last_updated_at",
+        "get_bugged_reports",
+        "get_broken_reports",
+        "get_xp_farm_reports",
+    )
+    list_filter = (
+        "trending",
+        "bugged",
+        "broken",
+        "xp_farm",
+        "category",
+        "sub_categories",
+        "tags",
+    )
     search_fields = ("title", "code")
 
     def get_owner(self, page: ExperiencePage):
@@ -26,9 +42,9 @@ class ExperiencePageAdmin(ModelAdmin):
 
         return format_html(
             """
-            <div style="display:flex;align-items:center;column-gap:5px" >
-                <img src="{}", alt=" " width=20 height=20 style="border-radius:100%" >
-                <span>{}</span>
+            <div style="display:flex;align-items:center;column-gap:5px;overflow: hidden;" >
+                <img src="{}", alt=" " width=20 height=20 style="border-radius:100%" onerror="this.hidden=true" >
+                <span style="flex-shrink:0">{}</span>
             </div>
             """,
             src,
@@ -43,6 +59,24 @@ class ExperiencePageAdmin(ModelAdmin):
         if not page.last_published_at:
             return page.first_published_at
         return page.last_published_at
+
+    def get_bugged_reports(self, page: ExperiencePage):
+        """Returns the amount of bugged reports"""
+        return page.bugged_report.all().count()
+
+    get_bugged_reports.short_description = "Bug Report Count"
+
+    def get_broken_reports(self, page: ExperiencePage):
+        """Returns the amount of broken reports"""
+        return page.broken_report.all().count()
+
+    get_broken_reports.short_description = "Broken Report Count"
+
+    def get_xp_farm_reports(self, page: ExperiencePage):
+        """Returns the amount of XP FARM reports"""
+        return page.broken_report.all().count()
+
+    get_xp_farm_reports.short_description = "XP Farm Report Count"
 
     def get_queryset(self, request):
         """Returns the queryset that contains all ExperiencePages by the request.user."""

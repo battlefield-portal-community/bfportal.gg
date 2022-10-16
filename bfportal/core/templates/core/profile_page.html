@@ -12,29 +12,31 @@
                 {% with account=accounts.discord.0 %}
                     <div class="profile_banner flex flex-col justify-center items-center text-sm px-2  py-4 gap-y-2  rounded-lg text-bf2042-4">
                         <div class="w-28">
-                        {% if account.extra_data.avatar %}
-                            <img src="{{ account.get_avatar_url }}" class="block rounded-full mx-auto" alt="@p"/>
-                        {% else %}
-                            <img src="{% static 'images/default_discord_avatar.png' %}" class="block rounded-full mx-auto" alt="@p"/>
-                        {% endif %}
+                            {% if account.extra_data.avatar %}
+                                <img src="{{ account.get_avatar_url }}" class="block rounded-full mx-auto" alt="@p"/>
+                            {% else %}
+                                <img src="{% static 'images/default_discord_avatar.png' %}"
+                                     class="block rounded-full mx-auto" alt="@p"/>
+                            {% endif %}
                         </div>
                         <div class="flex flex-col text-white font-bold gap-y-2">
                             <div class="text-center">
-                               {{ account.extra_data.username }}<p class="inline text-gray-400">#{{ account.extra_data.discriminator }}</p>
+                                {{ account.extra_data.username }}<p class="inline text-gray-400">
+                                #{{ account.extra_data.discriminator }}</p>
                             </div>
                             {% if account.extra_data.id in owners %}
                                 <div>
-                                   <p class="text-center text-bf2042-5">Owner</p>
+                                    <p class="text-center text-bf2042-5">Owner</p>
                                 </div>
                             {% else %}
                                 {% if requested_user.is_superuser %}
-                                <div>
-                                   <p class="text-center text-red-600">Administrator</p>
-                                </div>
+                                    <div>
+                                        <p class="text-center text-red-600">Administrator</p>
+                                    </div>
                                 {% elif requested_user|check_group:"Moderators" %}
-                                <div>
-                                   <p class="text-center text-red-400">Moderator</p>
-                                </div>
+                                    <div>
+                                        <p class="text-center text-red-400">Moderator</p>
+                                    </div>
                                 {% endif %}
                             {% endif %}
                         </div>
@@ -42,30 +44,64 @@
                     <div class="user_info grid grid-cols-3 pr-4 text-white text-xs gap-x-3 gap-y-6">
                         <div class="flex flex-col gap-y-2">
                             <p class="font-semibold font-semibold">Account Create on</p>
-                            <p class="text-bf2042-4">{{ user.date_joined|date:"d M Y"}}</p>
+                            <p class="text-bf2042-4">{{ user.date_joined|date:"d M Y" }}</p>
                         </div>
                         <div class="flex flex-col gap-y-2">
                             <p class="font-semibold font-semibold">Number of Experiences</p>
-                            <a href="experiences/" class="text-bf2042-4 hover:text-bf2042-6">{{ total_num_posts  }}</a>
+                            <a href="experiences/" class="text-bf2042-4 hover:text-bf2042-6">{{ total_num_posts }}</a>
                         </div>
                         <div class="flex flex-col gap-y-2">
                             <p class="font-semibold  font-semibold">Likes Earned</p>
-                            <p class="text-bf2042-4">{{earned_likes}}</p>
+                            <a class="text-bf2042-4" href="./liked">{{ earned_likes }}</a>
                         </div>
-                    {% if latest_post %}
-                        <div class="flex flex-col gap-y-2">
-                            <p class="font-semibold  font-semibold">Latest Experience</p>
-                                <a href="{{ latest_post.url }}" class="text-bf2042-4 hover:text-bf2042-6">{{ latest_post.title|title }} </a>
-                        </div>
-                        <div class="flex flex-col gap-y-2">
-                            <p class="font-semibold  font-semibold">Posted On</p>
-                            <p class="text-bf2042-4">{{ latest_post.first_published_at|date:"d M Y"}}</p>
-                        </div>
-                    {% endif %}
+                        {% if latest_post %}
+                            <div class="flex flex-col gap-y-2">
+                                <p class="font-semibold  font-semibold">Latest Experience</p>
+                                <a href="{{ latest_post.url }}"
+                                   class="text-bf2042-4 hover:text-bf2042-6">{{ latest_post.title|title }} </a>
+                            </div>
+                            <div class="flex flex-col gap-y-2">
+                                <p class="font-semibold  font-semibold">Posted On</p>
+                                <p class="text-bf2042-4">{{ latest_post.first_published_at|date:"d M Y" }}</p>
+                            </div>
+                        {% endif %}
                     </div>
                 {% endwith %}
             {% endif %}
         </div>
-        {% include 'core/experiences_listing.html'%}
+        {% if posts|length %}
+            <div class="flex flex-col gap-y-4  items-center">
+            <span class="font-semibold text-xl mx-auto cursor-pointer text-white bg-card-bg px-2 py-1 rounded hover:bg-hover-bg-light transition duration-200 select-none"
+                   onclick="handle_section_click('submittedContainer')">
+                Submitted Experiences
+            </span>
+                <div id="submittedContainer" class="w-full">
+                {% include 'core/experiences_listing.html' %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% with requested_user.profile.liked.all as posts %}
+            {% if posts|length %}
+                <div class="flex flex-col gap-y-4  items-center">
+                <span class="font-semibold text-xl mx-auto cursor-pointer text-white bg-card-bg px-2 py-1 rounded hover:bg-hover-bg-light transition duration-200 select-none"
+                      onclick="handle_section_click('likedContainer')">
+                    Liked Experiences
+                </span>
+                    <div id="likedContainer" class="hidden w-full">
+                        {% include 'core/experiences_listing.html' with disable_filters_and_pagination=True no_js=True %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
     </div>
+    <script>
+        function handle_section_click(id){
+            const likedContainer = $(`#${id}`);
+            likedContainer.toggle('fade', 200);
+            likedContainer[0].scrollIntoView({
+                behavior: 'smooth'
+            })
+        }
+    </script>
 {% endblock %}
