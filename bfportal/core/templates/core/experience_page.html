@@ -75,7 +75,7 @@
                             </span>
                         </div>
                         <div id="reportButtonDropdown"
-                             class="dropdown-content flex flex-col text-center text-md font-medium right-0 w-max rounded-lg absolute text-white"
+                             class="invisible dropdown-content flex flex-col text-center text-md font-medium right-0 w-max rounded-lg absolute text-white"
                         > <!--left-12 -->
                             <!-- arrow pointing to report button -->
                             <div class="flex flex-row justify-end pr-0.5">
@@ -456,6 +456,7 @@
             }
 
             if (csrftoken) {
+                let fetch_error = true;
                 menuHider.fadeIn();
                 fetch(`/api/report/${report_type}/?id={{ page.id }}`, {
                     method: 'post',
@@ -466,6 +467,7 @@
                     },
                     redirect: "error"
                 }).then(resp => {
+                    fetch_error = false;
                     menuHider.fadeOut(
                         function () {
                             if (resp.status === 200) {
@@ -484,7 +486,12 @@
                     )
                 }).catch((error) => {
                     menuHider.fadeOut(function () {
-                        handleAfterFadeOut(false, error.message)
+                        if(fetch_error){
+                            handleAfterFadeOut(false, "Not logged in")
+                        } else {
+                            handleAfterFadeOut(false, error.message)
+                        }
+
                     })
                 })
             } else {
