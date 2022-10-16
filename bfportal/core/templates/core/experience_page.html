@@ -436,7 +436,7 @@
                     reportSuccessfulItem.show('slide', {direction: "up"}, 200);
                     console.log(`Report type ${report_type} successful for {{ page.title }}`)
                 } else {
-                    reportSuccessfulItem.text("Please Log in..")
+                    reportSuccessfulItem.text(reportSuccessfulItemText)
                     reportSuccessfulItem.addClass("bg-bf2042-6")
                     reportSuccessfulItem.show('slide', {direction: "up"}, 200);
                 }
@@ -473,17 +473,22 @@
                                     handleAfterFadeOut(true, text)
                                 })
                             } else {
-                                throw Error("Not logged in")
+                                resp.text().then(function (text) {
+                                    if(text){
+                                        throw Error(text)
+                                    }
+                                    throw Error("Not logged in")
+                                })
                             }
                         }
                     )
                 }).catch((error) => {
                     menuHider.fadeOut(function () {
-                        handleAfterFadeOut(false)
+                        handleAfterFadeOut(false, error.message)
                     })
                 })
             } else {
-                handleAfterFadeOut(false)
+                handleAfterFadeOut(false, "Please log in")
             }
 
         }
