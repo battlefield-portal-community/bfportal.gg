@@ -35,6 +35,7 @@ class ReportTypes(enum.Enum, metaclass=EnumMeta):
     BUGGED = 0
     BROKEN = 1
     XP_FARM = 2
+    OK = 4
 
 
 def send_approve_request(
@@ -337,15 +338,44 @@ def report_experience(request: HttpRequest, report_type: int):
                     except ExperiencePage.DoesNotExist:
                         logger.debug(f"Wrong page id {page_id}")
                         return HttpResponse(status=400)
+                    save_page = True
+                    response_text = "Reported Successfully"
                     match report_type:
+                        case ReportTypes.OK:
+                            if exp_page.owner == request.user:
+                                exp_page.bugged = False
+                                exp_page.broken = False
+                                exp_page.save_revision(
+                                    user=request.user,
+                                    submitted_for_moderation=True,
+                                    changed=True,
+                                )
+                                return HttpResponse("Awaiting approval", status=200)
+                            else:
+                                return HttpResponse(
+                                    "Nice try... reported :)", status=404
+                                )
+
                         case ReportTypes.BUGGED:
-                            exp_page.bugged_report.add(request.user)
+                            if exp_page.owner == request.user:
+                                exp_page.bugged = True
+                                response_text = "State Change Successful"
+                            else:
+                                exp_page.bugged_report.add(request.user)
+
                         case ReportTypes.BROKEN:
-                            exp_page.broken_report.add(request.user)
+                            if exp_page.owner == request.user:
+                                exp_page.broken = True
+                                response_text = "State Change Successful"
+                            else:
+                                exp_page.broken_report.add(request.user)
+
                         case ReportTypes.XP_FARM:
                             exp_page.xp_farm_report.add(request.user)
-                    exp_page.save()
-                    return HttpResponse(status=200)
+
+                    if save_page:
+                        exp_page.save()
+                    return HttpResponse(response_text, status=200)
                 else:
                     logger.debug(f"Wrong page id {page_id}")
                     return HttpResponse(status=400)

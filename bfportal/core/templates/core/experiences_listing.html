@@ -22,8 +22,10 @@
                                 />
                             </div>
                             <!-- like count -->
+                            {% with post.liked_by.all.count as like_count %}
                             {% if post.bugged or post.broken or post.xp_farm %}
-                                <div class="absolute bottom-0 inset-x-0 w-full h-20 bugged" style="--alert-svg: url('{% static 'svgs/card/red_alert_bg.svg' %}') "></div>
+                                <div data-card_error_container="{{ post.id }}" class="absolute -bottom-0.5 inset-x-0 w-full h-7 {% if post.bugged %}bg-[#9c8b2e]/[.95]{% else %}bg-[#881e14]/[.95]{% endif %}"></div>
+
                                 <div class="absolute bottom-0 flex flex-row gap-x-1 mb-1 ml-1 text-xs">
                                     <img width="14" height="14" alt="" src="{% static 'svgs/card/Alert.svg' %}">
                                     <p class="align-bottom text-white">
@@ -37,8 +39,7 @@
                                     </p>
                                 </div>
                             {% endif %}
-                            {% with post.liked_by.all.count as like_count %}
-                            <div like_count_container="{{ post.id }}" class="absolute -bottom-0.5 right-0 w-min-14 pl-6 pr-2.5 pt-1.5 text-white text-sm group-hover:bg-bg-default duration-200 clickable fav-container" style="--rect-url: url('{% static 'svgs/card-fav-rect.svg' %}');" onclick="add_to_liked(this)">
+                            <div like_count_container="{{ post.id }}" class="absolute -bottom-0.5 h-7 right-0 w-min-14 pl-6 pr-2.5 pt-1.5 text-white text-sm group-hover:bg-bg-default duration-200 clickable fav-container" style="--rect-url: url('{% static 'svgs/card-fav-rect.svg' %}');" onclick="add_to_liked(this)">
                                 <div class="flex flex-row gap-2 font-medium pb-1.5">
                                     <p fav_count_container="{{ post.id }}" class="{% if like_count == 0 %} hidden {% endif %}">{{ like_count }}</p>
                                     {% if post|is_liked_by_user:request %}
@@ -98,7 +99,7 @@
                             {% endif %}
                             {% if post.exp_url|length %}
                                 <p class="text-[8px] text-white mx-auto pt-1 font-semibold">Editable
-                                <img class="inline" src="{% static 'svgs/card/open_link.svg' %}">
+                                <img class="inline" src="{% static 'svgs/card/open_link.svg' %}" alt="">
                                 </p>
                             {% endif %}
                         {% endif %}

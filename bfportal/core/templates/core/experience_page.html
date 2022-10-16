@@ -11,6 +11,7 @@
 
 
 
+
                          {% if debug %}{% static "images/placeholder.png" %}{% else %}{% if page.cover_img_url %}{{ page.cover_img_url }}{% else %}{% static "images/placeholder.png" %}{% endif %}{% endif %}'
                  alt="{{ page.slug }}"
                  onerror='if(this.src !== "{% static "images/placeholder.png" %}") this.src="{% static "images/placeholder.png" %}";'
@@ -27,6 +28,7 @@
                              width="32" height="32"
                              src="
 
+
                                      {% if page|is_liked_by_user:request %}{% static 'svgs/card/heart_liked.svg' %}{% else %}{% static 'svgs/card/heart_not_liked.svg' %}{% endif %}"
                              alt=""
                         />
@@ -39,47 +41,75 @@
             <!-- page title -->
             <div class="flex flex-row gap-x-4 items-center flex-wrap gap-y-4 relative w-full select-none mb-2">
                 <!-- sidebar -->
-                <div class="absolute flex right-0 gap-x-2 -bottom-8 xl:top-1/2 xl:-translate-y-1/2 xl:w-[70px] xl:h-[55px] xl:flex-col xl:gap-y-2 xl:items-center xl:ml-3.5 xl:justify-center xl:left-full">
+                <div class="absolute flex right-0 whitespace-nowrap gap-x-2 -bottom-8 xl:top-1/2 xl:-translate-y-1/2 xl:w-[70px] xl:h-[55px] xl:flex-col xl:gap-y-2 xl:items-end xl:justify-center xl:left-full">
                     <div id="shareButton"
                          class="text-sm text-white font-bold cursor-pointer hover:text-bg-light transition duration-200 flex flex-row gap-x-1"
                          onclick="showPopUp('shareButtonPopUp')">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 fill-bf2042-4" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M307 34.8c-11.5 5.1-19 16.6-19 29.2v64H176C78.8 128 0 206.8 0 304C0 417.3 81.5 467.9 100.2 478.1c2.5 1.4 5.3 1.9 8.1 1.9c10.9 0 19.7-8.9 19.7-19.7c0-7.5-4.3-14.4-9.8-19.5C108.8 431.9 96 414.4 96 384c0-53 43-96 96-96h96v64c0 12.6 7.4 24.1 19 29.2s25 3 34.4-5.4l160-144c6.7-6.1 10.6-14.7 10.6-23.8s-3.8-17.7-10.6-23.8l-160-144c-9.4-8.5-22.9-10.6-34.4-5.4z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 fill-bf2042-4" viewBox="0 0 512 512">
+                            <!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                            <path d="M307 34.8c-11.5 5.1-19 16.6-19 29.2v64H176C78.8 128 0 206.8 0 304C0 417.3 81.5 467.9 100.2 478.1c2.5 1.4 5.3 1.9 8.1 1.9c10.9 0 19.7-8.9 19.7-19.7c0-7.5-4.3-14.4-9.8-19.5C108.8 431.9 96 414.4 96 384c0-53 43-96 96-96h96v64c0 12.6 7.4 24.1 19 29.2s25 3 34.4-5.4l160-144c6.7-6.1 10.6-14.7 10.6-23.8s-3.8-17.7-10.6-23.8l-160-144c-9.4-8.5-22.9-10.6-34.4-5.4z"/>
+                        </svg>
                         <p>Share</p>
                     </div>
                     <div id="reportButton"
                          class="text-sm text-white font-bold cursor-pointer hover:text-bg-light transition duration-200 relative">
                         <div class="text-sm text-white font-bold cursor-pointer hover:text-bg-light transition duration-200 flex flex-row gap-x-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 fill-bf2042-4" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M256 0c53 0 96 43 96 96v3.6c0 15.7-12.7 28.4-28.4 28.4H188.4c-15.7 0-28.4-12.7-28.4-28.4V96c0-53 43-96 96-96zM41.4 105.4c12.5-12.5 32.8-12.5 45.3 0l64 64c.7 .7 1.3 1.4 1.9 2.1c14.2-7.3 30.4-11.4 47.5-11.4H312c17.1 0 33.2 4.1 47.5 11.4c.6-.7 1.2-1.4 1.9-2.1l64-64c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3l-64 64c-.7 .7-1.4 1.3-2.1 1.9c6.2 12 10.1 25.3 11.1 39.5H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H416c0 24.6-5.5 47.8-15.4 68.6c2.2 1.3 4.2 2.9 6 4.8l64 64c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0l-63.1-63.1c-24.5 21.8-55.8 36.2-90.3 39.6V240c0-8.8-7.2-16-16-16s-16 7.2-16 16V479.2c-34.5-3.4-65.8-17.8-90.3-39.6L86.6 502.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l64-64c1.9-1.9 3.9-3.4 6-4.8C101.5 367.8 96 344.6 96 320H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H96.3c1.1-14.1 5-27.5 11.1-39.5c-.7-.6-1.4-1.2-2.1-1.9l-64-64c-12.5-12.5-12.5-32.8 0-45.3z"/></svg>
-                            <p>Report</p>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 fill-bf2042-4" viewBox="0 0 512 512">
+                                <!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M256 0c53 0 96 43 96 96v3.6c0 15.7-12.7 28.4-28.4 28.4H188.4c-15.7 0-28.4-12.7-28.4-28.4V96c0-53 43-96 96-96zM41.4 105.4c12.5-12.5 32.8-12.5 45.3 0l64 64c.7 .7 1.3 1.4 1.9 2.1c14.2-7.3 30.4-11.4 47.5-11.4H312c17.1 0 33.2 4.1 47.5 11.4c.6-.7 1.2-1.4 1.9-2.1l64-64c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3l-64 64c-.7 .7-1.4 1.3-2.1 1.9c6.2 12 10.1 25.3 11.1 39.5H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H416c0 24.6-5.5 47.8-15.4 68.6c2.2 1.3 4.2 2.9 6 4.8l64 64c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0l-63.1-63.1c-24.5 21.8-55.8 36.2-90.3 39.6V240c0-8.8-7.2-16-16-16s-16 7.2-16 16V479.2c-34.5-3.4-65.8-17.8-90.3-39.6L86.6 502.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l64-64c1.9-1.9 3.9-3.4 6-4.8C101.5 367.8 96 344.6 96 320H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H96.3c1.1-14.1 5-27.5 11.1-39.5c-.7-.6-1.4-1.2-2.1-1.9l-64-64c-12.5-12.5-12.5-32.8 0-45.3z"/>
+                            </svg>
+                            <span class="flex flex-row gap-x-2">
+                                {% if page.owner == request.user %}
+                                    <p>Change State</p>
+                                    {% if page.bugged_report.all|length %}
+                                        <span class="text-[10px] w-5 font-bold text-black bg-[#FFCD1E] text-center rounded-full">{{ page.bugged_report.all|length }}</span>
+                                    {% endif %}
+                                    {% if page.broken_report.all|length %}
+                                        <span class="text-[10px] w-5 font-bold text-black bg-bf2042-6 text-center rounded-full">{{ page.broken_report.all|length }}</span>
+                                    {% endif %}
+
+                                {% else %}
+                                    Report
+                                {% endif %}
+
+                            </span>
                         </div>
                         <div id="reportButtonDropdown"
-                             class="dropdown-content flex flex-col text-center text-md font-medium right-0 w-max rounded-lg absolute text-white invisible"
+                             class="invisible dropdown-content flex flex-col text-center text-md font-medium right-0 w-max rounded-lg absolute text-white"
                         > <!--left-12 -->
                             <!-- arrow pointing to report button -->
                             <div class="flex flex-row justify-end pr-0.5">
                                 <div class="w-0 h-0 border-x-8 border-b-8 border-solid border-transparent border-b-card-bg"></div>
                             </div>
 
-                            <div class="flex flex-col bg-card-bg rounded relative">
-                                <span class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200"
-                                      onclick="report(0)">Experience Bugged</span>
-                                <span class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200"
-                                      onclick="report(1)">Experience Not Available</span>
-                                <span class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200"
-                                      onclick="report(2)">XP Farm</span>
-                                <span id="reportSuccessfulItem"
-                                      class="hidden text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200"
-                                      data-logged-in="{{ request.user.is_authenticated }}"></span>
-                                <div id="reportMenuHider" class="w-full h-full absolute bg-card-bg opacity-95 hidden">
-                                    <svg id="reportSpinner"
-                                         class="absolute w-8 h-8 absolute m-auto inset-0 text-bf2042-6 animate-spin fill-bf2042-4"
-                                         viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                                              fill="currentColor"></path>
-                                        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                                              fill="currentFill"></path>
-                                    </svg>
-                                </div>
+                            <div class="flex flex-col bg-transparent rounded relative">
+                                {% with "w-full flex flex-row gap-x-1 justify-end text-white text-sm py-1 px-2 bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200 first:rounded-t" as reportItemClass %}
+                                    {% if page.owner == request.user %}
+                                    <span class="{{ reportItemClass }}"
+                                          onclick="report(4)">Experience Ok</span>
+                                    {% endif %}
+                                    <span class="{{ reportItemClass }}"
+                                          onclick="report(0)">
+                                        Experience Bugged
+                                        {% if page.owner == request.user %}
+                                            <p class="text-[10px] w-5 font-bold text-black bg-[#FFCD1E]  rounded-full">{{ page.bugged_report.all|length }}</p>
+                                        {% endif %}
+                                    </span>
+                                    <span class="{{ reportItemClass }} {% if page.owner == request.user %}rounded-b{% endif %}"
+                                          onclick="report(1)">
+                                        Experience Not Available
+                                        {% if page.owner == request.user %}
+                                            <p class="text-[10px] w-5 font-bold text-black bg-bf2042-6 rounded-full">{{ page.broken_report.all|length }}</p>
+                                        {% endif %}
+                                    </span>
+                                    {% if page.owner != request.user %}
+                                    <span class="{{ reportItemClass }} rounded-b" onclick="report(2)">XP Farm</span>
+                                    {% endif %}
+                                    <span id="reportSuccessfulItem"
+                                          class="hidden text-white text-sm py-1 px-2 rounded-b text-bf2042-1 bg-bf2042-4 font-semibold"></span>
+                                {% endwith %}
+                                <div id="reportMenuHider"
+                                     class="w-full h-full absolute bg-card-bg opacity-95 hidden"></div>
                             </div>
                         </div>
                         <script>addDropDownPair("reportButton", "reportButtonDropdown")</script>
@@ -266,12 +296,13 @@
         </div>
     </div>
     <div id="shareButtonPopUp"
-         class="popup fixed w-full text-sm md:w-1/2 lg:w-1/3 max-w-[620px] h-[17%] inset-0 m-auto bg-card-bg rounded z-[1] flex flex-col gap-y-2 p-4 hidden">
+         class="hidden popup fixed w-full text-sm md:w-1/2 lg:w-1/3 max-w-[620px] h-[17%] inset-0 m-auto bg-card-bg rounded z-[1] flex flex-col gap-y-2 p-4">
         <span class="text-xl text-white font-bold flex-grow">Share</span>
         <div class="flex flex-row"></div>
         <div class="flex flex-row text-black font-medium gap-x-2 items-center">
             <span class="flex-grow p-1 bg-card-bg-dark text-white rounded">{{ request.build_absolute_uri }}</span>
-            <span class="px-2 py-1 bg-white rounded-lg font-semibold cursor-pointer hover:bg-bf2042-3 transition duration-200 ease-in-out" data-copy="{{ request.build_absolute_uri }}"
+            <span class="px-2 py-1 bg-white rounded-lg font-semibold cursor-pointer hover:bg-bf2042-3 transition duration-200 ease-in-out"
+                  data-copy="{{ request.build_absolute_uri }}"
                   data-copy-state="normal"
                   onclick="copyDivToClipboard(this)">Copy</span>
         </div>
@@ -398,7 +429,34 @@
                 menuHider = $('#reportMenuHider'),
                 reportSuccessfulItem = $('#reportSuccessfulItem');
 
+            function handleAfterFadeOut(successful, reportSuccessfulItemText) {
+                if (successful) {
+                    reportSuccessfulItem.text(reportSuccessfulItemText)
+                    reportSuccessfulItem.removeClass("bg-bf2042-6")
+                    reportSuccessfulItem.show('slide', {direction: "up"}, 200);
+                    console.log(`Report type ${report_type} successful for {{ page.title }}`)
+                } else {
+                    reportSuccessfulItem.text(reportSuccessfulItemText)
+                    reportSuccessfulItem.addClass("bg-bf2042-6")
+                    reportSuccessfulItem.show('slide', {direction: "up"}, 200);
+                }
+
+                setTimeout(function () {
+                    reportSuccessfulItem.hide(
+                        'slide',
+                        {direction: "up"},
+                        200
+                        {% if page.owner == request.user %}
+                            ,function () {
+                            location.reload()
+                        }
+                        {% endif %}
+                    );
+                }, 1000)
+            }
+
             if (csrftoken) {
+                let fetch_error = true;
                 menuHider.fadeIn();
                 fetch(`/api/report/${report_type}/?id={{ page.id }}`, {
                     method: 'post',
@@ -409,29 +467,37 @@
                     },
                     redirect: "error"
                 }).then(resp => {
-                    menuHider.fadeOut()
-                    if(resp.status === 200){
-                        //menuHider.hide(200);
-                        reportSuccessfulItem.text('Reported Successfully')
-                        reportSuccessfulItem.show('slide', {direction: "up"}, 200);
-                        console.log(`Report type ${report_type} successful for {{ page.title }}`)
-                    } else {
-                        throw Error("Not logged in")
-                    }
-
+                    fetch_error = false;
+                    menuHider.fadeOut(
+                        function () {
+                            if (resp.status === 200) {
+                                resp.text().then(function (text) {
+                                    handleAfterFadeOut(true, text)
+                                })
+                            } else {
+                                resp.text().then(function (text) {
+                                    if(text){
+                                        throw Error(text)
+                                    }
+                                    throw Error("Not logged in")
+                                })
+                            }
+                        }
+                    )
                 }).catch((error) => {
-                    menuHider.fadeOut();
-                    reportSuccessfulItem.text("Please Log in..")
-                    reportSuccessfulItem.show('slide', {direction: "up"}, 200);
+                    menuHider.fadeOut(function () {
+                        if(fetch_error){
+                            handleAfterFadeOut(false, "Not logged in")
+                        } else {
+                            handleAfterFadeOut(false, error.message)
+                        }
+
+                    })
                 })
             } else {
-                reportSuccessfulItem.text("Please Log in..")
-                reportSuccessfulItem.show('slide', {direction: "up"}, 200);
+                handleAfterFadeOut(false, "Please log in")
             }
 
-            setTimeout(function () {
-                reportSuccessfulItem.hide('slide', {direction: "up"}, 200);
-            }, 1000)
         }
     </script>
     {#https://api.gametools.network/bf2042/playground/?playgroundid=45e436e0-4cf7-11ec-be7b-76c50778a53a#}
