@@ -18,20 +18,18 @@
             />
             {% with page.liked_by.all.count as like_count %}
                 <div like_count_container="{{ page.id }}"
-                     class="absolute bottom-0 right-0 w-min-14 pl-8 pr-2.5 pt-1.5 fav-container"
-                     style="--rect-url: url('{% static 'svgs/card-fav-rect.svg' %}'); background-color: #121212"
-                     onclick="add_to_liked(this)">
-                    <div class="flex flex-row gap-2 font-medium pb-1.5 text-3xl">
-                        <p fav_count_container="{{ page.id }}"
-                           class="{% if like_count == 0 %} hidden {% endif %}">{{ like_count }}</p>
-                        <img like_svg="{{ page.id }}"
-                             width="32" height="32"
-                             src="
-
-
-                                     {% if page|is_liked_by_user:request %}{% static 'svgs/card/heart_liked.svg' %}{% else %}{% static 'svgs/card/heart_not_liked.svg' %}{% endif %}"
-                             alt=""
-                        />
+                     class="absolute bottom-0 bg-transparent right-0 w-min-14 text-white h-10" onclick="add_to_liked(this)">
+                    <div class="flex flex-row w-full h-full items-center relative bg-default group-hover:bg-bg-default pl-2.5 pr-4 transition duration-200  py-2">
+                        <span class="absolute right-full bottom-0 fav-container w-4 h-10 bg-default group-hover:bg-bg-default transition duration-200"></span>
+                        <div class="flex flex-row gap-2 font-medium text-3xl">
+                            <p fav_count_container="{{ page.id }}" class="{% if not like_count %} hidden {% endif %}">{{ like_count }}</p>
+                            <img like_svg="{{ page.id }}"
+                                 width="32" height="32"
+                                 src="
+                                         {% if page|is_liked_by_user:request %}{% static 'svgs/card/heart_liked.svg' %}{% else %}{% static 'svgs/card/heart_not_liked.svg' %}{% endif %}"
+                                 alt=""
+                            />
+                        </div>
                     </div>
                 </div>
             {% endwith %}
