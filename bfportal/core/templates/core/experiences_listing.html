@@ -22,7 +22,7 @@
                                 />
                             </div>
                             <!-- like count -->
-                            {% with 9999 as like_count %}
+                            {% with post.liked_by.all|length as like_count %}
                             {% if post.bugged or post.broken or post.xp_farm %}
                                 <div data-card_error_container="{{ post.id }}" class="absolute bottom-0 inset-x-0 w-full h-7 {% if post.bugged %}bg-[#9c8b2e]/[.95]{% else %}bg-[#881e14]/[.95]{% endif %}"></div>
 
