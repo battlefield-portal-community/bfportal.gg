@@ -22,38 +22,41 @@
                                 />
                             </div>
                             <!-- like count -->
-                            {% with post.liked_by.all.count as like_count %}
+                            {% with post.liked_by.all|length as like_count %}
                             {% if post.bugged or post.broken or post.xp_farm %}
-                                <div data-card_error_container="{{ post.id }}" class="absolute -bottom-0.5 inset-x-0 w-full h-7 {% if post.bugged %}bg-[#9c8b2e]/[.95]{% else %}bg-[#881e14]/[.95]{% endif %}"></div>
+                                <div data-card_error_container="{{ post.id }}" class="absolute bottom-0 inset-x-0 w-full h-7 {% if post.bugged %}bg-[#9c8b2e]/[.95]{% else %}bg-[#881e14]/[.95]{% endif %}"></div>
 
-                                <div class="absolute bottom-0 flex flex-row gap-x-1 mb-1 ml-1 text-xs">
+                                <div class="absolute bottom-[0.1rem] flex flex-row gap-x-1 mb-1 ml-1 text-xs">
                                     <img width="14" height="14" alt="" src="{% static 'svgs/card/Alert.svg' %}">
                                     <p class="align-bottom text-white">
-                                        {% if post.bugged %}
-                                            Experience Bugged
-                                        {% elif post.broken %}
+                                        {% if post.broken %}
                                             Experience Broken
+                                        {% elif post.bugged %}
+                                            Experience Bugged
                                         {% elif post.xp_farm %}
                                             XP Farm
                                         {% endif %}
                                     </p>
                                 </div>
                             {% endif %}
-                            <div like_count_container="{{ post.id }}" class="absolute -bottom-0.5 h-7 right-0 w-min-14 pl-6 pr-2.5 pt-1.5 text-white text-sm group-hover:bg-bg-default duration-200 clickable fav-container" style="--rect-url: url('{% static 'svgs/card-fav-rect.svg' %}');" onclick="add_to_liked(this)">
-                                <div class="flex flex-row gap-2 font-medium pb-1.5">
-                                    <p fav_count_container="{{ post.id }}" class="{% if like_count == 0 %} hidden {% endif %}">{{ like_count }}</p>
-                                    {% if post|is_liked_by_user:request %}
-                                    <img like_svg="{{ post.id }}" class="block" src="{% static 'svgs/card/heart_liked.svg' %}" alt="non">
-                                    {% else %}
-                                    <img like_svg="{{ post.id }}" class="block" src="{% static 'svgs/card/heart_not_liked.svg' %}" alt="non">
-                                    {% endif %}
+                            <div like_count_container="{{ post.id }}" class="absolute bottom-0 h-7 bg-transparent right-0 w-min-14 text-white text-sm clickable" onclick="add_to_liked(this)">
+                                <div class="flex flex-row w-full h-full items-center relative bg-card-bg group-hover:bg-bg-default px-1 transition duration-200">
+                                    <span class="absolute right-[99%] fav-container w-4 h-8 -bottom-1 bg-card-bg group-hover:bg-bg-default transition duration-200"></span>
+                                    <div class="flex flex-row gap-2 items-center font-medium">
+                                        <p fav_count_container="{{ post.id }}" class="{% if like_count == 0 %} hidden {% endif %}">{{ like_count }}</p>
+                                        {% if post|is_liked_by_user:request %}
+                                        <img like_svg="{{ post.id }}" class="block" src="{% static 'svgs/card/heart_liked.svg' %}" alt="non">
+                                        {% else %}
+                                        <img like_svg="{{ post.id }}" class="block" src="{% static 'svgs/card/heart_not_liked.svg' %}" alt="non">
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                             {% endwith %}
                         </div>
                     </div>
                     <!-- info -->
-                    <div class="grid grid-cols-1 grid-flow-row mt-3 h-1/3">
+                    <div class="grid grid-cols-1 grid-flow-row pt-3 h-1/3">
                         <!-- cats -->
                         <div class="flex flex-row flex-wrap gap-x-1 mb-2">
                             <a class="clickable" href="/experiences/?category={{ post.category }}">
