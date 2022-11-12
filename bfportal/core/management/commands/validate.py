@@ -6,13 +6,13 @@ from urllib.parse import parse_qs, urlsplit  # noqa:  E402
 import aiohttp
 import requests  # noqa:  E402
 from asgiref.sync import sync_to_async
-from core.helper import GT_BASE_URL
+from core.helper import GT_BASE_URL, save_tags_from_gt_api
 from core.models import ExperiencePage  # noqa:  E402
 from django.core.management import BaseCommand  # noqa:  E402
 from loguru import logger
 
 
-async def fetch(session, page: ExperiencePage, url: str):
+async def fetch(session, page: ExperiencePage, url: str, set_tags=True):
     """Checks GT api if an experience is valid or not"""
     async with session.get(url) as response:
         if response.status == 404:
@@ -24,25 +24,34 @@ async def fetch(session, page: ExperiencePage, url: str):
                 if page.broken:
                     logger.debug(f"{page} was broken now fixed....")
                 page.broken = False
+                tags = []
+                for tag_data in json["tag"]:
+                    tags.append(
+                        tag_data["metadata"]["translations"][0]["localizedText"]
+                    )
+                await sync_to_async(
+                    lambda: page.tags.add(*tags), thread_sensitive=True
+                )()
+
             else:
                 page.broken = True
 
         await sync_to_async(page.save, thread_sensitive=True)()
 
 
-async def fetch_all(session, mapping: dict[ExperiencePage, str]):
+async def fetch_all(session, mapping: dict[ExperiencePage, str], set_tags=False):
     """Makes all tasks"""
     tasks = []
     for page, url in mapping.items():
-        task = asyncio.create_task(fetch(session, page, url))
+        task = asyncio.create_task(fetch(session, page, url, set_tags=set_tags))
         tasks.append(task)
     await asyncio.gather(*tasks)
 
 
-async def main(mapping: dict[ExperiencePage, str]):
+async def main(mapping: dict[ExperiencePage, str], set_tags=False):
     """Start the validating loop"""
     async with aiohttp.ClientSession() as session:
-        await fetch_all(session, mapping)
+        await fetch_all(session, mapping, set_tags=set_tags)
 
 
 def start_background_loop(loop: asyncio.AbstractEventLoop) -> None:
@@ -58,9 +67,14 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):  # noqa: D102
         parser.add_argument("--experiences", action="store_true")
+        parser.add_argument("--tags", action="store_true")
 
     def handle(self, *args, **options):  # noqa: D102
         if options.get("experiences", None):
+            save_tags_from_gt_api()
+            get_tags = False
+            if options.get("tags", None):
+                get_tags = True
             experience: ExperiencePage
             experiences = ExperiencePage.objects.live().public()
             mapping: dict[ExperiencePage, str] = dict()
@@ -80,7 +94,7 @@ class Command(BaseCommand):
             t = Thread(target=start_background_loop, args=(loop,), daemon=True)
             t.start()
             start_time = datetime.now()
-            task = asyncio.run_coroutine_threadsafe(main(mapping), loop)
+            task = asyncio.run_coroutine_threadsafe(main(mapping, get_tags), loop)
             task.result()
             exec_time = (datetime.now() - start_time).total_seconds()
             print(f"It took {exec_time:,.2f} seconds to run")
