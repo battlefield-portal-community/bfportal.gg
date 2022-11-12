@@ -125,6 +125,6 @@ def save_tags_from_gt_api():
         if not Tag.objects.filter(name__exact=tag).exists():
             Tag(name=tag).save()
             tags_added.append(tag)
-        else:
-            logger.debug(f"{tag} exists in db")
-    logger.debug(f"Added Tags :- {tags_added}")
+
+    if tags_added:
+        logger.debug(f"Added Tags :- {tags_added}")
