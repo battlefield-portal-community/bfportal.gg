@@ -1,15 +1,16 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap'); */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @font-face {
-    font-family: "MONTSERRAT";
-    src: local('Montserrat'),
-    url("../fonts/Montserrat/Montserrat-VF.ttf") format("truetype") tech('variation');
+    font-family: "Montserrat";
+    src: url("../fonts/Montserrat/Montserrat-VF.ttf") format("truetype") tech('variation');
 }
 
 body {
-    font-family: MONTSERRAT, sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .fav-container {
