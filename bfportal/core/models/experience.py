@@ -229,6 +229,11 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         + [CustomBasePage.content_panels[-1]]
     )
 
+    @property
+    def like_count(self):
+        """Return the number of likes this experience has."""
+        return self.liked_by.count()
+
     parent_page_types = ["core.ExperiencesPage"]
     subpage_types = []
 

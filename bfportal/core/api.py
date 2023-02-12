@@ -22,6 +22,7 @@ class ExperiencePageAPIViewSet(BaseAPIViewSet):
         "exp_url",
         "featured",
         "bugged",
+        "like_count",
     ]
     listing_default_fields = body_fields
 
