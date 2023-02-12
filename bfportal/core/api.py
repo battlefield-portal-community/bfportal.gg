@@ -24,6 +24,7 @@ class ExperiencePageAPIViewSet(BaseAPIViewSet):
         "bugged",
         "xp_farm",
         "like_count",
+        "exp_creators",
     ]
     listing_default_fields = body_fields
 
