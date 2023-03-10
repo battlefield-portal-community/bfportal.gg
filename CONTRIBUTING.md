@@ -2,8 +2,10 @@
 > First off, thanks for taking the time to contribute! 🎉🎉
 
 ---
+
 This file contains a few guidelines on how to contribute to the Battlefield Portal Library hosted at bfportal.gg
 These are not rules but just some suggestion, so feel free to propose any change in the project
+
 ---
 
 Before you start contributing you should understand the stack that this projects uses
