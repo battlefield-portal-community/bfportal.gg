@@ -21,7 +21,7 @@ If you already have experience with django/wagtail, understanding the backend wi
 ----
 # Env Setup
 
-Refer to [readme.md](/readme.md)
+Refer to [readme.md](/readme.md#how-to-run-locally)
 
 ----
 
