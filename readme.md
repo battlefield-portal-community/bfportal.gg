@@ -36,7 +36,7 @@ You can later edit your experience if u like.
 - install dependencies `python -m pip install -r requirements.txt`
 - copy the [.env.template](bfportal/.env.template) file and rename it to .env
 - fill the appropriate data in .env file
-- Do first run migrate
+- run `python manage.py migrate`
 - run `python manage.py ensure_superuser --username bfportal --email superuser@bfportal.com --password <password>`
 - run `python manage.py ensure_initialization`
 - run server with `python manage.py runserver`
