@@ -22,7 +22,7 @@ services:
   bfportal_gg_production:
     image: docker.pkg.github.com/battlefield-portal-community/bfportal.gg/main:latest
     restart: always
-    command: bash -c "python manage.py migrate --noinput && python manage.py ensure_superuser --username bfportal --email superuser@bfportal.com --password '${SU_PASSWD}' &&  python manage.py ensure_initialization && python manage.py runserver 0.0.0.0:${PRODUCTION_PORT} --settings=bfportal.settings.production"
+    command: bash -c "python manage.py migrate --noinput && python manage.py ensure_superuser --username bfportal --email superuser@bfportal.com --password '${SU_PASSWD}' &&  python manage.py ensure_initialization && gunicorn bfportal.wsgi:application --workers 4 --bind 0.0.0.0:${PRODUCTION_PORT}"
     user: "33:33"
     ports:
       - "${PRODUCTION_PORT}:${PRODUCTION_PORT}"
@@ -75,7 +75,7 @@ services:
   bfportal_gg_dev:
     image: docker.pkg.github.com/battlefield-portal-community/bfportal.gg/dev:latest
     restart: always
-    command: bash -c "python manage.py migrate --noinput && python manage.py ensure_superuser --username bfportal --email superuser@bfportal.com --password '${SU_PASSWD}' &&  python manage.py ensure_initialization && python manage.py runserver 0.0.0.0:${DEVEL_PORT} --settings=bfportal.settings.production"
+    command: bash -c "python manage.py migrate --noinput && python manage.py ensure_superuser --username bfportal --email superuser@bfportal.com --password '${SU_PASSWD}' &&  python manage.py ensure_initialization && gunicorn bfportal.wsgi:application --workers 4 --bind 0.0.0.0:${DEVEL_PORT}"
     user: "33:33"
     ports:
       - "${DEVEL_PORT}:${DEVEL_PORT}"
