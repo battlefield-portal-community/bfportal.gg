@@ -31,11 +31,11 @@ If you already have experience with django/wagtail, understanding the backend wi
 - ### NodeJs
     - Make sure [npmjs](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) is installed in system, if the path to npm binary is not available in $PATH variable define `NPM_BIN_PATH` in [`settings/base.py`](/bfportal/bfportal/settings/base.py#L75) accordingly
     - Install TailwindCSS (only required if you are contributing to the frontend)  
-    
+
         ```
         python manage.py tailwind install --no-input
-        ``` 
-    
+        ```
+
     - Start TailwindCSS in watch mode
 
         ```
