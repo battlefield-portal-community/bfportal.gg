@@ -12,7 +12,7 @@ Before you start contributing you should understand the stack that this projects
 
 ![image](https://i.imgur.com/INghzbZ.png)
 
-If you already have experience with django/wagtail, understanding the backend will be really easy for you. 
+If you already have experience with django/wagtail, understanding the backend will be really easy for you.
 > **Note**
 > If you are just starting it is highly recommended to learn about the structure of a [django project](https://docs.djangoproject.com/en/4.1/intro/tutorial01/). and [wagtail project](https://docs.wagtail.org/en/stable/getting_started/tutorial.html)
 
@@ -36,7 +36,7 @@ If you already have experience with django/wagtail, understanding the backend wi
         python manage.py tailwind install --no-input
         ``` 
     
-    - Start TailwindCSS in watch mode 
+    - Start TailwindCSS in watch mode
 
         ```
         python manage.py tailwind start
