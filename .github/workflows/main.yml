@@ -10,6 +10,8 @@ on:
     branches:
       - main
       - dev
+    paths:
+      - 'bfportal/**'
 
 
 jobs:
