@@ -19,6 +19,7 @@ class ExperiencePageForm(forms.ModelForm):
         self.fields["sub_categories"].queryset = SubCategory.objects.filter(
             selectable_on_form=True
         )
+        self.fields["category"].required = True
         self.fields["cover_img_url"].required = True
 
     creators = AutoCompleteSelectMultipleField(
@@ -80,7 +81,11 @@ class ExperiencePageForm(forms.ModelForm):
     def clean_code(self):
         """Called when code field is being validated"""
         code = self.cleaned_data["code"]
-        if self.cleaned_data["category"].name.lower() != "prefab" and not len(code):
+        if (
+            self.cleaned_data.get("category", None)
+            and self.cleaned_data["category"].name.lower() != "prefab"
+            and not len(code)
+        ):
             raise forms.ValidationError(
                 "Must provide experience code if category is other than prefab"
             )
@@ -92,7 +97,11 @@ class ExperiencePageForm(forms.ModelForm):
     def clean_exp_url(self):
         """Called when experience url field is being validated"""
         url = self.cleaned_data["exp_url"]
-        if self.cleaned_data["category"].name.lower() == "prefab" and not len(url):
+        if (
+            self.cleaned_data.get("category", None)
+            and self.cleaned_data["category"].name.lower() == "prefab"
+            and not len(url)
+        ):
             raise forms.ValidationError(
                 "Must provide experience url if category is prefab"
             )
