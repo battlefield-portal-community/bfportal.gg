@@ -6,8 +6,7 @@
  [![Docker Build](https://github.com/battlefield-portal-community/bfportal.gg/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/battlefield-portal-community/bfportal.gg/actions/workflows/main.yml)
 # What is this ?
 
-With the release of battlefield 2042, ripple effect studio, added the ability to make custom game modes called "experiences", currently there is no way to share a game mode outside of the game, this project aims to fill that gap.  
-This project will replace the current website at https://bfportal.gg/
+With the release of battlefield 2042, ripple effect studio, added the ability to make custom game modes called "experiences", currently there is no way to share a game mode outside of the game, this project aims to fill that gap.
 
 # Info
 Head over to [bfportal.gg](https://bfportal.gg/), and try it out
