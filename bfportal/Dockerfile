@@ -1,5 +1,5 @@
 # Use an official Python runtime based on Debian 10 "buster" as a parent image.
-FROM python:3.11-slim-buster
+FROM python:3.11-slim-buster as dev
 
 # Add user that will be used in the container.
 RUN useradd --create-home wagtail
@@ -58,6 +58,8 @@ COPY --chown=wagtail:wagtail . .
 
 # Use user "wagtail" to run the build commands below and the server itself.
 USER wagtail
+
+FROM dev as final
 
 RUN python manage.py tailwind install --no-input;
 RUN python manage.py tailwind build --no-input
