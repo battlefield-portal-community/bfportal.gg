@@ -26,6 +26,10 @@ def get_scheduled_events(event_id: str, server_id: str = "870246147455877181") -
             headers=headers,
         )
         return resp.json()
+    else:
+        logger.warning(
+            "Unable to get scheduled events... DISCORD_BOT_TOKEN not provided"
+        )
 
 
 def validate_image_link(link: str):
