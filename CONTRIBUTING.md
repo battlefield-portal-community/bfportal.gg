@@ -20,6 +20,12 @@ If you already have experience with django/wagtail, understanding the backend wi
 
 ----
 # Env Setup
+- ### Docker
+  - Make sure You have docker installed and the `cd` to `bfportal` directory
+  - Then run `docker-compose --profile dev_local up`
+  - The website should be available at `127.0.0.1:8000`
+  - If You want to set up everything your self, See the next points
+
 
 - ### Python
     -  Refer to [readme.md](/readme.md#how-to-run-locally)
@@ -41,7 +47,6 @@ If you already have experience with django/wagtail, understanding the backend wi
         ```
         python manage.py tailwind start
         ```
-
 
 ----
 
