@@ -45,9 +45,8 @@ def send_approve_request(
 
     discord channel specified by APPROVAL_CHANNEL_WEBHOOK_ID env
     """
-    if (token := os.getenv("APPROVAL_CHANNEL_WEBHOOK_TOKEN", None)) is not None:
-        webhook_id = os.getenv("APPROVAL_CHANNEL_WEBHOOK_ID", None)
-        if webhook_id:
+    if len(token := os.getenv("APPROVAL_CHANNEL_WEBHOOK_TOKEN", "")):
+        if len(webhook_id := os.getenv("APPROVAL_CHANNEL_WEBHOOK_ID", "")):
             webhook_url = f"https://discord.com/api/webhooks/{webhook_id}/{token}"
             admin_add = False
             uid = -1
