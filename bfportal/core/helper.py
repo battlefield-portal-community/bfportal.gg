@@ -16,7 +16,7 @@ GT_BASE_URL = "https://api.gametools.network/bf2042/playground/?{}&blockydata=fa
 
 def get_scheduled_events(event_id: str, server_id: str = "870246147455877181") -> dict:
     """Tries to retrieve Scheduled events via discord API"""
-    if len(DISCORD_TOKEN := os.getenv("DISCORD_BOT_TOKEN", "")):
+    if not len(DISCORD_TOKEN := os.getenv("DISCORD_BOT_TOKEN", "")):
         headers = {
             "Authorization": f"Bot {DISCORD_TOKEN}",
             "content-type": "application/json",

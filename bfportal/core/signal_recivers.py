@@ -16,12 +16,12 @@ def send_to_discord(sender, **kwargs):
 
     discord channel specified by APPROVAL_SUCCESS_CHANNEL_WEBHOOK_ID env
     """
-    if len(token := os.getenv("APPROVAL_SUCCESS_CHANNEL_WEBHOOK_TOKEN", "")):
+    if not len(token := os.getenv("APPROVAL_SUCCESS_CHANNEL_WEBHOOK_TOKEN", "")):
         logger.warning(
             "Unable to publish new experience to discord as APPROVAL_SUCCESS_CHANNEL_WEBHOOK_TOKEN is not set"
         )
         return
-    if len(webhook_id := os.getenv("APPROVAL_SUCCESS_CHANNEL_WEBHOOK_ID", "")):
+    if not len(webhook_id := os.getenv("APPROVAL_SUCCESS_CHANNEL_WEBHOOK_ID", "")):
         logger.warning(
             "Unable to publish new experience to discord as APPROVAL_SUCCESS_CHANNEL_WEBHOOK_ID is not set"
         )
