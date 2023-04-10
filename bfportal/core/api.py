@@ -23,6 +23,7 @@ class ExperiencePageAPIViewSet(BaseAPIViewSet):
         "featured",
         "bugged",
         "xp_farm",
+        "broken",
         "like_count",
         "exp_creators",
     ]
