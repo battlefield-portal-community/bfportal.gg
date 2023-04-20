@@ -1,7 +1,15 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}{% trans "successful" %}{% endblock %}
+{% block title %}
+    {{ exp_name | title | truncatechars:20 }}
+    {% if after_edit %}
+        Saved
+    {% else %}
+        Submitted
+    {% endif %}
+
+    {% endblock %}
 
 {% block content %}
     <div class="absolute table text-white h-[90%] w-full left-0 top-0">
