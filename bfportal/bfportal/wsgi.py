@@ -10,28 +10,31 @@ https://docs.djangoproject.com/en/3.2/howto/deployment/wsgi/
 import os
 import warnings
 
-from django.core.wsgi import get_wsgi_application
-from dotenv import load_dotenv
-
-load_dotenv()
+from loguru import logger
 
 
 def init_project():
-    """Initialize the project
+    """Initialize the project"""
+    logger.info("project loaded")
+
+
+def init_wsgi():
+    """Initialize the WSGI
 
     Used to load .env file and set project specific settings
     """
-    from loguru import logger
+    global application
+    with warnings.catch_warnings():
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bfportal.settings.production")
+        from django.core.wsgi import get_wsgi_application
+        from wagtail.utils.deprecation import RemovedInWagtail50Warning
 
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bfportal.settings.production")
-    logger.info(".env loaded")
+        warnings.filterwarnings(
+            "ignore", category=RemovedInWagtail50Warning
+        )  # supress only wagtail warnings
+        application = get_wsgi_application()
 
 
-with warnings.catch_warnings():
-    from wagtail.utils.deprecation import RemovedInWagtail50Warning
-
-    warnings.filterwarnings(
-        "ignore", category=RemovedInWagtail50Warning
-    )  # supress only wagtail warnings
-    init_project()
-    application = get_wsgi_application()
+application = None
+init_project()
+init_wsgi()
