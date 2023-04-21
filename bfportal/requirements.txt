@@ -39,7 +39,7 @@ django-widget-tweaks==1.4.12
 django_debug_toolbar==3.8.1
 djangorestframework==3.14.0
 docopt==0.6.2
-draftjs-exporter==2.1.7
+draftjs-exporter==5.0.0
 et-xmlfile==1.1.0
 Faker==17.6.0
 filelock==3.10.0
@@ -52,6 +52,7 @@ isort==5.12.0
 Jinja2==3.1.2
 jinja2-time==0.2.0
 l18n==2021.3
+loguricorn==0.1.0
 loguru==0.6.0
 Markdown==3.4.1
 MarkupSafe==2.1.2
