@@ -285,8 +285,8 @@ LOGGING = {
 }
 
 LOGGING_FORMAT = (
-    "<fg #26FFDF><bg #011C26>[bfportal]</></> <green> "
-    "[{time:DD/MM/YY HH:mm:ss}]</green> "
+    "<fg #26FFDF><bg #011C26>[bfportal]</></> "
+    "<green>[{time:DD/MM/YY HH:mm:ss}]</green> <d>[{name}:{function}:{line}]</d> "
     "<level>[{level}] {message}</level>"
 )
 
