@@ -14,6 +14,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 import platform
 
+from loguricorn.intercept import InterceptHandler
+
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
@@ -258,3 +260,44 @@ MARKDOWNIFY_WHITELIST_ATTRS = [
     "alt",
     "class",
 ]
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "intercept": {
+            "()": InterceptHandler,
+            "level": 0,
+        },
+    },
+    "root": {
+        "handlers": ["intercept"],
+        "level": "INFO",
+        "propagate": False,
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["intercept"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+}
+
+LOGGING_FORMAT = (
+    "<fg #26FFDF><bg #011C26>[bfportal]</></> <green> "
+    "[{time:DD/MM/YY HH:mm:ss}]</green> "
+    "<level>[{level}] {message}</level>"
+)
+
+
+def setup_logging():
+    """Setup logging for the entire project."""
+    import sys
+
+    from loguru import logger
+
+    logger.remove()
+    logger.add(
+        sys.stdout, colorize=True, level="INFO", backtrace=True, format=LOGGING_FORMAT
+    )
