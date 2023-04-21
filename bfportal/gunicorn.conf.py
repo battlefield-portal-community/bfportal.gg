@@ -1,27 +1,20 @@
-import sys
-
 from dotenv import load_dotenv
 
 load_dotenv()
-from loguru import logger  # noqa: E402
 
-logger.remove()
-logger.add(
-    sys.stderr,
-    colorize=True,
-    format="<fg #26FFDF><bg #011C26>[bfportal]</></> "
-    "<green>[{time:DD/MM/YY HH:mm:ss}]</green> "
-    "<level>[{level}] {message}</level>",
-)
+from bfportal.settings.base import setup_logging  # noqa: E402
+
+setup_logging()
 
 logger_class = "loguricorn.Logger"
 
 bind = "127.0.0.1:8000"
-reload = True
+reload = False
 timeout = 30
 errorlog = "-"
 loglevel = "info"
 wsgi_app = "bfportal.wsgi:application"
+capture_output = True
 
 
 def when_ready(server):
