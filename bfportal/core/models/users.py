@@ -87,7 +87,11 @@ class Profile(models.Model):
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
         """Called when a user data is updated"""
-        instance.profile.save()
+        if (
+            profile := getattr(instance, "profile", None)
+        ) is None:  # is case a user with no profile tries to log in.
+            profile = Profile.objects.create(user=instance)
+        profile.save()
 
 
 class ProfilePage(RoutablePageMixin, CustomBasePage):
