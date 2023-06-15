@@ -1,25 +1,37 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}{% trans "successful" %}{% endblock %}
+{% block title %}
+    {{ exp_name | title | truncatechars:20 }}
+    {% if after_edit %}
+        Saved
+    {% else %}
+        Submitted
+    {% endif %}
+
+    {% endblock %}
 
 {% block content %}
-    <div class="absolute table text-white h-[90%] w-full left-0 top-0">
+    <div class="absolute table text-white h-[90%] w-full left-0 top-0 select-none">
         <div class="table-cell align-middle">
-                <div class="flex flex-col text-center mx-auto gap-y-4 w-max bg-card-bg p-4 rounded-xl divider divide-y divide-bf2042-3 drop-shadow-hover-bg-light-lg transition hover:drop-shadow-bf2042-3-lg duration-300 ease-in-out">
-                    <div class="text-xl pt-4">
+                <div class="flex flex-col items-center mx-auto gap-y-6 w-max bg-card-bg p-4 rounded-xl">
+                    <div class="text-xl pt-4 flex flex-col items-center gap-y-4">
+                        <span class="text-5xl text-white font-bold"> {{ exp_name | title }} </span>
                         {% if after_edit %}
-                            {{ exp_name }} {% trans "'s Changes submitted for moderation" %}
+                            <span class="text-sm text-bf2042-4 font-medium">Your <span class="text-bf2042-6">edits</span> have been saved and sent to moderation for approval</span>
                         {% else %}
-                            {{ exp_name }} {% trans "Submited Successfully for moderation" %}
+                            <span class="text-sm text-bf2042-4 font-medium">Your experience has been successfully sent to moderation and is waiting for approval</span>
                         {% endif %}
-
                     </div>
-                    <div class="">
+                    <div class="flex flex-row gap-x-4">
                         <a href="/">
-                            <button class="mt-4 p-4 bg-hover-bg-light rounded-xl hover:drop-shadow-bf2042-2 transition duration-100 ease-in-out" type="submit">{% trans 'Back To Home' %}</button>
+                            <button class="px-4 py-2 rounded-lg bg-white text-bf2042-1 text-lg font-bold" type="submit">{% trans 'Back To Home' %}</button>
+                        </a>
+                        <a href="/submit">
+                            <button class="px-4 py-2 rounded-lg bg-bf2042-4 text-bf2042-1 text-lg font-bold" type="submit">{% trans 'Submit another' %}</button>
                         </a>
                     </div>
+                    <p>Join our <a class="text-bf2042-4 font-bold" href="https://discord.bfportal.gg/" target="_blank">Discord</a> for more</p>
             </div>
         </div>
     </div>
