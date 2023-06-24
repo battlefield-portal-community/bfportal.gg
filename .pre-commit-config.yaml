@@ -31,6 +31,6 @@ repos:
           - flake8-docstrings~=1.6.0
 
   - repo: https://github.com/p0lygun/commit-msg-validator
-    rev: v1.1.0
+    rev: v1.2.0
     hooks:
       - id: check-commit-msg
