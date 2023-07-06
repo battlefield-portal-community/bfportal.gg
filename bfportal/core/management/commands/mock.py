@@ -18,12 +18,13 @@ class Command(BaseCommand):
     help = "Generates fake data"
 
     def add_arguments(self, parser):  # noqa: D102
-        parser.add_argument("no_of_pages", metavar="N", type=int, nargs="+")
-        # Named (optional) arguments
         parser.add_argument(
-            "--generate",
-            action="store_true",
-            help="Generates Fake Data",
+            "-e",
+            "--experiences",
+            type=int,
+            help="Generates Fake Experience pages",
+            nargs="?",
+            const=50,
         )
 
     def handle(self, *args, **options):
@@ -46,7 +47,7 @@ class Command(BaseCommand):
             "MP_Drained": "https://eaassets-a.akamaihd.net/battlelog/battlebinary/gamedata/kingston/d7/5f/Map_Art_BF2042_DRA_L-d75f98a0.png",  # noqa: E501
         }
         map_images = list(map_images.values())
-        if options["generate"]:
+        if options.get("experiences", False):
             factory = Faker()
             cats = ExperiencesCategory.objects.all()
             owner = [
