@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("wagtailsvg", "0004_remove_svg_edit_code"),
         ("core", "0041_alter_experiencepage_cover_img_url"),

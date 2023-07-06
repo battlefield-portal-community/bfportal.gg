@@ -14,7 +14,6 @@ from loguru import logger
 
 if TYPE_CHECKING:
     from .categories import SubCategory
-    from .experience import ExperiencePage
 
 
 def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
@@ -61,14 +60,12 @@ def apply_filters(request: HttpRequest, posts: models.query.QuerySet):
 
     if category := request.GET.getlist("category", None):
         category = list(map(str.lower, category))
-        post: ExperiencePage
         all_posts = all_posts.filter(
             reduce(operator.or_, (Q(category__name__iexact=cat) for cat in category))
         )
     if sub_cats := request.GET.getlist("sub_cat", None):
         sub_cats: [SubCategory, ...]
         sub_cats = list(map(str.lower, sub_cats))
-        post: ExperiencePage
         all_posts = all_posts.filter(
             reduce(
                 operator.or_, (Q(sub_categories__name__iexact=cat) for cat in sub_cats)
