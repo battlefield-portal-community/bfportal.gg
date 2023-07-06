@@ -55,7 +55,10 @@ class Command(BaseCommand):
             ]
             tags = get_tags_from_gt_api()
             experiences_page = ExperiencesPage.objects.first()
-            page_count = options.get("no_of_pages", [0])[0]
+            page_count = options.get("experiences")
+            self.stdout.write(
+                f"Generating {page_count} Experience Pages, this may take a while..."
+            )
             logger.critical("delete all Experience Pages [y/n] ")
             exp_pages = ExperiencePage.objects.all()
             if input().lower() == "y":
