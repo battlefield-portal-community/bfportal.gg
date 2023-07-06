@@ -5,6 +5,8 @@ services:
   db:
     image: postgres:14
     restart: always
+    profiles:
+      - production
     volumes:
       - postgress_db:/var/lib/postgresql/data
 
@@ -24,6 +26,8 @@ services:
     restart: always
     command: bash -c "python manage.py migrate --noinput && python manage.py ensure_superuser --username bfportal --email superuser@bfportal.com --password '${SU_PASSWD}' &&  python manage.py ensure_initialization && gunicorn --workers 4 --bind 0.0.0.0:${PRODUCTION_PORT}"
     user: "33:33"
+    profiles:
+      - production
     ports:
       - "${PRODUCTION_PORT}:${PRODUCTION_PORT}"
     volumes:
@@ -58,6 +62,8 @@ services:
   db_devel:
     image: postgres:14
     restart: always
+    profiles:
+      - dev
     volumes:
       - postgress_db_devel:/var/lib/postgresql/data
 
@@ -77,6 +83,8 @@ services:
     restart: always
     command: bash -c "python manage.py migrate --noinput && python manage.py ensure_superuser --username bfportal --email superuser@bfportal.com --password '${SU_PASSWD}' &&  python manage.py ensure_initialization && gunicorn --workers 4 --bind 0.0.0.0:${DEVEL_PORT}"
     user: "33:33"
+    profiles:
+      - dev
     ports:
       - "${DEVEL_PORT}:${DEVEL_PORT}"
     volumes:
@@ -109,6 +117,58 @@ services:
       retries: 3
       start_period: "5s"
 
+  db_dev_local:
+    image: postgres:14
+    restart: always
+    volumes:
+      - postgress_db_dev_local:/var/lib/postgresql/data
+    profiles:
+      - dev_local
+    environment:
+      - POSTGRES_NAME=${DB_NAME}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: "10s"
+      timeout: "5s"
+      retries: 5
+      start_period: "10s"
+
+  bfportal_dev_local:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    restart: always
+    command: bash -c "python manage.py migrate --noinput && python manage.py ensure_superuser --username bfportal --email superuser@bfportal.com --password 1234 &&  python manage.py ensure_initialization && python manage.py runserver 0.0.0.0:8000"
+    container_name: bfportal_dev_local
+    profiles:
+      - dev_local
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
+      - DISCORD_SECRET=${DISCORD_SECRET}
+      - DB_NAME=${DB_NAME}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_HOST=db_dev_local # takes precedent over .env file
+      - DEBUG=True
+      - APPROVAL_CHANNEL_WEBHOOK_TOKEN=${APPROVAL_CHANNEL_WEBHOOK_TOKEN}
+      - APPROVAL_CHANNEL_WEBHOOK_ID=${APPROVAL_CHANNEL_WEBHOOK_ID}
+      - APPROVAL_SUCCESS_CHANNEL_WEBHOOK_TOKEN=${APPROVAL_SUCCESS_CHANNEL_WEBHOOK_TOKEN}
+      - APPROVAL_SUCCESS_CHANNEL_WEBHOOK_ID=${APPROVAL_SUCCESS_CHANNEL_WEBHOOK_ID}
+      - PRODUCTION_HOST=${PRODUCTION_HOST}
+      - PRODUCTION_PORT=8000
+      - OWNERS=${OWNERS}
+      - DEVEL_PORT=8000
+    depends_on:
+      - db_dev_local
+
 volumes:
   postgress_db_devel:
   postgress_db:
+  postgress_db_dev_local:
