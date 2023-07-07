@@ -38,6 +38,11 @@ class Profile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     liked = models.ManyToManyField(ExperiencePage, blank=True)
+    is_mock_user = models.BooleanField(
+        default=False,
+        null=False,
+        help_text="If set to true, this user was created by the mock command, and is a fake user",
+    )
     hide_username = models.BooleanField(
         default=False,
         null=False,
@@ -81,7 +86,12 @@ class Profile(models.Model):
         if created:
             if (group := Group.objects.filter(name="self edit")).exists():
                 instance.groups.add(group[0])
-            Profile.objects.create(user=instance)
+            new_profile = Profile.objects.create(user=instance)
+            if getattr(instance, "__mock_user", None):
+                # custom object variable that is added in `mock` management command
+                # is not available everywhere, instead use profile.mock_user
+                new_profile.is_mock_user = True
+                new_profile.save()
 
     @staticmethod
     @receiver(post_save, sender=User)
