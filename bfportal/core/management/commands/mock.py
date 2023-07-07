@@ -1,15 +1,18 @@
-import datetime
 import string
+from datetime import datetime
 from random import choice, choices, randint
 from uuid import uuid4
 
+from allauth.socialaccount.models import SocialAccount
 from core.helper import get_tags_from_gt_api
 from core.models import ExperiencePage, ExperiencesCategory, ExperiencesPage
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.management import BaseCommand
 from django.utils.text import slugify
 from faker import Faker
 from loguru import logger
+from snowflake import SnowflakeGenerator
 
 
 class Command(BaseCommand):
@@ -18,6 +21,14 @@ class Command(BaseCommand):
     help = "Generates fake data"
 
     def add_arguments(self, parser):  # noqa: D102
+        parser.add_argument(
+            "-u",
+            "--users",
+            type=int,
+            help="Generates Fake Users",
+            nargs="?",
+            const=50,
+        )
         parser.add_argument(
             "-e",
             "--experiences",
@@ -29,6 +40,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         """Handler for command, handles the generation of data"""
+        if not settings.DEBUG:
+            logger.critical("MOCK COMMAND CAN ONLY BE USED WHEN DEBUG IS SET TO TRUE")
+            return
+
         map_images = {
             "MP_Harbor": "https://eaassets-a.akamaihd.net/battlelog/battlebinary/gamedata/kingston/60/b4/Map_Art_BFBC2_AH_L-60b49760.png",  # noqa: E501
             "MP_LightHouse": "https://eaassets-a.akamaihd.net/battlelog/battlebinary/gamedata/kingston/60/03/Map_Art_BFBC2_VP_L-600385e2.png",  # noqa: E501
@@ -47,7 +62,60 @@ class Command(BaseCommand):
             "MP_Drained": "https://eaassets-a.akamaihd.net/battlelog/battlebinary/gamedata/kingston/d7/5f/Map_Art_BF2042_DRA_L-d75f98a0.png",  # noqa: E501
         }
         map_images = list(map_images.values())
-        if options.get("experiences", False):
+        if number_of_users := options.get("users", False):
+            self.stdout.write(f"Generating {number_of_users} Users")
+            User = get_user_model()
+            snowflake_factory = SnowflakeGenerator(1)  # find what the 1 is for :)
+            Faker.seed("bfportal.gg")  # make sure we get the same data every time
+            faker_factory = Faker()
+            for user in range(number_of_users):
+                username = faker_factory.unique.first_name()
+                # check if user already exists
+                if User.objects.filter(username=username).exists():
+                    self.stdout.write(f"User with {username} exists skipping...")
+                    # todo: discuss if how to handle username collision
+                    # username = username + str(datetime.timestamp(datetime.utcnow()))
+                    # add timestamp to username to make it unique
+                user_attributes = {
+                    "username": username,
+                    "first_name": username,
+                    "last_name": faker_factory.unique.last_name(),
+                    "email": f"{username}@fake.gg",
+                    "password": "fake_user",
+                }
+                socialaccount_extra_data = {
+                    "id": str(next(snowflake_factory)),
+                    "username": username,
+                    "global_name": None,
+                    "display_name": None,
+                    "avatar": None,
+                    "discriminator": "0",
+                    "public_flags": 4194432,
+                    "flags": 4194432,
+                    "banner": None,
+                    "banner_color": "#292b2f",
+                    "accent_color": 2698031,
+                    "locale": "en-US",
+                    "mfa_enabled": faker_factory.pybool(),
+                    "premium_type": 0,
+                    "avatar_decoration": None,
+                    "email": user_attributes["email"],
+                    "verified": faker_factory.pybool(),
+                }
+                user = User(**user_attributes)
+                user._mock_user = True
+                user.save()  # we need to save as user id is required by Allauth
+
+                social_account = SocialAccount()
+                social_account.extra_data = socialaccount_extra_data
+                social_account.user_id = user.id
+                social_account.uid = socialaccount_extra_data["id"]
+                social_account.save()
+
+                user.socialaccount_set.add(social_account)
+                user.save()
+
+        if page_count := options.get("experiences", False):
             factory = Faker()
             cats = ExperiencesCategory.objects.all()
             owner = [
@@ -55,7 +123,6 @@ class Command(BaseCommand):
             ]
             tags = get_tags_from_gt_api()
             experiences_page = ExperiencesPage.objects.first()
-            page_count = options.get("experiences")
             self.stdout.write(
                 f"Generating {page_count} Experience Pages, this may take a while..."
             )
