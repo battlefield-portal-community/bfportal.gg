@@ -52,6 +52,9 @@ class Profile(models.Model):
 
     panels = [FieldPanel("hide_username")]
 
+    def __str__(self):
+        return self.user.username
+
     def autocomplete_label(self):
         """Called by Wagtail auto complete to get label for an account"""
         if not self.user.is_superuser:
@@ -86,12 +89,7 @@ class Profile(models.Model):
         if created:
             if (group := Group.objects.filter(name="self edit")).exists():
                 instance.groups.add(group[0])
-            new_profile = Profile.objects.create(user=instance)
-            if getattr(instance, "__mock_user", None):
-                # custom object variable that is added in `mock` management command
-                # is not available everywhere, instead use profile.mock_user
-                new_profile.is_mock_user = True
-                new_profile.save()
+            Profile.objects.create(user=instance)
 
     @staticmethod
     @receiver(post_save, sender=User)
