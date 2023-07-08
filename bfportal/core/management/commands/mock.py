@@ -217,4 +217,7 @@ class Command(BaseCommand):
                 for user in liked_by:
                     user.profile.add_liked_page(page)
 
+                for user in liked_by[0 : randint(0, 4)]:
+                    page.creators.add(user)
+
                 page.save()
