@@ -127,7 +127,7 @@ class Command(BaseCommand):
                     # todo: discuss if how to handle username collision
                     # username = username + str(datetime.timestamp(datetime.utcnow()))
                     # add timestamp to username to make it unique
-                    return
+                    continue
                 user_attributes = {
                     "username": username,
                     "first_name": username,
