@@ -8,7 +8,7 @@ from django.db import models
 from django.db.models import Count, Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from loguru import logger
@@ -160,7 +160,7 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
                 self.get_context(request, list_experiences=True, user=user),
             )
         else:
-            return HttpResponse("Nope", status=404)
+            return TemplateResponse(request, "404.html", status=404)
 
     @route(r"(\d{18,})/experiences/$", name="discord_id")
     def user_experiences(self, request, discord_id):
