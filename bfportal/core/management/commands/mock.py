@@ -138,8 +138,8 @@ class Command(BaseCommand):
                 socialaccount_extra_data = {
                     "id": str(next(snowflake_factory)),
                     "username": username,
-                    "global_name": None,
-                    "display_name": None,
+                    "global_name": username,
+                    "display_name": f'{user_attributes["first_name"]} {user_attributes["last_name"]}',
                     "avatar": None,
                     "discriminator": "0",
                     "public_flags": 4194432,
