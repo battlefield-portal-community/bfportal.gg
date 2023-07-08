@@ -8,7 +8,7 @@ from django.db import models
 from django.db.models import Count, Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from loguru import logger
@@ -38,6 +38,11 @@ class Profile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     liked = models.ManyToManyField(ExperiencePage, blank=True)
+    is_mock_user = models.BooleanField(
+        default=False,
+        null=False,
+        help_text="If set to true, this user was created by the mock command, and is a fake user",
+    )
     hide_username = models.BooleanField(
         default=False,
         null=False,
@@ -46,6 +51,9 @@ class Profile(models.Model):
     autocomplete_search_field = "user__username"
 
     panels = [FieldPanel("hide_username")]
+
+    def __str__(self):
+        return self.user.username
 
     def autocomplete_label(self):
         """Called by Wagtail auto complete to get label for an account"""
@@ -140,7 +148,7 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
     def root_profile_page(self, request):  # noqa: D102
         return redirect("/")
 
-    @route(r"^(\d{18})/$", name="discord_id")
+    @route(r"^(\d{18,})/$", name="discord_id")
     def profile_page_view(self, request: HttpRequest, discord_id):
         """Serves a profile page for a user ID"""
         user = social_user(discord_id)
@@ -152,9 +160,9 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
                 self.get_context(request, list_experiences=True, user=user),
             )
         else:
-            return HttpResponse("Nope", status=404)
+            return TemplateResponse(request, "404.html", status=404)
 
-    @route(r"(\d{18})/experiences/$", name="discord_id")
+    @route(r"(\d{18,})/experiences/$", name="discord_id")
     def user_experiences(self, request, discord_id):
         """Servers a list of experiences by a user"""
         user = social_user(discord_id=discord_id)
@@ -168,7 +176,7 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
         else:
             return TemplateResponse(request, "404.html", status=404)
 
-    @route(r"(\d{18})/liked/$", name="discord_id")
+    @route(r"(\d{18,})/liked/$", name="discord_id")
     def user_liked_experiences(self, request, discord_id):
         """Servers a list of experiences by a user"""
         user = social_user(discord_id=discord_id)
