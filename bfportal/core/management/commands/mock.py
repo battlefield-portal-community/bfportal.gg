@@ -202,6 +202,9 @@ class Command(BaseCommand):
                 page.tags.add(*choices(tags, k=10)),
 
                 page.is_mock = True
+                page.xp_farm = faker_factory.pybool()
+                page.broken = faker_factory.pybool()
+                page.bugged = faker_factory.pybool()
                 experiences_page.add_child(instance=page)
                 experiences_page.save()
 
