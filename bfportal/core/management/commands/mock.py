@@ -161,6 +161,7 @@ class Command(BaseCommand):
                 user.profile.is_mock_user = True
 
                 social_account = SocialAccount()
+                social_account.provider = "discord"
                 social_account.extra_data = socialaccount_extra_data
                 social_account.user_id = user.id
                 social_account.uid = socialaccount_extra_data["id"]
