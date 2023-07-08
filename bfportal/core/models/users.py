@@ -148,7 +148,7 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
     def root_profile_page(self, request):  # noqa: D102
         return redirect("/")
 
-    @route(r"^(\d{18})/$", name="discord_id")
+    @route(r"^(\d{18,})/$", name="discord_id")
     def profile_page_view(self, request: HttpRequest, discord_id):
         """Serves a profile page for a user ID"""
         user = social_user(discord_id)
@@ -162,7 +162,7 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
         else:
             return HttpResponse("Nope", status=404)
 
-    @route(r"(\d{18})/experiences/$", name="discord_id")
+    @route(r"(\d{18,})/experiences/$", name="discord_id")
     def user_experiences(self, request, discord_id):
         """Servers a list of experiences by a user"""
         user = social_user(discord_id=discord_id)
@@ -176,7 +176,7 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
         else:
             return TemplateResponse(request, "404.html", status=404)
 
-    @route(r"(\d{18})/liked/$", name="discord_id")
+    @route(r"(\d{18,})/liked/$", name="discord_id")
     def user_liked_experiences(self, request, discord_id):
         """Servers a list of experiences by a user"""
         user = social_user(discord_id=discord_id)
