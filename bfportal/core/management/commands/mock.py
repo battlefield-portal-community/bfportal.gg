@@ -124,7 +124,7 @@ class Command(BaseCommand):
                 # check if user already exists
                 if User.objects.filter(username=username).exists():
                     self.stdout.write(f"User {username} exists skipping...")
-                    # todo: discuss if how to handle username collision
+                    # todo: discuss how to handle username collision
                     # username = username + str(datetime.timestamp(datetime.utcnow()))
                     # add timestamp to username to make it unique
                     continue

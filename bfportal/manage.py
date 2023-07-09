@@ -13,9 +13,9 @@ setup_logging()
 
 if __name__ == "__main__":
     with warnings.catch_warnings():
-        from wagtail.utils.deprecation import RemovedInWagtail50Warning
-
-        warnings.filterwarnings("ignore", category=RemovedInWagtail50Warning)
+        # from wagtail.utils.deprecation import RemovedInWagtail60Warning
+        #
+        # # warnings.filterwarnings("ignore", category=RemovedInWagtail50Warning)
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bfportal.settings.dev")
         from django.core.management import execute_from_command_line
 
