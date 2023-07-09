@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("wagtailcore", "0077_alter_revision_user"),
         ("wagtailredirects", "0008_add_verbose_name_plural"),

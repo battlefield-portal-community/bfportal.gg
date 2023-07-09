@@ -28,7 +28,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
     "core",
-    "factory",
+    "wagtail",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     "wagtail.images",
     "wagtail.search",
     "wagtail.admin",
-    "wagtail.core",
     "wagtail.contrib.routable_page",
     "wagtail.api.v2",
     "wagtail_color_panel",

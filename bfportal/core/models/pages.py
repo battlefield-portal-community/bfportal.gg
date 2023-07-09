@@ -7,9 +7,9 @@ from django.apps import apps
 from django.db import models
 from django.template.response import TemplateResponse
 from loguru import logger
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel, StreamFieldPanel
+from wagtail import blocks
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, path, route
-from wagtail.core import blocks
 from wagtail.fields import StreamField
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.models import Page
@@ -39,7 +39,7 @@ class CustomBasePage(Page):
     Require to expose ExtraContent to all child pages
     """
 
-    extra_content = StreamField(ExtraContent(), blank=True)
+    extra_content = StreamField(ExtraContent(), blank=True, use_json_field=True)
     meta_title = models.CharField(
         blank=True,
         null=True,
@@ -59,7 +59,7 @@ class CustomBasePage(Page):
     )
 
     content_panels = Page.content_panels + [
-        StreamFieldPanel(
+        FieldPanel(
             "extra_content",
             classname="collapsed",
         )

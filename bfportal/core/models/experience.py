@@ -182,6 +182,9 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
     )
 
     allow_editing = models.BooleanField(default=False, null=False)
+    is_mock = models.BooleanField(
+        default=False, null=False, help_text="Is this a mock experience ?"
+    )
 
     content_panels = (
         Page.content_panels

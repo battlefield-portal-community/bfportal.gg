@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("wagtailforms", "0004_add_verbose_name_plural"),
         ("wagtailcore", "0066_collection_management_permissions"),
