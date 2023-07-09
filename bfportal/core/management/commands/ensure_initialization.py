@@ -10,7 +10,7 @@ from core.models import (
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 from loguru import logger
-from wagtail.core.models import Page, Site
+from wagtail.models import Page, Site
 
 
 class Command(BaseCommand):

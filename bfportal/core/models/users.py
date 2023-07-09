@@ -12,7 +12,7 @@ from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from loguru import logger
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.panels import FieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 
 from bfportal.settings.base import LOGIN_URL

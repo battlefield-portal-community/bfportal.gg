@@ -27,10 +27,10 @@ def init_wsgi():
     with warnings.catch_warnings():
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bfportal.settings.production")
         from django.core.wsgi import get_wsgi_application
-        from wagtail.utils.deprecation import RemovedInWagtail50Warning
+        from wagtail.utils.deprecation import RemovedInWagtail60Warning
 
         warnings.filterwarnings(
-            "ignore", category=RemovedInWagtail50Warning
+            "ignore", category=RemovedInWagtail60Warning
         )  # supress only wagtail warnings
         application = get_wsgi_application()
 
