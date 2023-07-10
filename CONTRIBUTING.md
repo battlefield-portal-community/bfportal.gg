@@ -33,7 +33,7 @@ If you already have experience with django/wagtail, understanding the backend wi
 
 
 - ### Python
-    -  Refer to [readme.md](/readme.md#how-to-run-locally)
+    -  Refer to [readme.md](/README.md#how-to-run-locally)
     -  install pre-commit checks by running (**make sure the Virtual Enviroment is activated !!**)
         ```
         pre-commit install
