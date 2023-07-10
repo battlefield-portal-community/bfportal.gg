@@ -32,6 +32,7 @@ RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-r
     libjpeg62-turbo-dev \
     zlib1g-dev \
     libwebp-dev \
+    curl \
 && rm -rf /var/lib/apt/lists/*
 # Set environment variables.
 # 1. Force Python stdout and stderr streams to be unbuffered.
@@ -46,14 +47,18 @@ ENV PYTHONUNBUFFERED=1 \
 ENV PATH="${VIRTUAL_ENV}/bin:${PATH}:/home/wagtail/.local/bin"
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
-# Copy the source code of the project into the container.
-COPY ./bfportal ./
 
-FROM dev as final
 COPY --chown=wagtail:wagtail --from=node_base /usr/local/bin /usr/local/bin
 COPY --chown=wagtail:wagtail --from=node_base /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/npm
+RUN chown -R wagtail:wagtail /app
+COPY --chown=wagtail:wagtail ["package.json", "package-lock.json", "tailwind.config.js", "./"]
+RUN npm install
 
-ENV NPM_BIN_PATH = "/usr/local/bin/npm"
-RUN python manage.py tailwind install --no-input;
-RUN python manage.py tailwind build --no-input
-RUN python manage.py collectstatic --noinput --clear
+
+# Copy the source code of the project into the container.
+COPY --chown=wagtail:wagtail ./bfportal ./
+
+FROM dev as final
+USER wagtail
+RUN npx tailwindcss -i ./bfportal/static/src/styles.css  -o ./bfportal/static/css/bfportal.css --minify
+RUN python manage.py collectstatic --noinput --clear  -i css/src/*

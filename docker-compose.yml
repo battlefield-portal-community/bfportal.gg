@@ -165,8 +165,33 @@ services:
       - PRODUCTION_PORT=8000
       - OWNERS=${OWNERS}
       - DEVEL_PORT=8000
+    healthcheck:
+      test: curl -fk http://0.0.0.0:8000/api/experiences || exit 1
+      interval: "10s"
+      timeout: "5s"
+      retries: 5
+      start_period: "10s"
     depends_on:
       - db_dev_local
+
+  bfportal_dev_local_tailwind:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    command: npx tailwindcss -i ./bfportal/static/src/styles.css  -o ./bfportal/static/css/bfportal.css --watch
+    restart: always
+    container_name: bfportal_dev_local_tailwind
+    profiles:
+      - dev_local
+    volumes:
+      - ./bfportal/bfportal:/app/bfportal
+      - ./bfportal/core:/app/core
+    depends_on:
+      bfportal_dev_local:
+        condition: service_healthy
+    stdin_open: true
+
 
 volumes:
   postgress_db_devel:
