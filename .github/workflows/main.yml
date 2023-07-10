@@ -36,7 +36,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ env.BRANCH_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ env.BRANCH_NAME }}:latest
           # ghcr.io/battlefield-portal-community/bfportal.gg/production:latest
 
       - name: Set up Docker Buildx
@@ -49,3 +49,5 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
