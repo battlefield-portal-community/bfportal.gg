@@ -61,4 +61,4 @@ COPY --chown=wagtail:wagtail ./bfportal ./
 FROM dev as final
 USER wagtail
 RUN npx tailwindcss -i ./bfportal/static/src/styles.css  -o ./bfportal/static/css/bfportal.css --minify
-RUN python manage.py collectstatic --noinput --clear  -i css/src/*
+RUN python manage.py collectstatic --noinput --clear  -i static/src/*
