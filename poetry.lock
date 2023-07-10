@@ -537,13 +537,13 @@ tags = ["django-taggit"]
 
 [[package]]
 name = "django-browser-reload"
-version = "1.10.0"
+version = "1.11.0"
 description = "Automatically reload your browser in development."
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "django_browser_reload-1.10.0-py3-none-any.whl", hash = "sha256:a4c72ad7e7c670ce15d9c8e8f649d47c661fd1de383f3e5a0cd9da613b439364"},
-    {file = "django_browser_reload-1.10.0.tar.gz", hash = "sha256:7528891a2d231e9fa6b04575154e636d099b03480cd75c571aad97c3c5b9d9b9"},
+    {file = "django_browser_reload-1.11.0-py3-none-any.whl", hash = "sha256:ce9576bd31562fda01dd8fca73e07696a9a1c7138d2aee084abfb7315dc633a4"},
+    {file = "django_browser_reload-1.11.0.tar.gz", hash = "sha256:fe232478a58e9e5d8b703537651d5a76b017d2208d1da5dfbe013937b5cca065"},
 ]
 
 [package.dependencies]
@@ -1819,4 +1819,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "b7625df484fb93b7cd3e0646f6225bada7b828e0f960dc489ee04d7f1d86bf10"
+content-hash = "296b60a6dac3ae97d9f24c1a18955bea199b24e4151a6046e57da67e7727daca"
