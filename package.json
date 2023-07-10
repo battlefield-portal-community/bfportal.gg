@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "tailwindcss": "^3.3.2"
+  },
+  "dependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/forms": "^0.5.3",
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "@tailwindcss/typography": "^0.5.9"
+  },
+  "scripts": {
+    "watch": "npx tailwindcss -i bfportal/bfportal/static/src/styles.css  -o bfportal/bfportal/static/css/bfportal.css --watch",
+    "build": "npx tailwindcss -i bfportal/bfportal/static/src/styles.css  -o bfportal/bfportal/static/css/bfportal.css --minify"
+  }
+}
