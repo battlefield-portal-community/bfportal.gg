@@ -37,8 +37,9 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ env.BRANCH_NAME }}
-          flavor: |
-            latest=true
+          tags: |
+            type=raw,value=latest,enable=true
+          # mark all as latest
           # ghcr.io/battlefield-portal-community/bfportal.gg/production:latest
 
       - name: Set up Docker Buildx
