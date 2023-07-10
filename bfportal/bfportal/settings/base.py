@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import platform
 
 from loguricorn.intercept import InterceptHandler
 
@@ -56,8 +55,6 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.discord",
-    "tailwind",
-    "theme",
     "django_browser_reload",
     "widget_tweaks",
     "embed_video",
@@ -70,10 +67,6 @@ INSTALLED_APPS = [
 ]
 
 SITE_ID = 1
-TAILWIND_APP_NAME = "theme"
-if platform.system() == "Windows":
-    # todo instead of this; check if npm is installed or not
-    NPM_BIN_PATH = r"D:\Program Files\nodejs\npm.cmd"
 SOCIALACCOUNT_PROVIDERS = {
     "discord": {
         "APP": {
