@@ -179,19 +179,17 @@ services:
       context: .
       dockerfile: Dockerfile
       target: dev
-    command: npx tailwindcss -i ./bfportal/static/src/styles.css  -o ./bfportal/static/css/bfportal.css --watch
+    command: npm run watch
     restart: always
     container_name: bfportal_dev_local_tailwind
     profiles:
       - dev_local
     volumes:
-      - ./bfportal/bfportal:/app/bfportal
-      - ./bfportal/core:/app/core
+      - ./bfportal:/app
     depends_on:
       bfportal_dev_local:
         condition: service_healthy
     stdin_open: true
-
 
 volumes:
   postgress_db_devel:

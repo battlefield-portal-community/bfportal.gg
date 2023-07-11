@@ -10,8 +10,9 @@ module.exports = {
         /**
          * HTML. Paths to Django template files that will contain Tailwind CSS classes.
          */
-        'bfportal/**/templates/**/*.html',
-        'bfportal/**/static/js/*.js',
+        './**/templates/**/*.html',
+        './**/templates/**/**/*.html',
+        './**/static/js/*.js',
     ],
     theme: {
         extend: {

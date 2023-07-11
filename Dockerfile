@@ -50,15 +50,15 @@ COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
 COPY --chown=wagtail:wagtail --from=node_base /usr/local/bin /usr/local/bin
 COPY --chown=wagtail:wagtail --from=node_base /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/npm
+COPY ./bfportal ./
 RUN chown -R wagtail:wagtail /app
-COPY --chown=wagtail:wagtail ["package.json", "package-lock.json", "tailwind.config.js", "./"]
+USER wagtail
 RUN npm install
 
 
 # Copy the source code of the project into the container.
-COPY --chown=wagtail:wagtail ./bfportal ./
 
 FROM dev as final
-USER wagtail
+
 RUN npx tailwindcss -i ./bfportal/static/src/styles.css  -o ./bfportal/static/css/bfportal.css --minify
 RUN python manage.py collectstatic --noinput --clear  -i static/src/*

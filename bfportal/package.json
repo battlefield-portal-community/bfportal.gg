@@ -9,7 +9,7 @@
     "@tailwindcss/typography": "^0.5.9"
   },
   "scripts": {
-    "watch": "npx tailwindcss -i bfportal/bfportal/static/src/styles.css  -o bfportal/bfportal/static/css/bfportal.css --watch",
-    "build": "npx tailwindcss -i bfportal/bfportal/static/src/styles.css  -o bfportal/bfportal/static/css/bfportal.css --minify"
+    "watch": "npx tailwindcss -i ./bfportal/static/src/styles.css  -o ./bfportal/static/css/bfportal.css --watch",
+    "build": "npx tailwindcss -i ./bfportal/static/src/styles.css  -o ./bfportal/static/css/bfportal.css --minify"
   }
 }
