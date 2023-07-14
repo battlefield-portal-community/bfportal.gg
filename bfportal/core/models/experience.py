@@ -5,10 +5,12 @@ from core.models.helper import pagination_wrapper
 from core.models.pages import CustomBasePage
 from django import forms
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
+from django.utils.translation import gettext_lazy as _
 from embed_video.fields import EmbedVideoField
 from loguru import logger
 from markdownx.models import MarkdownxField
@@ -177,6 +179,11 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         null=False,
         help_text="Is the experience a variant of some other experience?",
     )
+    variants = ParentalManyToManyField(
+        "core.ExperiencePage",
+        blank=True,
+        help_text="Variants of this experience",
+    )
 
     liked_by = models.ManyToManyField("core.Profile", blank=True)
 
@@ -199,7 +206,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
                     FieldPanel("trending", classname="full", permission="superuser"),
                     *[
                         FieldPanel(field, classname="full", permission="superuser")
-                        for field in ["bugged", "broken", "xp_farm"]
+                        for field in ["bugged", "broken", "xp_farm", "is_variant"]
                     ],
                 ],
                 heading="Admin only",
@@ -255,9 +262,23 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
                 )
                 for field in ["bugged", "broken", "xp_farm"]
             ],
+            AutocompletePanel(
+                "variants",
+                target_model="core.ExperiencePage",
+                classname="full collapsed",
+            ),
         ]
         + [CustomBasePage.content_panels[-1]]
     )
+
+    def clean(self):
+        """Validate the page. in ModelAdmin"""
+        if main_pages := self.variants.all().filter(is_variant=False):
+            page_list = [page.title for page in main_pages]
+            raise ValidationError(
+                _(" Can not add non variant pages to main experience ")
+                + f"{page_list}",
+            )
 
     @property
     def like_count(self):
