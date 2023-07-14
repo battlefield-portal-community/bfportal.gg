@@ -287,7 +287,12 @@ def setup_logging():
 
     from loguru import logger
 
+    log_level = "DEBUG" if os.getenv("DEBUG") else "INFO"
     logger.remove()
     logger.add(
-        sys.stdout, colorize=True, level="INFO", backtrace=True, format=LOGGING_FORMAT
+        sys.stdout,
+        colorize=True,
+        level=log_level,
+        backtrace=True,
+        format=LOGGING_FORMAT,
     )
