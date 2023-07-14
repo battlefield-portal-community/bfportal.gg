@@ -52,12 +52,17 @@
                                 </div>
                             </div>
                             {% endwith %}
+
                             <!-- Variants Count -->
-                            <div class="absolute bg-bf2042-4 top-0 w-full flex justify-center rounded-t-lg py-0.5">
-                                <a href="#" class="text-xs font-medium text-black">
-                                    5 Variants Available <!-- todo: connect to backend -->
-                                </a>
-                            </div>
+                            {% with post.variants.all as variants  %}
+                                {% if variants|length %}
+                                    <div class="absolute bg-bf2042-4 top-0 w-full flex justify-center rounded-t-lg py-0.5">
+                                        <a href="#" class="text-xs font-medium text-black">
+                                            {% if variants|length > 1 %} {{ variants|length }} {% endif %} Variant{{ variants|pluralize }} Available
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
                         </div>
                     </div>
                     <!-- info -->
