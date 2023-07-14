@@ -172,8 +172,11 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         help_text="People who have reported this is exp an xp farm",
         related_name="xp_farm_report",
     )
-
-    first_publish = models.BooleanField(default=True, null=False)
+    is_variant = models.BooleanField(
+        default=False,
+        null=False,
+        help_text="Is the experience a variant of some other experience?",
+    )
 
     liked_by = models.ManyToManyField("core.Profile", blank=True)
 
@@ -181,6 +184,7 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         "auth.User", blank=True, help_text="choose creators"
     )
 
+    first_publish = models.BooleanField(default=True, null=False)
     allow_editing = models.BooleanField(default=False, null=False)
     is_mock = models.BooleanField(
         default=False, null=False, help_text="Is this a mock experience ?"
