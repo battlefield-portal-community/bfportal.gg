@@ -21,8 +21,6 @@
                                         onerror='if(this.src !== "{% static "images/placeholder.png" %}") this.src="{% static "images/placeholder.png"%}";'
                                 />
                             </div>
-                            <!-- like count -->
-                            {% with post.liked_by.all|length as like_count %}
                             {% if post.bugged or post.broken or post.xp_farm %}
                                 <div data-card_error_container="{{ post.id }}" class="absolute bottom-0 inset-x-0 w-full h-7 {% if post.bugged %}bg-[#9c8b2e]/[.95]{% else %}bg-[#881e14]/[.95]{% endif %}"></div>
 
@@ -39,6 +37,7 @@
                                     </p>
                                 </div>
                             {% endif %}
+                            {% with post.liked_by.all|length as like_count %} <!-- like count -->
                             <div like_count_container="{{ post.id }}" class="absolute bottom-0 h-7 bg-transparent right-0 w-min-14 text-white text-sm clickable" onclick="add_to_liked(this)">
                                 <div class="flex flex-row w-full h-full items-center relative bg-card-bg group-hover:bg-bg-default px-1 transition duration-200">
                                     <span class="absolute right-[99%] fav-container w-4 h-8 -bottom-1 bg-card-bg group-hover:bg-bg-default transition duration-200"></span>
@@ -53,6 +52,8 @@
                                 </div>
                             </div>
                             {% endwith %}
+                            <!-- Variants Count -->
+
                         </div>
                     </div>
                     <!-- info -->
