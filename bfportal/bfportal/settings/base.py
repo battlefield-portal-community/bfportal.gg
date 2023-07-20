@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     "wagtailautocomplete",
     "ajax_select",
     "markdownx",
+    "generic_chooser",
 ]
 
 SITE_ID = 1
@@ -189,7 +190,7 @@ STATIC_URL = "/static/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
-
+WAGTAILSVG_UPLOAD_FOLDER = "svg"
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = "bfportal"
@@ -289,5 +290,5 @@ def setup_logging():
 
     logger.remove()
     logger.add(
-        sys.stdout, colorize=True, level="INFO", backtrace=True, format=LOGGING_FORMAT
+        sys.stdout, colorize=True, level="DEBUG", backtrace=True, format=LOGGING_FORMAT
     )
