@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
-from .models.categories import BaseCategory, ExperiencesCategory
+from .models.categories import BaseCategory, ExperiencesCategory, SubCategory
+
+__all__ = ["ExperiencesCategorySerializer", "SubCategoryCategorySerializer"]
 
 
 class BaseCategorySerializer(serializers.ModelSerializer):
@@ -16,4 +18,12 @@ class ExperiencesCategorySerializer(BaseCategorySerializer):
 
     class Meta:
         model = ExperiencesCategory
+        exclude = BaseCategorySerializer.Meta.exclude
+
+
+class SubCategoryCategorySerializer(BaseCategorySerializer):
+    """Serializer for SubCategory."""
+
+    class Meta:
+        model = SubCategory
         exclude = BaseCategorySerializer.Meta.exclude

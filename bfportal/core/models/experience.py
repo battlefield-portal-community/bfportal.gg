@@ -273,7 +273,10 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         APIField("no_players"),
         APIField("no_bots"),
         APIField("category", serializer=serializers.ExperiencesCategorySerializer()),
-        APIField("sub_categories"),
+        APIField(
+            "sub_categories",
+            serializer=serializers.SubCategoryCategorySerializer(many=True),
+        ),
         APIField("bugged"),
         APIField("broken"),
         APIField("xp_farm"),
