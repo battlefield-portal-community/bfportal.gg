@@ -17,6 +17,7 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 
 from bfportal.settings.base import LOGIN_URL
 
+from ..helper import user_to_api_response
 from .experience import ExperiencePage
 from .helper import pagination_wrapper
 from .pages import CustomBasePage
@@ -53,18 +54,23 @@ class Profile(models.Model):
     panels = [FieldPanel("hide_username")]
 
     def __str__(self):
-        return self.user.username
+        return self.autocomplete_label()
+
+    def username(self):
+        """Username of the user associated with this profile"""
+        return user_to_api_response(self.user)["username"]
+
+    def uid(self):
+        """Returns uid (discord id) of the user associated with this profile"""
+        return user_to_api_response(self.user)["id"]
 
     def autocomplete_label(self):
         """Called by Wagtail auto complete to get label for an account"""
         if not self.user.is_superuser:
             discord_data = self.user.socialaccount_set.extra().first().extra_data
-            if len(discord_data.get("username", "")):
-                return f"{discord_data['username']}#{discord_data['discriminator']} : {discord_data['id']}"
-            else:
-                return str(self.user)
-        else:
-            return str(self.user)
+            if username := discord_data.get("username", None):
+                return f"{username}:{discord_data['id']}"
+        return str(self.user)
 
     def add_liked_page(self, experience_page: ExperiencePage):
         """Adds a ExperiencePage to `self.liked`, and adds self to `ExperiencePage.liked_by`
