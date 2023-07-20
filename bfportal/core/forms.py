@@ -54,6 +54,8 @@ class ExperiencePageForm(forms.ModelForm):
             "creators",
             "tags",
             "allow_editing",
+            "is_variant",
+            "variants",
         ]
         error_messages = {"category": {"required": "Select at least one category"}}
 
@@ -62,8 +64,9 @@ class ExperiencePageForm(forms.ModelForm):
         "exp_url",
         "code",
         "title",
+        "is_variant",
         "description",
-        "creators",
+        "variants" "creators",
         "tags",
         "no_players",
         "no_bots",
