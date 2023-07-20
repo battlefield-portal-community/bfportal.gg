@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models.categories import BaseCategory, ExperiencesCategory, SubCategory
+from ..models.categories import BaseCategory, ExperiencesCategory, SubCategory
 
 __all__ = ["ExperiencesCategorySerializer", "SubCategoryCategorySerializer"]
 
