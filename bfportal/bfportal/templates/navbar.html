@@ -1,138 +1,166 @@
 {% load static wagtailcore_tags socialaccount %}
 {% with is_super_user=request.user.is_superuser %}
-{% if is_super_user %}
-<div class="sticky top-0 w-full z-[1] h-10 bg-bf2042-4 font-bold text-center py-2 "><p class="text-bf2042-1">LOGGED IN AS SUPERUSER :- {{ request.user|upper }}</p></div>
-{% endif %}
-<nav id="navBar" class="sticky relative {%if is_super_user %} top-[2.5rem] {% else %} top-0 {% endif %} z-[1] bg-bg-default flex h-16 items-center w-full gap-x-12 px-8 py-4">
-    <a href="/">
-                <img class="fill-current h-8 w-48 mr-2" width="54" height="54"
-                     src="{% static 'images/icon_portal_library_website.png' %}"
-                     alt=""/>
-    </a>
-    <div class="flex flex-grow items-center">
-        <!-- logo and left side -->
-        <div class="hidden text-base md:flex-grow md:flex md:gap-x-8 content-center">
-            <a href="https://docs.bfportal.gg/" target="_blank"
-               class="text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out cursor-alias">
-                Docs
-            </a>
-            <a href="https://gametools.network/"
-               target="_blank"
-               class="cursor-alias text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">
-                Server Browser
-            </a>
-            {% if page.is_experience_page and  page.owner == request.user %}
-                <a href="edit/"
+    {% if is_super_user %}
+        <div class="sticky top-0 w-full z-[1] h-10 bg-bf2042-4 font-bold text-center py-2 "><p class="text-bf2042-1">
+            LOGGED IN AS SUPERUSER : {{ request.user|upper }}</p></div>
+    {% endif %}
+    <nav id="navBar"
+         class="sticky {% if is_super_user %} top-[2.5rem] {% else %} top-0 {% endif %} z-[1] bg-bg-default flex h-16 items-center w-full gap-x-12 px-8 py-4">
+        <a href="/">
+            <img class="fill-current h-8 w-48 mr-2" width="54" height="54"
+                 src="{% static 'images/icon_portal_library_website.png' %}"
+                 alt=""/>
+        </a>
+        <div class="flex flex-grow items-center">
+            <!-- logo and left side -->
+            <div class="hidden text-base md:flex-grow md:flex md:gap-x-8 content-center">
+                <a href="https://docs.bfportal.gg/" target="_blank"
+                   class="text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out cursor-alias">
+                    Docs
+                </a>
+                <a href="https://gametools.network/"
+                   target="_blank"
                    class="cursor-alias text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">
-                    Edit Experience
+                    Server Browser
                 </a>
-            {% endif %}
-            <a href="https://discord.gg/8un9qY5AvV"
-               target="_blank"
-               class="cursor-alias text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">
-                <p id="discord-nav">Discord</p>
-            </a>
-
-            {% block extend_navbar %}
-
-            {% endblock %}
-        </div>
-        {% if not no_login %}
-            <div class="hidden md:flex flex-grow justify-end items-center gap-x-8">
-            <a href="/submit/"
-               class="cursor-pointer text-bf2042-4 font-bold hover:text-bf2042-3 transition duration-100 ease-in-out">
-                Submit Experience
-            </a>
-            <!-- when logged-in -->
-            {% if request.user.is_authenticated %}
-                {% get_social_accounts user as accounts %}
-                {% if accounts %}
-                    {% with account=accounts.discord.0 %}
-                        <div id="profileButton"
-                             class="profileButton relative group">
-                            <div class="w-7">
-                                {% if account.extra_data.avatar %}
-                                    <img src="{{ account.get_avatar_url }}" class="block rounded-full w-full " alt="@p"/>
-                                {% else %}
-                                    <img src="{% static 'images/default_discord_avatar.png' %}" class="inline rounded-full w-full" alt="@p"/>
-                                {% endif %}
-                            </div>
-                            <div id="accountNavBarDropdown"
-                                 class="dropdown-content flex flex-col text-center text-md font-medium left-1/2 -translate-x-1/2 w-max rounded-lg absolute text-white invisible"> <!--left-12 -->
-                                <div class="flex flex-row justify-center">
-                                    <div class="w-0 h-0 border-x-8 border-b-8 border-solid border-transparent border-b-card-bg"></div>
-                                </div>
-                                <a class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200" href="/users/{{ account.uid }}">Profile</a>
-                                <a class="text-white text-sm py-1 px-2 rounded-b bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200" href="/logout">Logout</a>
-                            </div>
-                        </div>
-                    {% endwith %}
+                {% if page.is_experience_page and  page.owner == request.user %}
+                    <a href="edit/"
+                       class="cursor-alias text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">
+                        Edit Experience
+                    </a>
                 {% endif %}
-            {% else %}
-                <!-- not logged-in -->
-                <a href="{% provider_login_url 'discord' process='login' %}"
-                   class="flex flex-row items-center gap-x-8 text-white  font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">login
-                <img class="p-2.5 py bg-bf2042-4 rounded-full" src="{% static 'svgs/discord_icon.svg' %}" alt="non">
+                <a href="https://discord.gg/8un9qY5AvV"
+                   target="_blank"
+                   class="cursor-alias text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">
+                    <p id="discord-nav">Discord</p>
                 </a>
-            {% endif %}
-        </div>
-        {% endif %}
-        <!-- right side -->
-        <!-- mobile nav pane -->
-        <div class="grow md:hidden">
-            <div id="menuIcon" class="group flex flex-col gap-y-1 ml-auto w-min cursor-pointer md:hidden">
-                <div class="w-4 h-0.5 rounded-lg bg-bf2042-4 group-hover:bg-bf2042-6 transition duration-200 ease-in-out"></div>
-                <div class="w-4 h-0.5 rounded-lg bg-bf2042-4 group-hover:bg-bf2042-6 transition duration-200 ease-in-out"></div>
-                <div class="w-4 h-0.5 rounded-lg bg-bf2042-4 group-hover:bg-bf2042-6 transition duration-200 ease-in-out"></div>
+
+                {% block extend_navbar %}
+
+                {% endblock %}
             </div>
-            <div id="nav-bar-pane" class="hidden flex flex-col absolute bg-card-bg top-full right-0 backdrop-brightness-50 items-center md:hidden">
-                <div class="flex flex-col items-end  text-lg ml-4 mr-2 gap-y-2 mt-2">
-                    <a href="/experiences/"
-                       class="text-white hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
-                        Library
+            <div class="hidden md:flex flex-grow justify-end items-center gap-x-8">
+                <div>
+                    <span id="disclaimer"
+                          onclick="showPopUp('disclaimerPopUp')"
+                          class="cursor-alias text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">Disclaimer</span>
+                </div>
+                {% if not no_login %}
+                    <a href="/submit/"
+                       class="cursor-pointer text-bf2042-4 font-bold hover:text-bf2042-3 transition duration-100 ease-in-out">
+                        Submit Experience
                     </a>
-                    <a href="#"
-                       class="text-white hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px]  border-b-2 border-white">
-                        Docs
-                    </a>
-                    <a href="/experiences/featured"
-                       class="text-white hover:text-bf2042-5  transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
-                        Featured
-                    </a>
-                    {% if not no_login %}
-                        <a href="/submit/"
-                           class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
-                            Submit Experience
-                        </a>
-                    {% endif %}
-                    {% if page.is_experience_page and  page.owner == request.user %}
-                        <a href="edit/"
-                           class="text-white hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
-                            Edit Experience
-                        </a>
-                    {% endif %}
-                    <a href="https://gametools.network/"
-                       target="_blank"
-                       class="cursor-alias lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
-                        Server Browser
-                    </a>
-                    {% if not no_login %}
-                        {% if request.user.is_authenticated %}
-                            {% get_social_accounts user as accounts %}
-                            {% if accounts %}
-                                {% with account=accounts.discord.0 %}
-                                    <a class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white" href="/users/{{ account.uid }}">Profile</a>
-                                    <a class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white" href="/logout/" >Logout</a>
-                                {% endwith %}
-                            {% endif %}
-                        {% else %}
-                            <a href="{% provider_login_url 'discord' process='login' %}"
-                               class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">Login</a>
+                    <!-- when logged-in -->
+                    {% if request.user.is_authenticated %}
+                        {% get_social_accounts user as accounts %}
+                        {% if accounts %}
+                            {% with account=accounts.discord.0 %}
+                                <div id="profileButton"
+                                     class="profileButton relative group">
+                                    <div class="w-7">
+                                        {% if account.extra_data.avatar %}
+                                            <img src="{{ account.get_avatar_url }}" class="block rounded-full w-full "
+                                                 alt="@p"/>
+                                        {% else %}
+                                            <img src="{% static 'images/default_discord_avatar.png' %}"
+                                                 class="inline rounded-full w-full" alt="@p"/>
+                                        {% endif %}
+                                    </div>
+                                    <div id="accountNavBarDropdown"
+                                         class="dropdown-content flex flex-col text-center text-md font-medium left-1/2 -translate-x-1/2 w-max rounded-lg absolute text-white invisible">
+                                        <!--left-12 -->
+                                        <div class="flex flex-row justify-center">
+                                            <div class="w-0 h-0 border-x-8 border-b-8 border-solid border-transparent border-b-card-bg"></div>
+                                        </div>
+                                        <a class="text-white text-sm py-1 px-2 rounded-t bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200"
+                                           href="/users/{{ account.uid }}">Profile</a>
+                                        <a class="text-white text-sm py-1 px-2 rounded-b bg-card-bg hover:bg-hover-bg-light transition ease-in-out duration-200"
+                                           href="/logout">Logout</a>
+                                    </div>
+                                </div>
+                            {% endwith %}
                         {% endif %}
+                    {% else %}
+                        <!-- not logged-in -->
+                        <a href="{% provider_login_url 'discord' process='login' %}"
+                           class="flex flex-row items-center gap-x-8 text-white  font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">login
+                            <img class="p-2.5 py bg-bf2042-4 rounded-full" src="{% static 'svgs/discord_icon.svg' %}"
+                                 alt="non">
+                        </a>
                     {% endif %}
+                {% endif %}
+            </div>
+
+            <!-- right side -->
+            <!-- mobile nav pane -->
+            <div class="grow md:hidden">
+                <div id="menuIcon" class="group flex flex-col gap-y-1 ml-auto w-min cursor-pointer md:hidden">
+                    <div class="w-4 h-0.5 rounded-lg bg-bf2042-4 group-hover:bg-bf2042-6 transition duration-200 ease-in-out"></div>
+                    <div class="w-4 h-0.5 rounded-lg bg-bf2042-4 group-hover:bg-bf2042-6 transition duration-200 ease-in-out"></div>
+                    <div class="w-4 h-0.5 rounded-lg bg-bf2042-4 group-hover:bg-bf2042-6 transition duration-200 ease-in-out"></div>
+                </div>
+                <div id="nav-bar-pane"
+                     class="hidden flex flex-col absolute bg-card-bg top-full right-0 backdrop-brightness-50 items-center md:hidden">
+                    <div class="flex flex-col items-end  text-lg ml-4 mr-2 gap-y-2 mt-2">
+                        <a href="/experiences/"
+                           class="text-white hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
+                            Library
+                        </a>
+                        <a href="#"
+                           class="text-white hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px]  border-b-2 border-white">
+                            Docs
+                        </a>
+                        <a href="/experiences/featured"
+                           class="text-white hover:text-bf2042-5  transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
+                            Featured
+                        </a>
+                        {% if not no_login %}
+                            <a href="/submit/"
+                               class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
+                                Submit Experience
+                            </a>
+                        {% endif %}
+                        {% if page.is_experience_page and  page.owner == request.user %}
+                            <a href="edit/"
+                               class="text-white hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
+                                Edit Experience
+                            </a>
+                        {% endif %}
+                        <a href="https://gametools.network/"
+                           target="_blank"
+                           class="cursor-alias lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
+                            Server Browser
+                        </a>
+                        {% if not no_login %}
+                            {% if request.user.is_authenticated %}
+                                {% get_social_accounts user as accounts %}
+                                {% if accounts %}
+                                    {% with account=accounts.discord.0 %}
+                                        <a class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white"
+                                           href="/users/{{ account.uid }}">Profile</a>
+                                        <a class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white"
+                                           href="/logout/">Logout</a>
+                                    {% endwith %}
+                                {% endif %}
+                            {% else %}
+                                <a href="{% provider_login_url 'discord' process='login' %}"
+                                   class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">Login</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
+    </nav>
+    <div id="disclaimerPopUp"
+         class="hidden popup fixed w-full text-sm md:w-1/2 lg:w-1/3 max-w-[620px] max-h-[20%] inset-0 m-auto bg-card-bg rounded z-[1] flex flex-col gap-y-2 p-4">
+        <span class="text-xl text-bf2042-4 font-bold flex-grow">Disclaimer</span>
+        <p class="text-justify text-white">
+            This site was created under Electronic Arts’ Fansite Agreement using materials from Battlefield 2042.
+Trademarks are the property of their respective owners. Game materials copyright Electronic Arts
+Inc. and/or its licensors. Electronic Arts Inc. and its licensors have not otherwise endorsed and are
+not responsible for the operation of or content on this site
+        </p>
     </div>
-</nav>
+
 {% endwith %}

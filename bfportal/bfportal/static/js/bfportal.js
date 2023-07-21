@@ -1,6 +1,6 @@
 // https://portal.battlefield.com/experience/package/era?playgroundId=d23be170-33aa-11ed-98f8-9d6912d338ca
 
-$(document).ready(function() {
+$(document).ready(function () {
     "use strict";
     $("body").on('click touch', function (event) {
         animateNavBarPane(true);
@@ -18,7 +18,7 @@ $(document).ready(function() {
             otherInp = $('#id_code');
         }
         const req = $(`#${inp.prop('id')}Reason`),
-            otherReq =  $(`#${otherInp.prop('id')}Reason`);
+            otherReq = $(`#${otherInp.prop('id')}Reason`);
 
         if (req.siblings().length <= 2) {
             required_asterisk.insertBefore(req);
@@ -40,7 +40,7 @@ $(document).ready(function() {
     }
 
 
-    async function GetPlaygroundInfo(url=null, experienceCode=null ){
+    async function GetPlaygroundInfo(url = null, experienceCode = null) {
         let api_url;
         if (url) {
             api_url = `https://api.gametools.network/bf2042/playground/?playgroundid=${url.search.split('=').at(-1)}&blockydata=false&lang=en-us&return_ownername=false`;
@@ -54,24 +54,26 @@ $(document).ready(function() {
     }
 
     function fillForm(GTApiResponse) {
-            GTApiResponse.playgroundName = String;
-            GTApiResponse.playgroundDescription = String;
-            if (!GTApiResponse.hasOwnProperty('errors')) {
-                GTApiResponse.tag.forEach(elm => {addTagToDeck(elm['metadata']['translations'][0]['localizedText'])});
+        GTApiResponse.playgroundName = String;
+        GTApiResponse.playgroundDescription = String;
+        if (!GTApiResponse.hasOwnProperty('errors')) {
+            GTApiResponse.tag.forEach(elm => {
+                addTagToDeck(elm['metadata']['translations'][0]['localizedText'])
+            });
 
 
-                GTApiResponse = GTApiResponse.validatedPlayground;
-                document.getElementById("id_title").value = toTitleCase(GTApiResponse.playgroundName);
-                document.getElementById("id_description").value = GTApiResponse.playgroundDescription;
-                document.getElementById("id_no_players").value = GTApiResponse.mapRotation.maps[0].gameSize;
-                {
-                    document.getElementById("id_no_bots").value = GTApiResponse.mapRotation.maps[0].gameSize;
+            GTApiResponse = GTApiResponse.validatedPlayground;
+            document.getElementById("id_title").value = toTitleCase(GTApiResponse.playgroundName);
+            document.getElementById("id_description").value = GTApiResponse.playgroundDescription;
+            document.getElementById("id_no_players").value = GTApiResponse.mapRotation.maps[0].gameSize;
+            {
+                document.getElementById("id_no_bots").value = GTApiResponse.mapRotation.maps[0].gameSize;
 
-                }
             }
+        }
     }
 
-    $('#autoFillBtn').on('click touch', function (){
+    $('#autoFillBtn').on('click touch', function () {
         let expUrl = $("#id_exp_url");
         let experienceCode = $("#id_code");
 
@@ -102,13 +104,13 @@ $(document).ready(function() {
     });
 
 
-    function animateNavBarPane(hide=null) {
+    function animateNavBarPane(hide = null) {
         if (hide) {
             navBarPane.animate({'right': `-${navBarPane.width()}px`}, 100, function () {
                 navBarPane.addClass("hidden");
             });
         } else {
-            if (navBarPane.css('right') === '0px'){
+            if (navBarPane.css('right') === '0px') {
                 navBarPane.animate({'right': `-${navBarPane.width()}px`}, 100, function () {
                     navBarPane.addClass("hidden");
                 });
@@ -131,6 +133,12 @@ $(document).ready(function() {
     });
 
     addDropDownPair("profileButton", "accountNavBarDropdown")
+
+    $('#disclaimer').on(
+        'touch click', function () {
+            console.log('Show legal garbage')
+        }
+    )
 });
 
 function getCookie(name) {
