@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bfportal-gg"
-version = "1.4.1"
+version = "2.0.0"
 description = "A website that enables players to share Battlefield Portal Mods (Battlefield 2042)."
 authors = ["p0lygun <solankivibhakar82@gmail.com>"]
 license = "MIT"
