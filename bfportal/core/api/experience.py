@@ -1,10 +1,21 @@
 from rest_framework.renderers import JSONRenderer
 from wagtail.api import APIField
-from wagtail.api.v2.router import WagtailAPIRouter
 from wagtail.api.v2.views import PagesAPIViewSet
 
-from . import serializers
-from .models import ExperiencePage
+from .. import serializers
+from ..models import ExperiencePage
+
+
+class ExperiencePageAPIViewSet(PagesAPIViewSet):
+    """
+    ViewSet used to define how the api for ExperiencePage will work.
+
+    # todo: serialize all field
+    """
+
+    renderer_classes = [JSONRenderer]
+    model = ExperiencePage
+
 
 ExperiencePage.api_fields = [
     APIField("featured"),
@@ -30,18 +41,3 @@ ExperiencePage.api_fields = [
     APIField("allow_editing"),
     APIField("is_mock"),
 ]
-
-
-class ExperiencePageAPIViewSet(PagesAPIViewSet):
-    """
-    ViewSet used to define how the api for ExperiencePage will work.
-
-    # todo: serialize all field
-    """
-
-    renderer_classes = [JSONRenderer]
-    model = ExperiencePage
-
-
-api_router = WagtailAPIRouter("wagtailapi")
-api_router.register_endpoint("experiences", ExperiencePageAPIViewSet)
