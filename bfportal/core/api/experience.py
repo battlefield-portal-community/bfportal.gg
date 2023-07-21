@@ -18,6 +18,7 @@ class ExperiencePageAPIViewSet(PagesAPIViewSet):
 
 
 ExperiencePage.api_fields = [
+    APIField("owner", serializer=serializers.UserModelSerializer()),
     APIField("featured"),
     APIField("description"),
     APIField("code"),
