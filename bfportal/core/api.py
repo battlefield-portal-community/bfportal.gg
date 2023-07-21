@@ -26,7 +26,7 @@ ExperiencePage.api_fields = [
     APIField("xp_farm"),
     APIField("first_publish"),
     APIField("liked_by", serializer=serializers.ProfileSerializerNoLikes(many=True)),
-    APIField("creators"),
+    APIField("creators", serializer=serializers.UserModelSerializer(many=True)),
     APIField("allow_editing"),
     APIField("is_mock"),
 ]
