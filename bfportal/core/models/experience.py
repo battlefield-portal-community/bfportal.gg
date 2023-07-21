@@ -16,14 +16,11 @@ from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from taggit.models import TaggedItemBase
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
-from wagtail.api import APIField
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.models import Page
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 
 from bfportal.settings.base import LOGIN_URL
-
-from .. import serializers
 
 
 class UserApiResponse(TypedDict):
@@ -260,32 +257,6 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         ]
         + [CustomBasePage.content_panels[-1]]
     )
-
-    api_fields = [
-        APIField("featured"),
-        APIField("trending"),
-        APIField("description"),
-        APIField("code"),
-        APIField("exp_url"),
-        APIField("tags"),
-        APIField("vid_url"),
-        APIField("cover_img_url"),
-        APIField("no_players"),
-        APIField("no_bots"),
-        APIField("category", serializer=serializers.ExperiencesCategorySerializer()),
-        APIField(
-            "sub_categories",
-            serializer=serializers.SubCategoryCategorySerializer(many=True),
-        ),
-        APIField("bugged"),
-        APIField("broken"),
-        APIField("xp_farm"),
-        APIField("first_publish"),
-        APIField("liked_by"),
-        APIField("creators"),
-        APIField("allow_editing"),
-        APIField("is_mock"),
-    ]
 
     @property
     def like_count(self):
