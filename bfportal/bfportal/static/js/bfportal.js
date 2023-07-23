@@ -135,11 +135,6 @@ $(document).ready(function () {
 
     addDropDownPair("profileButton", "accountNavBarDropdown")
 
-    $('#disclaimer').on(
-        'touch click', function () {
-            console.log('Show legal garbage')
-        }
-    )
 });
 
 function getCookie(name) {
