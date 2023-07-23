@@ -1,5 +1,4 @@
 import os
-from typing import TYPE_CHECKING
 
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth import get_user_model
@@ -18,11 +17,9 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 
 from bfportal.settings.base import LOGIN_URL
 
+from .experience import ExperiencePage
 from .helper import pagination_wrapper
 from .pages import CustomBasePage
-
-if TYPE_CHECKING:
-    from .experience import ExperiencePage
 
 
 def social_user(discord_id: int) -> User | bool:
