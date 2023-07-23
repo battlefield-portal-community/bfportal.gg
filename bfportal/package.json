@@ -11,5 +11,6 @@
   "scripts": {
     "watch": "npx tailwindcss -i ./bfportal/static/src/styles.css  -o ./bfportal/static/css/bfportal.css --watch",
     "build": "npx tailwindcss -i ./bfportal/static/src/styles.css  -o ./bfportal/static/css/bfportal.css --minify"
-  }
+  },
+  "version": "2.0.0"
 }
