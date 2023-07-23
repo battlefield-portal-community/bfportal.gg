@@ -10,7 +10,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("wagtailcore", "0077_alter_revision_user"),
         ("core", "0064_auto_20221008_1001"),

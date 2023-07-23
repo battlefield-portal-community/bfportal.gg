@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("taggit", "0003_taggeditem_add_unique_index"),
         ("core", "0009_experiencepage_tags"),

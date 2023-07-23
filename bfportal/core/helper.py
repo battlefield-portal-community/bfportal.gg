@@ -1,22 +1,37 @@
 import os
 from functools import partial
+from typing import TYPE_CHECKING, NotRequired, TypedDict, Union
 
 import bleach
 import markdown
 import requests
 from bleach.css_sanitizer import ALLOWED_CSS_PROPERTIES  # noqa: F401
+from cachetools import TTLCache, cached
 from django import forms
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.utils.safestring import mark_safe
 from loguru import logger
 from taggit.models import Tag
 
+if TYPE_CHECKING:
+    from django.contrib.auth.models import User as UserType
+
 GT_BASE_URL = "https://api.gametools.network/bf2042/playground/?{}&blockydata=false&lang=en-us&return_ownername=false"
+User: "UserType"
+User = get_user_model()
+
+
+class UserApiResponse(TypedDict):
+    """Type definition for user api response"""
+
+    id: NotRequired[Union[str | None]]
+    username: str
 
 
 def get_scheduled_events(event_id: str, server_id: str = "870246147455877181") -> dict:
     """Tries to retrieve Scheduled events via discord API"""
-    if DISCORD_TOKEN := os.getenv("DISCORD_BOT_TOKEN", None):
+    if len(DISCORD_TOKEN := os.getenv("DISCORD_BOT_TOKEN", "")):
         headers = {
             "Authorization": f"Bot {DISCORD_TOKEN}",
             "content-type": "application/json",
@@ -26,6 +41,10 @@ def get_scheduled_events(event_id: str, server_id: str = "870246147455877181") -
             headers=headers,
         )
         return resp.json()
+    else:
+        logger.warning(
+            "Unable to get scheduled events... DISCORD_BOT_TOKEN not provided"
+        )
 
 
 def validate_image_link(link: str):
@@ -128,3 +147,15 @@ def save_tags_from_gt_api():
 
     if tags_added:
         logger.debug(f"Added Tags :- {tags_added}")
+
+
+@cached(cache=TTLCache(maxsize=1024, ttl=60 * 60))  # cache for 1 hour
+def user_to_api_response(user: User) -> UserApiResponse:
+    """Converts a user to a dict to be used in api response"""
+    if social_account := user.socialaccount_set.first():
+        social_account = social_account.extra_data
+        return {
+            "id": social_account["id"],
+            "username": social_account["username"],
+        }
+    return {"username": user.username, "id": None}

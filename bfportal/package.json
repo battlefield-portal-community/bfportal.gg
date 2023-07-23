@@ -1,0 +1,19 @@
+{
+  "devDependencies": {
+    "tailwindcss": "^3.3.2"
+  },
+  "dependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/forms": "^0.5.3",
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "@tailwindcss/typography": "^0.5.9"
+  },
+  "scripts": {
+    "watch": "npx tailwindcss -i ./bfportal/static/src/styles.css  -o ./bfportal/static/css/bfportal.css --watch",
+    "build": "npx tailwindcss -i ./bfportal/static/src/styles.css  -o ./bfportal/static/css/bfportal.css --minify",
+    "release:major": "changelog -M -f '../CHANGELOG.md' && git add ../CHANGELOG.md && git commit -m 'chore: updated CHANGELOG.md' && npm version major && git push origin && git push origin --tags",
+    "release:minor": "changelog -m -f '../CHANGELOG.md' && git add ../CHANGELOG.md && git commit -m 'chore: updated CHANGELOG.md' && npm version minor && git push origin && git push origin --tags",
+    "release:patch": "changelog -p -f '../CHANGELOG.md' && git add ../CHANGELOG.md && git commit -m 'chore: updated CHANGELOG.md' && npm version patch && git push origin && git push origin --tags"
+  },
+  "version": "2.0.0"
+}

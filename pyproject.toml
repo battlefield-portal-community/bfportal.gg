@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "bfportal-gg"
+version = "2.0.0"
+description = "A website that enables players to share Battlefield Portal Mods (Battlefield 2042)."
+authors = ["p0lygun <solankivibhakar82@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "bfportal"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+aiohttp = "^3.8.4"
+asgiref = "^3.7.2"
+bleach = "^6.0.0"
+wagtail = "^5.0.2"
+django-allauth = "^0.54.0"
+django-autocomplete-light = "^3.9.7"
+django-embed-video = "^1.4.9"
+Faker = "^18.13.0"
+loguricorn = {git = "https://github.com/p0lygun/loguricorn.git"}
+loguru = "^0.7.0"
+Markdown = "^3.4.3"
+mdgen = "^0.1.10"
+python-dotenv = "^1.0.0"
+requests = "^2.31.0"
+snowflake-id = "^0.0.4"
+wagtail-autocomplete = "^0.10.0"
+wagtailsvg = "^0.0.37"
+whitenoise = "^6.5.0"
+django-ajax-selects = "^2.2.0"
+django-widget-tweaks = "^1.4.12"
+django-extensions = "^3.2.3"
+django-browser-reload = "^1.10.0"
+django-markdownx = "^4.0.2"
+tinycss2 = "^1.2.1"
+psycopg2 = "^2.9.6"
+pre-commit = "^3.3.3"
+gunicorn = "^20.1.0"
+wagtail-generic-chooser = "^0.5.1"
+cachetools = "^5.3.1"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.3.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

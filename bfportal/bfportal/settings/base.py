@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import platform
 
 from loguricorn.intercept import InterceptHandler
 
@@ -28,7 +27,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
     "core",
-    "factory",
+    "wagtail",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
@@ -39,10 +38,8 @@ INSTALLED_APPS = [
     "wagtail.images",
     "wagtail.search",
     "wagtail.admin",
-    "wagtail.core",
     "wagtail.contrib.routable_page",
     "wagtail.api.v2",
-    "wagtail_color_panel",
     "modelcluster",
     "taggit",
     "dal",
@@ -58,25 +55,19 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.discord",
-    "tailwind",
-    "theme",
     "django_browser_reload",
     "widget_tweaks",
     "embed_video",
-    "django_extensions",
+    "django_extensions",  # todo: triage if we really need this
     "wagtailsvg",
     "wagtail.contrib.modeladmin",
-    "generic_chooser",
     "wagtailautocomplete",
     "ajax_select",
     "markdownx",
+    "generic_chooser",
 ]
 
 SITE_ID = 1
-TAILWIND_APP_NAME = "theme"
-if platform.system() == "Windows":
-    # todo instead of this; check if npm is installed or not
-    NPM_BIN_PATH = r"D:\Program Files\nodejs\npm.cmd"
 SOCIALACCOUNT_PROVIDERS = {
     "discord": {
         "APP": {
@@ -199,7 +190,7 @@ STATIC_URL = "/static/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
-
+WAGTAILSVG_UPLOAD_FOLDER = "svg"
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = "bfportal"
@@ -299,5 +290,5 @@ def setup_logging():
 
     logger.remove()
     logger.add(
-        sys.stdout, colorize=True, level="INFO", backtrace=True, format=LOGGING_FORMAT
+        sys.stdout, colorize=True, level="DEBUG", backtrace=True, format=LOGGING_FORMAT
     )

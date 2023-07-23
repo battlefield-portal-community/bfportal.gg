@@ -51,7 +51,6 @@ class Command(BaseCommand):
             json_db = json.load(db_file)
         su = User.objects.filter(is_superuser=True).first()
         for json_row in json_db:
-
             row = DBRow(**json_row)
             if row.type == "Prefabs":
                 row.type = "Prefab"

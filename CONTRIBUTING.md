@@ -20,10 +20,21 @@ If you already have experience with django/wagtail, understanding the backend wi
 
 ----
 # Env Setup
+- ### Docker
+  - Create a Python Virtual Environment and activate it
+  - Install the pre-commit hooks by running `pre-commit install --install-hooks`
+  - Make sure You have **docker** installed and the `cd` to `bfportal` directory
+  - Copy the `.env.template` file to `.env`
+  - Create a [discord application](https://discord.com/developers/applications) for OAuth2 and copy the client id and secret
+  - Paste the client id and secret in `.env` file to `DISCORD_CLIENT_ID` and `DISCORD_SECRET` respectively
+  - Then run `docker-compose --profile dev_local up`
+  - The website should be available at `127.0.0.1:8000`
+  - If You want to set up everything your self, See the next points
+
 
 - ### Python
-    -  Refer to [readme.md](/readme.md#how-to-run-locally)
-    -  install pre-commit checks by runnning (**make sure the Virtual Enviroment is activated !!**)
+    -  Refer to [readme.md](/README.md#how-to-run-locally)
+    -  install pre-commit checks by running (**make sure the Virtual Enviroment is activated !!**)
         ```
         pre-commit install
         ```
@@ -41,7 +52,10 @@ If you already have experience with django/wagtail, understanding the backend wi
         ```
         python manage.py tailwind start
         ```
-
+- ### Postgres
+    - Make sure postgres is installed and running
+    - Create DB, USER and Password for the project
+    - Update the `.env` file accordingly
 
 ----
 
@@ -76,9 +90,9 @@ bfportal/
 - Make sure all the precommit test are passed
 - Open a pull request to merge the branch into dev branch
 - The changes will be reviewed on dev deployment
-- Upon successfull testing dev will be merged into main
+- Upon successfully testing dev will be merged into main
 
 # How to discuss with the maintainers
-- Join our [discord server](https://bfportal.gg/join).
+- Join our [discord server](https://discord.bfportal.gg/).
 - Open a new issue.
 - mail us at mail@bfportal.gg

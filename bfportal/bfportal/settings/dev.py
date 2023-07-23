@@ -8,7 +8,6 @@ SECRET_KEY = "django-insecure-@1-5%%lz%ye22x_2!x(-#i(n)8mz8(^mbk=uhh4r7s7ukqrbh7
 
 # SECURITY WARNING: define the correct hosts in production!
 ALLOWED_HOSTS = ["*"]
-
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 

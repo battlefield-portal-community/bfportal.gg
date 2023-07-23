@@ -18,7 +18,10 @@
                 {% if category.visible %}
                     <a href="/category/{{ category.name|replace:" |_" }}">
                     <div class="flex flex-row text-white gap-x-1 items-center min-w-fit px-2 py-1 rounded hover:bg-card-bg transition duration-200 ease-in-out">
-                        <img src="{{ category.icon.url }}" alt="{{ category.name }}-icon">
+                        {% if category.icon.url %}
+                            <img src="{{ category.icon.url }}" alt="{{ category.name }}-icon">
+                        {% endif %}
+
                         <p>{{ category.name }}</p>
                     </div>
                     </a>
