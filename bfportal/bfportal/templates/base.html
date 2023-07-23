@@ -289,11 +289,19 @@
     function showPopUp(id) {
         const popup = $(document.getElementById(id))
         if (popup) {
-            $(`#popUpBackground`).fadeIn(100);
+            showPopUpBackGround();
             popup.fadeIn();
             popup.css('display', 'flex');
         }
     }
+
+    function showPopUpBackGround() {
+        $(`#popUpBackground`).fadeIn(100);
+    }
+
+    $('#disclaimer-mobile').on('click touch', function() {
+        showPopUp('disclaimerPopUp');
+    });
 
 </script>
 {% block extra_js %}
