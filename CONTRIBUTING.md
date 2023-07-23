@@ -28,10 +28,10 @@ If you already have experience with django/wagtail, understanding the backend wi
 
 ### Prerequisites
 
-    You need to install the following applications on your system
-    - Python
-    - NodeJS / npm package manager
-    - Docker
+You need to install the following applications on your system
+- Python
+- NodeJS / npm package manager
+- Docker
 
 ### Setup
 
@@ -49,7 +49,10 @@ If you already have experience with django/wagtail, understanding the backend wi
   cd bfportal.gg
   poetry install
   ```
-- Install the pre-commit hooks by running `pre-commit install --install-hooks`
+- Install the pre-commit hooks by running
+  ```
+  pre-commit install --install-hooks
+  ```
 - Install npm dependencies
   ```
   cd bfportal.gg/bfportal
@@ -58,10 +61,13 @@ If you already have experience with django/wagtail, understanding the backend wi
 - Copy the `.env.template` file to `.env`
 - (optional) Create a [discord application](https://discord.com/developers/applications) for OAuth2 and copy the client id and secret
   - Paste the client id and secret in `.env` file to `DISCORD_CLIENT_ID` and `DISCORD_SECRET` respectively
-- Run `docker-compose --profile dev_local up` from the repositories root directory to build the necessary images and run the platform
+- From the repositories root directory build the necessary docker images and run the platform
+  ```
+  docker-compose --profile dev_local up
+  ```
 - The website should become available at `127.0.0.1:8000`
 
-## Manual Environment Setup
+## Non-Container Environment Setup
 
 ### Python
 
