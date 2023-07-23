@@ -123,6 +123,7 @@ $(document).ready(function () {
 
     $('#menuIcon').on('click touch', function (e) {
         e.stopPropagation();
+        showPopUpBackGround();
         $('#nav-bar-pane').height($('#main').height() - 2);
         animateNavBarPane();
     });

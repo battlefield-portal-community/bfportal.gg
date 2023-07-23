@@ -100,7 +100,7 @@
                     <div class="w-4 h-0.5 rounded-lg bg-bf2042-4 group-hover:bg-bf2042-6 transition duration-200 ease-in-out"></div>
                 </div>
                 <div id="nav-bar-pane"
-                     class="hidden flex flex-col absolute bg-card-bg top-full right-0 backdrop-brightness-50 items-center md:hidden">
+                     class="flex flex-col absolute bg-bg-default top-full right-0 backdrop-brightness-50 items-center md:hidden">
                     <div class="flex flex-col items-end  text-lg ml-4 mr-2 gap-y-2 mt-2">
                         <a href="/experiences/"
                            class="text-white hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
@@ -116,7 +116,7 @@
                         </a>
                         {% if not no_login %}
                             <a href="/submit/"
-                               class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
+                               class="lg:mt-0 text-white hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
                                 Submit Experience
                             </a>
                         {% endif %}
@@ -128,23 +128,27 @@
                         {% endif %}
                         <a href="https://gametools.network/"
                            target="_blank"
-                           class="cursor-alias lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
+                           class="cursor-alias lg:mt-0 text-white  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
                             Server Browser
                         </a>
+                        <div id="disclaimer-mobile"
+                            class="cursor-alias lg:mt-0 text-white  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
+                            Disclaimer
+                        </div>
                         {% if not no_login %}
                             {% if request.user.is_authenticated %}
                                 {% get_social_accounts user as accounts %}
                                 {% if accounts %}
                                     {% with account=accounts.discord.0 %}
-                                        <a class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white"
+                                        <a class="lg:mt-0 text-white hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white"
                                            href="/users/{{ account.uid }}">Profile</a>
-                                        <a class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white"
+                                        <a class="lg:mt-0 text-white hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white"
                                            href="/logout/">Logout</a>
                                     {% endwith %}
                                 {% endif %}
                             {% else %}
                                 <a href="{% provider_login_url 'discord' process='login' %}"
-                                   class="lg:mt-0 text-white hover:text-white  rounded-lg  hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">Login</a>
+                                   class="lg:mt-0 text-white hover:text-bf2042-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">Login</a>
                             {% endif %}
                         {% endif %}
                     </div>
@@ -353,5 +357,4 @@ A: One in 3,000,000 has a chance of becoming a human being.
 -->
         </p>
     </div>
-
 {% endwith %}
