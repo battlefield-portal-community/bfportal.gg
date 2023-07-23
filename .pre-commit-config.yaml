@@ -21,7 +21,7 @@ repos:
         args: ["--profile", "black", "--filter-files"]
 
   - repo: https://github.com/psf/black
-    rev: 23.3.0
+    rev: 23.7.0
     hooks:
       - id: black
 
@@ -33,6 +33,6 @@ repos:
           - flake8-docstrings~=1.6.0
 
   - repo: https://github.com/p0lygun/commit-msg-validator
-    rev: v1.2.0
+    rev: v1.4.0
     hooks:
       - id: check-commit-msg
