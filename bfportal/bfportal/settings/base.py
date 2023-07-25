@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
+    "django.contrib.sitemaps",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -66,6 +67,8 @@ INSTALLED_APPS = [
     "markdownx",
     "generic_chooser",
 ]
+# wagtail apps that we added
+INSTALLED_APPS += ["wagtail.contrib.settings"]
 
 SITE_ID = 1
 SOCIALACCOUNT_PROVIDERS = {
