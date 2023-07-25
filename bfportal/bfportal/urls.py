@@ -17,6 +17,7 @@ from wagtail.contrib.sitemaps.views import sitemap
 from wagtail.documents import urls as wagtaildocs_urls
 from wagtailautocomplete.urls.admin import urlpatterns as autocomplete_admin_urls
 
+from .robots import serve_robots_txt
 from .sitemaps import sitemaps
 
 urlpatterns = [
@@ -75,6 +76,13 @@ urlpatterns += [
         "sitemap.xml",
         sitemap,
         {"sitemaps": sitemaps},
+    )
+]
+# robots.txt
+urlpatterns += [
+    path(
+        "robots.txt",
+        serve_robots_txt,
     )
 ]
 
