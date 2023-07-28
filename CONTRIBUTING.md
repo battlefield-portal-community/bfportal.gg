@@ -29,9 +29,10 @@ If you already have experience with django/wagtail, understanding the backend wi
 ### Prerequisites
 
 You need to install the following applications on your system
-- Python
-- NodeJS / npm package manager
-- Docker
+
+- [Python](https://www.python.org/downloads/)
+- [NodeJS / npm package manager](https://nodejs.org/en/download)
+- [Docker](https://www.docker.com)
 
 ### Setup
 
@@ -40,7 +41,7 @@ You need to install the following applications on your system
   py -m venv ./python-venvs/bfportal
   ./python-venvs/bfportal/Scripts/activate
   ```
-- Install poetry for dependency management
+- Install [poetry](https://python-poetry.org/docs/#installation) for dependency management
   ```
   curl -sSL https://install.python-poetry.org | python3 -
   ```
@@ -79,7 +80,7 @@ You need to install the following applications on your system
 
 ### NodeJs
 
-- Make sure [npmjs](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) is installed in system, if the path to npm binary is not available in $PATH variable define `NPM_BIN_PATH` in [`settings/base.py`](/bfportal/bfportal/settings/base.py#L75) accordingly
+- Make sure [npmjs](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) is installed in system, if the path to npm binary is not available in \$PATH variable define `NPM_BIN_PATH` in [`settings/base.py`](/bfportal/bfportal/settings/base.py#L75) accordingly
 - Install TailwindCSS (only required if you are contributing to the frontend)
   ```
   python manage.py tailwind install --no-input

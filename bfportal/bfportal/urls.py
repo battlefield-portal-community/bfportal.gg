@@ -13,8 +13,12 @@ from django.urls import include, path, re_path
 from django.views.generic import RedirectView, TemplateView
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
+from wagtail.contrib.sitemaps.views import sitemap
 from wagtail.documents import urls as wagtaildocs_urls
 from wagtailautocomplete.urls.admin import urlpatterns as autocomplete_admin_urls
+
+from .robots import serve_robots_txt
+from .sitemaps import sitemaps
 
 urlpatterns = [
     path("django-admin/", admin.site.urls),
@@ -64,6 +68,22 @@ urlpatterns = [
     re_path(r"^ajax_select/", include(ajax_select_urls)),
     path("markdownx/", include("markdownx.urls")),
     path("events/", events_view, name="events-view"),
+]
+
+# sitemap urls
+urlpatterns += [
+    path(
+        "sitemap.xml",
+        sitemap,
+        {"sitemaps": sitemaps},
+    )
+]
+# robots.txt
+urlpatterns += [
+    path(
+        "robots.txt",
+        serve_robots_txt,
+    )
 ]
 
 if settings.DEBUG:

@@ -58,6 +58,14 @@ class CustomBasePage(Page):
         validators=[validate_image_link],
     )
 
+    include_in_sitemap = models.BooleanField(default=True)
+
+    def get_sitemap_urls(self, request=None):
+        """Return sitemap urls for this page"""
+        if not self.include_in_sitemap:
+            return []
+        return super().get_sitemap_urls(request)
+
     content_panels = Page.content_panels + [
         FieldPanel(
             "extra_content",
@@ -73,7 +81,8 @@ class CustomBasePage(Page):
             ],
             classname="collapsible",
             heading="Preview Embed Override",
-        )
+        ),
+        FieldPanel("include_in_sitemap"),
     ] + Page.promote_panels
 
     class Meta:

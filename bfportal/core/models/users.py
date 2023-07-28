@@ -1,5 +1,4 @@
 import os
-from typing import TYPE_CHECKING
 
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth import get_user_model
@@ -18,11 +17,10 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 
 from bfportal.settings.base import LOGIN_URL
 
+from .experience import ExperiencePage
 from .helper import pagination_wrapper
 from .pages import CustomBasePage
-
-if TYPE_CHECKING:
-    from .experience import ExperiencePage
+from .settings import GenericSystemSettings
 
 
 def social_user(discord_id: int) -> User | bool:
@@ -114,10 +112,15 @@ class ProfilePage(RoutablePageMixin, CustomBasePage):
 
     def serve(self, request, view=None, args=None, kwargs=None):
         """Checks if a user is authenticated before serving the profile page"""
-        if request.user.is_authenticated:
-            return super().serve(request, view, args, kwargs)
-        else:
-            return redirect(LOGIN_URL)
+        system_settings = GenericSystemSettings.load(request_or_site=request)
+        if system_settings.need_login_to_view_profile:
+            return (
+                super().serve(request, view, args, kwargs)
+                if request.user.is_authenticated
+                else redirect(LOGIN_URL)
+            )
+
+        return super().serve(request, view, args, kwargs)
 
     def get_context(self, request, *args, **kwargs):  # noqa: D102
         list_experiences = kwargs.pop("list_experiences", None)
