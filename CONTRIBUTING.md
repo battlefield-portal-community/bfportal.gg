@@ -11,12 +11,27 @@ Before you start contributing you should understand the stack that this projects
 
 ![image](https://i.imgur.com/INghzbZ.png)
 
-If you already have experience with django/wagtail, understanding the backend will be really easy for you.
+As shown in the architecture picture the project is built based on the following:
 
-> **Note**
-> If you are just starting it is highly recommended to learn about the structure of a [django project](https://docs.djangoproject.com/en/4.1/intro/tutorial01/). and [wagtail project](https://docs.wagtail.org/en/stable/getting_started/tutorial.html)
+**Backend:**
 
-> Learn wagtail first :)
+- [Python](https://www.python.org/downloads/)
+  - [wagtail](https://docs.wagtail.org/en/stable/getting_started/tutorial.html)
+  - [django](https://docs.djangoproject.com/en/4.1/intro/tutorial01/)
+- [PostgreSQL](https://www.postgresql.org/)
+
+**Frontend:**
+
+- HTML/CSS/JS
+  - Django Templates
+  - NPM JS Libraries
+  - [tailwindcss](https://github.com/tailwindlabs/tailwindcss)
+
+**Runtime Environment:**
+
+- [Docker](https://www.docker.com) Container Images on Linux
+
+If you're not familiar with Django or Wagtail, it might be good to start with [wagtail](https://docs.wagtail.org/en/stable/getting_started/tutorial.html).
 
 ### Django Apps
 
@@ -29,7 +44,7 @@ If you already have experience with django/wagtail, understanding the backend wi
 
 - All the "webpages" are in `<app>/<templates>/<app>/` directory, we can use this structure to override the template of other apps that are installed in python
 - The models for all "pages" type are defined in [`/core/models/*`](/bfportal/core/models)
-- The API at (https://api.bfportal.gg/) is defined and controlled by [`/core/api.py`](/bfportal/core/api.py)
+- The API at (https://api.bfportal.gg/) is defined and controlled by [`/core/api/*`](/bfportal/core/api)
 - Form validation and discord hooks are done in [`/core/views.py`](/bfportal/core/views.py)
 
 # How to contribute
@@ -38,9 +53,9 @@ If you already have experience with django/wagtail, understanding the backend wi
 - Create a new branch for that issue
 - Make your changes
 - Make sure all the precommit test are passed
-- Open a pull request to merge the branch into dev branch
+- Open a pull request to merge the branch into main branch
 - The changes will be reviewed on dev deployment
-- Upon successfully testing dev will be merged into main
+- Upon successfully testing dev will be merged into production
 
 ## How to discuss with the maintainers
 
