@@ -111,28 +111,56 @@ You need to install the following applications on your system
 
 ## Non-Container Environment Setup
 
-### Python
+### Prerequisites
 
-- Refer to [readme.md](/README.md#how-to-run-locally)
-- install pre-commit checks by running (**make sure the Virtual Enviroment is activated !!**)
-  ```
-  pre-commit install
-  ```
+You need to install the following applications on your system
 
-### NodeJs
+- [Python](https://www.python.org/downloads/)
+- [NodeJS / npm package manager](https://nodejs.org/en/download)
+- [PostgreSQL](https://www.postgresql.org/)
 
-- Make sure [npmjs](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) is installed in system, if the path to npm binary is not available in \$PATH variable define `NPM_BIN_PATH` in [`settings/base.py`](/bfportal/bfportal/settings/base.py#L75) accordingly
-- Install TailwindCSS (only required if you are contributing to the frontend)
-  ```
-  python manage.py tailwind install --no-input
-  ```
-- Start TailwindCSS in watch mode
-  ```
-  python manage.py tailwind start
-  ```
+### Setup
 
-### Postgres
+- Create a Python Virtual Environment and activate it
+  ```
+  py -m venv ./python-venvs/bfportal
+  ./python-venvs/bfportal/Scripts/activate
+  ```
+- Install [poetry](https://python-poetry.org/docs/#installation) for dependency management
+  ```
+  curl -sSL https://install.python-poetry.org | python3 -
+  ```
+- Install python dependencies
+  ```
+  cd bfportal.gg
+  poetry install
+  ```
+- Install the pre-commit hooks by running
+  ```
+  pre-commit install --install-hooks
+  ```
+- Install npm dependencies
+  ```
+  cd bfportal.gg/bfportal
+  npm install
+  ```
+- Copy the `.env.template` file to `.env`
+- (optional) Create a [discord application](https://discord.com/developers/applications) for OAuth2 and copy the client id and secret
+
+  - Paste the client id and secret in `.env` file to `DISCORD_CLIENT_ID` and `DISCORD_SECRET` respectively
 
 - Make sure postgres is installed and running
-- Create DB, USER and Password for the project
-- Update the `.env` file accordingly
+
+  - Create DB, USER and Password for the project
+  - Update the `.env` file accordingly
+
+- Launch the server / web page with following commands:
+
+```
+cd bfportal.gg/bfportal
+python manage.py migrate --noinput
+python manage.py ensure_superuser --username bfportal --email superuser@bfportal.com --password 1234
+python manage.py ensure_initialization
+python manage.py mock -u 3 -e 10 --clear
+python manage.py runserver 0.0.0.0:8000
+```
