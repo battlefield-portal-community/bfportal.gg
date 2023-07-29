@@ -28,7 +28,11 @@ It is pretty straight forward
 
 You can later edit your experience if u like.
 
-### Special Thanks to
+# How to Contribute
+
+If you want to contribute to this project and the community, you're welcome to have a look at our [Contribution Guide](/CONTRIBUTING.md) for this project.
+
+# Special Thanks to
 
 - [gametools.network](https://gametools.network/) for providing API to autofill submisson form 🥰
 - [Wagtail](https://github.com/wagtail/wagtail) for providing an awesome framework that makes managing submissions very easy ✅
