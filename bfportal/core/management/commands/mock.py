@@ -230,6 +230,7 @@ class Command(BaseCommand):
                 page.xp_farm = faker_factory.pybool()
                 page.broken = faker_factory.pybool()
                 page.bugged = faker_factory.pybool()
+                page.trending = faker_factory.pybool()
                 experiences_page.add_child(instance=page)
                 experiences_page.save()
 

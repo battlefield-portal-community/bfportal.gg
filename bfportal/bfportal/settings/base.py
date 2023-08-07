@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
+    "django.contrib.sitemaps",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -64,7 +65,10 @@ INSTALLED_APPS = [
     "wagtailautocomplete",
     "ajax_select",
     "markdownx",
+    "generic_chooser",
 ]
+# wagtail apps that we added
+INSTALLED_APPS += ["wagtail.contrib.settings"]
 
 SITE_ID = 1
 SOCIALACCOUNT_PROVIDERS = {
@@ -189,7 +193,7 @@ STATIC_URL = "/static/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
-
+WAGTAILSVG_UPLOAD_FOLDER = "svg"
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = "bfportal"

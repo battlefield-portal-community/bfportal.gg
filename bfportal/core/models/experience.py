@@ -1,10 +1,7 @@
-from typing import Optional, TypedDict
-
 from core.models.categories import ExperiencesCategory
 from core.models.helper import pagination_wrapper
 from core.models.pages import CustomBasePage
 from django import forms
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.http import HttpRequest, HttpResponse
@@ -24,25 +21,7 @@ from wagtailautocomplete.edit_handlers import AutocompletePanel
 
 from bfportal.settings.base import LOGIN_URL
 
-
-class UserApiResponse(TypedDict):
-    """Type definition for user api response"""
-
-    id: Optional[str]
-    username: str
-    discriminator: Optional[str]
-
-
-def user_to_api_response(user: User) -> UserApiResponse:
-    """Converts a user to a dict to be used in api response"""
-    if social_account := user.socialaccount_set.first():
-        social_account = social_account.extra_data
-        return {
-            "id": social_account["id"],
-            "username": social_account["username"],
-            "discriminator": social_account["discriminator"],
-        }
-    return {"username": user.username}
+from ..helper import user_to_api_response
 
 
 class ExperiencePageTag(TaggedItemBase):
@@ -197,6 +176,9 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
         default=False, null=False, help_text="Is this a mock experience ?"
     )
 
+    parent_page_types = ["core.ExperiencesPage"]
+    subpage_types = []
+
     content_panels = (
         Page.content_panels
         + [
@@ -293,9 +275,6 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
             [user_to_api_response(creator) for creator in self.creators.all()]
         )
         return creators
-
-    parent_page_types = ["core.ExperiencesPage"]
-    subpage_types = []
 
     @route(r"^edit/$")
     def edit_page(self, request: HttpRequest):  # noqa: D102
