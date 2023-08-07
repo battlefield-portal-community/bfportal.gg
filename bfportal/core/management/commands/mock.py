@@ -19,7 +19,6 @@ from snowflake import SnowflakeGenerator
 
 User = get_user_model()
 
-
 if TYPE_CHECKING:
     from django.contrib.auth.models import User
 
@@ -68,6 +67,11 @@ class Command(BaseCommand):
             action="store_true",
             help="Removes all mock data from the database",
         )
+        parser.add_argument(
+            "--noregen",
+            action="store_true",
+            help="Does not regenerate mock data if it already exists",
+        )
 
     def handle(self, *args, **options):
         """Handler for command, handles the generation of data"""
@@ -77,6 +81,26 @@ class Command(BaseCommand):
         if not settings.DEBUG:
             logger.critical("MOCK COMMAND CAN ONLY BE USED WHEN DEBUG IS SET TO TRUE")
             return
+        if options.get("noregen", False) and options.get("clear", False):
+            logger.critical("Cannot use --noregen and --clear together")
+            self.stdout.write("Cannot use --noregen and --clear together")
+            return
+        if options.get("noregen", False):
+            #  only generate data if there is no mock data in the database
+            if not User.objects.filter(profile__is_mock_user=True).exists():
+                call_command(
+                    "mock",
+                    "-u",
+                    options.get("users", 3),
+                    "-e",
+                    options.get("experiences", 10),
+                )
+                return
+            self.stdout.write(
+                "Mock data already exists in the database.. skipping generation"
+            )
+            return
+
         if options.get("clear", False) and not options.get("experiences", False):
             mock_users = User.objects.filter(profile__is_mock_user=True)
             mock_experiences = ExperiencePage.objects.filter(is_mock=True)
@@ -89,6 +113,7 @@ class Command(BaseCommand):
 
             return
 
+        # todo: use global_mapping module from gametools, ask gala_vs for more details
         BF2042_MAP_PICTURES = list(
             {
                 "MP_Harbor": "https://eaassets-a.akamaihd.net/battlelog/battlebinary/gamedata/kingston/60/b4/Map_Art_BFBC2_AH_L-60b49760.png",  # noqa: E501
