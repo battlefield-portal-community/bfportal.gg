@@ -1460,6 +1460,16 @@ files = [
 ]
 
 [[package]]
+name = "snowflake"
+version = "0.0.3"
+description = "Simple persistent unique IDs."
+optional = false
+python-versions = "*"
+files = [
+    {file = "snowflake-0.0.3.tar.gz", hash = "sha256:5e0f2310bc9e499c8c47bed8da0695d79ad372057de7e03751e47fef46a6760d"},
+]
+
+[[package]]
 name = "snowflake-id"
 version = "0.0.4"
 description = "The Snowflake generator done right."
@@ -1804,4 +1814,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "9d6946a1a8f41096241af45c0ac820e3af61d10c65b160b05118ec6ddabdd66b"
+content-hash = "99cef8b5ef069d54d238aa69903f45b26e3edb98bab48da3307a756d80c072af"
