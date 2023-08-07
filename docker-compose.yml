@@ -141,7 +141,7 @@ services:
       dockerfile: Dockerfile
       target: dev
     restart: no
-    command: bash -c "python manage.py migrate --noinput && python manage.py ensure_superuser --username bfportal --email superuser@bfportal.com --password 1234 &&  python manage.py ensure_initialization && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py migrate --noinput && python manage.py ensure_superuser --username bfportal --email superuser@bfportal.com --password 1234 &&  python manage.py ensure_initialization && python manage.py mock -u 3 -e 10 --clear && python manage.py runserver 0.0.0.0:8000"
     container_name: bfportal_dev_local
     profiles:
       - dev_local
