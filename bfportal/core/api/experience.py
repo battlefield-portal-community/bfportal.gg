@@ -13,6 +13,13 @@ class ExperiencePageAPIViewSet(PagesAPIViewSet):
     # todo: serialize all field
     """
 
+    @property
+    def default_response_headers(self):
+        """Adds cache-control header"""
+        headers = PagesAPIViewSet.default_response_headers.fget(self)
+        headers["Cache-Control"] = "public, max-age=300"
+        return headers
+
     renderer_classes = [JSONRenderer]
     model = ExperiencePage
 
