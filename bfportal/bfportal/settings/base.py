@@ -83,7 +83,7 @@ SPECTACULAR_SETTINGS = {
     "SCHEMA_PATH_PREFIX": "/api",
     "SCHEMA_PATH_PREFIX_TRIM": True,
     "SERVERS": [
-        {"url": "http://bfportal.gg/api", "description": "Production"},
+        {"url": "https://bfportal.gg/api", "description": "Production"},
         {"url": "http://localhost:8000/api", "description": "Local"},
     ],
     "AUTHENTICATION_WHITELIST": [],
