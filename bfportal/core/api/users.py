@@ -34,7 +34,7 @@ class UserFilter(BaseFilterBackend):
 
 
 class ProfileAPIViewSet(BaseAPIViewSet):
-    """ViewSet used to define how the api for ExperiencePage will work."""
+    """User profiles within bfportal.gg."""
 
     @property
     def default_response_headers(self):

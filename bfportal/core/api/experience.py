@@ -7,11 +7,9 @@ from ..models import ExperiencePage
 
 
 class ExperiencePageAPIViewSet(PagesAPIViewSet):
-    """
-    ViewSet used to define how the api for ExperiencePage will work.
+    """Experiences within bfportal.gg."""
 
     # todo: serialize all field
-    """
 
     @property
     def default_response_headers(self):

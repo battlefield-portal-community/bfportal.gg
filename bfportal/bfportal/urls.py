@@ -11,6 +11,11 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.generic import RedirectView, TemplateView
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.contrib.sitemaps.views import sitemap
@@ -48,6 +53,17 @@ urlpatterns = [
     ],
     # api urls
     *[
+        path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+        path(
+            "api/schema/swagger-ui/",
+            SpectacularSwaggerView.as_view(url_name="schema"),
+            name="swagger-ui",
+        ),
+        path(
+            "api/schema/redoc/",
+            SpectacularRedocView.as_view(url_name="schema"),
+            name="redoc",
+        ),
         path(
             "api/categories/",
             CategoriesAutocomplete.as_view(),
@@ -62,8 +78,10 @@ urlpatterns = [
         ),
         path("api/", api_router.urls),
         re_path(
-            "^api/$", TemplateView.as_view(template_name="coming_soon.html")
-        ),  # todo: add correct api docs
+            "^api/$",
+            SpectacularSwaggerView.as_view(url_name="schema"),
+            name="swagger-ui",
+        ),
     ],
     re_path(r"^ajax_select/", include(ajax_select_urls)),
     path("markdownx/", include("markdownx.urls")),
