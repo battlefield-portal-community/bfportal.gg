@@ -2,6 +2,7 @@ version: "3.7"
 
 services:
 
+  # Production environment services
   db:
     image: postgres:14
     restart: always
@@ -59,6 +60,7 @@ services:
       retries: 3
       start_period: "5s"
 
+  # Dev environment services (on remote server)
   db_devel:
     image: postgres:14
     restart: always
@@ -117,6 +119,7 @@ services:
       retries: 3
       start_period: "5s"
 
+  # Dev environment services (on local machine)
   db_dev_local:
     image: postgres:14
     restart: always
@@ -129,7 +132,7 @@ services:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U", "${DB_USERNAME}"]
       interval: "10s"
       timeout: "5s"
       retries: 5
@@ -141,7 +144,7 @@ services:
       dockerfile: Dockerfile
       target: dev
     restart: no
-    command: bash -c "python manage.py migrate --noinput && python manage.py ensure_superuser --username bfportal --email superuser@bfportal.com --password 1234 &&  python manage.py ensure_initialization && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py migrate --noinput && python manage.py ensure_superuser --username bfportal --email superuser@bfportal.com --password 1234 &&  python manage.py ensure_initialization && python manage.py mock -u 10 -e 50 --noregen && python manage.py runserver 0.0.0.0:8000"
     container_name: bfportal_dev_local
     profiles:
       - dev_local

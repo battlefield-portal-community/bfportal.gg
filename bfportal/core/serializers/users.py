@@ -31,7 +31,6 @@ class UserModelSerializer(serializers.ModelSerializer):
             "username",
             "first_name",
             "last_name",
-            "email",
             "social_account",
         ]
         depth = 1
@@ -39,7 +38,11 @@ class UserModelSerializer(serializers.ModelSerializer):
     def get_social_account(self, obj):
         """Adds social account info for a User."""
         if providers := obj.socialaccount_set.all():
-            return {provider.provider: provider.extra_data for provider in providers}
+            providers_dict = {}
+            for provider in providers:
+                provider.extra_data.pop("email", None)  # remove email to avoid leak
+                providers_dict[provider.provider] = provider.extra_data
+            return providers_dict
         # no provider internal account
         return {}
 

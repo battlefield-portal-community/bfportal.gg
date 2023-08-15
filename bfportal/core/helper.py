@@ -148,6 +148,24 @@ def save_tags_from_gt_api():
     if tags_added:
         logger.debug(f"Added Tags :- {tags_added}")
 
+    if len(cloudflare_auth_key := os.getenv("CLOUDFLARE_AUTH_KEY", "")):
+        if len(cloudflare_auth_email := os.getenv("CLOUDFLARE_AUTH_EMAIL", "")):
+            if len(cloudflare_zone_id := os.getenv("CLOUDFLARE_ZONE_ID", "")):
+                requests.post(
+                    f"https://api.cloudflare.com/client/v4/zones/{cloudflare_zone_id}/purge_cache",
+                    json={
+                        "files": [
+                            "https://bfportal.gg/api/categories/?q="
+                            "https://bfportal.gg/api/tags/?q="
+                        ]
+                    },
+                    headers={
+                        "X-Auth-Email": cloudflare_auth_email,
+                        "X-Auth-Key": cloudflare_auth_key,
+                        "Content-Type": "application/json",
+                    },
+                )
+
 
 @cached(cache=TTLCache(maxsize=1024, ttl=60 * 60))  # cache for 1 hour
 def user_to_api_response(user: User) -> UserApiResponse:

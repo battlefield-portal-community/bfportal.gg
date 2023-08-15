@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
+    "django.contrib.sitemaps",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -65,7 +66,29 @@ INSTALLED_APPS = [
     "ajax_select",
     "markdownx",
     "generic_chooser",
+    "drf_spectacular",
 ]
+# wagtail apps that we added
+INSTALLED_APPS += ["wagtail.contrib.settings"]
+
+REST_FRAMEWORK = {
+    # YOUR SETTINGS
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "BFPortal API",
+    "DESCRIPTION": "Get portal experiences from outside the website",
+    "VERSION": "1.0.0",
+    "SCHEMA_PATH_PREFIX": "/api",
+    "SCHEMA_PATH_PREFIX_TRIM": True,
+    "SERVERS": [
+        {"url": "https://bfportal.gg/api", "description": "Production"},
+        {"url": "http://localhost:8000/api", "description": "Local"},
+    ],
+    "AUTHENTICATION_WHITELIST": [],
+    "PREPROCESSING_HOOKS": ["bfportal.excluded_path.custom_preprocessing_hook"],
+}
 
 SITE_ID = 1
 SOCIALACCOUNT_PROVIDERS = {
