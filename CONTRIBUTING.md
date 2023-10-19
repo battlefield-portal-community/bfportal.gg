@@ -71,41 +71,37 @@ If you're not familiar with Django or Wagtail, it might be good to start with [w
 
 You need to install the following applications on your system
 
-- [Python](https://www.python.org/downloads/)
-- [NodeJS / npm package manager](https://nodejs.org/en/download)
+- [Python](https://www.python.org/downloads/) [^3.11]
 - [Docker](https://www.docker.com)
 
-### Setup
+## Todo
+- [ ] docker `pre-commit` hooks in docker environment
+  - all hooks except `commit-msg-validator` are working.
 
-- Create a Python Virtual Environment and activate it
+### Setup
+- Clone in repo and cd into it
   ```
-  py -m venv ./python-venvs/bfportal
-  ./python-venvs/bfportal/Scripts/activate
+  git clone https://gh.bfportal.gg/
   ```
 - Install [poetry](https://python-poetry.org/docs/#installation) for dependency management
   ```
   curl -sSL https://install.python-poetry.org | python3 -
   ```
-- Install python dependencies
+- Install project dependencies
   ```
-  cd bfportal.gg
   poetry install
   ```
 - Install the pre-commit hooks by running
   ```
   pre-commit install --install-hooks
   ```
-- Install npm dependencies
-  ```
-  cd bfportal.gg/bfportal
-  npm install
-  ```
+
 - Copy the `.env.template` file to `.env`
 - (optional) Create a [discord application](https://discord.com/developers/applications) for OAuth2 and copy the client id and secret
   - Paste the client id and secret in `.env` file to `DISCORD_CLIENT_ID` and `DISCORD_SECRET` respectively
 - From the repositories root directory build the necessary docker images and run the platform
   ```
-  docker-compose --profile dev_local up
+  docker-compose up
   ```
 - The website should become available at `127.0.0.1:8000`
 
@@ -115,17 +111,14 @@ You need to install the following applications on your system
 
 You need to install the following applications on your system
 
-- [Python](https://www.python.org/downloads/)
+- [Python](https://www.python.org/downloads/) [^3.11]
 - [NodeJS / npm package manager](https://nodejs.org/en/download)
 - [PostgreSQL](https://www.postgresql.org/)
 
 ### Setup
 
-- Create a Python Virtual Environment and activate it
-  ```
-  py -m venv ./python-venvs/bfportal
-  ./python-venvs/bfportal/Scripts/activate
-  ```
+<!-- no need to create venv as poetry will create one -->
+
 - Install [poetry](https://python-poetry.org/docs/#installation) for dependency management
   ```
   curl -sSL https://install.python-poetry.org | python3 -
