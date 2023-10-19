@@ -34,7 +34,14 @@ class UserFilter(BaseFilterBackend):
 
 
 class ProfileAPIViewSet(BaseAPIViewSet):
-    """ViewSet used to define how the api for ExperiencePage will work."""
+    """User profiles within bfportal.gg."""
+
+    @property
+    def default_response_headers(self):
+        """Adds cache-control header"""
+        headers = BaseAPIViewSet.default_response_headers.fget(self)
+        headers["Cache-Control"] = "public, max-age=300"
+        return headers
 
     name = "UsersApi"
     renderer_classes = [JSONRenderer]
