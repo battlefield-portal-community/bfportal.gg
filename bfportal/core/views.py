@@ -407,5 +407,5 @@ def events_view(request: HttpRequest):
     """Handles /events page"""
     return render(
         request,
-        "502.html",
+        "coming_soon.html",
     )
