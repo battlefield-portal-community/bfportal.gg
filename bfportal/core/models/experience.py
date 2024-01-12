@@ -90,13 +90,15 @@ class ExperiencePage(RoutablePageMixin, CustomBasePage):
     )
 
     no_players = models.PositiveIntegerField(
-        blank=True,
+        blank=False,
+        null=False,
         default=0,
         help_text="Max Number of Human Players in your experience",
         verbose_name="Number of Human Players",
     )
     no_bots = models.PositiveIntegerField(
-        blank=True,
+        blank=False,
+        null=False,
         default=0,
         help_text="Max Number of Bots in your experience",
         verbose_name="Number Of Bots",
