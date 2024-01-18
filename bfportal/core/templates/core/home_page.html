@@ -57,11 +57,14 @@
     <div class="flex flex-row mx-4 gap-x-1 lg:mx-32 text-lg font-bold text-white">
         <img src="{% static "svgs/pages/trending.svg" %}" alt="" width="16" height="16">
         <p>Trending</p>
-
     </div>
     {% include 'core/experiences_listing.html' with posts=trending_posts no_js=True disable_filters_and_pagination=True trending_section=True %}
     {% endif %}
 
+    <div class="flex flex-row mx-4 gap-x-1 lg:mx-32 text-lg font-bold text-white">
+        <img src="{% static "svgs/filter/library_icon.svg" %}" alt="" width="16" height="16">
+        <p>Experiences</p>
+    </div>
     {% include 'core/experiences_listing.html'%}
 
 
