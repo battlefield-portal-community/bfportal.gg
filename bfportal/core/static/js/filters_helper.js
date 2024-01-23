@@ -220,5 +220,8 @@ function hideAllFilters() {
             }
         });
     }
+}
 
+function submitSearch(){
+    
 }

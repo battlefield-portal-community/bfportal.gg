@@ -6,9 +6,11 @@
                 onclick="hideAllFilters()">Show Filters
         </button>
     </div>
+    
     <div class="grid grid-cols-1 gap-y-4 max-w-fit justify-self-center bg-card-bg rounded-lg mt-4">
         {% with label_class="flex flex-col gap-y-2.5 font-bold text-white" text_input_class="bg-default rounded ring-0 border-0 focus:ring-0 placeholder:font-light" %}
             <div id="filtersContainer" class="flex flex-col gap-y-7 px-4 py-2"> <!-- todo: add invisible class -->
+                <form name="searchFilter" action="./" method="get">
                 <!-- exp name and creator -->
                 <div class="flex flex-row flex-grow gap-x-16 flex-wrap gap-y-2 w-fit">
                     <!-- todo: make this responsive -->
@@ -18,7 +20,7 @@
                             Experience Name
                         </div>
                         <label>
-                            <input id="experienceNameInput" class="{{ text_input_class }}" placeholder="Experience Name"
+                            <input name="experience" id="experienceNameInput" class="{{ text_input_class }}" placeholder="Experience Name"
                                    type="text">
                         </label>
                     </div>
@@ -28,7 +30,7 @@
                             Experience creator name
                         </div>
                         <label>
-                            <input id="creatorNameInput" class="{{ text_input_class }}"
+                            <input name="creator" id="creatorNameInput" class="{{ text_input_class }}"
                                    placeholder="Experience creator name" type="text">
                         </label>
                     </div>
@@ -41,7 +43,7 @@
                     </div>
                     <div id="categoriesContainer" class="flex flex-row flex-wrap gap-x-4">
                         {#                    <label class="text-sm text-white flex flex-row items-center gap-x-1">#}
-                        {#                        <input type="checkbox" class="rounded border-2 border-bf2042-4 bg-default text-bf2042-4 shadow-none mr-1 focus:ring focus:ring-offset-0 focus:ring-bf2042-4 focus:ring-opacity-0"> <!-- todo fix check color -->#}
+                        {#                        <input name="category" type="checkbox" class="rounded border-2 border-bf2042-4 bg-default text-bf2042-4 shadow-none mr-1 focus:ring focus:ring-offset-0 focus:ring-bf2042-4 focus:ring-opacity-0"> <!-- todo fix check color -->#}
                         {#                        Solo#}
                         {#                    </label>#}
                     </div>
@@ -54,7 +56,7 @@
                     </div>
                     <div class="flex flex-row gap-x-8 items-center">
                         <label>
-                            <input id="tagsInput" type="text" class="{{ text_input_class }}" placeholder="Search tags">
+                            <input id="tagsInput" name="tags" type="text" class="{{ text_input_class }}" placeholder="Search tags">
                         </label>
                         <div class="max-w-[30rem]">
                             <div id="tagsContainer" class="flex flex-row flex-wrap gap-x-2"></div>
@@ -70,11 +72,11 @@
                     </div>
                     <div class="flex flex-row flex-wrap gap-x-4 items-center">
                         <label>
-                            <input id="fromDate" type="date" class="{{ text_input_class }} font-light text-[#42464e]">
+                            <input id="fromDate" name="fromDate" type="date" class="{{ text_input_class }} font-light text-[#42464e]">
                         </label>
                         <p>To</p>
                         <label>
-                            <input id="toDate" type="date" class="{{ text_input_class }} font-light text-[#42464e]">
+                            <input id="toDate" name="toDate" type="date" class="{{ text_input_class }} font-light text-[#42464e]">
                         </label>
                     </div>
                 </div>
@@ -95,10 +97,10 @@
 
             <div class="flex gap-x-4 justify-self-end font-bold">
                 <button id="filtersClear" type="button" class="text-bf2042-6 rounded hover:text-bf2042-5">Clear</button>
-                <button id="filtersApply" type="button" class="text-bf2042-4 rounded hover:text-bf2042-5">Apply</button>
+                <input type="submit" id="filtersApply" value="Apply" class="text-bf2042-4 rounded hover:text-bf2042-5"/>
             </div>
         </div>
-
     </div>
+    </form>
     <script defer src="{% static 'js/filters_helper.js' %}?v=1" type="text/javascript"></script>
 </div>
