@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Search Bar</title>
+        <style>
+            body {
+                background-color: darkgrey;
+            }
+            #searchContainer {
+                border: 1px;
+                border-radius: 5%;
+                border-color: aqua;
+                background-color: black;
+                margin: auto;
+            }
+            .advancedSearchButton {
+                background-image: url(../../../static/svgs/filter/modifier.svg); 
+                width:16px; 
+                height:16px; 
+                display: none; 
+                cursor: pointer;
+                color: aqua;
+            }
+.searchInput {
+    background-color: black;
+    color: darkgray;
+    caret-color: aqua;
+    border: 0px;
+    outline: none;
+}
+            .searchIcon {
+                background-image: url(../../../static/svgs/manify_glass.svg); 
+                width:16px; 
+                height:16px; 
+                display: block; 
+                cursor: pointer;
+                color: aqua;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="searchContainer">
+            <form name="search">
+                <input type="text" placeholder="Search..." name="experience" id="experienceNameInput" class="searchInput" />
+                <div class="advancedSearchButton" id="advancedSearchButton"></div>
+                <div class="searchIcon" id="searchIcon"></div>
+            </form>
+        </div>
+    </body>
+</html>
