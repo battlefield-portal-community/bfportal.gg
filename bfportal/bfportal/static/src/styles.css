@@ -168,3 +168,34 @@ a.ui-menu-item-wrapper.ui-state-active, .ui-widget-content .ui-state-active, .ui
 .red-svg {
     filter: brightness(0) saturate(100%) invert(15%) sepia(76%) saturate(5742%) hue-rotate(360deg) brightness(90%) contrast(128%);
 }
+
+#searchContainer {
+    border: #26ffe0 solid 2px;
+}
+
+#advancedSearchButton {
+    background-image: url(/static/svgs/filter/modifier.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    color: #26ffe0;
+    fill: #26ffe0;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+#searchIcon {
+    background-image: url(/static/svgs/manify_glass.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    color: #26ffe0;
+    fill: #26ffe0;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+#experienceNameInput {
+    caret-color: #26ffe0;
+    color: white;
+}

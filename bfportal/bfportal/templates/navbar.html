@@ -13,7 +13,7 @@
         </a>
         <div class="flex flex-grow items-center">
             <!-- logo and left side -->
-            <div class="hidden text-base md:flex-grow md:flex md:gap-x-8 content-center">
+            <div class="hidden text-base md:flex-grow md:flex md:gap-x-8 content-center items-center">
                 <a href="https://docs.bfportal.gg/" target="_blank"
                    class="text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out cursor-alias">
                     Docs
@@ -103,6 +103,7 @@
                 </div>
                 <div id="nav-bar-pane"
                      class="flex flex-col absolute bg-bg-default top-full right-0 backdrop-brightness-50 items-center md:hidden">
+                    {% include "core/blocks/searchbar.html" %}
                     <div class="flex flex-col items-end  text-lg ml-4 mr-2 gap-y-2 mt-2">
                         <a href="/experiences/"
                            class="text-white hover:text-bf2042-5 transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
