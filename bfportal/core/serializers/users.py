@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from ..models.experience import ExperiencePage
@@ -23,6 +24,7 @@ class UserModelSerializer(serializers.ModelSerializer):
     """Serializer for User model."""
 
     social_account = serializers.SerializerMethodField()
+    experience_count = serializers.SerializerMethodField()
 
     class Meta:
         model = get_user_model()
@@ -31,6 +33,7 @@ class UserModelSerializer(serializers.ModelSerializer):
             "username",
             "first_name",
             "last_name",
+            "experience_count",
             "social_account",
         ]
         depth = 1
@@ -45,6 +48,10 @@ class UserModelSerializer(serializers.ModelSerializer):
             return providers_dict
         # no provider internal account
         return {}
+
+    def get_experience_count(self, obj: User):
+        """Return the count of exp pages a user has created."""
+        return len(ExperiencePage.objects.filter(owner_id=obj.id))
 
 
 class ProfileSerializer(serializers.ModelSerializer):
