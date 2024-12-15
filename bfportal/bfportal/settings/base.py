@@ -225,7 +225,7 @@ WAGTAILSEARCH_BACKENDS = {
         "BACKEND": "wagtail.search.backends.database",
     }
 }
-
+WAGTAILAPI_LIMIT_MAX = None
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 EMAIL_BACKEND = "django.core.mail.backends.dummy.EmailBackend"
