@@ -59,7 +59,7 @@ class ProfileAPIViewSet(BaseAPIViewSet):
         """
         Checks if all the parameters are valid,
 
-        Overriden here so that we can send custom params in our requests
+        Override here so that we can send custom params in our requests
         see `UserFilter` class
 
         """
