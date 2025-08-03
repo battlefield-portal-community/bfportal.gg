@@ -1,49 +1,59 @@
-[tool.poetry]
+[project]
 name = "bfportal-gg"
 version = "2.0.0"
 description = "A website that enables players to share Battlefield Portal Mods (Battlefield 2042)."
-authors = ["p0lygun <solankivibhakar82@gmail.com>"]
-license = "MIT"
+authors = [{ name = "p0lygun", email = "solankivibhakar82@gmail.com" }]
+requires-python = "~=3.11.0"
 readme = "README.md"
-packages = [{ include = "bfportal" }]
+license = "MIT"
+dependencies = [
+    "aiohttp>=3.8.4,<4",
+    "asgiref>=3.7.2,<4",
+    "bleach>=6.0.0,<7",
+    "wagtail>=5.0.2,<6",
+    "django-allauth>=0.54.0,<0.55",
+    "django-autocomplete-light>=3.9.7,<4",
+    "django-embed-video>=1.4.9,<2",
+    "Faker>=18.13.0,<19",
+    "loguricorn",
+    "loguru>=0.7.0,<0.8",
+    "Markdown>=3.4.3,<4",
+    "mdgen>=0.1.10,<0.2",
+    "python-dotenv>=1.0.0,<2",
+    "requests>=2.31.0,<3",
+    "snowflake-id>=0.0.4,<0.0.5",
+    "wagtail-autocomplete>=0.10.0,<0.11",
+    "wagtailsvg>=0.0.37,<0.0.38",
+    "whitenoise>=6.5.0,<7",
+    "django-ajax-selects>=2.2.0,<3",
+    "django-widget-tweaks>=1.4.12,<2",
+    "django-extensions>=3.2.3,<4",
+    "django-browser-reload>=1.10.0,<2",
+    "django-markdownx>=4.0.2,<5",
+    "tinycss2>=1.2.1,<2",
+    "psycopg2-binary>=2.9.6,<3",
+    "pre-commit>=3.3.3,<4",
+    "gunicorn>=20.1.0,<21",
+    "wagtail-generic-chooser>=0.5.1,<0.6",
+    "cachetools>=5.3.1,<6",
+    "snowflake>=0.0.3,<0.0.4",
+    "drf-spectacular>=0.26.4,<0.27",
+]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-aiohttp = "^3.8.4"
-asgiref = "^3.7.2"
-bleach = "^6.0.0"
-wagtail = "^5.0.2"
-django-allauth = "^0.54.0"
-django-autocomplete-light = "^3.9.7"
-django-embed-video = "^1.4.9"
-Faker = "^18.13.0"
+[dependency-groups]
+dev = ["pre-commit>=3.3.3,<4"]
+
+[tool.uv]
+
+[tool.uv.sources]
 loguricorn = { git = "https://github.com/p0lygun/loguricorn.git" }
-loguru = "^0.7.0"
-Markdown = "^3.4.3"
-mdgen = "^0.1.10"
-python-dotenv = "^1.0.0"
-requests = "^2.31.0"
-snowflake-id = "^0.0.4"
-wagtail-autocomplete = "^0.10.0"
-wagtailsvg = "^0.0.37"
-whitenoise = "^6.5.0"
-django-ajax-selects = "^2.2.0"
-django-widget-tweaks = "^1.4.12"
-django-extensions = "^3.2.3"
-django-browser-reload = "^1.10.0"
-django-markdownx = "^4.0.2"
-tinycss2 = "^1.2.1"
-psycopg2 = "^2.9.6"
-pre-commit = "^3.3.3"
-gunicorn = "^20.1.0"
-wagtail-generic-chooser = "^0.5.1"
-cachetools = "^5.3.1"
-snowflake = "^0.0.3"
-drf-spectacular = "^0.26.4"
 
-[tool.poetry.group.dev.dependencies]
-pre-commit = "^3.3.3"
+[tool.hatch.build.targets.sdist]
+include = ["bfportal"]
+
+[tool.hatch.build.targets.wheel]
+include = ["bfportal"]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
