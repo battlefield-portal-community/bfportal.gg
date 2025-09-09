@@ -29,8 +29,8 @@ services:
     container_name: bfportal_dev_local
     ports:
       - "8000:8000"
-    volumes:
-      - ./bfportal:/app
+#     volumes:
+#       - ./bfportal:/app
     environment:
       - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
       - DISCORD_SECRET=${DISCORD_SECRET}
