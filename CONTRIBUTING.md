@@ -83,17 +83,17 @@ You need to install the following applications on your system
   ```
   git clone https://gh.bfportal.gg/
   ```
-- Install [poetry](https://python-poetry.org/docs/#installation) for dependency management
+- Install [uv](https://docs.astral.sh/uv/getting-started/installation/) for dependency management
   ```
-  curl -sSL https://install.python-poetry.org | python3 -
+  curl -LsSf https://astral.sh/uv/install.sh | sh
   ```
 - Install project dependencies
   ```
-  poetry install
+  uv sync
   ```
 - Install the pre-commit hooks by running
   ```
-  pre-commit install --install-hooks
+  uv run pre-commit install --install-hooks
   ```
 
 - Copy the `.env.template` file to `.env`
@@ -119,18 +119,22 @@ You need to install the following applications on your system
 
 <!-- no need to create venv as poetry will create one -->
 
-- Install [poetry](https://python-poetry.org/docs/#installation) for dependency management
+
+- Clone in repo and cd into it
   ```
-  curl -sSL https://install.python-poetry.org | python3 -
+  git clone https://gh.bfportal.gg/
   ```
-- Install python dependencies
+- Install [uv](https://docs.astral.sh/uv/getting-started/installation/) for dependency management
   ```
-  cd bfportal.gg
-  poetry install
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  ```
+- Install project dependencies
+  ```
+  uv sync
   ```
 - Install the pre-commit hooks by running
   ```
-  pre-commit install --install-hooks
+  uv run pre-commit install --install-hooks
   ```
 - Install npm dependencies
   ```
@@ -147,7 +151,7 @@ You need to install the following applications on your system
   - Create DB, USER and Password for the project
   - Update the `.env` file accordingly
 
-- Launch the server / web page with following commands:
+- Launch the server / web page with following commands(be sure to activate venv):
 
 ```
 cd bfportal.gg/bfportal
