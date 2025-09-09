@@ -10,7 +10,7 @@ logger_class = "loguricorn.Logger"
 
 bind = "127.0.0.1:8000"
 reload = False
-timeout = 30
+timeout = 120
 errorlog = "-"
 loglevel = "info"
 wsgi_app = "bfportal.wsgi:application"
