@@ -1,4 +1,4 @@
-from urllib.parse import parse_qs, urlsplit
+from urllib.parse import urlsplit
 
 import requests
 from ajax_select.fields import AutoCompleteSelectMultipleField
@@ -116,18 +116,19 @@ class ExperiencePageForm(forms.ModelForm):
             #    fragment=''
             # )
             parsed_url = urlsplit(url)
-            query_dict = parse_qs(parsed_url.query)
+            # query_dict = parse_qs(parsed_url.query)
             if parsed_url.netloc != "portal.battlefield.com":
                 logger.warning(f"Invalid url {url} submitted ")
                 raise forms.ValidationError(
                     "only a URL from https://portal.battlefield.com/ is allowed",
                     code="invalid_domain",
                 )
-            elif "playgroundId" not in query_dict.keys():
-                logger.info(f"url without playgroundId passed {url}")
-                raise forms.ValidationError(
-                    "must contain Playground ID", code="no_playground_id"
-                )
+            # TODO: Re-enable this once we have a way to validate the playgroundId
+            # elif "playgroundId" not in query_dict.keys():
+            #     logger.info(f"url without playgroundId passed {url}")
+            #     raise forms.ValidationError(
+            #         "must contain Playground ID", code="no_playground_id"
+            #     )
         return url
 
     def clean_cover_img_url(self):
