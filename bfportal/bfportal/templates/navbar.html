@@ -6,10 +6,11 @@
     {% endif %}
     <nav id="navBar"
          class="sticky {% if is_super_user %} top-[2.5rem] {% else %} top-0 {% endif %} z-[1] bg-bg-default flex h-16 items-center w-full gap-x-12 px-8 py-4">
-        <a href="/">
+        <a href="/" class="text-bf2042-4">
             <img class="fill-current h-8 w-48 mr-2" width="54" height="54"
-                 src="{% static 'images/icon_portal_library_website.png' %}"
+                 src="{% static 'images/icon_portal_library_website.svg' %}"
                  alt=""/>
+
         </a>
         <div class="flex flex-grow items-center">
             <!-- logo and left side -->
