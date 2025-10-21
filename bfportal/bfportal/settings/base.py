@@ -26,6 +26,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
+    "bf6",
     "core",
     "wagtail",
     "wagtail.contrib.forms",
