@@ -25,41 +25,50 @@
                     </span>
                 </a>
 
-                <div class="flex h-full w-full items-center justify-center">
-                    <a href=""
-                       target="_blank"
-                       class="cursor-pointer text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">
-                       MAPS
-                    </a>
-                </div>
+                <a href="" target="_blank" class="flex h-full w-full items-center justify-center font-bold hover:cursor-pointer text-white
+                            {% if request.path == '/maps/' %}
+                              bg-bf6-4 hover:bg-bf6-6 transition duration-200 ease-in-out text-bf6-bg-default
+                            {% endif%}">
+                    <span>
+                        MAPS
+                    </span>
+                </a>
 
-                <div class="flex h-full w-full items-center justify-center">
-                    <a href=""
-                       target="_blank"
-                       class="cursor-pointer text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">
-                       TOOLS & PLUGINS
-                    </a>
-                </div>
+                <a href="" target="_blank" class="flex h-full w-full items-center justify-center font-bold hover:cursor-pointer text-white
+                            {% if request.path == '/tools/' %}
+                              bg-bf6-4 hover:bg-bf6-6 transition duration-200 ease-in-out text-bf6-bg-default
+                            {% endif%}">
+                    <span>
+                        TOOLS & PLUGINS
+                    </span>
+                </a>
 
-                <div class="flex h-full w-full items-center justify-center">
-                    <a href="" target="_blank"
-                       class="text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out cursor-pointer">
+                <a href="" target="_blank" class="flex h-full w-full items-center justify-center font-bold hover:cursor-pointer text-white
+                            {% if request.path == '/guides/' %}
+                              bg-bf6-4 hover:bg-bf6-6 transition duration-200 ease-in-out text-bf6-bg-default
+                            {% endif%}">
+                    <span>
                         GUIDES & DOCS
-                    </a>
-                </div>
-                <div class="flex h-full w-full items-center justify-center">
-                    <a href="" target="_blank"
-                       class="text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out cursor-pointer">
-                        LIBRARY
-                    </a>
-                </div>
+                    </span>
+                </a>
 
-                <div class="flex h-full w-full items-center justify-center">
-                    <a href="" target="_blank"
-                       class="text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out cursor-pointer">
+                <a href="" target="_blank" class="flex h-full w-full items-center justify-center font-bold hover:cursor-pointer text-white
+                            {% if request.path == '/library/' %}
+                              bg-bf6-4 hover:bg-bf6-6 transition duration-200 ease-in-out text-bf6-bg-default
+                            {% endif%}">
+                    <span>
+                        LIBRARY
+                    </span>
+                </a>
+
+                <a href="" target="_blank" class="flex h-full w-full items-center justify-center font-bold hover:cursor-pointer text-white
+                            {% if request.path == '/events/' %}
+                              bg-bf6-4 hover:bg-bf6-6 transition duration-200 ease-in-out text-bf6-bg-default
+                            {% endif%}">
+                    <span>
                         EVENTS
-                    </a>
-                </div>
+                    </span>
+                </a>
 
     {#    TODO: ADD FORUM SUPPORT  #}
 {#                <a href="https://docs.bfportal.gg/" target="_blank"#}
