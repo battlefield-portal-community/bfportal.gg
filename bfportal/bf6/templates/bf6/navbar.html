@@ -15,44 +15,65 @@
 
             </a>
         </div>
+
         <div class="flex flex-grow items-center gap-x-12 px-8 py-4">
             <!-- left side -->
-            <div class="hidden text-base md:flex-grow md:flex md:gap-x-8 content-center">
-                <a href="https://docs.bfportal.gg/" target="_blank"
+        <div class="hidden text-base md:flex-grow md:flex md:gap-x-28 content-center">
+                <a href="" target="_blank"
                    class="text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out cursor-alias">
-                    Docs
+                    SCRIPTS
                 </a>
-                <a href="https://gametools.network/"
+                <a href=""
                    target="_blank"
                    class="cursor-alias text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">
-                    Server Browser
+                   MAPS
                 </a>
-                {% if page.is_experience_page and  page.owner == request.user %}
-                    <a href="edit/"
-                       class="cursor-alias text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">
-                        Edit Experience
-                    </a>
-                {% endif %}
-                <a href="https://discord.gg/8un9qY5AvV"
+                <a href=""
                    target="_blank"
                    class="cursor-alias text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">
-                    <p id="discord-nav">Discord</p>
+                   TOOLS & PLUGINS
                 </a>
+                <a href="" target="_blank"
+                   class="text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out cursor-alias">
+                    GUIDES & DOCS
+                </a>
+                <a href="" target="_blank"
+                   class="text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out cursor-alias">
+                    LIBRARY
+                </a>
+                <a href="" target="_blank"
+                   class="text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out cursor-alias">
+                    EVENTS
+                </a>
+
+{#    TODO: ADD FORUM SUPPORT  #}
+{#                <a href="https://docs.bfportal.gg/" target="_blank"#}
+{#                   class="text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out cursor-alias">#}
+{#                   FOURM #}
+{#                </a>#}
+{# TODO: discuss if discord link should be shown #}
+{#                <a href="https://discord.gg/8un9qY5AvV"#}
+{#                   target="_blank"#}
+{#                   class="cursor-alias text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">#}
+{#                    <p id="discord-nav">Discord</p>#}
+{#                </a>#}
 
                 {% block extend_navbar %}
 
                 {% endblock %}
             </div>
+            <!-- right side -->
             <div class="hidden md:flex flex-grow justify-end items-center gap-x-8">
-                <div>
-                    <span id="disclaimer"
-                          onclick="showPopUp('disclaimerPopUp')"
-                          class="cursor-alias text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">Disclaimer</span>
-                </div>
+{#            TODO: ask mata do we not need this anymore #}
+{#                <div>#}
+{#                    <span id="disclaimer"#}
+{#                          onclick="showPopUp('disclaimerPopUp')"#}
+{#                          class="cursor-alias text-white font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">Disclaimer</span>#}
+{#                </div>#}
                 {% if not no_login %}
                     <a href="/submit/"
-                       class="cursor-pointer text-bf6-4 font-bold hover:text-bf2042-3 transition duration-100 ease-in-out">
-                        Submit Experience
+                       class="cursor-pointer text-bf6-4 font-bold hover:text-bf6-3 transition duration-100 ease-in-out">
+                        SUBMIT
                     </a>
                     <!-- when logged-in -->
                     {% if request.user.is_authenticated %}
@@ -86,16 +107,13 @@
                         {% endif %}
                     {% else %}
                         <!-- not logged-in -->
-                        <a href="{% provider_login_url 'discord' process='login' %}"
-                           class="flex flex-row items-center gap-x-8 text-white  font-bold hover:text-[#cccccc] transition duration-100 ease-in-out">login
+                        <a href="{% provider_login_url 'discord' process='login' %}">
                             <img class="p-2.5 py bg-bf6-4 rounded-full" src="{% static 'svgs/discord_icon.svg' %}"
                                  alt="non">
                         </a>
                     {% endif %}
                 {% endif %}
             </div>
-
-            <!-- right side -->
             <!-- mobile nav pane -->
             <div class="grow md:hidden">
                 <div id="menuIcon" class="group flex flex-col gap-y-1 ml-auto w-min cursor-pointer md:hidden">

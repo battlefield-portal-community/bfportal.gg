@@ -221,6 +221,10 @@
                     span = document.createElement('span');
 
                 span.className = "text-xs text-bg-light"
+                const element = document.getElementById('discord-nav')
+                if (element === null || element === undefined) {
+                    return
+                }
                 document.getElementById('discord-nav').appendChild(span)
 
                 if (document.location.pathname === '/') {
