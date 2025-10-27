@@ -44,10 +44,10 @@ module.exports = {
                 'bf6-discord-light-dark': "#36393f",
                 'bf6-1': "#011C26",
                 'bf6-2': "#025159",
-                'bf6-3': "#08A696",
+                'bf6-3': "rgb(175,38,2)",
                 'bf6-4': "#FF3D00",
                 'bf6-5': "#F26A1B",
-                'bf6-6': "#FF2C10",
+                'bf6-6': "rgb(175,38,2)",
 
             },
             dropShadow: {
