@@ -1,0 +1,308 @@
+{% load template_filters %}
+{% load static wagtailcore_tags wagtailimages_tags account socialaccount %}
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>{% block title %}{% if page.meta_title %}{{ page.meta_title }}{% else %}{{ page.title }}
+    {% endif %}{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href={% static "images/fav.gif" %}>
+    {% if not disable_preview_embed %}
+        <meta property="og:title"
+              content="{% if page.meta_title %}{{ page.meta_title }}{% else %}{{ page.title }}{% endif %}"/>
+        <meta property="og:type" content="website">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta property="twitter:domain" content="bfportal.gg">
+        <meta property="twitter:url" content="{{ request.build_absolute_uri }}">
+        <meta name="twitter:title"
+              content="{% if page.meta_title %}{{ page.meta_title }}{% else %}{{ page.title }}{% endif %}">
+        {% if page %}
+            {% if page.meta_description %}
+                {% with page.meta_description as description %}
+                    <meta property="og:description" content="{{ description }}"/>
+                    <meta name="description" content="{{ description }}"/>
+                    <meta property="og:description" content="{{ description }}"/>
+                {% endwith %}
+            {% endif %}
+            {% if page.meta_image %}
+                {% with page.meta_image as image_url %}
+                    <meta property="og:image" content="{{ image_url }}"/>
+                    <meta name="twitter:image" content="{{ image_url }}">
+                {% endwith %}
+            {% else %}
+                {% if page.is_experience_page %}
+                    {% with page.description as description %}
+                        <meta property="og:description" content="{{ description }}"/>
+                        <meta name="description" content="{{ description }}"/>
+                        <meta property="og:description" content="{{ description }}"/>
+                    {% endwith %}
+                    <meta property="og:image" content="{{ page.cover_img_url }}"/>
+                    <meta property="twitter:image" content="{{ page.cover_img_url }}"/>
+                {% endif %}{% endif %}{% else %}
+            <meta name="twitter:description" content="Battlefield Portal Library">
+            <meta name="twitter:image" content="{{ request|get_opg_image_url }}">
+            <meta name="description" content="Share & Find experiences made on portal.battlefield.com"/>
+            <meta property="og:description" content="Share & Find experiences made on portal.battlefield.com"/>
+            <meta property="og:image" content="{{ request|get_opg_image_url }}"/>
+        {% endif %}{% endif %}
+
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    {% block preload_media %}{% endblock %}
+    <link rel="stylesheet" href="{% static "css/bfportal.css" %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css"
+          integrity="sha512-ELV+xyi8IhEApPS/pSj66+Jiw+sOT1Mqkzlh8ExXihe4zfqbWkxPRi8wptXIO9g73FSlhmquFlUOuMSoXz5IRw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/theme.min.css"
+          integrity="sha512-hbs/7O+vqWZS49DulqH1n2lVtu63t3c3MTAn0oYMINS5aT8eIAbJGDXgLt6IxDHcWyzVTgf9XyzZ9iWyVQ7mCQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    {% block extra_css %}
+        {# Override this in templates to add extra stylesheets #}
+    {% endblock %}
+
+
+    <script type="text/javascript" src="{% static 'js/preload.js' %}"></script>
+    <script type="text/javascript">
+        /* When the user clicks on the button,
+        toggle between hiding and showing the dropdown content */
+        function toggleDropdown(id) {
+            const drpDown = document.getElementById(id)
+            drpDown.classList.toggle("invisible");
+            drpDown.style.opacity = '0%';
+            drpDown.style.top = '0rem';
+            anime({
+                targets: `#${id}`,
+                opacity: '100%',
+                top: '2rem',
+                easing: 'easeOutQuint',
+                duration: "200"
+            });
+
+        }
+
+        function addDropDownPair(buttonID, menuID) {
+            const button = document.getElementById(buttonID),
+                menu = document.getElementById(menuID);
+
+            if (button) {
+                button.addEventListener('click', function () {
+                    toggleDropdown(menuID)
+                })
+
+                menu.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                });
+
+                // Close the dropdown if the user clicks outside it
+                window.addEventListener('click', function (event) {
+                    if (!event.target.closest(`#${buttonID}`)) document.getElementById(menuID).classList.add('invisible');
+                })
+            }
+        }
+    </script>
+</head>
+<body class="bg-bf6-bg-default min-h-screen m-0  relative flex flex-col {% block body_class %}{% endblock %}">
+<div id="popUpBackground" class="fixed w-screen h-screen bg-bf6-bg-default/[.95] z-[1] hidden" onclick="hidePopUps()"></div>
+{% block header %}
+    {% include nav_tmpl|default:'bf6/navbar.html' %}
+{% endblock %}
+
+<div id="main" class="main-content  flex flex-col flex-grow gap-y-12 overflow-x-hidden mb-8">
+    <h1 class="text-white text-4xl font-extrabold flex flex-col text-center">Test</h1>
+    {% block extra_content %}
+        {% include_block page.extra_content %}
+        <script type="text/javascript">
+            [...document.getElementsByClassName("extra_content")].forEach(function (element) {
+                if (!element.children.length) element.style.display = "none"
+            })
+        </script>
+    {% endblock %}
+    {% if not no_cat_description  and cat_description %}
+        <div class="text-white flex w-11/12 mx-auto">
+            <div class="text-white text-sm font-medium prose prose-invert min-w-fit mt-10">
+                {{ cat_description|show_markdown|safe }}
+            </div>
+        </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+</div>
+
+{% block footer %}
+    {% include 'bf6/footer.html' %}
+{% endblock %}
+{# Global javascript #}
+<script src="{% static 'js/jquery.min.js' %}"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="{% static 'js/jquery.waypoints.js' %}"></script>
+<script src="{% static 'js/infinite.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bfportal.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/color_filter.js' %}"></script>
+<script type="text/javascript">
+    const showEvents = ['mouseenter', 'focus'];
+    const hideEvents = ['mouseleave', 'blur'];
+    let tooltip_btns = document.getElementsByClassName("tooltip_btn");
+
+    [...tooltip_btns].forEach(function (elm) {
+        const tooltip = document.getElementById(`${elm.getAttribute('for')}`);
+
+        const popperInstance = Popper.createPopper(
+            elm, tooltip, {
+                placement: 'top',
+                modifiers: [
+                    {
+                        name: 'offset',
+                        options: {
+                            offset: [0, 8],
+                        },
+                    },
+                ]
+            })
+
+        function show() {
+            tooltip.setAttribute('data-show', '');
+            popperInstance.update();
+        }
+
+        function hide() {
+            tooltip.removeAttribute('data-show');
+        }
+
+        showEvents.forEach((event) => {
+            elm.addEventListener(event, show);
+        });
+
+        hideEvents.forEach((event) => {
+            elm.addEventListener(event, hide);
+        });
+    })
+
+    function add_to_liked(elem) {
+        const id = elem.getAttribute("like_count_container");
+        fetch(`/api/like/${id}/`).then(
+            function (resp) {
+                console.log(resp.url)
+                if (resp.redirected) {
+                    document.location = `${resp.url.split("=")[0]}=${document.location.pathname}`
+                } else {
+                    return resp.json()
+                }
+
+            }
+        ).then(function (data) {
+            const fav_containers = document.querySelectorAll(`[fav_count_container='${id}']`),
+                like_svgs = [...document.querySelectorAll(`[like_svg='${id}']`)]
+            fav_containers.forEach(function (elem, index) {
+                const like_svg = like_svgs[index]
+                if (elem.textContent && data > elem.textContent) {
+                    like_svg.src = "{% static 'svgs/card/heart_liked.svg' %}"
+                } else {
+                    like_svg.src = "{% static 'svgs/card/heart_not_liked.svg' %}"
+                }
+                elem.textContent = data
+                if (elem.textContent === "0") {
+                    elem.classList.remove("block")
+                    elem.classList.add("hidden")
+                } else {
+                    elem.classList.add("block")
+                    elem.classList.remove("hidden")
+                }
+            })
+        })
+    }
+
+    fetch('https://discord.com/api/guilds/870246147455877181/widget.json').then(
+        resp => {
+            resp.json().then(json => {
+                const totalCount = parseInt(json['presence_count']),
+                    span = document.createElement('span');
+
+                span.className = "text-xs text-bg-light"
+                document.getElementById('discord-nav').appendChild(span)
+
+                if (document.location.pathname === '/') {
+                    const duration = 5,
+                        countStep = Math.trunc((totalCount / duration) / 50);
+
+                    let currCount = 0
+
+                    function increaseCount() {
+                        span.innerHTML = `&nbsp;&nbsp;${currCount} members online`
+                        if (totalCount >= currCount) {
+                            currCount += countStep
+                            setTimeout(increaseCount, duration)
+                        }
+                    }
+
+                    increaseCount()
+                } else {
+                    span.innerHTML = `&nbsp;&nbsp;${totalCount} members online`
+
+                }
+
+            })
+        }
+    )
+
+    async function copyDivToClipboard(elem) {
+        const container_div = $(elem);
+        if (container_div.attr('data-copy-state') === "normal") { // only run when the inner html is set correctly
+            const old_html = container_div.html(),
+                state_class = "bg-bf6-5 hover:bg-bf6-5";
+
+            container_div.attr('data-copy-state', "copy");
+            await navigator.clipboard.writeText(container_div.attr('data-copy')).then(
+                () => {
+                    container_div.addClass(state_class);
+                    container_div.text("Copied")
+                    setTimeout(function () {
+                        container_div.fadeOut(200, function () {
+                            container_div.html(old_html).fadeIn(1000);
+                            container_div.attr('data-copy-state', "normal")
+                        })
+                        container_div.removeClass(state_class);
+                    }, 1000);
+                }, () => {
+                    console.log("Copy Failed");
+                    container_div.attr('data-copy-state', "normal")
+                }
+            )
+        }
+    }
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === "Escape") {
+            hidePopUps();
+        }
+    });
+
+    function hidePopUps() {
+        $('#popUpBackground, .popup').fadeOut(100)
+    }
+
+    function showPopUp(id) {
+        const popup = $(document.getElementById(id))
+        if (popup) {
+            showPopUpBackGround();
+            popup.fadeIn();
+            popup.css('display', 'flex');
+        }
+    }
+
+    function showPopUpBackGround() {
+        $(`#popUpBackground`).fadeIn(100);
+    }
+
+    $('#disclaimer-mobile').on('click touch', function() {
+        showPopUp('disclaimerPopUp');
+    });
+
+</script>
+{% block extra_js %}
+    {# Override this in templates to add extra javascript #}
+{% endblock %}
+</body>
+</html>
