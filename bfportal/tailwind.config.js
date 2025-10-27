@@ -32,6 +32,23 @@ module.exports = {
                 'bf2042-4': "#26FFDF",
                 'bf2042-5': "#F26A1B",
                 'bf2042-6': "#FF2C10",
+
+                'bf6-bg-default' : '#0F0F0F',
+                'bf6-bg-light' : '#262626',
+                'bf6-default' : '#0F0F0F',
+                'bf6-card-bg' : '#141414',
+                'bf6-card-bg-dark': '#0F0F0F',
+                'bf6-hover-bg-light': '#131313',
+                'bf6-accent-bg' : '#363636',
+                'bf6-discord-dark': "#303434",
+                'bf6-discord-light-dark': "#36393f",
+                'bf6-1': "#011C26",
+                'bf6-2': "#025159",
+                'bf6-3': "#08A696",
+                'bf6-4': "#FF3D00",
+                'bf6-5': "#F26A1B",
+                'bf6-6': "#FF2C10",
+
             },
             dropShadow: {
                 'bf2042-1' : '0 0 0.35rem #011C26',
