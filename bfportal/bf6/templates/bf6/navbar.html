@@ -124,38 +124,32 @@
                 <div id="nav-bar-pane"
                      class="flex flex-col absolute bg-bg-default top-full right-0 backdrop-brightness-50 items-center md:hidden">
                     <div class="flex flex-col items-end  text-lg ml-4 mr-2 gap-y-2 mt-2">
-                        <a href="/experiences/"
+                        <a href=""
                            class="text-white hover:text-bf6-5 transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
-                            Library
+                            SCRIPTS
                         </a>
-                        <a href="#"
+                        <a href=""
                            class="text-white hover:text-bf6-5 transition duration-200 ease-in-out rounded-[0px]  border-b-2 border-white">
-                            Docs
+                            MAPS
                         </a>
-                        <a href="/experiences/featured"
+                        <a href=""
                            class="text-white hover:text-bf6-5  transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
-                            Featured
+                            TOOLS & PLUGINS
                         </a>
                         {% if not no_login %}
                             <a href="/submit/"
                                class="lg:mt-0 text-white hover:text-bf6-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
-                                Submit Experience
+                                SUBMIT
                             </a>
                         {% endif %}
-                        {% if page.is_experience_page and  page.owner == request.user %}
-                            <a href="edit/"
-                               class="text-white hover:text-bf6-5 transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
-                                Edit Experience
-                            </a>
-                        {% endif %}
-                        <a href="https://gametools.network/"
+                        <a href=""
                            target="_blank"
                            class="cursor-alias lg:mt-0 text-white  hover:text-bf6-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
-                            Server Browser
+                            GUIDES & DOCS
                         </a>
                         <div id="disclaimer-mobile"
                             class="cursor-alias lg:mt-0 text-white  hover:text-bf6-6 transition rounded-[0px] duration-200 ease-in-out border-b-2 border-white">
-                            Disclaimer
+                            DISCLAIMER
                         </div>
                         {% if not no_login %}
                             {% if request.user.is_authenticated %}
