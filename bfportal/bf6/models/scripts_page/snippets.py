@@ -91,7 +91,7 @@ class SnippetPage(RoutablePageMixin, CustomBasePage):
                     FieldPanel("category", widget=forms.RadioSelect),
                     AutocompletePanel("creators", target_model="core.Profile"),
                 ],
-                heading="Title, Description, Categories, Creators",
+                heading="Description, Categories, Creators",
                 classname="collapsed",
             ),
             MultiFieldPanel(
