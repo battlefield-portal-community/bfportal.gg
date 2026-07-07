@@ -12,6 +12,7 @@ from modelcluster.fields import ParentalManyToManyField
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.models import Page
+from wagtail.search import index
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 
 from bfportal.settings.base import LOGIN_URL
@@ -52,6 +53,9 @@ class SnippetPage(RoutablePageMixin, CustomBasePage):
         help_text="Choose Script Type",
         related_name="+",
     )
+    code = models.TextField(blank=False, null=True, default="")
+    exp_json = models.JSONField(blank=True, null=True, default=dict)
+
     first_publish = models.BooleanField(default=True, null=False)
     liked_by = models.ManyToManyField("core.Profile", blank=True)
     creators = ParentalManyToManyField(
@@ -64,6 +68,11 @@ class SnippetPage(RoutablePageMixin, CustomBasePage):
     parent_page_types = ["bf6.ScriptsListingPage"]
     subpage_types = []
 
+    search_fields = Page.search_fields + [
+        index.SearchField("title"),
+        index.SearchField("description"),
+        index.SearchField("code"),
+    ]
     content_panels = (
         Page.content_panels
         + [
@@ -90,6 +99,14 @@ class SnippetPage(RoutablePageMixin, CustomBasePage):
                     FieldPanel("vid_url", classname="full"),
                 ],
                 heading="Video Showcasing the snippet",
+                classname="collapsed",
+            ),
+            MultiFieldPanel(
+                [
+                    FieldPanel("code", classname="full"),
+                    FieldPanel("exp_json", classname="full"),
+                ],
+                heading="Code, Json",
                 classname="collapsed",
             ),
         ]
