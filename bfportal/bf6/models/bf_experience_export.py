@@ -93,7 +93,7 @@ class Workspace:
 
 
 @dataclass
-class Experience:
+class ExperienceExport:
     """A Battlefield Portal experience as exported to JSON."""
 
     name: str
@@ -121,7 +121,7 @@ class Experience:
         return None
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> Experience:
+    def from_dict(cls, data: dict[str, Any]) -> ExperienceExport:
         """Build an ``Experience`` from a decoded JSON dict."""
         return cls(
             name=data["name"],
