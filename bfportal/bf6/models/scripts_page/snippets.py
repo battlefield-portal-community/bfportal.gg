@@ -6,6 +6,8 @@ from core.models.pages import CustomBasePage
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from embed_video.fields import EmbedVideoField
@@ -164,3 +166,13 @@ class SnippetPage(RoutablePageMixin, CustomBasePage):
     @staticmethod
     def is_experience_page():  # noqa: D102
         return True
+
+
+@receiver(pre_save, sender=SnippetPage)
+def update_ts_code(sender, **kwargs):
+    """Updates the ts code of the experience when the experience is saved."""
+    logger.debug(f"updating ts code for {kwargs['instance']}")
+    if not kwargs["instance"].exp_json:
+        return
+    exp = ExperienceExport(**kwargs["instance"].exp_json)
+    kwargs["instance"].code = exp.ts_code
