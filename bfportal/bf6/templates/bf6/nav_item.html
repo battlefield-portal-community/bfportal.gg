@@ -1,0 +1,11 @@
+{% load string_filters %}
+<a href="{{ href }}" target="_blank" class="flex h-full w-full items-center justify-center font-bold hover:cursor-pointer
+            {% if request.path|startswith:path %}
+              bg-bf6-4 text-bf6-bg-default
+            {% else %}
+              text-white
+            {% endif %}">
+    <span>
+        {{ label }}
+    </span>
+</a>

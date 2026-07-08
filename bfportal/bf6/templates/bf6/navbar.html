@@ -16,59 +16,12 @@
                     </a>
                 </div>
 
-                <a href="" target="_blank" class="flex h-full w-full items-center justify-center font-bold hover:cursor-pointer text-white
-                            {% if request.path == '/scripts/' %}
-                              bg-bf6-4 hover:bg-bf6-6 transition duration-200 ease-in-out text-bf6-bg-default
-                            {% endif%}">
-                    <span>
-                        SCRIPTS
-                    </span>
-                </a>
-
-                <a href="" target="_blank" class="flex h-full w-full items-center justify-center font-bold hover:cursor-pointer text-white
-                            {% if request.path == '/maps/' %}
-                              bg-bf6-4 hover:bg-bf6-6 transition duration-200 ease-in-out text-bf6-bg-default
-                            {% endif%}">
-                    <span>
-                        MAPS
-                    </span>
-                </a>
-
-                <a href="" target="_blank" class="flex h-full w-full items-center justify-center font-bold hover:cursor-pointer text-white
-                            {% if request.path == '/tools/' %}
-                              bg-bf6-4 hover:bg-bf6-6 transition duration-200 ease-in-out text-bf6-bg-default
-                            {% endif%}">
-                    <span>
-                        TOOLS & PLUGINS
-                    </span>
-                </a>
-
-                <a href="" target="_blank" class="flex h-full w-full items-center justify-center font-bold hover:cursor-pointer text-white
-                            {% if request.path == '/guides/' %}
-                              bg-bf6-4 hover:bg-bf6-6 transition duration-200 ease-in-out text-bf6-bg-default
-                            {% endif%}">
-                    <span>
-                        GUIDES & DOCS
-                    </span>
-                </a>
-
-                <a href="" target="_blank" class="flex h-full w-full items-center justify-center font-bold hover:cursor-pointer text-white
-                            {% if request.path == '/library/' %}
-                              bg-bf6-4 hover:bg-bf6-6 transition duration-200 ease-in-out text-bf6-bg-default
-                            {% endif%}">
-                    <span>
-                        LIBRARY
-                    </span>
-                </a>
-
-                <a href="" target="_blank" class="flex h-full w-full items-center justify-center font-bold hover:cursor-pointer text-white
-                            {% if request.path == '/events/' %}
-                              bg-bf6-4 hover:bg-bf6-6 transition duration-200 ease-in-out text-bf6-bg-default
-                            {% endif%}">
-                    <span>
-                        EVENTS
-                    </span>
-                </a>
+                {% include "bf6/nav_item.html" with href="/scripts/" path="/scripts/" label="SCRIPTS" %}
+                {% include "bf6/nav_item.html" with href="/" path="/maps/" label="MAPS" %}
+                {% include "bf6/nav_item.html" with href="/" path="/tools/" label="TOOLS & PLUGINS" %}
+                {% include "bf6/nav_item.html" with href="/" path="/guides/" label="GUIDES & DOCS" %}
+                {% include "bf6/nav_item.html" with href="/" path="/library/" label="LIBRARY" %}
+                {% include "bf6/nav_item.html" with href="/" path="/events/" label="EVENTS" %}
 
     {#    TODO: ADD FORUM SUPPORT  #}
 {#                <a href="https://docs.bfportal.gg/" target="_blank"#}
@@ -148,7 +101,7 @@
                 <div id="nav-bar-pane"
                      class="flex flex-col absolute bg-bg-default top-full right-0 backdrop-brightness-50 items-center md:hidden">
                     <div class="flex flex-col items-end  text-lg ml-4 mr-2 gap-y-2 mt-2">
-                        <a href=""
+                        <a href="/scripts/"
                            class="text-white hover:text-bf6-5 transition duration-200 ease-in-out rounded-[0px] border-b-2 border-white">
                             SCRIPTS
                         </a>
