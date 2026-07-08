@@ -1,5 +1,5 @@
 {% load template_filters %}
-{% load static wagtailcore_tags wagtailimages_tags account socialaccount %}
+{% load static wagtailcore_tags wagtailimages_tags account socialaccount string_filters%}
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
@@ -107,7 +107,6 @@
 {% endblock %}
 
 <div id="main" class="main-content  flex flex-col flex-grow gap-y-12 overflow-x-hidden mb-8">
-    <h1 class="text-white text-4xl font-extrabold flex flex-col text-center">Test</h1>
     {% block extra_content %}
         {% include_block page.extra_content %}
         <script type="text/javascript">
