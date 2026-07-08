@@ -1,0 +1,16 @@
+{% extends "bf6/base.html" %}
+{% block content %}
+    <div class="flex w-full h-14 text-white text-base font-bold -mt-12">
+        {% for tab in script_tabs %}
+            <a href="{{ tab.href }}"
+               class="flex flex-1 h-full items-center justify-center transition duration-100 ease-in-out hover:cursor-pointer
+               {% if tab.key == active_tab %}
+                 bg-bf6-4 text-bf6-bg-default
+               {% else %}
+                 text-white hover:text-bf6-4
+               {% endif %}">
+                <span>{{ tab.label }}</span>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock content %}
