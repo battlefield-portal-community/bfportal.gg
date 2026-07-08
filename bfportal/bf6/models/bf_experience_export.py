@@ -61,14 +61,20 @@ class WorkspaceBlock(BaseModel):
 class WorkspaceBlocks(BaseModel):
     """The set of blocks in the workspace along with their language version."""
 
-    languageVersion: int
+    languageVersion: int = 0
     blocks: list[WorkspaceBlock] = []
+
+
+class WorkspaceMod(BaseModel):
+    """The `mod` payload holding the workspace blocks."""
+
+    blocks: WorkspaceBlocks = Field(default_factory=WorkspaceBlocks)
 
 
 class Workspace(BaseModel):
     """The visual scripting workspace (`mod`) of an experience."""
 
-    mod: dict[str, Any] = {}
+    mod: WorkspaceMod = Field(default_factory=WorkspaceMod)
 
 
 class ExperienceExport(BaseModel):
