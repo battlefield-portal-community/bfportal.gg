@@ -41,6 +41,7 @@ dependencies = [
     "django>=4.2.4",
     "django-modelcluster>=6.0",
     "django-taggit>=4.0.0",
+    "pydantic>=2.13.4",
 ]
 
 [dependency-groups]
