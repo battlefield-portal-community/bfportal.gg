@@ -1,7 +1,10 @@
+import pydantic
+from bf6.models.bf_experience_export import ExperienceExport
 from bf6.models.categories import ScriptsCategory
 from core.helper import user_to_api_response
 from core.models.pages import CustomBasePage
 from django import forms
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
@@ -112,6 +115,18 @@ class SnippetPage(RoutablePageMixin, CustomBasePage):
         ]
         + [CustomBasePage.content_panels[-1]]
     )
+
+    def clean(self):
+        """Custom clean method to validate the experience json."""
+        try:
+            ExperienceExport(**self.exp_json)
+        except pydantic.ValidationError as e:
+            exp_errors = []
+
+            for error in e.errors():
+                location = ".".join(str(loc) for loc in error["loc"])
+                exp_errors.append(f"{location}: {error['msg']}")
+            raise ValidationError({"exp_json": ["\n".join(exp_errors)]})
 
     @property
     def like_count(self):
