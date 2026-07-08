@@ -1,3 +1,5 @@
+import json
+
 import pydantic
 from bf6.models.bf_experience_export import ExperienceExport
 from bf6.models.categories import ScriptsCategory
@@ -10,6 +12,7 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
+from django.utils.safestring import mark_safe
 from embed_video.fields import EmbedVideoField
 from loguru import logger
 from markdownx.models import MarkdownxField
@@ -121,14 +124,16 @@ class SnippetPage(RoutablePageMixin, CustomBasePage):
     def clean(self):
         """Custom clean method to validate the experience json."""
         try:
-            ExperienceExport(**self.exp_json)
+            if self.exp_json:
+                ExperienceExport(**self.exp_json)
         except pydantic.ValidationError as e:
+            logger.warning(f"Invalid experience json: {e}")
+            logger.debug(json.dumps(e.errors()))
             exp_errors = []
-
             for error in e.errors():
-                location = ".".join(str(loc) for loc in error["loc"])
+                location = ".".join([str(loc) for loc in error["loc"]])
                 exp_errors.append(f"{location}: {error['msg']}")
-            raise ValidationError({"exp_json": ["\n".join(exp_errors)]})
+            raise ValidationError({"exp_json": mark_safe("<br>".join(exp_errors))})
 
     @property
     def like_count(self):
