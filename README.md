@@ -32,6 +32,15 @@ You can later edit your experience if u like.
 
 If you want to contribute to this project and the community, you're welcome to have a look at our [Contribution Guide](/CONTRIBUTING.md) for this project.
 
+# Use of AI
+
+We do **not** write the code for this project using AI. All code is written by hand by contributors. AI assistants (e.g. Claude Code) are used only for a small, well-defined set of tasks:
+
+- **Talking through an approach** in plan mode — discussing structure, schema, and trade-offs. The contributor still writes all the code themselves (see [`CLAUDE.md`](/CLAUDE.md)).
+- **The workflow automations defined in [`.claude/skills/`](/.claude/skills)** — currently `plan-issue` (turn an agreed plan into GitHub issues and cut a feature branch) and `open-pr` (open a PR and link the issues it closes).
+
+Anything outside of the above is not an accepted use of AI in this repo. See the [Contribution Guide](/CONTRIBUTING.md#use-of-ai) for details.
+
 # Special Thanks to
 
 - [gametools.network](https://gametools.network/) for providing API to autofill submisson form 🥰

@@ -57,6 +57,17 @@ If you're not familiar with Django or Wagtail, it might be good to start with [w
 - The changes will be reviewed on dev deployment
 - Upon successfully testing dev will be merged into production
 
+## Use of AI
+
+We do **not** write the code for this project using AI — every line is written by hand by a human contributor. AI assistants (e.g. Claude Code) are permitted only for the narrow set of tasks below:
+
+- **Discussing the approach in plan mode.** The assistant helps talk through structure, DB schema, relationships, and trade-offs, and points at the existing files a change would touch. It does **not** produce an implementation checklist, write diffs, or hand off a plan to execute — the contributor implements everything by hand. The rules for this live in [`CLAUDE.md`](/CLAUDE.md).
+- **The workflow skills defined in [`.claude/skills/`](/.claude/skills).** These are the only sanctioned automations:
+  - `plan-issue` — turn an agreed plan into well-formed GitHub issue(s) and cut a feature branch, run before any code is written.
+  - `open-pr` — open a pull request for a feature branch and link all the issues it closes.
+
+Using AI to generate the actual code, tests, migrations, or templates is **not** accepted. If you're unsure whether a use is allowed, ask the maintainers first.
+
 ## How to discuss with the maintainers
 
 - Join our [discord server](https://discord.bfportal.gg/).
